@@ -1,0 +1,29 @@
+34 Super Ass Brothers
+30
+24 Game Designer
+20 AshQuimby
+26
+24 Developers
+20 AshQuimby, a_viper
+26
+24 Net Code
+20 a_viper
+26
+24 Art Director
+20 AshQuimby
+26
+24 Artists
+20 AshQuimby, a_viper
+26
+24 Composers
+20 Beat Thorn, a_viper, AshQuimby
+26
+24 Seagull Engine Team
+20 AshQuimby, a_viper
+20 Seagull Engine made with libGDX
+26
+24 Mod Loader Developers
+20 AshQuimby
+2560
+24 Major Inconvenience
+16 Cow Tip Mooment

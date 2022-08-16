@@ -1,0 +1,9 @@
+{
+    "java.project.referencedLibraries": [
+        "lib/**/*.jar",
+        "seagull-engine.jar"
+    ],
+    "java.project.sourcePaths": [
+        "src"
+    ]
+}
