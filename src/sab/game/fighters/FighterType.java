@@ -2,7 +2,7 @@ package sab.game.fighters;
 
 import sab.game.Player;
 
-public abstract class FighterType implements Cloneable { 
+public abstract class FighterType { 
     public void setDefaults(Fighter fighter) {
     }
 
@@ -44,13 +44,5 @@ public abstract class FighterType implements Cloneable {
 
     public void charging(Fighter fighter, Player player) {
 
-    }
-
-    public FighterType copy() {
-        try {
-           return (FighterType) this.clone();
-        } catch (CloneNotSupportedException e) {
-        }
-        return null;
     }
 }

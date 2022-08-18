@@ -78,15 +78,15 @@ public class SettingsScreen extends SelectorScreen {
     public void increase() {
         switch (selectorId) {
             case 0 -> {
-                SABSounds.playSound("blip.mp3");
+                SABSounds.playSound(SABSounds.BLIP);
                 settings.replace("master_volume", Math.max(0, (int) (Float.parseFloat(settings.get("master_volume")) * 100) + 5) / 100f + "");
             }
             case 1 -> {
-                SABSounds.playSound("blip.mp3");
+                SABSounds.playSound(SABSounds.BLIP);
                 settings.replace("music_volume", Math.max(0, (int) (Float.parseFloat(settings.get("music_volume")) * 100) + 5) / 100f + "");
             }
             case 2 -> {
-                SABSounds.playSound("blip.mp3");
+                SABSounds.playSound(SABSounds.BLIP);
                 settings.replace("sfx_volume", Math.max(0, (int) (Float.parseFloat(settings.get("sfx_volume")) * 100) + 5) / 100f + "");
             }
             default -> {
@@ -98,15 +98,15 @@ public class SettingsScreen extends SelectorScreen {
     public void decrease() {
         switch (selectorId) {
             case 0 -> {
-                SABSounds.playSound("blip.mp3");
+                SABSounds.playSound(SABSounds.BLIP);
                 settings.replace("master_volume", Math.max(0, (int) (Float.parseFloat(settings.get("master_volume")) * 100) - 5) / 100f + "");
             }
             case 1 -> {
-                SABSounds.playSound("blip.mp3");
+                SABSounds.playSound(SABSounds.BLIP);
                 settings.replace("music_volume", Math.max(0, (int) (Float.parseFloat(settings.get("music_volume")) * 100) - 5) / 100f + "");
             }
             case 2 -> {
-                SABSounds.playSound("blip.mp3");
+                SABSounds.playSound(SABSounds.BLIP);
                 settings.replace("sfx_volume", Math.max(0, (int) (Float.parseFloat(settings.get("sfx_volume")) * 100) - 5) / 100f + "");
             }
             default -> {
@@ -131,7 +131,7 @@ public class SettingsScreen extends SelectorScreen {
                 Settings.fromHashMap(settings);
                 SABSounds.soundEngine.setCurrentMusicVolume(Settings.getMusicVolume() * Settings.getMasterVolume());
                 Settings.writeFile();
-                SABSounds.playSound("select.mp3");
+                SABSounds.playSound(SABSounds.SELECT);
                 return new TitleScreen(false);
             }
             default -> {

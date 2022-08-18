@@ -39,21 +39,21 @@ public class ExtrasScreen extends SelectorScreen {
     public Screen onSelect(int selection) {
         switch(selection) {
             case 0 -> {
-                SABSounds.playSound("select.mp3");
+                SABSounds.playSound(SABSounds.SELECT);
                 return new CharactersScreen();
             }
             case 1 -> {
-                SABSounds.playSound("select.mp3");
+                SABSounds.playSound(SABSounds.SELECT);
             }
             case 2 -> {
-                SABSounds.playSound("select.mp3");
+                SABSounds.playSound(SABSounds.SELECT);
                 return new JukeboxScreen();
             }
             case 3 -> {
-                SABSounds.playSound("select.mp3");
+                SABSounds.playSound(SABSounds.SELECT);
             }
             case 4 -> {
-                SABSounds.playSound("select.mp3");
+                SABSounds.playSound(SABSounds.SELECT);
                 return new TitleScreen(false);
             }
             default -> {

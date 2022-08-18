@@ -14,12 +14,10 @@ public class Settings {
 
     public static void loadSettings() {
         HashMap<String, String> settings = null;
+
         try {
             settings = SabReader.read(new File("../settings.sab"));
-        } catch (FileNotFoundException e) {
-            readError();
-            loadSettings();
-        } catch (RuntimeException e) {
+        } catch (FileNotFoundException | RuntimeException e) {
             readError();
             loadSettings();
         }
@@ -27,7 +25,6 @@ public class Settings {
         try {
             fromHashMap(settings);
         } catch (NullPointerException e) {
-            readError();
             loadSettings();
         }
     }

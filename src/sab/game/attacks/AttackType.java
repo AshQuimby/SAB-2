@@ -18,10 +18,10 @@ public class AttackType implements Cloneable {
         return null;
     }
 
-    public void sucessfulHit(Attack attack, GameObject hit) {
+    public void hit(Attack attack, GameObject hit) {
     }
 
-    public void hit(Attack attack, GameObject hit) {
+    public void successfulHit(Attack attack, GameObject hit) {
     }
 
     public void kill(Attack attack) {

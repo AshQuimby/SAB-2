@@ -20,6 +20,7 @@ public class ChainSlash extends AttackType {
         attack.damage = 12;
         attack.direction = attack.owner.direction;
         attack.hitCooldown = 10;
+        attack.reflectable = false;
     }
 
     @Override

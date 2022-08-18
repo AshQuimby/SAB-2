@@ -19,10 +19,10 @@ public class SelectorScreen extends ScreenAdapter {
     @Override
     public Screen keyPressed(int keyCode) {
         if (keyCode == Input.Keys.UP) {
-            SABSounds.playSound("blip.mp3");
+            SABSounds.playSound(SABSounds.BLIP);
             selectorId = Utils.loop(selectorId, -1, options.length, 0);
         } else if (keyCode == Input.Keys.DOWN) {
-            SABSounds.playSound("blip.mp3");
+            SABSounds.playSound(SABSounds.BLIP);
             selectorId = Utils.loop(selectorId, 1, options.length, 0);
         } else if (keyCode == Input.Keys.ENTER) {
             return onSelect(selectorId);

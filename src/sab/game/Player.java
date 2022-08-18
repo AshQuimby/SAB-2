@@ -82,6 +82,7 @@ public class Player extends GameObject implements Hittable {
             knockback.scl(0.9f);
             hitbox.x += velocity.x;
             hitbox.y += velocity.y;
+            currentAction = null;
             return;
         }
 
@@ -115,38 +116,32 @@ public class Player extends GameObject implements Hittable {
             velocity.y += getJumpVelocity();
         }
 
-        if (currentAction == null) {
-            if (keys.isPressed(Keys.LEFT) ^ keys.isPressed(Keys.RIGHT)) {
-                frame = fighter.walkAnimation.step();
-            } else {
-                frame = 0;
-                fighter.walkAnimation.reset();
-            }
-
-            // Attacks
-            if (keys.isJustPressed(Keys.ATTACK)) {
-                if (keys.isPressed(Keys.LEFT) || keys.isPressed(Keys.RIGHT)) {
-                    fighter.sideAttack(this);
-                } else {
-                    fighter.neutralAttack(this);
-                }
-            }
+        if (keys.isPressed(Keys.LEFT) ^ keys.isPressed(Keys.RIGHT)) {
+            frame = fighter.walkAnimation.stepLooping();
+        } else {
+            frame = 0;
+            fighter.walkAnimation.reset();
         }
 
-        if (fighter.walkAnimation.isDone()) {
-            fighter.walkAnimation.reset();
+        // Attacks
+        if (keys.isJustPressed(Keys.ATTACK)) {
+            if (keys.isPressed(Keys.LEFT) || keys.isPressed(Keys.RIGHT)) {
+                fighter.sideAttack(this);
+            } else {
+                fighter.neutralAttack(this);
+            }
         }
 
         fighter.update(this);
 
         gravityAndFriction();
         hitbox.setPosition(hitbox.getPosition(new Vector2()).add(velocity));
-        keys.update();
 
         touchingStage = false;
     }
 
     private float getJumpVelocity() {
+        // Don't ask.
         float h0 = fighter.jumpHeight;
         float g = 1;
         float m = fighter.mass;
@@ -167,6 +162,8 @@ public class Player extends GameObject implements Hittable {
 
     @Override
     public void postUpdate() {
+        keys.update();
+        
         if (hitbox.y < -704 / 2 - fighter.hitboxHeight) {
             kill(1);
         }

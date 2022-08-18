@@ -44,12 +44,34 @@ public class Animation {
     }
 
     public int step() {
+        if (isDone()) return frames[frames.length - 1];
+
         if (ticksUntilNextFrame <= 0) {
             ticksUntilNextFrame = frameLength;
             frame++;
         }
 
         ticksUntilNextFrame--;
+        return frames[frame];
+    }
+
+    public int stepLooping() {
+        if (isDone()) {
+            reset();
+        }
+
+        if (ticksUntilNextFrame <= 0) {
+            ticksUntilNextFrame = frameLength;
+            frame++;
+        }
+
+        ticksUntilNextFrame--;
+
+        if (isDone()) {
+            reset();
+            return frames[frames.length - 1];
+        }
+
         return frames[frame];
     }
 

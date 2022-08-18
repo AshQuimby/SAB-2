@@ -39,11 +39,11 @@ public class TitleScreen extends SelectorScreen {
 
     @Override
     public Screen onSelect(int selection) {
-        SABSounds.playSound("select.mp3");
+        SABSounds.playSound(SABSounds.SELECT);
         
         switch(selection) {
             case 0 -> {
-                return new LocalBattleScreen();
+                return new CharacterSelectScreen();
             }
             case 1 -> {
                 return new HostGameScreen();

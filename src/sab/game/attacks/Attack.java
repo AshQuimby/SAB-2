@@ -30,7 +30,7 @@ public class Attack extends DamageSource {
         velocity = new Vector2();
         owner = player;
         knockback = new Vector2();
-
+        reflectable = true;
         this.type = type;
         type.onCreate(this);
     }
@@ -50,7 +50,7 @@ public class Attack extends DamageSource {
 
         for (GameObject target : owner.battle.getHittableGameObjects()) {
             if (hitbox.overlaps(target.hitbox) && target != owner && (hitObjects.get(target) == null || hitObjects.get(target) <= 0)) {
-                if (((Hittable) target).onHit(this)) sucessfulHit(target);
+                if (((Hittable) target).onHit(this)) successfulHit(target);
                 hit(target);
             }
         }
@@ -80,17 +80,17 @@ public class Attack extends DamageSource {
         hitObjects.clear();
     }
 
-    public void sucessfulHit(GameObject hit) {
+    public void hit(GameObject hit) {
+        type.hit(this, hit);
+    }
+
+    public void successfulHit(GameObject hit) {
         if (hitObjects.containsKey(hit))
             hitObjects.replace(hit, hitCooldown);
         else 
            hitObjects.put(hit, hitCooldown);
 
-        type.sucessfulHit(this, hit);
-    }
-
-    public void hit(GameObject hit) {
-        type.hit(this, hit);
+        type.successfulHit(this, hit);
     }
 
     public void kill() {

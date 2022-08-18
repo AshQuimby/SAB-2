@@ -4,6 +4,7 @@ import com.badlogic.gdx.Input;
 import com.seagull_engine.Seagraphics;
 
 import sab.game.Battle;
+import sab.game.SABSounds;
 import sab.net.Keys;
 import sab.screen.*;
 
@@ -11,6 +12,7 @@ public class LocalBattleScreen extends ScreenAdapter {
     private Battle battle;
 
     public LocalBattleScreen() {
+        SABSounds.playMusic("last_location.mp3", true);
         battle = new Battle();
     }
 

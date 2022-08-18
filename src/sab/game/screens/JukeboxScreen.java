@@ -110,23 +110,23 @@ public class JukeboxScreen extends ScreenAdapter {
     public Screen keyPressed(int keyCode) {
         switch (keyCode) {
             case Input.Keys.RIGHT -> {
-                SABSounds.playSound("blip.mp3");
+                SABSounds.playSound(SABSounds.BLIP);
                 songIndex = Utils.loop(songIndex, 1, songNames.size(), 0);
             }
             case Input.Keys.LEFT -> {
-                SABSounds.playSound("blip.mp3");
+                SABSounds.playSound(SABSounds.BLIP);
                 songIndex = Utils.loop(songIndex, -1, songNames.size(), 0);
             }
             case Input.Keys.UP -> {
-                SABSounds.playSound("blip.mp3");
+                SABSounds.playSound(SABSounds.BLIP);
                 widgetIndex = Utils.loop(widgetIndex, 1, 3, 0);
             }
             case Input.Keys.DOWN -> {
-                SABSounds.playSound("blip.mp3");
+                SABSounds.playSound(SABSounds.BLIP);
                 widgetIndex = Utils.loop(widgetIndex, -1, 3, 0);
             }
             case Input.Keys.ENTER -> {
-                SABSounds.playSound("blip.mp3");
+                SABSounds.playSound(SABSounds.BLIP);
                 switch (widgetIndex) {
                     case 0 -> {
                         if (playing != songIndex) {
@@ -154,7 +154,7 @@ public class JukeboxScreen extends ScreenAdapter {
                 }
             }
             case Input.Keys.ESCAPE -> {
-                SABSounds.playSound("blip.mp3");
+                SABSounds.playSound(SABSounds.BLIP);
                 return new ExtrasScreen();
             }
         }

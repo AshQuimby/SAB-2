@@ -156,7 +156,7 @@ public class Battle {
         g.scalableDraw(g.imageProvider.getImage("in_battle_hud.png"), 0, -256, 128, 96);
 
         for (int i = 0; i < player1.getLives(); i++) {
-            g.scalableDraw(g.imageProvider.getImage("life_p1.png"), i * 24, -256, 20, 20);
+            g.scalableDraw(g.imageProvider.getImage("life_p1.png"), i * 24 + 32, -256, 20, 20);
         }
     }
 }

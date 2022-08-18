@@ -1,6 +1,5 @@
 package sab.game.screens;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.badlogic.gdx.Input;
@@ -11,29 +10,21 @@ import com.seagull_engine.Seagraphics;
 import sab.game.Game;
 import sab.game.SABSounds;
 import sab.game.fighters.Fighter;
-import sab.game.fighters.FighterType;
-import sab.modloader.Mod;
 import sab.screen.Screen;
 import sab.screen.ScreenAdapter;
 import sab.util.Utils;
 
 public class CharactersScreen extends ScreenAdapter {
-
-    private List<Fighter> fighters;
     private int characterIndex;
 
     public CharactersScreen() {
-        fighters = new ArrayList<Fighter>();
-        for (Mod mod : Game.game.mods.values()) {
-            for (FighterType fighter : mod.fighters) {
-                fighters.add(new Fighter(fighter));
-            }
-        }
         characterIndex = 0;
     }
 
     @Override
     public void render(Seagraphics g) {
+        List<Fighter> fighters = Game.game.fighters;
+
         g.scalableDraw(g.imageProvider.getImage("character_description_background_layer_1.png"), -1152 / 2, -704 / 2, 1152, 704);
 
         g.scalableDraw(g.imageProvider.getImage(fighters.get(characterIndex).id + "_render.png"), 1152 / 2 - 512 - 8, -704 / 2 - 8, 512, 512);
@@ -55,14 +46,16 @@ public class CharactersScreen extends ScreenAdapter {
 
     @Override
     public Screen keyPressed(int keyCode) {
+        List<Fighter> fighters = Game.game.fighters;
+
         if (keyCode == Input.Keys.RIGHT) {
-            SABSounds.playSound("blip.mp3");
+            SABSounds.playSound(SABSounds.BLIP);
             characterIndex = Utils.loop(characterIndex, 1, fighters.size(), 0);
         } else if (keyCode == Input.Keys.LEFT) {
-            SABSounds.playSound("blip.mp3");
+            SABSounds.playSound(SABSounds.BLIP);
             characterIndex = Utils.loop(characterIndex, -1, fighters.size(), 0);
         } else if (keyCode == Input.Keys.ESCAPE) {
-            SABSounds.playSound("blip.mp3");
+            SABSounds.playSound(SABSounds.BLIP);
             return new ExtrasScreen();
         }
         

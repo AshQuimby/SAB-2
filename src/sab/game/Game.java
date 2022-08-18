@@ -4,8 +4,10 @@ import com.seagull_engine.Messenger;
 import com.seagull_engine.Seagraphics;
 
 import sab.game.fighters.Chain;
+import sab.game.fighters.Fighter;
 import sab.game.fighters.FighterType;
 import sab.game.fighters.Marvin;
+import sab.game.fighters.Walouis;
 import sab.game.screens.TitleScreen;
 import sab.modloader.Mod;
 import sab.screen.Screen;
@@ -19,7 +21,9 @@ import java.net.URLClassLoader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.FileAlreadyExistsException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
@@ -30,23 +34,31 @@ import java.lang.reflect.InvocationTargetException;
 
 public class Game extends Messenger {
     public static final Game game = new Game();
-
+    
+    public final List<Fighter> fighters;
     private Screen screen;
 
     public final Map<String, Mod> mods;
 
     public Game() {
         mods = new HashMap<String, Mod>();
+        fighters = new ArrayList<Fighter>();
     }
     
     @Override
     public void load() {
         Settings.loadSettings();
         Mod baseGame = new Mod("Super Ass Brothers", "sab", "1.0", "base game assets");
-        baseGame.addFighters(new Marvin(), new Chain());
+        baseGame.addFighters(new Marvin(), new Chain(), new Walouis());
         addMod(baseGame);
         loadMods();
         
+        for (Mod mod : Game.game.mods.values()) {
+            for (FighterType fighter : mod.fighters) {
+                fighters.add(new Fighter(fighter));
+            }
+        }
+
         screen = new TitleScreen(true);
     }
 
@@ -167,9 +179,12 @@ public class Game extends Messenger {
     public void loadMods() {
         try {
             File modsFolder = new File("../mods");
-            for (File mod : modsFolder.listFiles()) {
-                if (mod.getName().endsWith(".jar")) {
-                    addMod(getModFromJar(mod));
+
+            if (modsFolder.isDirectory()) {
+                for (File mod : modsFolder.listFiles()) {
+                    if (mod.getName().endsWith(".jar")) {
+                        addMod(getModFromJar(mod));
+                    }
                 }
             }
         } catch (IOException e) {

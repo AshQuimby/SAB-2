@@ -3,7 +3,7 @@ package sab.game.fighters;
 import sab.game.Player;
 import sab.game.animation.Animation;
 
-public class Fighter {
+public class Fighter implements Cloneable {
     public final FighterType type;
     /*
      * The "id" value may be confusing but it works internally
@@ -84,5 +84,13 @@ public class Fighter {
 
     public void sideAttack(Player player) {
         type.sideAttack(this, player);
+    }
+
+    public Fighter copy() {
+        try {
+           return (Fighter) this.clone();
+        } catch (CloneNotSupportedException e) {
+        }
+        return null;
     }
 }

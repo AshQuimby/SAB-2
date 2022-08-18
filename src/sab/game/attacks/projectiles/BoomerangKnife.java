@@ -64,7 +64,7 @@ public class BoomerangKnife extends AttackType {
     }
 
     @Override
-    public void sucessfulHit(Attack attack, GameObject hit) {
+    public void successfulHit(Attack attack, GameObject hit) {
 
     }
 
