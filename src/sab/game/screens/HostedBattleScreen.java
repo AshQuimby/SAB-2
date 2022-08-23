@@ -4,9 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.math.Vector2;
+import com.seagull_engine.GameObject;
 import com.seagull_engine.Seagraphics;
 
 import sab.game.Battle;
+import sab.game.Player;
 import sab.net.Connection;
 import sab.net.Packets;
 import sab.net.Server;
@@ -15,6 +18,8 @@ import sab.screen.Screen;
 import sab.screen.ScreenAdapter;
 
 public class HostedBattleScreen extends ScreenAdapter {
+    private long lastSent;
+
     private static class ClientHandler implements Runnable {
         private Battle battle;
         private Connection client;
@@ -80,6 +85,8 @@ public class HostedBattleScreen extends ScreenAdapter {
             connections.add(connection);
             new Thread(new ClientHandler(battle, connection, 1)).start();
         }).start();
+
+        lastSent = System.currentTimeMillis();
     }
 
     @Override
@@ -127,6 +134,19 @@ public class HostedBattleScreen extends ScreenAdapter {
     @Override
     public Screen update() {
         battle.update();
+
+        if (System.currentTimeMillis() - lastSent > 50) {
+            for (byte i = 0; i < 2; i++) {
+                Player player = battle.getPlayer(i);
+
+                for (Connection client : connections) {
+                    Packets.sendPlayerState(client, i, player.hitbox.getPosition(new Vector2()), player.velocity, (byte) player.frame);
+                }
+            }
+
+            lastSent = System.currentTimeMillis();
+        }
+
         return this;
     }
 

@@ -44,6 +44,7 @@ public class ExtrasScreen extends SelectorScreen {
             }
             case 1 -> {
                 SABSounds.playSound(SABSounds.SELECT);
+                return new CreditsScreen();
             }
             case 2 -> {
                 SABSounds.playSound(SABSounds.SELECT);

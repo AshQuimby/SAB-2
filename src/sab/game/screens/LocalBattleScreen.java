@@ -5,15 +5,18 @@ import com.seagull_engine.Seagraphics;
 
 import sab.game.Battle;
 import sab.game.SABSounds;
+import sab.game.fighters.Fighter;
+import sab.game.stages.LastLocation;
+import sab.game.stages.Stage;
 import sab.net.Keys;
 import sab.screen.*;
 
 public class LocalBattleScreen extends ScreenAdapter {
     private Battle battle;
 
-    public LocalBattleScreen() {
+    public LocalBattleScreen(Fighter player1, Fighter player2, int[] costumes) {
         SABSounds.playMusic("last_location.mp3", true);
-        battle = new Battle();
+        battle = new Battle(player1, player2, costumes, new Stage(new LastLocation()));
     }
 
     @Override

@@ -1,5 +1,7 @@
 package sab.game;
 
+import java.util.List;
+
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.seagull_engine.GameObject;
@@ -66,9 +68,16 @@ public class CollisionResolver {
             
         }
 
-
         resolve(a.hitbox, new Vector2(-b.velocity.x, -b.velocity.y), b.hitbox);
 
+        return direction;
+    }
+
+    public static Direction movingResolve(GameObject a, List<GameObject> list) {
+        Direction direction = Direction.NONE;
+        for (GameObject b : list) {
+            direction = movingResolve(a, b);
+        }
         return direction;
     }
 }

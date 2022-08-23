@@ -25,7 +25,7 @@ public class ChainSlash extends AttackType {
 
     @Override
     public void update(Attack attack) {
-        attack.hitbox.setCenter(attack.owner.hitbox.getCenter(new Vector2()).add(-32 * attack.owner.direction, 4));
+        attack.hitbox.setCenter(attack.owner.hitbox.getCenter(new Vector2()).add(32 * attack.owner.direction, 4));
 
         if (attack.life % 2 == 0) attack.frame++;
     }
@@ -35,8 +35,8 @@ public class ChainSlash extends AttackType {
     }
 
     @Override
-    public void onSpawn(Attack attack, int data) {
-        attack.hitbox.setCenter(attack.owner.hitbox.getCenter(new Vector2()).add(-32 * attack.owner.direction, 4));
-        attack.knockback = new Vector2(8 * -attack.owner.direction, 4);
+    public void onSpawn(Attack attack, int[] data) {
+        attack.hitbox.setCenter(attack.owner.hitbox.getCenter(new Vector2()).add(32 * attack.owner.direction, 4));
+        attack.knockback = new Vector2(8 * attack.owner.direction, 4);
     }
 }

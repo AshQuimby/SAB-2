@@ -38,24 +38,33 @@ public class Fighter implements Cloneable {
     public int imageOffsetX;
     public int imageOffsetY;
 
+    // The number of mid-air jumps this character can use
+    public int jumps;
+
     // The description of the character to display in the "Fighters" screen
     public String description;
 
     // The horizontal acceleration of the character in pixels/tick
     public float speed;
 
+    // The number of pixels high the character jumps by default and multiplier for mid-air jumps
     public float jumpHeight;
+    public float doubleJumpMultiplier;
 
+    // The multiplier of the players velocity, larger numbers make characters more "slippery" (greater than zero but less than one)
     public float friction;
 
+    // Increases fall speed and decreases knockback
     public float mass;
 
+    // The animations all characters have
     public Animation walkAnimation;
+    public Animation ledgeAnimation;
 
     public Fighter(FighterType type) {
         id = "fighter";
         name = "Fighter";
-        costumes = 0;
+        costumes = 2;
         hitboxWidth = 64;
         hitboxHeight = 64;
         renderWidth = 64;
@@ -63,10 +72,13 @@ public class Fighter implements Cloneable {
         imageOffsetX = 0;
         imageOffsetY = 0;
         speed = 1;
+        jumps = 1;
+        doubleJumpMultiplier = 0.75f;
         jumpHeight = 50;
         friction = .05f;
         mass = 1;
         walkAnimation = null;
+        ledgeAnimation = new Animation(new int[]{8}, 1, false);
         description = "    This is the default"
         + "\ndescription. Change it by changing"
         + "\nthe \"description\" field";
@@ -84,6 +96,22 @@ public class Fighter implements Cloneable {
 
     public void sideAttack(Player player) {
         type.sideAttack(this, player);
+    }
+
+    public void upAttack(Player player) {
+        type.upAttack(this, player);
+    }
+
+    public void downAttack(Player player) {
+        type.downAttack(this, player);
+    }
+
+    public void chargeAttack(Player player, int charge) {
+        type.chargeAttack(this, player, charge);
+    }
+
+    public void charging(Player player, int charge) {
+        type.charging(this, player, charge);
     }
 
     public Fighter copy() {

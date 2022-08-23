@@ -13,6 +13,7 @@ public class Connection {
     public Connection(String address, int port) {
         try {
             this.socket = new Socket(address, port);
+            socket.setTcpNoDelay(true);
 
             out = new DataOutputStream(this.socket.getOutputStream());
             in = new DataInputStream(this.socket.getInputStream());
@@ -25,6 +26,7 @@ public class Connection {
         this.socket = socket;
 
         try {
+            socket.setTcpNoDelay(true);
             out = new DataOutputStream(this.socket.getOutputStream());
             in = new DataInputStream(this.socket.getInputStream());
         } catch (IOException e) {

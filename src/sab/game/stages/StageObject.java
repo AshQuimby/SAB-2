@@ -10,4 +10,8 @@ public class StageObject extends GameObject {
         this.imageName = imageName;
         drawRect = new Rectangle(x, y, width, height);
     }
+
+    public boolean isSolid() {
+        return false;
+    }
 }

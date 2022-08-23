@@ -26,6 +26,10 @@ public abstract class FighterType {
 
     }
 
+    public void chargeAttack(Fighter fighter, Player player, int charge) {
+
+    }
+
     public void neutralSpecial(Fighter fighter, Player player) {
 
     }
@@ -42,7 +46,7 @@ public abstract class FighterType {
 
     }
 
-    public void charging(Fighter fighter, Player player) {
+    public void charging(Fighter fighter, Player player, int charge) {
 
     }
 }

@@ -5,6 +5,7 @@ import java.util.HashMap;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.seagull_engine.GameObject;
+import com.seagull_engine.Seagraphics;
 
 import sab.game.DamageSource;
 import sab.game.Hittable;
@@ -35,7 +36,7 @@ public class Attack extends DamageSource {
         type.onCreate(this);
     }
 
-    public void onSpawn(int data) {
+    public void onSpawn(int[] data) {
         type.onSpawn(this, data);
     }
 
@@ -96,5 +97,10 @@ public class Attack extends DamageSource {
     public void kill() {
         type.kill(this);
         owner.battle.removeGameObject(this);
+    }
+
+    @Override
+    public void render(Seagraphics g) {
+        type.render(this, g);
     }
 }

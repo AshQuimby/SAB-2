@@ -1,7 +1,6 @@
 package sab.game.stages;
 
 public class Platform extends StageObject {
-
     private PlatformBehavior behavior;
     private boolean updates;
 
@@ -31,5 +30,10 @@ public class Platform extends StageObject {
     public void update() {
         if (updates) behavior.update();
         postUpdate();
+    }
+
+    @Override
+    public boolean isSolid() {
+        return true;
     }
 }

@@ -1,7 +1,13 @@
 package sab.game.screens;
 
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.math.Vector2;
+import com.seagull_engine.GameObject;
+import com.seagull_engine.Seagraphics;
 
+import sab.game.Battle;
+import sab.game.Game;
+import sab.game.Player;
 import sab.net.Connection;
 import sab.net.Keys;
 import sab.net.Packets;
@@ -9,10 +15,30 @@ import sab.screen.Screen;
 import sab.screen.ScreenAdapter;
 
 public class JoinGameScreen extends ScreenAdapter {
+    private Battle battle;
     private Connection connection;
 
     public JoinGameScreen() {
         connection = new Connection("localhost", 25565);
+        battle = new Battle();
+
+        new Thread(() -> {
+            while (true) {
+                byte header = connection.readByte();
+
+                if (header == Packets.KICK) {
+                    String message = connection.readUTF();
+                    System.out.println(message);
+                }
+
+                if (header == Packets.PLAYER_STATE) {
+                    Player player = battle.getPlayer(connection.readByte());
+                    player.hitbox.setPosition(Packets.readVector(connection));
+                    player.velocity.set(Packets.readVector(connection));
+                    player.frame = connection.readByte();
+                }
+            }
+        }).start();
     }
 
     @Override
@@ -48,6 +74,17 @@ public class JoinGameScreen extends ScreenAdapter {
             Packets.sendKeyRelease(connection, Keys.RIGHT);
         }
 
+        return this;
+    }
+
+    @Override
+    public void render(Seagraphics g) {
+        battle.render(g);
+    }
+
+    @Override
+    public Screen update() {
+        if (System.currentTimeMillis() % 500 == 0) battle.update();
         return this;
     }
 

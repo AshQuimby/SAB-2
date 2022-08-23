@@ -7,7 +7,6 @@ import sab.game.Direction;
 import sab.game.attacks.Attack;
 import sab.game.attacks.AttackType;
 
-
 public class Fireball extends AttackType {
     @Override
     public void onCreate(Attack attack) {
@@ -25,7 +24,7 @@ public class Fireball extends AttackType {
     @Override
     public void update(Attack attack) {
         attack.velocity.y -= 1;
-        Direction collisionDirection = CollisionResolver.movingResolve(attack, attack.owner.battle.platform);
+        Direction collisionDirection = CollisionResolver.movingResolve(attack, attack.owner.battle.getPlatforms());
 
         attack.rotation -= (attack.velocity.x * (Math.abs(attack.velocity.y) + 0.1f)) / 3f;
 
@@ -33,7 +32,7 @@ public class Fireball extends AttackType {
             if (collisionDirection == Direction.UP || collisionDirection == Direction.DOWN) {
                 attack.velocity.x *= 0.9f;
                 attack.velocity.y *= -0.86f;
-            } else if (collisionDirection == Direction.UP || collisionDirection == Direction.DOWN) {
+            } else if (collisionDirection == Direction.RIGHT || collisionDirection == Direction.LEFT) {
                 attack.velocity.x *= -1;
             }
         }
@@ -45,9 +44,9 @@ public class Fireball extends AttackType {
     }
 
     @Override
-    public void onSpawn(Attack attack, int data) {
+    public void onSpawn(Attack attack, int[] data) {
         attack.hitbox.setCenter(attack.owner.hitbox.getCenter(new Vector2()));
-        attack.velocity = new Vector2(-10 * attack.owner.direction, 0);
-        attack.knockback = new Vector2(8 * -attack.owner.direction, 4);
+        attack.velocity = new Vector2(10 * attack.owner.direction, 0);
+        attack.knockback = new Vector2(8 * attack.owner.direction, 4);
     }
 }

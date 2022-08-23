@@ -1,7 +1,11 @@
-34 Super Ass Brothers
+34 Super Ass Brothers:
+28 Remasstered
 30
 24 Game Designer
 20 AshQuimby
+26
+24 Concept Designers
+20 AshQuimby, Birdthorn, a_viper
 26
 24 Developers
 20 AshQuimby, a_viper
@@ -15,6 +19,9 @@
 24 Artists
 20 AshQuimby, a_viper
 26
+24 UI Design
+20 AshQuimby
+26
 24 Composers
 20 Beat Thorn, a_viper, AshQuimby
 26
@@ -23,7 +30,22 @@
 20 Seagull Engine made with libGDX
 26
 24 Mod Loader Developers
-20 AshQuimby
+20 AshQuimby, a_viper
+26
+24 Beta Testers
+20 N/A (Nobody has beta tested SAB 2 yet)
+26
+24 Special Thanks To
+20 Beta Testers for SAB 1
+16 Birdthorn, Watil, jcswitch, a_kraken, SBsteveyHops, G1B3R1SH
+16
+20 SBsteveyHops
+16 Making an unofficial/official SAB website
+16
+20 And the (albeit small) SAB community
+16 The game would be nothing without you
+26
+34 THANK YOU FOR PLAYING
 2560
 24 Major Inconvenience
 16 Cow Tip Mooment

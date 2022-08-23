@@ -1,5 +1,7 @@
 package sab.game;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 import com.seagull_engine.Messenger;
 import com.seagull_engine.Seagraphics;
 
@@ -10,11 +12,13 @@ import sab.game.fighters.Marvin;
 import sab.game.fighters.Walouis;
 import sab.game.screens.TitleScreen;
 import sab.modloader.Mod;
+import sab.modloader.ModLoader;
 import sab.screen.Screen;
 import sab.util.SabReader;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 import java.net.URLClassLoader;
@@ -25,6 +29,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.jar.JarInputStream;
@@ -49,13 +54,13 @@ public class Game extends Messenger {
     public void load() {
         Settings.loadSettings();
         Mod baseGame = new Mod("Super Ass Brothers", "sab", "1.0", "base game assets");
-        baseGame.addFighters(new Marvin(), new Chain(), new Walouis());
+        baseGame.addFighters((Class<? extends FighterType>[]) new Class<?>[] {Marvin.class, Chain.class, Walouis.class});
         addMod(baseGame);
         loadMods();
         
         for (Mod mod : Game.game.mods.values()) {
-            for (FighterType fighter : mod.fighters) {
-                fighters.add(new Fighter(fighter));
+            for (Class<? extends FighterType> fighter : mod.fighters) {
+                fighters.add(new Fighter(ModLoader.getFighterType(fighter)));
             }
         }
 
@@ -91,91 +96,6 @@ public class Game extends Messenger {
         screen.close();
     }
 
-    public Mod getModFromJar(File mod) throws IOException {
-        if (!mod.getName().endsWith(".jar")) {
-            throw new IllegalArgumentException("File must be of type jar");
-        }
-        if (!mod.exists()) {
-            throw new IllegalArgumentException("File must exist");
-        }
-
-        URL url = mod.toURI().toURL();
-        URL[] urls = new URL[] { url };
-
-        URLClassLoader cl = new URLClassLoader(urls);
-
-        JarFile modJar = new JarFile(mod);
-
-        JarInputStream jar = new JarInputStream(new FileInputStream(mod));
-
-        String namespace = "";
-
-        // Find the settings file   
-        while (jar.available() > 0) {
-            JarEntry jFile = jar.getNextJarEntry();
-            if (jFile == null)
-                break;
-            InputStream jIn = modJar.getInputStream(jFile);
-            String fileName = jFile.getName().split("/")[jFile.getName().split("/").length - 1];
-            String path = mod.getCanonicalPath().substring(0, mod.getCanonicalPath().length() - mod.getName().length())
-                    + "resources/" + fileName;
-            if (jFile.getName().equals("mod.sab")) {
-                Files.copy(jIn, Paths.get(path));
-                HashMap<String, String> settings = SabReader.read(Paths.get(path).toFile());
-                Files.delete(Paths.get(path));
-                namespace = settings.get("namespace");
-                mods.put(settings.get("namespace"), new Mod(settings.get("display_name"), settings.get("namespace"),
-                        settings.get("version"), settings.get("version")));
-                break;
-            }
-        }
-
-        jar.close();
-        jar = new JarInputStream(new FileInputStream(mod));
-
-        // Find assets and classes
-        while (jar.available() > 0) {
-            JarEntry jFile = jar.getNextJarEntry();
-            if (jFile == null)
-                break;
-            InputStream jIn = modJar.getInputStream(jFile);
-            String fileName = jFile.getName().split("/")[jFile.getName().split("/").length - 1];
-            String path = mod.getCanonicalPath().substring(0, mod.getCanonicalPath().length() - mod.getName().length())
-                    + "resources/" + fileName;
-            if (jFile.getName().endsWith(".png")) {
-                try {
-                    Files.copy(jIn, Paths.get(path));
-                    window.imageProvider.loadAbsoluteImage(path, namespace
-                            + ":" + (jFile.getName().split("/"))[jFile.getName().split("/").length - 1]);
-                    Files.delete(Paths.get(path));
-                } catch (FileAlreadyExistsException e) {
-                    Files.delete(Paths.get(path));
-                    Files.copy(jIn, Paths.get(path));
-                    window.imageProvider.loadAbsoluteImage(path, namespace
-                            + ":" + (jFile.getName().split("/"))[jFile.getName().split("/").length - 1]);
-                    Files.delete(Paths.get(path));
-                }
-            } else if (jFile.getName().endsWith(".class")
-                    && jFile.getName().startsWith(namespace)) {
-                try {
-                    Class<?> clazz = cl.loadClass(jFile.getName().replace("/", ".").substring(0, jFile.getName().length() - 6));
-                    if (FighterType.class.isAssignableFrom(clazz)) {
-                        FighterType fighter = (FighterType) clazz.getConstructors()[0].newInstance((Object []) null);
-                        mods.get(namespace).addFighters(fighter);
-                    }
-                } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-        }
-
-        cl.close();
-        modJar.close();
-        jar.close();
-
-        return mods.get(namespace);
-    }
-
     public void loadMods() {
         try {
             File modsFolder = new File("../mods");
@@ -183,7 +103,7 @@ public class Game extends Messenger {
             if (modsFolder.isDirectory()) {
                 for (File mod : modsFolder.listFiles()) {
                     if (mod.getName().endsWith(".jar")) {
-                        addMod(getModFromJar(mod));
+                        addMod(ModLoader.loadMod(mod, this));
                     }
                 }
             }

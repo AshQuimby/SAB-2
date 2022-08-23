@@ -2,18 +2,13 @@ package sab.game.fighters;
 
 import sab.game.Player;
 import sab.game.animation.Animation;
-import sab.game.attacks.Attack;
-import sab.game.attacks.melees.Wrench;
-import sab.game.attacks.projectiles.Fireball;
 
 public class Walouis extends FighterType {
-    private Animation swingAnimation;
 
     @Override
     public void setDefaults(Fighter fighter) {
         fighter.id = "walouis";
         fighter.name = "Walouis";
-        fighter.costumes = 0;
         fighter.hitboxWidth = 40;
         fighter.hitboxHeight = 60;
         fighter.renderWidth = 64;
@@ -21,6 +16,7 @@ public class Walouis extends FighterType {
         fighter.imageOffsetX = 0;
         fighter.imageOffsetY = 2;
         fighter.frames = 11;
+        fighter.jumps = 1;
         fighter.speed = 0.6f;
         fighter.jumpHeight = 160;
         fighter.friction = .05f;
@@ -35,8 +31,7 @@ public class Walouis extends FighterType {
         + "\nprofessional badminton career." 
         + "\n"
         + "\nDebut: Marvin Badminton";
-
-        swingAnimation = new Animation(new int[] {4, 5, 0}, 7, true);
+        fighter.costumes = 3;
     }
 
     @Override

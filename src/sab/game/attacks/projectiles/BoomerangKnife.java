@@ -57,9 +57,9 @@ public class BoomerangKnife extends AttackType {
     }
 
     @Override
-    public void onSpawn(Attack attack, int data) {
+    public void onSpawn(Attack attack, int[] data) {
         attack.hitbox.setCenter(attack.owner.hitbox.getCenter(new Vector2()));
-        attack.velocity = new Vector2(-10 * attack.owner.direction, 0);
+        attack.velocity = new Vector2(10 * attack.owner.direction, 0);
         attack.knockback.set(attack.velocity);
     }
 

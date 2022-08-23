@@ -4,7 +4,6 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.seagull_engine.GameObject;
 
-import sab.game.DamageSource;
 import sab.game.attacks.Attack;
 import sab.game.attacks.AttackType;
 
@@ -27,7 +26,7 @@ public class Wrench extends AttackType {
 
     @Override
     public void update(Attack attack) {
-        attack.hitbox.setCenter(attack.owner.hitbox.getCenter(new Vector2()).add(-16 * attack.owner.direction, -4));
+        attack.hitbox.setCenter(attack.owner.hitbox.getCenter(new Vector2()).add(16 * attack.owner.direction, -4));
         attack.rotation += 6f * attack.direction;
 
         Vector2 center = attack.hitbox.getCenter(new Vector2());
@@ -58,8 +57,8 @@ public class Wrench extends AttackType {
     }
 
     @Override
-    public void onSpawn(Attack attack, int data) {
-        attack.hitbox.setCenter(attack.owner.hitbox.getCenter(new Vector2()).add(-16 * attack.owner.direction, -4));
+    public void onSpawn(Attack attack, int[] data) {
+        attack.hitbox.setCenter(attack.owner.hitbox.getCenter(new Vector2()).add(16 * attack.owner.direction, -4));
         attack.knockback = new Vector2();
     }
 }

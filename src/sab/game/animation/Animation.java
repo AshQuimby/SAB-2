@@ -9,7 +9,6 @@ public class Animation {
     private int frame;
     private int ticksUntilNextFrame;
 
-
     public Animation(int firstFrame, int lastFrame, int frameLength, boolean interruptable) {
         if (firstFrame >= lastFrame) {
             throw new IllegalArgumentException("First frame must come after last frame");
@@ -30,14 +29,14 @@ public class Animation {
         ticksUntilNextFrame = frameLength;
     }
 
-    public Animation(int[] frames, int frameLength, boolean interruptible) {
+    public Animation(int[] frames, int frameLength, boolean interruptable) {
         if (frameLength <= 0) {
             throw new IllegalArgumentException("Frame length must be greater than 0");
         }
 
         this.frames = frames.clone();
         this.frameLength = frameLength;
-        this.interruptable = interruptible;
+        this.interruptable = interruptable;
 
         frame = 0;
         ticksUntilNextFrame = frameLength;

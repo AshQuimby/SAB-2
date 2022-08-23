@@ -44,6 +44,7 @@ public class JukeboxScreen extends ScreenAdapter {
 
     public void loadVanillaSongs() {
         addSong("lobby_music.mp3", "Lobby Music", "Beat Thorn");
+        addSong("lobby_music_old.mp3", "Lobby Music (Old)", "Beat Thorn");
         addSong("loading_music.mp3", "Loading Music", "Beat Thorn/AshQuimby");
         addSong("last_location.mp3", "Last Location", "Beat Thorn");
         addSong("overgrown_armada.mp3", "Overgrown Armada", "a_viper");
