@@ -28,11 +28,12 @@ public class FallingKnife extends AttackType {
         attack.direction = attack.owner.direction;
         attack.hitCooldown = 24;
         attack.reflectable = false;
+        attack.collideWithStage = true;
     }
 
     @Override
     public void update(Attack attack) {
-        if (CollisionResolver.movingResolve(attack, attack.owner.battle.getPlatforms()) == Direction.UP) {
+        if (attack.collisionDirection == Direction.DOWN) {
             attack.velocity.y = 0;
             attack.hitbox.y -= 10;
             onGround = true;

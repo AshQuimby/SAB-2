@@ -32,12 +32,17 @@ public class AirSlash extends AttackType {
         attack.owner.velocity.y *= 0.98f;
         attack.hitbox.setCenter(attack.owner.hitbox.getCenter(new Vector2()).add(0, 4));
 
+        if (attack.owner.touchingStage) {
+            attack.alive = false;
+            attack.owner.resetAction();
+        }
+
         attack.owner.frame = 6;
         if (attack.life % 2 == 0) attack.frame++;
         if (attack.life % 3 == 0) attack.owner.direction *= -1;
         if (attack.frame >= 6) attack.frame = 0;
 
-        if (attack.owner.keys.isJustPressed(Keys.ATTACK)) attack.owner.velocity.y += 3;
+        if (attack.owner.keys.isJustPressed(Keys.ATTACK)) attack.owner.velocity.y += 5;
         if (attack.owner.keys.isPressed(Keys.RIGHT)) attack.owner.velocity.x += 0.5f;
         if (attack.owner.keys.isPressed(Keys.LEFT)) attack.owner.velocity.x -= 0.5f;
 
@@ -53,6 +58,7 @@ public class AirSlash extends AttackType {
     public void onSpawn(Attack attack, int[] data) {
         attack.owner.velocity.y *= 0.05f;
         attack.hitbox.setCenter(attack.owner.hitbox.getCenter(new Vector2()).add(0, 4));
+        attack.owner.touchingStage = false;
         attack.knockback = new Vector2(0, 1);
     }
 }

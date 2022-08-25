@@ -9,12 +9,12 @@ public class Walouis extends FighterType {
     public void setDefaults(Fighter fighter) {
         fighter.id = "walouis";
         fighter.name = "Walouis";
-        fighter.hitboxWidth = 40;
-        fighter.hitboxHeight = 60;
+        fighter.hitboxWidth = 44;
+        fighter.hitboxHeight = 88;
         fighter.renderWidth = 64;
         fighter.renderHeight = 96;
-        fighter.imageOffsetX = 0;
-        fighter.imageOffsetY = 2;
+        fighter.imageOffsetX = 8;
+        fighter.imageOffsetY = 4;
         fighter.frames = 11;
         fighter.jumps = 1;
         fighter.speed = 0.6f;

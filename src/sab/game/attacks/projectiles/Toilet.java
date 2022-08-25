@@ -24,18 +24,19 @@ public class Toilet extends AttackType {
         attack.direction = attack.owner.direction;
         attack.hitCooldown = 100;
         attack.reflectable = false;
+        attack.collideWithStage = true;
     }
 
     @Override
     public void update(Attack attack) {
         attack.drawRect.y += 20;
 
-        if (CollisionResolver.movingResolve(attack, attack.owner.battle.getPlatforms()) == Direction.UP) {
+        if (attack.collisionDirection == Direction.DOWN) {
             attack.velocity.y = 0;
         }
 
         if (attack.life == 290) {
-            attack.owner.velocity.y = 28;
+            attack.owner.velocity.y = 14;
             attack.frame = 1;
             playerLaunched = true;
         }

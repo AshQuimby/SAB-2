@@ -11,6 +11,9 @@ public class Particle extends GameObject {
     public boolean alive;
     private float rotationSpeed;
     private Color tint;
+    private int type;
+    private int life;
+    private int frameSpeed;
 
     public Particle(Vector2 position, Vector2 velocity, float width, float height, String image) {
         alive = true;
@@ -26,6 +29,7 @@ public class Particle extends GameObject {
         tint = Color.WHITE;
         frame = 0;
         this.velocity = velocity;
+        type = 0;
     }
 
     public Particle(Vector2 position, Vector2 velocity, float width, float height, float maxRotationSpeed, String image) {
@@ -42,6 +46,7 @@ public class Particle extends GameObject {
         tint = Color.WHITE;
         frame = 0;
         this.velocity = velocity;
+        type = 0;
     }
 
     public Particle(Vector2 position, Vector2 velocity, float width, float height, float maxRotationSpeed, Color tint, String image) {
@@ -58,10 +63,19 @@ public class Particle extends GameObject {
         this.tint = tint;
         frame = 0;
         this.velocity = velocity;
+        type = 0;
+    }
+
+    public Particle(Vector2 position, Vector2 velocity, float width, float height, int frameCount, int frameSpeed, String image) {
+        this(position, velocity, width, height, image);
+        this.frameCount = frameCount;
+        this.frameSpeed = frameSpeed;
+        type = 1;
     }
 
     @Override
     public void preUpdate() {
+        if (type == 0) {
         Rectangle old = new Rectangle(hitbox);
         rotation += rotationSpeed;
         resize(hitbox.width *= 0.95f, hitbox.height *= 0.95f);
@@ -70,6 +84,14 @@ public class Particle extends GameObject {
         hitbox.y += velocity.y;
         drawRect.set(hitbox);
         if (drawRect.width < 2f || drawRect.height < 2f) alive = false;
+        } else if (type == 1) {
+            hitbox.x += velocity.x;
+            hitbox.y += velocity.y;
+            life++;
+            if (life % frameSpeed == 0) frame++;
+            if (frame == frameCount) alive = false;
+            drawRect.set(hitbox);
+        }
     }
 
     @Override

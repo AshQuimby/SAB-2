@@ -11,8 +11,6 @@ import com.badlogic.gdx.math.Vector2;
 import com.seagull_engine.GameObject;
 import com.seagull_engine.Seagraphics;
 
-import sab.net.VoidFunction;
-
 import sab.game.attacks.Attack;
 import sab.game.fighters.Chain;
 import sab.game.fighters.Fighter;
@@ -20,6 +18,7 @@ import sab.game.fighters.Marvin;
 import sab.game.particles.Particle;
 import sab.game.stages.LastLocation;
 import sab.game.stages.Ledge;
+import sab.game.stages.PassablePlatform;
 import sab.game.stages.Platform;
 import sab.game.stages.Stage;
 import sab.game.stages.StageObject;
@@ -43,14 +42,23 @@ public class Battle {
     private Map<GameObject, Integer> idsByGameObject;
     private int nextId;
 
+    // Pause game variables
+    // Pausing should not be avaliable on servers unless the server owner pauses the game
+    private boolean paused;
+    private boolean pauseOverlayHidden;
+    private int pauseMenuIndex;
+
     public boolean drawHitboxes;
 
     public Battle(Fighter fighter1, Fighter fighter2, int[] costumes, Stage stage) {
         players = new ArrayList<>();
-        player1 = new Player(fighter1, costumes[0], this);
-        player2 = new Player(fighter2, costumes[1], this);
+        player1 = new Player(fighter1, costumes[0], 0, this);
+        player2 = new Player(fighter2, costumes[1], 1, this);
         players.add(player1);
         players.add(player2);
+        paused = false;
+        pauseOverlayHidden = false;
+        pauseMenuIndex = 0;
 
         this.stage = stage;
 
@@ -82,10 +90,11 @@ public class Battle {
 
     public void reset() {
         players.clear();
-        player1 = new Player(player1.fighter, player1.costume, this);
-        player2 = new Player(player1.fighter, player1.costume, this);
+        player1 = new Player(player1.fighter, player1.costume, 0, this);
+        player2 = new Player(player1.fighter, player1.costume, 1, this);
         players.add(player1);
         players.add(player2);
+        paused = false;
 
         this.stage = new Stage(new LastLocation());
 
@@ -149,7 +158,29 @@ public class Battle {
         return platforms;
     }
 
+    public List<GameObject> getPassablePlatforms() {
+        List<GameObject> platforms = new ArrayList<>();
+        for (GameObject stageObject : stageObjects) {
+            if (stageObject instanceof PassablePlatform) platforms.add(stageObject);
+        }
+        return platforms;
+    }
+
+    // // If this returns true then it returns to the character select screen
+    // public boolean onPauseSelect() {
+    //     return paused && pauseMenuIndex == 2;
+    // }
+
     public void update() {
+
+        if (paused) return;
+
+        // if (paused) {
+        //     if (player1.keys.isJustPressed(Keys.UP) || player2.keys.isJustPressed(Keys.UP)) pauseMenuIndex++;
+        //     if (player1.keys.isJustPressed(Keys.DOWN) || player2.keys.isJustPressed(Keys.DOWN)) pauseMenuIndex++;
+        //     return;
+        // }
+
         for (GameObject newGameObject : newGameObjects) {
             gameObjects.add(newGameObject);
             int id = ++nextId;
@@ -221,6 +252,18 @@ public class Battle {
         }
     }
 
+    public void pause() {
+        paused = true;
+    }
+
+    public void unpause() {
+        paused = false;
+    }
+
+    public void togglePause() {
+        paused = !paused;
+    }
+
     public Player getPlayer(int player) {
         return players.get(player);
     }
@@ -244,7 +287,7 @@ public class Battle {
     }
 
     public void render(Seagraphics g) {
-        g.scalableDraw(g.imageProvider.getImage("background.png"), -1152 / 2, -704 / 2, 1152, 704);
+        g.scalableDraw(g.imageProvider.getImage(stage.background), -1152 / 2, -704 / 2, 1152, 704);
 
         for (GameObject misc : miscGameObjects) {
             misc.render(g);
@@ -261,9 +304,7 @@ public class Battle {
             if (drawHitboxes) drawHitbox(player);
         }
 
-        for (GameObject platform : getPlatforms()) {
-            platform.render(g);
-        }
+        stage.render(g);
 
         for (Particle particle : particles) {
             particle.render(g);
@@ -276,13 +317,22 @@ public class Battle {
             }
         }
 
-        g.scalableDraw(g.imageProvider.getImage("in_battle_hud.png"), 0, -256, 128, 96);
+        g.scalableDraw(g.imageProvider.getImage("in_battle_hud_p1.png"), -256, -256 - 64, 128, 128);
+
+        g.scalableDraw(g.imageProvider.getImage("in_battle_hud_p2.png"), 256 - 128, -256 - 64, 128, 128);
 
         for (int i = 0; i < player1.getLives(); i++) {
-            g.scalableDraw(g.imageProvider.getImage("life_p1.png"), i * 24 + 38, -252, 20, 20);
+            g.scalableDraw(g.imageProvider.getImage("life_p1.png"), -256 + 48 + 24 * i, -256 - 12, 20, 20);
+        }
+        for (int i = 0; i < player2.getLives(); i++) {
+            g.scalableDraw(g.imageProvider.getImage("life_p2.png"), 256 - 128 + 48 + 24 * i, -256 - 12, 20, 20);
         }
 
-        g.drawText(player1.damage + "%", g.imageProvider.getFont("SAB_font"), 0, 0, 1, Color.WHITE, 0);
-        g.drawText(player2.damage + "%", g.imageProvider.getFont("SAB_font"), 256, 0, 1, Color.WHITE, 0);
+        g.drawText(player1.damage + "%", g.imageProvider.getFont("SAB_font"), -256 + 116, -256 + 48, 1, Color.WHITE, 1);
+        g.drawText(player2.damage + "%", g.imageProvider.getFont("SAB_font"), 256 - 128 + 116, -256 + 48, 1, Color.WHITE, 1);
+
+        if (paused && !pauseOverlayHidden) {
+            g.usefulDraw(g.imageProvider.getImage("pause_overlay.png"), -1152 / 2, -704 / 2, 1152, 704, pauseMenuIndex, 3, 0, false, false);
+        }
     }
 }

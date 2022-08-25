@@ -25,27 +25,26 @@ public class Frostball extends AttackType {
         attack.damage = 10;
         attack.directional = true;
         bounced = false;
+        attack.collideWithStage = true;
     }
 
     @Override
     public void update(Attack attack) {
-        Direction collisionDirection = CollisionResolver.movingResolve(attack, attack.owner.battle.getPlatforms());
-
-
         if (bounced) {
-            attack.rotation += (1 + (90 - attack.life) / 60) * Math.signum(attack.velocity.x) * 12;
+            attack.rotation -= (1 + (90 - attack.life) / 60) * Math.signum(attack.velocity.x) * 12;
             attack.velocity.scl(0.92f);
         } else {
-            attack.rotation += (1 + (90 - attack.life) / 60) * Math.signum(attack.velocity.x);
+            attack.rotation -= (1 + (90 - attack.life) / 60) * Math.signum(attack.velocity.x);
             attack.velocity.y -= 0.25f;
         }
         
-        if (collisionDirection != Direction.NONE) {
-            if (collisionDirection == Direction.UP || collisionDirection == Direction.DOWN) {
+        if (attack.collisionDirection != Direction.NONE) {
+            if (attack.collisionDirection == Direction.UP || attack.collisionDirection == Direction.DOWN) {
                 attack.velocity.x *= 0.9f;
                 attack.velocity.y *= -0.86f;
-            } else if (collisionDirection == Direction.RIGHT || collisionDirection == Direction.LEFT) {
+            } else if (attack.collisionDirection == Direction.RIGHT || attack.collisionDirection == Direction.LEFT) {
                 attack.velocity.x *= -1;
+                attack.knockback.x *= -1;
             }
             if (attack.life > 30) attack.life = 30;
             bounced = true;
@@ -60,7 +59,7 @@ public class Frostball extends AttackType {
     @Override
     public void kill(Attack attack) {
         for (int i = 0; i < 8 ; i++) {
-            attack.owner.battle.addParticle(new Particle(attack.hitbox.getCenter(new Vector2()), new Vector2(2 * MathUtils.random(), 0).rotateDeg(MathUtils.random() * 360), 64, 64, 0, "frostfire.png"));
+            attack.owner.battle.addParticle(new Particle(attack.hitbox.getCenter(new Vector2()), new Vector2(4 * MathUtils.random(), 0).rotateDeg(MathUtils.random() * 360), 96, 96, 0, "frostfire.png"));
         }
     }
 
@@ -68,7 +67,7 @@ public class Frostball extends AttackType {
     public void onSpawn(Attack attack, int[] data) {
         attack.hitbox.setCenter(attack.owner.hitbox.getCenter(new Vector2()).add(0, 48));
         attack.velocity = new Vector2(10 * attack.owner.direction, 0);
-        attack.knockback = new Vector2(8 * attack.owner.direction, 4);
+        attack.knockback = new Vector2(8 * (data[0] / 8f) * attack.owner.direction, 4 * (data[0] / 8f));
         attack.damage = data[0];
         attack.resize(attack.hitbox.width + data[0] / 2, attack.hitbox.height + data[0] / 2);
         attack.drawRect.set(attack.hitbox);

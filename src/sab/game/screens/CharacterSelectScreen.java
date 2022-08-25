@@ -21,22 +21,33 @@ public class CharacterSelectScreen extends ScreenAdapter {
     private int player2Index;
     private int player1CostumeIndex;
     private int player2CostumeIndex;
+    private boolean player1Ready;
+    private boolean player2Ready;
+    private boolean refreshed;
 
     public CharacterSelectScreen() {
         player1Index = 0;
         player2Index = 1;
         player1CostumeIndex = 0;
         player2CostumeIndex = 0;
+        refreshed = false;
         player1Fighters = new ArrayList<Fighter>(); 
         player2Fighters = new ArrayList<Fighter>();
-        for (Fighter fighter : Game.game.fighters) {
-            Fighter f = fighter.copy();
-            f.type.setDefaults(f);
-            player1Fighters.add(f);
-            f = fighter.copy();
-            f.type.setDefaults(f);
-            player2Fighters.add(fighter.copy());
+    }
+
+    public Screen update() {
+        if (!refreshed) {
+            for (Fighter fighter : Game.game.fighters) {
+                Fighter f = fighter.copy();
+                f.type.setDefaults(f);
+                player1Fighters.add(f);
+                f = fighter.copy();
+                f.type.setDefaults(f);
+                player2Fighters.add(fighter.copy());
+            }
+            refreshed = true;
         }
+        return this;
     }
 
     @Override
@@ -67,6 +78,13 @@ public class CharacterSelectScreen extends ScreenAdapter {
         g.usefulTintDraw(g.imageProvider.getImage(player2Fighters.get(Utils.loop(player2Index, 1, fighterCount, 0)).id + ".png"), 1156 / 2 - 136 - player2Fighters.get(Utils.loop(player2Index, 1, fighterCount, 0)).renderWidth / 2, 704 / 2 - 172, player2Fighters.get(Utils.loop(player2Index, 1, fighterCount, 0)).renderWidth, player2Fighters.get(Utils.loop(player2Index, 1, fighterCount, 0)).renderHeight, 0, player2Fighters.get(Utils.loop(player2Index, 1, fighterCount, 0)).frames, 0, false, false, new Color(0.5f, 0.5f, 0.5f, 1f));
         
         g.scalableDraw(g.imageProvider.getImage("character_selector_background_layer_2.png"), -1152 / 2, -704 / 2, 1152, 704);
+
+        if (player1Ready && player2Ready) {
+            g.usefulDraw(g.imageProvider.getImage("fight_button.png"), -1152 / 2 + 416, 704 / 2 + 144, 320, 100, (Game.game.window.getTick() / 4) % 10, 11, 0, false, false);
+        }
+
+        g.usefulDraw(g.imageProvider.getImage("fighter_selectors.png"), -1152 / 2 + 8, -704 /2 + 8, 496, 496, player1Ready ? 1 : 0, 4, 0, false, false);
+        g.usefulDraw(g.imageProvider.getImage("fighter_selectors.png"), 1152 / 2 - 8 - 496, -704 /2 + 8, 496, 496, player2Ready ? 3 : 2, 4, 0, false, false);
     }
 
     @Override
@@ -116,11 +134,19 @@ public class CharacterSelectScreen extends ScreenAdapter {
             if (player1CostumeIndex == newCostume && player1Index == player2Index) newCostume = Utils.loop(newCostume, -1, player2Fighters.get(player2Index).costumes, 0);
             SABSounds.playSound(SABSounds.BLIP);
             player2CostumeIndex = newCostume;
-        } else if (keyCode == Input.Keys.ENTER) {
+        } else if (keyCode == Input.Keys.ENTER && player1Ready && player2Ready) {
             player1Fighters.get(player1Index).walkAnimation.reset();
             player2Fighters.get(player2Index).walkAnimation.reset();
             SABSounds.playSound(SABSounds.BLIP);
-            return new LocalBattleScreen(player1Fighters.get(player1Index), player2Fighters.get(player2Index), new int[]{player1CostumeIndex, player2CostumeIndex});
+            return new StageSelectScreen(player1Fighters.get(player1Index), player2Fighters.get(player2Index), player1CostumeIndex, player2CostumeIndex);
+        } else if (keyCode == Input.Keys.F) {
+            player1Ready = !player1Ready;
+            if (player1Ready) SABSounds.playSound(SABSounds.SELECT); else SABSounds.playSound("deselect.mp3"); 
+        } else if (keyCode == Input.Keys.M) {
+            player2Ready = !player2Ready;
+            if (player2Ready) SABSounds.playSound(SABSounds.SELECT); else SABSounds.playSound("deselect.mp3"); 
+        } else if (keyCode == Input.Keys.ESCAPE) {
+            return new TitleScreen(false);
         }
         return this;
     }

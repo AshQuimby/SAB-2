@@ -65,6 +65,7 @@ public class Chain extends FighterType {
     @Override
     public void upAttack(Fighter fighter, Player player) {
         player.startAttack(new Attack(new AirSlash(), player), flyingAnimation, 2, 40, false);
+        player.velocity.y = 0;
     }
 
     @Override

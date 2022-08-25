@@ -4,7 +4,7 @@
 24 Game Designer
 20 AshQuimby
 26
-24 Concept Designers
+24 Character Design
 20 AshQuimby, Birdthorn, a_viper
 26
 24 Developers
@@ -36,7 +36,8 @@
 20 N/A (Nobody has beta tested SAB 2 yet)
 26
 24 Special Thanks To
-20 Beta Testers for SAB 1
+16
+20 Beta testers for SAB 1
 16 Birdthorn, Watil, jcswitch, a_kraken, SBsteveyHops, G1B3R1SH
 16
 20 SBsteveyHops
@@ -45,7 +46,7 @@
 20 And the (albeit small) SAB community
 16 The game would be nothing without you
 26
-34 THANK YOU FOR PLAYING
+34 THANK YOU FOR PLAYING!
 2560
 24 Major Inconvenience
 16 Cow Tip Mooment

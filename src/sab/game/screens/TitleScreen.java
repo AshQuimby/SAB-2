@@ -43,7 +43,7 @@ public class TitleScreen extends SelectorScreen {
         
         switch(selection) {
             case 0 -> {
-                return new CharacterSelectScreen();
+                return Game.game.globalCharacterSelectScreen;
             }
             case 1 -> {
                 return new HostGameScreen();

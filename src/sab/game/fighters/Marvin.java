@@ -31,7 +31,7 @@ public class Marvin extends FighterType {
         fighter.imageOffsetX = 0;
         fighter.imageOffsetY = 2;
         fighter.frames = 12;
-        fighter.speed = 0.6f;
+        fighter.speed = 0.45f;
         fighter.jumpHeight = 160;
         fighter.friction = .05f;
         fighter.mass = 5f;
@@ -62,27 +62,35 @@ public class Marvin extends FighterType {
 
     @Override
     public void neutralAttack(Fighter fighter, Player player) {
-        swingAnimation.reset();
-        player.startAttack(new Attack(new Fireball(), player), swingAnimation, 6, 10, false);
-        player.velocity.y /= 3;
-        player.velocity.x *= 0.9f;
+        if (!player.usedRecovery) {
+            swingAnimation.reset();
+            player.startAttack(new Attack(new Fireball(), player), swingAnimation, 6, 10, false);
+            player.velocity.y /= 3;
+            player.velocity.x *= 0.9f;
+        }
     }
 
     @Override
     public void sideAttack(Fighter fighter, Player player) {
-        swingAnimation.reset();
-        player.startAttack(new Attack(new Wrench(), player), swingAnimation, 4, 18, false);
+        if (!player.usedRecovery) {
+            swingAnimation.reset();
+            player.startAttack(new Attack(new Wrench(), player), swingAnimation, 4, 18, false);
+        }
     }
 
     @Override
     public void upAttack(Fighter fighter, Player player) {
-        squatAnimation.reset();
-        player.startAttack(new Attack(new Toilet(), player), squatAnimation, 4, 30, false);
+        if (!player.usedRecovery) {
+            squatAnimation.reset();
+            player.startAttack(new Attack(new Toilet(), player), squatAnimation, 4, 30, false);
+        }
     }
 
     @Override
     public void downAttack(Fighter fighter, Player player) {
-        player.startChargeAttack(new PlayerAction(5, true, 0, null), 5, 60);
+        if (!player.usedRecovery) {
+            player.startChargeAttack(new PlayerAction(5, true, 0, null), 5, 60);
+        }
     }
 
     @Override

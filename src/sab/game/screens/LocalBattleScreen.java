@@ -14,9 +14,9 @@ import sab.screen.*;
 public class LocalBattleScreen extends ScreenAdapter {
     private Battle battle;
 
-    public LocalBattleScreen(Fighter player1, Fighter player2, int[] costumes) {
+    public LocalBattleScreen(Fighter player1, Fighter player2, int[] costumes, Stage stage) {
         SABSounds.playMusic("last_location.mp3", true);
-        battle = new Battle(player1, player2, costumes, new Stage(new LastLocation()));
+        battle = new Battle(player1, player2, costumes, stage);
     }
 
     @Override
@@ -52,6 +52,10 @@ public class LocalBattleScreen extends ScreenAdapter {
         if (keyCode == Input.Keys.M) {
             battle.getPlayer(1).keys.press(Keys.ATTACK);
         }
+
+        if (keyCode == Input.Keys.ESCAPE || keyCode == Input.Keys.SHIFT_RIGHT) battle.togglePause();
+
+        // if (keyCode == Input.Keys.ENTER) if (battle.onSelect()) return Game.game.globalCharacterSelectScreen;
 
         return this;
     }

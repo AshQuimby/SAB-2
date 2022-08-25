@@ -19,21 +19,22 @@ public class Fireball extends AttackType {
         attack.drawRect.height = 32;
         attack.damage = 10;
         attack.directional = true;
+        attack.collideWithStage = true;
     }
 
     @Override
     public void update(Attack attack) {
         attack.velocity.y -= 1;
-        Direction collisionDirection = CollisionResolver.movingResolve(attack, attack.owner.battle.getPlatforms());
 
         attack.rotation -= (attack.velocity.x * (Math.abs(attack.velocity.y) + 0.1f)) / 3f;
 
-        if (collisionDirection != Direction.NONE) {
-            if (collisionDirection == Direction.UP || collisionDirection == Direction.DOWN) {
+        if (attack.collisionDirection != Direction.NONE) {
+            if (attack.collisionDirection == Direction.UP || attack.collisionDirection == Direction.DOWN) {
                 attack.velocity.x *= 0.9f;
                 attack.velocity.y *= -0.86f;
-            } else if (collisionDirection == Direction.RIGHT || collisionDirection == Direction.LEFT) {
+            } else if (attack.collisionDirection == Direction.RIGHT || attack.collisionDirection == Direction.LEFT) {
                 attack.velocity.x *= -1;
+                attack.knockback.x *= -1;
             }
         }
     }

@@ -1,5 +1,11 @@
 package sab.game;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.swing.text.Position;
+import javax.swing.text.StyledEditorKit;
+
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.seagull_engine.GameObject;
@@ -8,7 +14,9 @@ import com.seagull_engine.Seagraphics;
 import sab.game.animation.Animation;
 import sab.game.attacks.Attack;
 import sab.game.fighters.Fighter;
+import sab.game.particles.Particle;
 import sab.game.stages.Ledge;
+import sab.game.stages.PassablePlatform;
 import sab.net.Keys;
 
 public class Player extends GameObject implements Hittable {
@@ -18,11 +26,13 @@ public class Player extends GameObject implements Hittable {
     public Fighter fighter;
     public int damage;
     public boolean touchingStage;
+    public boolean usedRecovery;
     public int costume;
 
     private PlayerAction currentAction;
     private Direction collisionDirection;
     private Vector2 knockback;
+    private int knockbackDuration;
     private int lives;
     private int extraJumpsUsed;
     private int minCharge;
@@ -32,8 +42,10 @@ public class Player extends GameObject implements Hittable {
     private int ledgeCooldown;
     private int ledgeGrabs;
     private boolean charging;
+    private int smokeGenerator;
+    private int id;
 
-    public Player(Fighter fighter, int costume, Battle battle) {
+    public Player(Fighter fighter, int costume, int id, Battle battle) {
         this.battle = battle;
         
         velocity = new Vector2();
@@ -65,8 +77,57 @@ public class Player extends GameObject implements Hittable {
 
         stunned = 0;
         charging = false;
+        usedRecovery = false;
         maxCharge = 0;
         charge = 0;
+        knockbackDuration = 0;
+        smokeGenerator = 0;
+        this.id = id;
+    }
+
+    public void move(Vector2 v) {
+        Vector2 movement = v.cpy();
+
+        while (movement.len() > 0) {
+            Vector2 step = movement.cpy().limit(1);
+            movement.sub(step);
+
+            collisionDirection = CollisionResolver.moveWithCollisions(this, step, battle.getPlatforms());
+
+            List<GameObject> passablePlatforms = battle.getPassablePlatforms();
+            
+            for (GameObject platform : passablePlatforms) {
+                if (!keys.isPressed(Keys.DOWN) && velocity.y <= 0
+                        && hitbox.y > platform.hitbox.y + platform.hitbox.height - 16) {
+                    Direction tryDirection = CollisionResolver.moveWithCollisions(this, velocity, platform);
+                    if (tryDirection != Direction.NONE)
+                        collisionDirection = tryDirection;
+                }
+            }
+
+            if (collisionDirection == Direction.DOWN) {
+                touchingStage = true;
+            }
+
+            if (knockbackDuration > 0) {
+                if (smokeGenerator-- <= 0) {
+                    battle.addParticle(new Particle(hitbox.getCenter(new Vector2()), new Vector2(), 32, 32, 6, 4,
+                            "p" + (id + 1) + "_smoke.png"));
+                    smokeGenerator = 60;
+                }
+                if (collisionDirection == Direction.UP || collisionDirection == Direction.DOWN) {
+                    knockback.y *= -1;
+                    SABSounds.playSound("slam.mp3");
+                } else if (collisionDirection == Direction.RIGHT || collisionDirection == Direction.LEFT) {
+                    knockback.x *= -1;
+                    SABSounds.playSound("slam.mp3");
+                }
+            }
+        }
+    }
+
+    public void resetAction() {
+        currentAction = null;
     }
 
     public void startAttack(Attack attack, int delay, int endLag, boolean important) {
@@ -100,19 +161,20 @@ public class Player extends GameObject implements Hittable {
     public void applyForce(Vector2 force) {
         // F = m * a, so a = F / m
         velocity.add(force.cpy().scl(1f / fighter.mass));
+        knockback.add(force.cpy().scl(1f / fighter.mass));
     }
 
     @Override
     public void update() {
-
         if (stunned > 0) {
             stunned--;
             return;
         }
+
         Ledge ledge = null;
         if (ledgeCooldown <= 0) ledge = battle.getStage().grabLedge(this);
 
-        if (knockback.len() > 0) {
+        if (knockbackDuration > 0) {
             if (currentAction != null && !currentAction.isImportant()) currentAction = null;
 
             if (ledge != null) { 
@@ -120,15 +182,15 @@ public class Player extends GameObject implements Hittable {
                 ledge = null;
             }
 
-            applyForce(knockback);
+            velocity = knockback.cpy().scl(1f / fighter.mass);
+            gravityAndFriction();
             charge = 0;
             charging = false;
-            knockback.set(0, 0);
+            if (--knockbackDuration <= 0) {
+                knockback = new Vector2(0, 0);
+            }
             return;
         }
-
-        hitbox.x += velocity.x;
-        hitbox.y += velocity.y;
         
         if (ledgeCooldown > 0) {
             ledgeCooldown--;
@@ -145,13 +207,18 @@ public class Player extends GameObject implements Hittable {
                 velocity.y = -getJumpVelocity() / 2;
             } else if (keys.isJustPressed(Keys.UP)) {
                 ledgeCooldown = 8;
-                velocity.y = getJumpVelocity() * 0.75f;
-            } else return;
+                velocity.y = getJumpVelocity();
+            }
+            return;
         }
 
         if (touchingStage) {
             extraJumpsUsed = 0;
-            velocity.y = 0;
+            usedRecovery = false;
+            if (velocity.y < 0) velocity.y = 0;
+        }
+        if (collisionDirection == Direction.RIGHT || collisionDirection == Direction.LEFT) {
+            // velocity.x = 0;
         }
 
         if (charging) {
@@ -215,9 +282,7 @@ public class Player extends GameObject implements Hittable {
         }
 
         fighter.update(this);
-
         gravityAndFriction();
-        hitbox.setPosition(hitbox.getPosition(new Vector2()).add(velocity));
     }
 
     public void stun(int time) {
@@ -255,31 +320,37 @@ public class Player extends GameObject implements Hittable {
 
     @Override
     public void postUpdate() {
+
         touchingStage = false;
+
+        if (stunned <= 0) move(velocity);
         
+        if (knockbackDuration > 0) frame = fighter.knockbackAnimation.stepLooping();
+
         keys.update();
         
         if (hitbox.y < -704 / 2 - fighter.hitboxHeight) {
             kill(1);
         }
-
-        Direction collisionDirection = CollisionResolver.movingResolve(this, battle.getPlatforms());
-        if (collisionDirection == Direction.UP) touchingStage = true;
-
-        
-
-        drawRect.setCenter(hitbox.getCenter(new Vector2()).add(fighter.imageOffsetX, fighter.imageOffsetY));
     }
 
     @Override
     public boolean onHit(DamageSource source) {
         damage += source.damage;
-        knockback.add(source.knockback.cpy().scl((damage) / 100f + 1f));
+        Vector2 newKnockback = source.knockback.cpy().scl(4f).scl(damage / 100f + 1f);
+        if (newKnockback.len() > knockback.len()) {
+            smokeGenerator = 0;
+            knockback.set(newKnockback);
+        } else {
+            knockback.setAngleRad(newKnockback.angleRad());
+        }
+        knockbackDuration = (int) (knockback.len() * 0.25f);
         return true;
     }
 
     @Override
     public void render(Seagraphics g) {
+        drawRect.setCenter(hitbox.getCenter(new Vector2()).add(fighter.imageOffsetX * direction, fighter.imageOffsetY));
         String costumeString = fighter.id + (costume == 0 ? "" : "_alt_" + costume) + ".png";
         preRender(g);
         g.usefulDraw(g.imageProvider.getImage(costumeString), drawRect.x, drawRect.y, (int) drawRect.width, (int) drawRect.height, frame, frameCount, rotation, direction == 1, false);

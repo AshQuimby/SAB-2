@@ -30,7 +30,7 @@ public class AttackType implements Cloneable {
 
     public void onSpawn(Attack attack, int[] data) {
     }
-    
+
     public void render(Attack attack, Seagraphics g) {
         g.usefulDraw(
             g.imageProvider.getImage(attack.imageName),

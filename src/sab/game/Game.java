@@ -10,7 +10,13 @@ import sab.game.fighters.Fighter;
 import sab.game.fighters.FighterType;
 import sab.game.fighters.Marvin;
 import sab.game.fighters.Walouis;
+import sab.game.screens.CharacterSelectScreen;
 import sab.game.screens.TitleScreen;
+import sab.game.stages.Boxtopia;
+import sab.game.stages.LastLocation;
+import sab.game.stages.StageType;
+import sab.game.stages.Warzone;
+import sab.game.stages.Stage;
 import sab.modloader.Mod;
 import sab.modloader.ModLoader;
 import sab.screen.Screen;
@@ -41,6 +47,8 @@ public class Game extends Messenger {
     public static final Game game = new Game();
     
     public final List<Fighter> fighters;
+    public final List<Class<? extends StageType>> stages;
+    public final CharacterSelectScreen globalCharacterSelectScreen;
     private Screen screen;
 
     public final Map<String, Mod> mods;
@@ -48,6 +56,8 @@ public class Game extends Messenger {
     public Game() {
         mods = new HashMap<String, Mod>();
         fighters = new ArrayList<Fighter>();
+        stages = new ArrayList<>();
+        globalCharacterSelectScreen = new CharacterSelectScreen();
     }
     
     @Override
@@ -55,12 +65,16 @@ public class Game extends Messenger {
         Settings.loadSettings();
         Mod baseGame = new Mod("Super Ass Brothers", "sab", "1.0", "base game assets");
         baseGame.addFighters((Class<? extends FighterType>[]) new Class<?>[] {Marvin.class, Chain.class, Walouis.class});
+        baseGame.addStages((Class<? extends StageType>[]) new Class<?>[] {LastLocation.class, Warzone.class, Boxtopia.class});
         addMod(baseGame);
         loadMods();
         
         for (Mod mod : Game.game.mods.values()) {
             for (Class<? extends FighterType> fighter : mod.fighters) {
                 fighters.add(new Fighter(ModLoader.getFighterType(fighter)));
+            }
+            for (Class<? extends StageType> stage : mod.stages) {
+                stages.add(stage);
             }
         }
 

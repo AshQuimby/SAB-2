@@ -16,6 +16,7 @@ import java.util.jar.JarInputStream;
 
 import sab.game.Game;
 import sab.game.fighters.FighterType;
+import sab.game.stages.StageType;
 import sab.util.SabReader;
 
 public final class ModLoader {
@@ -107,6 +108,15 @@ public final class ModLoader {
     }
 
     public static FighterType getFighterType(Class<? extends FighterType> type) {
+        try {
+			return type.getDeclaredConstructor().newInstance();
+		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
+				| NoSuchMethodException | SecurityException e) {
+			throw new RuntimeException(e);
+		}
+    }
+
+    public static StageType getStageType(Class<? extends StageType> type) {
         try {
 			return type.getDeclaredConstructor().newInstance();
 		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException

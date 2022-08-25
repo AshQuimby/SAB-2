@@ -8,8 +8,10 @@ import com.seagull_engine.GameObject;
 import com.seagull_engine.Seagraphics;
 
 import sab.game.DamageSource;
+import sab.game.Direction;
 import sab.game.Hittable;
 import sab.game.Player;
+import sab.game.CollisionResolver;
 
 public class Attack extends DamageSource {
     public AttackType type;
@@ -17,7 +19,8 @@ public class Attack extends DamageSource {
     public int life;
     public int hitCooldown;
     public boolean directional;
-
+    public boolean collideWithStage;
+    public Direction collisionDirection;
     private HashMap<GameObject, Integer> hitObjects;
 
     public Attack(AttackType type, Player player) {
@@ -38,6 +41,20 @@ public class Attack extends DamageSource {
 
     public void onSpawn(int[] data) {
         type.onSpawn(this, data);
+    }
+    
+    @Override
+    public void preUpdate() {
+        if (collideWithStage) {
+            collisionDirection = CollisionResolver.moveWithCollisions(this, velocity, owner.battle.getPlatforms());
+        } else {
+            hitbox.x += velocity.x;
+            hitbox.y += velocity.y;
+        }
+
+        drawRect.setCenter(hitbox.getCenter(new Vector2()));
+        update();
+        postUpdate();
     }
 
     @Override

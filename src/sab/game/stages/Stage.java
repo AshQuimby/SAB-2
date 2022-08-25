@@ -3,26 +3,37 @@ package sab.game.stages;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Rectangle;
+import com.seagull_engine.Seagraphics;
 
 import sab.game.Player;
 
 public class Stage {
     public String id;
     public String name;
+    public String background;
+    public String music;
 
     protected List<StageObject> stageObjects;
     protected List<Ledge> ledges;
+
+    // Players can be outside this blast zone safely when not taking knockback
+    protected Rectangle safeBlastZone;
+
+    // Players cannot be outside this blast zone even when 
+    protected Rectangle unsafeBlastZone;
     private StageType type;
 
     public Stage(StageType type) {
         id = "stage";
         name = "Stage";
+        background = "background.png";
+        music = "last_location.mp3";
         stageObjects = new ArrayList<>();
         ledges = new ArrayList<>();
         
         this.type = type;
-        type.init(this);
+        this.type.init(this);
     }
 
     public void update() {
@@ -58,5 +69,11 @@ public class Stage {
 
     public List<StageObject> getStageObjects() {
         return stageObjects;
+    }
+
+    public void render(Seagraphics g) {
+        for (StageObject platform : stageObjects) {
+            platform.render(g);
+        }
     }
 }
