@@ -5,12 +5,10 @@ import com.badlogic.gdx.math.Vector2;
 import com.seagull_engine.GameObject;
 import com.seagull_engine.Seagraphics;
 
-import sab.game.CollisionResolver;
 import sab.game.Direction;
 import sab.game.attacks.Attack;
 import sab.game.attacks.AttackType;
 import sab.game.particles.Particle;
-import sab.game.stages.Platform;
 
 public class FallingKnife extends AttackType {
     private boolean onGround;

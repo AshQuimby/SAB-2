@@ -1,10 +1,6 @@
 package sab.game;
 
-import java.util.ArrayList;
 import java.util.List;
-
-import javax.swing.text.Position;
-import javax.swing.text.StyledEditorKit;
 
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
@@ -16,7 +12,6 @@ import sab.game.attacks.Attack;
 import sab.game.fighters.Fighter;
 import sab.game.particles.Particle;
 import sab.game.stages.Ledge;
-import sab.game.stages.PassablePlatform;
 import sab.net.Keys;
 
 public class Player extends GameObject implements Hittable {
@@ -28,12 +23,13 @@ public class Player extends GameObject implements Hittable {
     public boolean touchingStage;
     public boolean usedRecovery;
     public int costume;
+    public Vector2 knockback;
 
     private PlayerAction currentAction;
     private Direction collisionDirection;
-    private Vector2 knockback;
     private int knockbackDuration;
     private int lives;
+    private int frozen;
     private int extraJumpsUsed;
     private int minCharge;
     private int maxCharge;
@@ -41,9 +37,12 @@ public class Player extends GameObject implements Hittable {
     private int charge;
     private int ledgeCooldown;
     private int ledgeGrabs;
-    private boolean charging;
+    private int usedCharge;
     private int smokeGenerator;
     private int id;
+    private int freezeFrame;
+    private boolean repeatAttack;
+    private boolean charging;
 
     public Player(Fighter fighter, int costume, int id, Battle battle) {
         this.battle = battle;
@@ -76,6 +75,9 @@ public class Player extends GameObject implements Hittable {
         this.costume = costume;
 
         stunned = 0;
+        freezeFrame = 0;
+        frozen = 0;
+        repeatAttack = false;
         charging = false;
         usedRecovery = false;
         maxCharge = 0;
@@ -98,8 +100,8 @@ public class Player extends GameObject implements Hittable {
             
             for (GameObject platform : passablePlatforms) {
                 if (!keys.isPressed(Keys.DOWN) && velocity.y <= 0
-                        && hitbox.y > platform.hitbox.y + platform.hitbox.height - 16) {
-                    Direction tryDirection = CollisionResolver.moveWithCollisions(this, velocity, platform);
+                        && hitbox.y > platform.hitbox.y + platform.hitbox.height - 12) {
+                    Direction tryDirection = CollisionResolver.resolveY(this, step, platform);
                     if (tryDirection != Direction.NONE)
                         collisionDirection = tryDirection;
                 }
@@ -117,10 +119,8 @@ public class Player extends GameObject implements Hittable {
                 }
                 if (collisionDirection == Direction.UP || collisionDirection == Direction.DOWN) {
                     knockback.y *= -1;
-                    SABSounds.playSound("slam.mp3");
                 } else if (collisionDirection == Direction.RIGHT || collisionDirection == Direction.LEFT) {
                     knockback.x *= -1;
-                    SABSounds.playSound("slam.mp3");
                 }
             }
         }
@@ -130,16 +130,25 @@ public class Player extends GameObject implements Hittable {
         currentAction = null;
     }
 
+    public void startAnimation(int delay, Animation animation, int endLag, boolean important) {
+        currentAction = new PlayerAction(delay, animation, important, endLag);
+    }
+
     public void startAttack(Attack attack, int delay, int endLag, boolean important) {
-        currentAction = new PlayerAction(delay, attack, false, endLag, null);
+        currentAction = new PlayerAction(delay, attack, important, endLag, null);
     }
 
     public void startAttack(Attack attack, Animation animation, int delay, int endLag, boolean important) {
-        currentAction = new PlayerAction(delay, attack, animation, false, endLag, null);
+        currentAction = new PlayerAction(delay, attack, animation, important, endLag, null);
     }
 
     public void startAttack(Attack attack, Animation animation, int delay, int endLag, boolean important, int[] data) {
-        currentAction = new PlayerAction(delay, attack, animation, false, endLag, data);
+        currentAction = new PlayerAction(delay, attack, animation, important, endLag, data);
+    }
+
+    public void startRepeatingAttack(Attack attack, Animation animation, int delay, int endLag, boolean important, int[] data) {
+        currentAction = new PlayerAction(delay, attack, animation, important, endLag, data);
+        repeatAttack = true;
     }
 
     public int getLives() {
@@ -166,9 +175,14 @@ public class Player extends GameObject implements Hittable {
 
     @Override
     public void update() {
+        usedCharge = 0;
         if (stunned > 0) {
             stunned--;
             return;
+        }
+
+        if (frozen > 0) {
+            frozen--;
         }
 
         Ledge ledge = null;
@@ -184,11 +198,19 @@ public class Player extends GameObject implements Hittable {
 
             velocity = knockback.cpy().scl(1f / fighter.mass);
             gravityAndFriction();
+            repeatAttack = false;
+            usedCharge = 0;
             charge = 0;
             charging = false;
-            if (--knockbackDuration <= 0) {
+            if (knockbackDuration-- <= 0) {
                 knockback = new Vector2(0, 0);
             }
+            return;
+        } else {
+            knockback = new Vector2(0, 0);
+        }
+
+        if (frozen > 0) {
             return;
         }
         
@@ -202,6 +224,7 @@ public class Player extends GameObject implements Hittable {
             hitbox.setPosition(ledge.getGrabPosition(hitbox));
             velocity.scl(0);
             frame = fighter.ledgeAnimation.stepLooping();
+            usedRecovery = false;
             if (keys.isJustPressed(Keys.DOWN)) {
                 ledgeCooldown = 8;
                 velocity.y = -getJumpVelocity() / 2;
@@ -218,16 +241,18 @@ public class Player extends GameObject implements Hittable {
             if (velocity.y < 0) velocity.y = 0;
         }
         if (collisionDirection == Direction.RIGHT || collisionDirection == Direction.LEFT) {
-            // velocity.x = 0;
+            velocity.x = 0;
         }
-
+        
         if (charging) {
             if (++charge >= maxCharge) {
                 charge = maxCharge;
             }
             fighter.charging(this, charge);
             if (keys.isPressed(Keys.ATTACK)) {
-                currentAction.changeDelay(1);
+                if (currentAction != null) {
+                    currentAction.changeDelay(1);
+                }
             }
         }
 
@@ -236,6 +261,7 @@ public class Player extends GameObject implements Hittable {
             if (currentAction.finished()) {
                 currentAction = null;
                 if (charging) fighter.chargeAttack(this, charge);
+                usedCharge = charge;
                 charge = 0;
                 charging = false;
             } else {
@@ -269,7 +295,7 @@ public class Player extends GameObject implements Hittable {
         }
 
         // Attacks
-        if (keys.isJustPressed(Keys.ATTACK)) {
+        if (keys.isJustPressed(Keys.ATTACK) || (repeatAttack && keys.isPressed(Keys.ATTACK))) {
             if (keys.isPressed(Keys.DOWN)) {
                 fighter.downAttack(this);
             } else if (keys.isPressed(Keys.UP)) {
@@ -279,21 +305,38 @@ public class Player extends GameObject implements Hittable {
             } else {
                 fighter.neutralAttack(this);
             }
+        } else {
+            repeatAttack = false;
         }
+
+        if (usedRecovery) frame = fighter.freefallAnimation.stepLooping();
 
         fighter.update(this);
         gravityAndFriction();
     }
 
-    public void stun(int time) {
-        if (time > stunned) stunned = time;
+    public int getCharge() {
+        return charge;
+    }
+
+    public int getUsedCharge() {
+        return usedCharge;
+    }
+
+    public void stun(int ticks) {
+        if (ticks > stunned) stunned = ticks;
+    }
+
+    public void freeze(int ticks) {
+        if (ticks > frozen) frozen = ticks;
+        freezeFrame = frame;
     }
 
     private float getJumpVelocity() {
         // Don't ask. -a_viper
         // I highly recommend DMing a_viper and asking -AshQuimby
         float h0 = fighter.jumpHeight;
-        float g = 1.2f;
+        float g = 1.6f;
         float m = fighter.mass;
         float k = fighter.friction;
         float v0 = (float) (-Math.sqrt(2 * g * h0) + (2f / 3f) * ((h0 * k) / m) - (h0 / (9 * Math.sqrt(2)) * Math.sqrt(h0 / g) * (k * k / m * m)));
@@ -313,7 +356,7 @@ public class Player extends GameObject implements Hittable {
         velocity.y -= 1.2f;
 
         applyForce(velocity.cpy().scl(-fighter.friction));
-        if (touchingStage && !(keys.isPressed(Keys.LEFT) ^ keys.isPressed(Keys.RIGHT))) {
+        if (touchingStage && (!(keys.isPressed(Keys.LEFT) ^ keys.isPressed(Keys.RIGHT)) || charging)) {
             velocity.x *= 0.3f;
         }
     }
@@ -335,6 +378,11 @@ public class Player extends GameObject implements Hittable {
     }
 
     @Override
+    public boolean canBeHit(DamageSource source) {
+        return true;
+    }
+
+    @Override
     public boolean onHit(DamageSource source) {
         damage += source.damage;
         Vector2 newKnockback = source.knockback.cpy().scl(4f).scl(damage / 100f + 1f);
@@ -352,8 +400,15 @@ public class Player extends GameObject implements Hittable {
     public void render(Seagraphics g) {
         drawRect.setCenter(hitbox.getCenter(new Vector2()).add(fighter.imageOffsetX * direction, fighter.imageOffsetY));
         String costumeString = fighter.id + (costume == 0 ? "" : "_alt_" + costume) + ".png";
+        if (frozen > 0) {
+            frame = freezeFrame;
+        }
         preRender(g);
         g.usefulDraw(g.imageProvider.getImage(costumeString), drawRect.x, drawRect.y, (int) drawRect.width, (int) drawRect.height, frame, frameCount, rotation, direction == 1, false);
         postRender(g);
+
+        if (frozen > 0) {
+            g.usefulDraw(g.imageProvider.getImage("ice.png"), drawRect.x, drawRect.y, (int) drawRect.width, (int) drawRect.height, frame, frameCount, rotation, false, false);
+        }
     }
 }

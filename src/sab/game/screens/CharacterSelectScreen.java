@@ -24,6 +24,9 @@ public class CharacterSelectScreen extends ScreenAdapter {
     private boolean player1Ready;
     private boolean player2Ready;
     private boolean refreshed;
+    private boolean susGus;
+    private boolean inputInvalidated;
+    private int[] inputBuffer;
 
     public CharacterSelectScreen() {
         player1Index = 0;
@@ -31,8 +34,11 @@ public class CharacterSelectScreen extends ScreenAdapter {
         player1CostumeIndex = 0;
         player2CostumeIndex = 0;
         refreshed = false;
-        player1Fighters = new ArrayList<Fighter>(); 
+        inputInvalidated = false;
+        player1Fighters = new ArrayList<Fighter>();
         player2Fighters = new ArrayList<Fighter>();
+        susGus = Math.random() > 0.99;
+        inputBuffer = new int[4];
     }
 
     public Screen update() {
@@ -62,8 +68,23 @@ public class CharacterSelectScreen extends ScreenAdapter {
 
         g.scalableDraw(g.imageProvider.getImage("character_selector_background_layer_1.png"), -1152 / 2, -704 / 2, 1152, 704);
 
+        if (inputBuffer[0] == 49 && inputBuffer[1] == 47 && inputBuffer[1] == 47 && inputBuffer[3] == 46) {
+            if (player1Fighters.get(player1Index).id.equals("marvin")) {
+                inputInvalidated = true;
+                player1CostumeIndex = 1929;
+            }
+
+            if (player2Fighters.get(player2Index).id.equals("marvin")) {
+                inputInvalidated = true;
+                player2CostumeIndex = 1929;
+            }
+        }
+
         String player1Costume = player1CostumeIndex == 0 ? "" : "_alt_" + player1CostumeIndex;
-        String player2Costume = player2CostumeIndex == 0 ? "" : "_alt_" + player2CostumeIndex;
+        String player2Costume = player2CostumeIndex == 0 ? "" : "_alt_" + player2CostumeIndex;    
+
+        if (player1Fighters.get(player1Index).id.equals("gus") && player1CostumeIndex == 2 && susGus) player1Costume += "_alt";
+        if (player2Fighters.get(player2Index).id.equals("gus") && player2CostumeIndex == 2 && susGus) player2Costume += "_alt";
 
         g.usefulDraw(g.imageProvider.getImage(player1Fighters.get(player1Index).id + "_render" + player1Costume + ".png"), -1152 / 2, -704 / 2, 512, 512, 0, 1, 0, true, false);
         g.usefulDraw(g.imageProvider.getImage(player1Fighters.get(player1Index).id + player1Costume + ".png"), -1156 / 2 + 256 - player1Fighters.get(player1Index).renderWidth / 2, 704 / 2 - 160, player1Fighters.get(player1Index).renderWidth, player1Fighters.get(player1Index).renderHeight, player1Fighters.get(player1Index).walkAnimation.getFrame(), player1Fighters.get(player1Index).frames, 0, true, false);
@@ -89,6 +110,13 @@ public class CharacterSelectScreen extends ScreenAdapter {
 
     @Override
     public Screen keyPressed(int keyCode) {
+        if (!inputInvalidated) {
+            for (int i = 0; i < 3; i++) {
+                inputBuffer[i] = inputBuffer[i + 1];
+            }
+            inputBuffer[3] = keyCode;
+        }
+        
         int fighterCount = Game.game.fighters.size();
         if (keyCode == Input.Keys.A) {
             player1Fighters.get(player1Index).walkAnimation.reset();

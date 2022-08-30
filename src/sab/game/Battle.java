@@ -49,6 +49,7 @@ public class Battle {
     private int pauseMenuIndex;
 
     public boolean drawHitboxes;
+    public boolean gameEnded;
 
     public Battle(Fighter fighter1, Fighter fighter2, int[] costumes, Stage stage) {
         players = new ArrayList<>();
@@ -59,6 +60,7 @@ public class Battle {
         paused = false;
         pauseOverlayHidden = false;
         pauseMenuIndex = 0;
+        gameEnded = false;
 
         this.stage = stage;
 
@@ -95,6 +97,7 @@ public class Battle {
         players.add(player1);
         players.add(player2);
         paused = false;
+        gameEnded = false;
 
         this.stage = new Stage(new LastLocation());
 
@@ -119,6 +122,11 @@ public class Battle {
 
     public void addGameObject(GameObject gameObject) {
         newGameObjects.add(gameObject);
+    }
+
+    public void addAttack(Attack attack, int[] data) {
+        addGameObject(attack);
+        attack.onSpawn(data);
     }
 
     // Do NOT call this method from a particle
@@ -166,12 +174,9 @@ public class Battle {
         return platforms;
     }
 
-    // // If this returns true then it returns to the character select screen
-    // public boolean onPauseSelect() {
-    //     return paused && pauseMenuIndex == 2;
-    // }
-
     public void update() {
+
+        if (player1.getLives() <= 0 || player2.getLives() <= 0) endGame();
 
         if (paused) return;
 
@@ -252,6 +257,10 @@ public class Battle {
         }
     }
 
+    public void endGame() {
+        gameEnded = true;
+    }
+
     public void pause() {
         paused = true;
     }
@@ -288,11 +297,13 @@ public class Battle {
 
     public void render(Seagraphics g) {
         g.scalableDraw(g.imageProvider.getImage(stage.background), -1152 / 2, -704 / 2, 1152, 704);
-
+        
         for (GameObject misc : miscGameObjects) {
             misc.render(g);
             if (drawHitboxes) drawHitbox(misc);
         }
+
+        stage.renderDetails(g);
 
         for (GameObject attack : attacks) {
             attack.render(g);
@@ -304,7 +315,7 @@ public class Battle {
             if (drawHitboxes) drawHitbox(player);
         }
 
-        stage.render(g);
+        stage.renderPlatforms(g);
 
         for (Particle particle : particles) {
             particle.render(g);

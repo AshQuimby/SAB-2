@@ -61,6 +61,7 @@ public class Fighter implements Cloneable {
     public Animation walkAnimation;
     public Animation ledgeAnimation;
     public Animation knockbackAnimation;
+    public Animation freefallAnimation;
 
     public Fighter(FighterType type) {
         id = "fighter";
@@ -81,6 +82,7 @@ public class Fighter implements Cloneable {
         walkAnimation = null;
         ledgeAnimation = new Animation(new int[]{8}, 1, false);
         knockbackAnimation = new Animation(new int[]{7}, 1, false);
+        freefallAnimation = new Animation(new int[]{6}, 1, false);
         description = "    This is the default"
         + "\ndescription. Change it by changing"
         + "\nthe \"description\" field";

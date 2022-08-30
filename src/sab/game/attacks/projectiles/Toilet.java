@@ -3,7 +3,6 @@ package sab.game.attacks.projectiles;
 import com.badlogic.gdx.math.Vector2;
 import com.seagull_engine.GameObject;
 
-import sab.game.CollisionResolver;
 import sab.game.Direction;
 import sab.game.attacks.Attack;
 import sab.game.attacks.AttackType;
@@ -36,7 +35,7 @@ public class Toilet extends AttackType {
         }
 
         if (attack.life == 290) {
-            attack.owner.velocity.y = 14;
+            attack.owner.velocity.y = 24;
             attack.frame = 1;
             playerLaunched = true;
         }

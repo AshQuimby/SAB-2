@@ -13,12 +13,21 @@ public class PlayerAction {
     private Animation animation;
     private boolean important;
     
-    public PlayerAction(int delay, boolean important, int endLag, int[] data) {
+    public PlayerAction(int delay, boolean important, int endLag) {
         this.delay = delay;
         this.important = important;
         attack = null;
         this.endLag = endLag;
-        this.data = data;
+        this.data = new int[] {0};
+    }
+
+    public PlayerAction(int delay, Animation animation, boolean important, int endLag) {
+        this.delay = delay;
+        this.important = important;
+        this.animation = animation;
+        attack = null;
+        this.endLag = endLag;
+        this.data = new int[] {0};
     }
 
     public PlayerAction(int delay, Attack attack, boolean important, int endLag, int[] data) {

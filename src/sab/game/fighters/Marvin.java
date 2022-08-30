@@ -36,7 +36,7 @@ public class Marvin extends FighterType {
         fighter.friction = .05f;
         fighter.mass = 5f;
         fighter.jumps = 10000;
-        fighter.walkAnimation = new Animation(0, 4, 5, true);
+        fighter.walkAnimation = new Animation(0, 3, 5, true);
         fighter.description = "    Retired Albany plumber now"
         + "\nprincess saving daydreamer,"
         + "\nMarvin is a troubled man "
@@ -83,13 +83,14 @@ public class Marvin extends FighterType {
         if (!player.usedRecovery) {
             squatAnimation.reset();
             player.startAttack(new Attack(new Toilet(), player), squatAnimation, 4, 30, false);
+            player.usedRecovery = true;
         }
     }
 
     @Override
     public void downAttack(Fighter fighter, Player player) {
         if (!player.usedRecovery) {
-            player.startChargeAttack(new PlayerAction(5, true, 0, null), 5, 60);
+            player.startChargeAttack(new PlayerAction(5, true, 0), 5, 60);
         }
     }
 

@@ -1,16 +1,15 @@
 package sab.game.stages;
 
-import com.badlogic.gdx.math.Vector2;
-
 public class Boxtopia extends StageType {
-
     @Override
     public void init(Stage stage) {
         stage.name = "Boxtopia";
-        stage.music = "genetically_engineered_bad.mp3";
-        stage.addStageObject(new Platform(-512 / 2, -128, 512, 56, "last_location.png"));
-        stage.addStageObject(new Platform(-512 / 2, -128 + 56, 56, 256 - 56, "last_location.png"));
-        stage.addStageObject(new Platform(512 / 2 - 56, -128 + 56, 56, 256 - 56, "last_location.png"));
-        stage.addStageObject(new Platform(-512 / 2, 128, 512, 56, "last_location.png"));
+        stage.background = "box_location.png";
+        stage.music = "box_location.mp3";
+        stage.addStageObject(new StageObject(-512 / 2, -256, 512, 512, "box_back.png"));
+        stage.addStageObject(new Platform(-512 / 2, -256, 512, 32, "box_bottom.png"));
+        stage.addStageObject(new Platform(-512 / 2, -256 + 32, 32, 448, "box_left_wall.png"));
+        stage.addStageObject(new Platform(512 / 2 - 32, -256 + 32, 32, 448, "box_right_wall.png"));
+        stage.addStageObject(new PassablePlatform(-512 / 2, -256 + 448 + 32, 512, 32, "box_top.png"));
     }
 }

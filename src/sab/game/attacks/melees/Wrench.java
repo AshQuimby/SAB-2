@@ -11,6 +11,9 @@ public class Wrench extends AttackType {
     @Override
     public void onCreate(Attack attack) {
         attack.imageName = "wrench.png";
+        if (attack.owner.costume == 1929) {
+            attack.imageName = "wrэnch.png";
+        }
         attack.life = 15;
         attack.frameCount = 1;
         attack.velocity = new Vector2();
@@ -26,11 +29,11 @@ public class Wrench extends AttackType {
 
     @Override
     public void update(Attack attack) {
-        attack.hitbox.setCenter(attack.owner.hitbox.getCenter(new Vector2()).add(16 * attack.owner.direction, -4));
-        attack.rotation += 6f * attack.direction;
+        attack.hitbox.setCenter(attack.owner.hitbox.getCenter(new Vector2()).add(16 * attack.direction, -4));
+        attack.rotation -= 6f * attack.direction;
 
         Vector2 center = attack.hitbox.getCenter(new Vector2());
-        float wrenchAngle = (float) Math.toRadians(attack.rotation + 45);
+        float wrenchAngle = (float) Math.toRadians(attack.rotation + attack.direction == 1 ? 45 : 125);
         float wrenchLength = (float) Math.sqrt(attack.hitbox.width * attack.hitbox.width + attack.hitbox.height * attack.hitbox.height);
 
         attack.hitbox.setCenter(center.x + MathUtils.cos(wrenchAngle) * wrenchLength / 2, 

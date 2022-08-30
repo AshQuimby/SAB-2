@@ -5,7 +5,6 @@ import java.util.List;
 
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.Vector2;
-import com.seagull_engine.GameObject;
 import com.seagull_engine.Seagraphics;
 
 import sab.game.Battle;

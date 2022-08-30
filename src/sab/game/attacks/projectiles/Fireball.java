@@ -1,11 +1,12 @@
 package sab.game.attacks.projectiles;
 
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.seagull_engine.GameObject;
-import sab.game.CollisionResolver;
 import sab.game.Direction;
 import sab.game.attacks.Attack;
 import sab.game.attacks.AttackType;
+import sab.game.particles.Particle;
 
 public class Fireball extends AttackType {
     @Override
@@ -42,6 +43,13 @@ public class Fireball extends AttackType {
     @Override
     public void hit(Attack attack, GameObject hit) {
         attack.alive = false;
+    }
+
+    @Override
+    public void kill(Attack attack) {
+        for (int i = 0; i < 4 ; i++) {
+            attack.owner.battle.addParticle(new Particle(attack.hitbox.getCenter(new Vector2()), new Vector2(4 * MathUtils.random(), 0).rotateDeg(MathUtils.random() * 360), 32, 32, 0, "fire.png"));
+        }
     }
 
     @Override

@@ -16,6 +16,7 @@ import sab.game.CollisionResolver;
 public class Attack extends DamageSource {
     public AttackType type;
     public boolean alive;
+    public boolean canHit;
     public int life;
     public int hitCooldown;
     public boolean directional;
@@ -37,6 +38,7 @@ public class Attack extends DamageSource {
         reflectable = true;
         this.type = type;
         type.onCreate(this);
+        canHit = true;
     }
 
     public void onSpawn(int[] data) {
@@ -66,10 +68,13 @@ public class Attack extends DamageSource {
             hitObjects.replace(key, hitObjects.get(key) - 1);
         }
 
-        for (GameObject target : owner.battle.getHittableGameObjects()) {
-            if (hitbox.overlaps(target.hitbox) && target != owner && (hitObjects.get(target) == null || hitObjects.get(target) <= 0)) {
-                if (((Hittable) target).onHit(this)) successfulHit(target);
-                hit(target);
+        if (canHit) {
+            for (GameObject target : owner.battle.getHittableGameObjects()) {
+                if (hitbox.overlaps(target.hitbox) && target != owner && (hitObjects.get(target) == null || hitObjects.get(target) <= 0)) {
+                    if (((Hittable) target).canBeHit(this)) successfulHit(target);
+                    hit(target);
+                    ((Hittable) target).onHit(this);
+                }
             }
         }
 
@@ -113,7 +118,7 @@ public class Attack extends DamageSource {
 
     public void kill() {
         type.kill(this);
-        owner.battle.removeGameObject(this);
+        if (!alive) owner.battle.removeGameObject(this);
     }
 
     @Override

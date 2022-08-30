@@ -51,6 +51,11 @@ public class Platform extends StageObject {
     }
 
     @Override
+    public boolean inBackground() {
+        return false;
+    }
+
+    @Override
     public boolean isSolid() {
         return true;
     }

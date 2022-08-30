@@ -9,6 +9,11 @@ public class StageObject extends GameObject {
         velocity = new Vector2();
         this.imageName = imageName;
         drawRect = new Rectangle(x, y, width, height);
+        hitbox = new Rectangle(drawRect);
+    }
+
+    public boolean inBackground() {
+        return true;
     }
 
     public boolean isSolid() {

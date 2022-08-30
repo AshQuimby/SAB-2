@@ -32,7 +32,7 @@ public class Chain extends FighterType {
         fighter.frames = 9;
         fighter.friction = .1f;
         fighter.mass = 4.36f;
-        fighter.walkAnimation = new Animation(0, 4, 5, true);
+        fighter.walkAnimation = new Animation(0, 3, 5, true);
         fighter.costumes = 3;
 
         hasBoomerang = true;

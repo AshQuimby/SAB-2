@@ -1,13 +1,12 @@
 package sab.game;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.files.FileHandle;
 import com.seagull_engine.Messenger;
 import com.seagull_engine.Seagraphics;
 
 import sab.game.fighters.Chain;
 import sab.game.fighters.Fighter;
 import sab.game.fighters.FighterType;
+import sab.game.fighters.Gus;
 import sab.game.fighters.Marvin;
 import sab.game.fighters.Walouis;
 import sab.game.screens.CharacterSelectScreen;
@@ -16,32 +15,16 @@ import sab.game.stages.Boxtopia;
 import sab.game.stages.LastLocation;
 import sab.game.stages.StageType;
 import sab.game.stages.Warzone;
-import sab.game.stages.Stage;
 import sab.modloader.Mod;
 import sab.modloader.ModLoader;
 import sab.screen.Screen;
-import sab.util.SabReader;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.net.URL;
-import java.net.URLClassLoader;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.nio.file.FileAlreadyExistsException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Scanner;
-import java.util.jar.JarEntry;
-import java.util.jar.JarFile;
-import java.util.jar.JarInputStream;
-
-import java.io.InputStream;
-import java.lang.reflect.InvocationTargetException;
 
 public class Game extends Messenger {
     public static final Game game = new Game();
@@ -64,7 +47,7 @@ public class Game extends Messenger {
     public void load() {
         Settings.loadSettings();
         Mod baseGame = new Mod("Super Ass Brothers", "sab", "1.0", "base game assets");
-        baseGame.addFighters((Class<? extends FighterType>[]) new Class<?>[] {Marvin.class, Chain.class, Walouis.class});
+        baseGame.addFighters((Class<? extends FighterType>[]) new Class<?>[] {Marvin.class, Chain.class, Walouis.class, Gus.class});
         baseGame.addStages((Class<? extends StageType>[]) new Class<?>[] {LastLocation.class, Warzone.class, Boxtopia.class});
         addMod(baseGame);
         loadMods();

@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.seagull_engine.Seagraphics;
 
 import sab.game.Game;
+import sab.game.SABSounds;
 import sab.game.fighters.Fighter;
 import sab.game.stages.Stage;
 import sab.game.stages.StageType;
@@ -39,9 +40,10 @@ public class StageSelectScreen extends ScreenAdapter {
     @Override
     public void render(Seagraphics g) {
         g.scalableDraw(g.imageProvider.getImage(stages.get(stageIndex).background), -1152 / 2, -704 / 2, 1152, 704);
-        stages.get(stageIndex).render(g);
+        stages.get(stageIndex).renderDetails(g);
+        stages.get(stageIndex).renderPlatforms(g);
         g.usefulTintDraw(g.imageProvider.getImage("pixel.png"), -1152 / 2, -704 / 2, 1152, 704, 0, 1, 0, false, false, new Color(0, 0, 0, 0.5f));
-        g.drawText(stages.get(stageIndex).name, g.imageProvider.getFont("SAB_font"), 0, 256, 1, Color.WHITE, 0);
+        g.drawText(stages.get(stageIndex).name, g.imageProvider.getFont("SAB_font"), 0, 256, 2, Color.WHITE, 0);
     }
 
     @Override
@@ -50,6 +52,7 @@ public class StageSelectScreen extends ScreenAdapter {
         if (keyCode == Input.Keys.A || keyCode == Input.Keys.LEFT) stageIndex = sab.util.Utils.loop(stageIndex, -1, stages.size(), 0);
         if (keyCode == Input.Keys.ENTER) return new LocalBattleScreen(player1, player2, new int[]{player1Costume, player2Costume}, stages.get(stageIndex));
         if (keyCode == Input.Keys.ESCAPE) return Game.game.globalCharacterSelectScreen;
+        SABSounds.playSound(SABSounds.BLIP);
         return this;
     }
 }

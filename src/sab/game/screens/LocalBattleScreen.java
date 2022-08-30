@@ -4,9 +4,9 @@ import com.badlogic.gdx.Input;
 import com.seagull_engine.Seagraphics;
 
 import sab.game.Battle;
+import sab.game.Game;
 import sab.game.SABSounds;
 import sab.game.fighters.Fighter;
-import sab.game.stages.LastLocation;
 import sab.game.stages.Stage;
 import sab.net.Keys;
 import sab.screen.*;
@@ -15,8 +15,8 @@ public class LocalBattleScreen extends ScreenAdapter {
     private Battle battle;
 
     public LocalBattleScreen(Fighter player1, Fighter player2, int[] costumes, Stage stage) {
-        SABSounds.playMusic("last_location.mp3", true);
         battle = new Battle(player1, player2, costumes, stage);
+        SABSounds.playMusic(battle.getStage().music, true);
     }
 
     @Override
@@ -99,6 +99,9 @@ public class LocalBattleScreen extends ScreenAdapter {
 
     @Override
     public Screen update() {
+        if (battle.gameEnded) {
+            return Game.game.globalCharacterSelectScreen;
+        }
         battle.update();
         return this;
     }

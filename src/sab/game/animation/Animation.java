@@ -17,7 +17,7 @@ public class Animation {
             throw new IllegalArgumentException("Frame length must be greater than 0");
         }
 
-        frames = new int[lastFrame - firstFrame];
+        frames = new int[lastFrame + 1 - firstFrame];
         for (int i = 0; i < frames.length; i++) {
             frames[i] = firstFrame + i;
         }

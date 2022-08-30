@@ -71,9 +71,15 @@ public class Stage {
         return stageObjects;
     }
 
-    public void render(Seagraphics g) {
+    public void renderDetails(Seagraphics g) {
         for (StageObject platform : stageObjects) {
-            platform.render(g);
+            if (platform.inBackground()) platform.render(g);
+        }
+    }
+
+    public void renderPlatforms(Seagraphics g) {
+        for (StageObject platform : stageObjects) {
+            if (!platform.inBackground()) platform.render(g);
         }
     }
 }

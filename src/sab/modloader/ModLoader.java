@@ -44,21 +44,27 @@ public final class ModLoader {
 
     public static Mod loadMod(File modFile, Game game) throws IOException {
         if (modFile.isDirectory()) {
-            throw new IllegalArgumentException("File cannot be a directory");
+            throw new IllegalArgumentException("Mod " + modFile.getName() + " Failed to load: File cannot be a directory");
         }
         if (!modFile.getName().endsWith(".jar")) {
-            throw new IllegalArgumentException("File must be of type jar");
+            throw new IllegalArgumentException("Mod " + modFile.getName() + " Failed to load: File must be of type jar");
         }
         if (!modFile.exists()) {
-            throw new IllegalArgumentException("File must exist");
+            throw new IllegalArgumentException("Mod " + modFile.getName() + " Failed to load: File must exist");
         }
 
         Map<String, String> modSettings = getModSettings(modFile);
         if (modSettings == null)
             return null;
 
+        for (Mod mod : Game.game.mods.values()) {
+            if (modSettings.get("namespace").equals(mod.namespace)) {
+                throw new IllegalArgumentException("Mod " + modSettings.get("display_name") + " Failed to load: Mods with duplicate namespace \"" + mod.namespace + "\". Conflicting mod: " + mod.displayName);
+            }
+        }
+
         Mod mod = new Mod(modSettings.get("display_name"), modSettings.get("namespace"),
-                modSettings.get("version"), modSettings.get("version"));
+                modSettings.get("version"), modSettings.get("description"));
 
         URL modURL = modFile.toURI().toURL();
         URL[] urls = new URL[] { modURL };
@@ -91,6 +97,9 @@ public final class ModLoader {
                             .loadClass(entry.getName().replace("/", ".").substring(0, entry.getName().length() - 6));
                     if (FighterType.class.isAssignableFrom(clazz)) {
                         mod.addFighter((Class<? extends FighterType>) clazz);
+                    }
+                    if (StageType.class.isAssignableFrom(clazz)) {
+                        mod.addStage((Class<? extends StageType>) clazz);
                     }
                 } catch (ClassNotFoundException e) {
                     throw new RuntimeException(e);
