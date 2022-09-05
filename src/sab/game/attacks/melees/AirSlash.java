@@ -29,6 +29,7 @@ public class AirSlash extends AttackType {
     @Override
     public void update(Attack attack) {
         attack.owner.velocity.y += 1.5f;
+        attack.owner.velocity.x *= 0.95f;
         attack.owner.velocity.y *= 0.98f;
         attack.hitbox.setCenter(attack.owner.hitbox.getCenter(new Vector2()).add(0, 4));
 

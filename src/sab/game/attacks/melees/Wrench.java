@@ -8,6 +8,8 @@ import sab.game.attacks.Attack;
 import sab.game.attacks.AttackType;
 
 public class Wrench extends AttackType {
+    private float swing;
+
     @Override
     public void onCreate(Attack attack) {
         attack.imageName = "wrench.png";
@@ -25,19 +27,19 @@ public class Wrench extends AttackType {
         attack.direction = attack.owner.direction;
         attack.hitCooldown = 16;
         attack.reflectable = false;
+
+        swing = 0;
     }
 
     @Override
     public void update(Attack attack) {
-        attack.hitbox.setCenter(attack.owner.hitbox.getCenter(new Vector2()).add(16 * attack.direction, -4));
-        attack.rotation -= 6f * attack.direction;
+        attack.hitbox.setCenter(attack.owner.hitbox.getCenter(new Vector2()).add(40 * attack.owner.direction, 8));
+        swing += 8;
 
-        Vector2 center = attack.hitbox.getCenter(new Vector2());
-        float wrenchAngle = (float) Math.toRadians(attack.rotation + attack.direction == 1 ? 45 : 125);
-        float wrenchLength = (float) Math.sqrt(attack.hitbox.width * attack.hitbox.width + attack.hitbox.height * attack.hitbox.height);
-
-        attack.hitbox.setCenter(center.x + MathUtils.cos(wrenchAngle) * wrenchLength / 2, 
-                center.y + MathUtils.sin(wrenchAngle) * wrenchLength / 2);
+        float wrenchLength = (float) Math
+                .sqrt(attack.hitbox.width * attack.hitbox.width + attack.hitbox.height * attack.hitbox.height);
+        attack.rotation = -(swing - 45) * attack.direction;
+        attack.hitbox.y -= MathUtils.sinDeg(swing - 45) * wrenchLength / 2;
         
         for (GameObject gameObject : attack.owner.battle.getGameObjects()) {
             if (Attack.class.isAssignableFrom(gameObject.getClass()) && ((Attack) gameObject).reflectable) {

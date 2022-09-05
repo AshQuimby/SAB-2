@@ -1,5 +1,6 @@
 package sab.game.screens;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.badlogic.gdx.Input;
@@ -10,20 +11,25 @@ import com.seagull_engine.Seagraphics;
 import sab.game.Game;
 import sab.game.SABSounds;
 import sab.game.fighters.Fighter;
+import sab.game.fighters.FighterType;
+import sab.modloader.ModLoader;
 import sab.screen.Screen;
 import sab.screen.ScreenAdapter;
 import sab.util.Utils;
 
 public class CharactersScreen extends ScreenAdapter {
     private int characterIndex;
+    private List<Fighter> fighters = new ArrayList<>();
 
     public CharactersScreen() {
         characterIndex = 0;
+        for (Class<? extends FighterType> fighter : Game.game.fighters) {
+            fighters.add(new Fighter(ModLoader.getFighterType(fighter)));
+        }
     }
 
     @Override
     public void render(Seagraphics g) {
-        List<Fighter> fighters = Game.game.fighters;
 
         g.scalableDraw(g.imageProvider.getImage("character_description_background_layer_1.png"), -1152 / 2, -704 / 2, 1152, 704);
 
@@ -46,7 +52,6 @@ public class CharactersScreen extends ScreenAdapter {
 
     @Override
     public Screen keyPressed(int keyCode) {
-        List<Fighter> fighters = Game.game.fighters;
 
         if (keyCode == Input.Keys.RIGHT) {
             SABSounds.playSound(SABSounds.BLIP);

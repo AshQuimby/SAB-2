@@ -127,7 +127,13 @@ public class Player extends GameObject implements Hittable {
     }
 
     public void resetAction() {
+        charging = false;
+        charge = 0;
         currentAction = null;
+    }
+
+    public void removeJumps() {
+        extraJumpsUsed = fighter.jumps;
     }
 
     public void startAnimation(int delay, Animation animation, int endLag, boolean important) {
@@ -369,8 +375,6 @@ public class Player extends GameObject implements Hittable {
         if (stunned <= 0) move(velocity);
         
         if (knockbackDuration > 0) frame = fighter.knockbackAnimation.stepLooping();
-
-        keys.update();
         
         if (hitbox.y < -704 / 2 - fighter.hitboxHeight) {
             kill(1);

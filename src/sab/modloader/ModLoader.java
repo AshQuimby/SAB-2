@@ -15,6 +15,8 @@ import java.util.jar.JarFile;
 import java.util.jar.JarInputStream;
 
 import sab.game.Game;
+import sab.game.attacks.Attack;
+import sab.game.attacks.AttackType;
 import sab.game.fighters.FighterType;
 import sab.game.stages.StageType;
 import sab.util.SabReader;
@@ -44,22 +46,27 @@ public final class ModLoader {
 
     public static Mod loadMod(File modFile, Game game) throws IOException {
         if (modFile.isDirectory()) {
-            throw new IllegalArgumentException("Mod " + modFile.getName() + " Failed to load: File cannot be a directory");
+            Game.game.addModError("Mod " + modFile.getName() + " failed to load: File cannot be a directory");
+            return null;
         }
         if (!modFile.getName().endsWith(".jar")) {
-            throw new IllegalArgumentException("Mod " + modFile.getName() + " Failed to load: File must be of type jar");
+            Game.game.addModError("Mod " + modFile.getName() + " failed to load: File must be of type jar");
+            return null;
         }
         if (!modFile.exists()) {
-            throw new IllegalArgumentException("Mod " + modFile.getName() + " Failed to load: File must exist");
+            Game.game.addModError("Mod " + modFile.getName() + " failed to load: File must exist");
+            return null;
         }
 
         Map<String, String> modSettings = getModSettings(modFile);
-        if (modSettings == null)
+        if (modSettings == null) {
+            Game.game.addModError("Jar file " + modFile.getName() + " is missing a mod.sab file");
             return null;
-
+        }
         for (Mod mod : Game.game.mods.values()) {
             if (modSettings.get("namespace").equals(mod.namespace)) {
-                throw new IllegalArgumentException("Mod " + modSettings.get("display_name") + " Failed to load: Mods with duplicate namespace \"" + mod.namespace + "\". Conflicting mod: " + mod.displayName);
+                Game.game.addModError("Mod " + modSettings.get("display_name") + " failed to load: Mods with same namespace \"" + mod.namespace + "\". Conflicting mod: " + mod.displayName);
+                return null;
             }
         }
 
@@ -86,7 +93,6 @@ public final class ModLoader {
                     + "resources/" + fileName;
 
             Files.copy(entryReader, Paths.get(path));
-            File entryFile = Paths.get(path).toFile();
 
             if (entry.getName().endsWith(".png")) {
                 game.window.imageProvider.loadAbsoluteImage(path, mod.namespace
@@ -100,6 +106,10 @@ public final class ModLoader {
                     }
                     if (StageType.class.isAssignableFrom(clazz)) {
                         mod.addStage((Class<? extends StageType>) clazz);
+                    }
+                    if (AttackType.class.isAssignableFrom(clazz)) {
+                        String id = clazz.getSimpleName().toLowerCase();
+                        mod.addAttack(mod.namespace + ":" + id, (Class<? extends AttackType>) clazz);
                     }
                 } catch (ClassNotFoundException e) {
                     throw new RuntimeException(e);
@@ -132,5 +142,18 @@ public final class ModLoader {
 				| NoSuchMethodException | SecurityException e) {
 			throw new RuntimeException(e);
 		}
+    }
+
+    public static AttackType getAttackType(Class<? extends AttackType> type) {
+        try {
+			return type.getDeclaredConstructor().newInstance();
+		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
+				| NoSuchMethodException | SecurityException e) {
+			throw new RuntimeException(e);
+		}
+    }
+
+    public static AttackType getAttack(String id) {
+        return Game.game.getAttackType(id);
     }
 }

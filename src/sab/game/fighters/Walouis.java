@@ -30,6 +30,7 @@ public class Walouis extends FighterType {
         fighter.imageOffsetY = 4;
         fighter.frames = 11;
         fighter.jumps = 1;
+        fighter.doubleJumpMultiplier = 0.85f;
         fighter.speed = 0.32f;
         fighter.jumpHeight = 160;
         fighter.friction = .05f;
@@ -70,6 +71,7 @@ public class Walouis extends FighterType {
             player.velocity.y = 26;
             player.startAttack(new Attack(new Note(), player), fighter.freefallAnimation, 1, 1, false, new int[]{0});
             player.usedRecovery = true;
+            player.removeJumps();
         }
     }
 
@@ -77,6 +79,7 @@ public class Walouis extends FighterType {
     public void downAttack(Fighter fighter, Player player) {
         if (!player.usedRecovery) {
             throwAnimation.reset();
+            player.velocity.x *= 0.1f;
             player.startAttack(new Attack(new Bomb(), player), throwAnimation, 24, 12, false, new int[]{0});
         }
     }

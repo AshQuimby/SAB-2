@@ -11,6 +11,7 @@ import sab.game.attacks.AttackType;
 import sab.game.particles.Particle;
 
 public class Bomb extends AttackType {
+
     private volatile boolean exploded;
 
     @Override
@@ -33,7 +34,7 @@ public class Bomb extends AttackType {
         attack.velocity.y -= 0.15f;
         attack.velocity.x *= 0.99f;
 
-        attack.rotation -= attack.velocity.x * 2;
+        attack.rotation -= 8 * attack.direction;
         
         if (exploded) {
             attack.alive = false;
@@ -64,8 +65,8 @@ public class Bomb extends AttackType {
             exploded = true;
         } else {
             for (int i = 0; i < 6 ; i++) {
-                attack.owner.battle.addParticle(new Particle(attack.hitbox.getCenter(new Vector2()), new Vector2(4 * MathUtils.random(), 0).rotateDeg(MathUtils.random() * 360), 32, 32, 0, "fire.png"));
-                attack.owner.battle.addParticle(new Particle(attack.hitbox.getCenter(new Vector2()), new Vector2(4 * MathUtils.random(), 0).rotateDeg(MathUtils.random() * 360), 48, 48, 0, "smoke.png"));
+                attack.owner.battle.addParticle(new Particle(attack.hitbox.getCenter(new Vector2()), new Vector2(4 * MathUtils.random(), 0).rotateDeg(MathUtils.random() * 360), 64, 64, 0, "fire.png"));
+                attack.owner.battle.addParticle(new Particle(attack.hitbox.getCenter(new Vector2()), new Vector2(4 * MathUtils.random(), 0).rotateDeg(MathUtils.random() * 360), 96, 96, 0, "smoke.png"));
             }
             SABSounds.playSound("explosion.mp3");
         }

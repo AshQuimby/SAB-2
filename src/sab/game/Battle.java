@@ -255,6 +255,10 @@ public class Battle {
         for (GameObject gameObject : gameObjects) {
             gameObject.preUpdate();
         }
+
+        for (Player player : players) {
+            player.keys.update();
+        }
     }
 
     public void endGame() {

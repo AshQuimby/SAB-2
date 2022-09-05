@@ -8,7 +8,6 @@ import com.seagull_engine.GameObject;
 
 import sab.game.Direction;
 import sab.game.Player;
-import sab.game.animation.Animation;
 import sab.game.attacks.Attack;
 import sab.game.attacks.AttackType;
 

@@ -9,7 +9,6 @@ import sab.game.attacks.Attack;
 import sab.game.attacks.AttackType;
 import sab.game.particles.Particle;
 
-
 public class Frostball extends AttackType {
     boolean bounced;
 

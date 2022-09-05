@@ -18,7 +18,7 @@ public class Tongue extends AttackType {
         attack.frameCount = 2;
         attack.velocity = new Vector2();
         attack.hitbox.width = 92;
-        attack.hitbox.height = 8; 
+        attack.hitbox.height = 8;
         attack.drawRect.width = 92;
         attack.drawRect.height = 8;
         attack.damage = 16;

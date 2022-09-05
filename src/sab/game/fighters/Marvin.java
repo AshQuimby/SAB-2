@@ -35,7 +35,7 @@ public class Marvin extends FighterType {
         fighter.jumpHeight = 160;
         fighter.friction = .05f;
         fighter.mass = 5f;
-        fighter.jumps = 10000;
+        fighter.jumps = 1;
         fighter.walkAnimation = new Animation(0, 3, 5, true);
         fighter.description = "    Retired Albany plumber now"
         + "\nprincess saving daydreamer,"
@@ -52,6 +52,7 @@ public class Marvin extends FighterType {
         squatAnimation = new Animation(new int[] {6}, 4, true);
         chargeAnimation = new Animation(new int[] {9}, 4, true);
         throwAnimation = new Animation(new int[] {10, 11}, 6, true);
+        fighter.freefallAnimation = new Animation(new int[]{7}, 1, true);
         fighter.costumes = 3;
     }
 

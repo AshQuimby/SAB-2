@@ -1,5 +1,8 @@
 package sab.game.screens;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.Month;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,6 +13,8 @@ import com.seagull_engine.Seagraphics;
 import sab.game.Game;
 import sab.game.SABSounds;
 import sab.game.fighters.Fighter;
+import sab.game.fighters.FighterType;
+import sab.modloader.ModLoader;
 import sab.screen.Screen;
 import sab.screen.ScreenAdapter;
 import sab.util.Utils;
@@ -43,13 +48,13 @@ public class CharacterSelectScreen extends ScreenAdapter {
 
     public Screen update() {
         if (!refreshed) {
-            for (Fighter fighter : Game.game.fighters) {
-                Fighter f = fighter.copy();
+            for (Class<? extends FighterType> fighter : Game.game.fighters) {
+                Fighter f = new Fighter(ModLoader.getFighterType(fighter));
                 f.type.setDefaults(f);
                 player1Fighters.add(f);
-                f = fighter.copy();
+                f = new Fighter(ModLoader.getFighterType(fighter));
                 f.type.setDefaults(f);
-                player2Fighters.add(fighter.copy());
+                player2Fighters.add(f);
             }
             refreshed = true;
         }
@@ -68,6 +73,7 @@ public class CharacterSelectScreen extends ScreenAdapter {
 
         g.scalableDraw(g.imageProvider.getImage("character_selector_background_layer_1.png"), -1152 / 2, -704 / 2, 1152, 704);
 
+        if (LocalDateTime.now().getDayOfMonth() == 1 && LocalDateTime.now().getMonth() == Month.APRIL)
         if (inputBuffer[0] == 49 && inputBuffer[1] == 47 && inputBuffer[1] == 47 && inputBuffer[3] == 46) {
             if (player1Fighters.get(player1Index).id.equals("marvin")) {
                 inputInvalidated = true;

@@ -1,51 +1,58 @@
-34 Super Ass Brothers:
-28 Remasstered
+48 Super Ass Brothers:
+40 Remasstered
 30
 24 Game Designer
 20 AshQuimby
-26
+34
 24 Character Design
 20 AshQuimby, Birdthorn, a_viper
-26
+34
 24 Developers
 20 AshQuimby, a_viper
-26
+34
 24 Net Code
 20 a_viper
-26
-24 Art Director
+34
+24 Art Direction
 20 AshQuimby
-26
+34
 24 Artists
 20 AshQuimby, a_viper
-26
+34
 24 UI Design
 20 AshQuimby
-26
+34
 24 Composers
 20 Beat Thorn, a_viper, AshQuimby
-26
+34
 24 Seagull Engine Team
 20 AshQuimby, a_viper
 20 Seagull Engine made with libGDX
-26
+34
 24 Mod Loader Developers
 20 AshQuimby, a_viper
-26
+34
+24 Costume Contest Winners
+20 Midsummer Contest 1: JCswitch (Bullet Kin Gus)
+34
 24 Beta Testers
 20 N/A (Nobody has beta tested SAB 2 yet)
-26
+34
 24 Special Thanks To
 16
 20 Beta testers for SAB 1
-16 Birdthorn, Watil, jcswitch, a_kraken, SBsteveyHops, G1B3R1SH
-16
+16 Birdthorn, Watil, JCswitch, a_kraken, SBsteveyHops, G1B3R1SH
+18
 20 SBsteveyHops
 16 Making an unofficial/official SAB website
-16
+18  
+20 Honorable Costume Contest Submissions
+16 Gigachad John Joseph (Birdthorn)
+16 Bowser Emperor E. Vile (JCswitch)
+18
 20 And the (albeit small) SAB community
 16 The game would be nothing without you
-26
+34
 34 THANK YOU FOR PLAYING!
 2560
 24 Major Inconvenience

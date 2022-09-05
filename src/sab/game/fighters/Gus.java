@@ -31,7 +31,7 @@ public class Gus extends FighterType {
 
         shootAnimation = new Animation(9, 10, 5, true);
         tongueAnimation = new Animation(4, 5, 7, true);
-        fighter.costumes = 3;
+        fighter.costumes = 4;
     }
 
     @Override
