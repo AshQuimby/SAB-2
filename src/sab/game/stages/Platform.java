@@ -46,7 +46,7 @@ public class Platform extends StageObject {
     @Override
     public void update() {
         if (!updates) return; 
-        behavior.update();
+        behavior.update(this);
         postUpdate();
     }
 

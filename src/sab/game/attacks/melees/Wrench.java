@@ -57,7 +57,7 @@ public class Wrench extends AttackType {
 
     @Override
     public void successfulHit(Attack attack, GameObject hit) {
-        hit.velocity.scl(-3);
+        hit.velocity.scl(-1.5f);
         hit.direction *= -1;
     }
 

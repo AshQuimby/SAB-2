@@ -17,15 +17,14 @@ public class Tongue extends AttackType {
         attack.life = 14;
         attack.frameCount = 2;
         attack.velocity = new Vector2();
-        attack.hitbox.width = 92;
+        attack.hitbox.width = 64;
         attack.hitbox.height = 8;
-        attack.drawRect.width = 92;
+        attack.drawRect.width = 64;
         attack.drawRect.height = 8;
         attack.damage = 16;
         attack.direction = attack.owner.direction;
         attack.hitCooldown = 15;
         attack.reflectable = false;
-
         tipper = new Rectangle();
         tipper.width = 4;
         tipper.height = 4;
@@ -33,11 +32,13 @@ public class Tongue extends AttackType {
 
     @Override
     public void update(Attack attack) {
-        attack.hitbox.setCenter(attack.owner.hitbox.getCenter(new Vector2()).add(20 * attack.owner.direction, 4));
-        tipper.setCenter(attack.hitbox.getCenter(new Vector2()).add(attack.direction * (attack.hitbox.width / 2 + tipper.width / 2), 2));
+        attack.hitbox.setCenter(attack.owner.hitbox.getCenter(new Vector2()).add((attack.hitbox.width + attack.owner.hitbox.width) / 2 * attack.owner.direction, 12));
+        tipper.setCenter(attack.hitbox.getCenter(new Vector2()).add(attack.direction * (attack.hitbox.width / 2 - tipper.width / 2), 2));
 
-        if (attack.life <= 5)
-            attack.frame = 2;
+        if (attack.life <= 5) {
+            attack.frame = 1;
+            attack.canHit = false;
+        }
     }
 
     @Override
@@ -46,9 +47,7 @@ public class Tongue extends AttackType {
 
     @Override
     public void successfulHit(Attack attack, GameObject hit) {
-        if (tipper.overlaps(hit.hitbox) && attack.frame == 0 && hit instanceof Player) {
-            ((Player) hit).knockback.setAngleDeg(new Vector2(15 * attack.direction, 4).angleDeg());
-        }
+        if (hit.hitbox.overlaps(tipper)) attack.knockback = new Vector2(12 * attack.direction, 8);
     }
 
     @Override

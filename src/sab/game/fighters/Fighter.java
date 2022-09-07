@@ -44,8 +44,14 @@ public class Fighter implements Cloneable {
     // The description of the character to display in the "Fighters" screen
     public String description;
 
-    // The horizontal acceleration of the character in pixels/tick
+    // The character's debut to display in the "Fighters" screen
+    public String debut;
+
+    // The maximum horizontal speed of the character in pixels/tick
     public float speed;
+
+    // The horizontal acceleration of the character in pixels/tick
+    public float acceleration;
 
     // The number of pixels high the character jumps by default and multiplier for mid-air jumps
     public float jumpHeight;
@@ -73,7 +79,8 @@ public class Fighter implements Cloneable {
         renderHeight = 64;
         imageOffsetX = 0;
         imageOffsetY = 0;
-        speed = 1;
+        speed = 12;
+        acceleration = 0.45f;
         jumps = 1;
         doubleJumpMultiplier = 0.75f;
         jumpHeight = 50;
@@ -83,9 +90,8 @@ public class Fighter implements Cloneable {
         ledgeAnimation = new Animation(new int[]{8}, 1, false);
         knockbackAnimation = new Animation(new int[]{7}, 1, false);
         freefallAnimation = new Animation(new int[]{6}, 1, false);
-        description = "    This is the default"
-        + "\ndescription. Change it by changing"
-        + "\nthe \"description\" field";
+        description = "This is the default description. Change it by changing the \"description\" field. Text wrapping is handled by the engine so you don't have to add new lines.";
+        debut = "This is the debut, it is the \"game\" your character originates from.";
         this.type = type;
         type.setDefaults(this);
     }
@@ -116,6 +122,10 @@ public class Fighter implements Cloneable {
 
     public void charging(Player player, int charge) {
         type.charging(this, player, charge);
+    }
+
+    public void onHit(Player player) {
+        type.onHit(this, player);
     }
 
     public Fighter copy() {

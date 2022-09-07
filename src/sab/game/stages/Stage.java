@@ -20,8 +20,9 @@ public class Stage {
     // Players can be outside this blast zone safely when not taking knockback
     protected Rectangle safeBlastZone;
 
-    // Players cannot be outside this blast zone even when 
+    // Players cannot be below or to the right/left of this blast zone even when not taking knockback
     protected Rectangle unsafeBlastZone;
+    
     private StageType type;
 
     public Stage(StageType type) {
@@ -31,6 +32,9 @@ public class Stage {
         music = "last_location.mp3";
         stageObjects = new ArrayList<>();
         ledges = new ArrayList<>();
+
+        safeBlastZone = new Rectangle(-1152 / 2 - 64, -704 / 2 - 64, 1152 + 128, 704 + 128);
+        unsafeBlastZone = new Rectangle(-1152 / 2 - 128, -704 / 2 - 128, 1152 + 256, 704 + 256);
         
         this.type = type;
         this.type.init(this);
@@ -57,6 +61,14 @@ public class Stage {
 
     public List<Ledge> getLedges() {
         return ledges;
+    }
+
+    public Rectangle getSafeBlastZone() {
+        return new Rectangle(safeBlastZone);
+    }
+
+    public Rectangle getUnsafeBlastZone() {
+        return new Rectangle(unsafeBlastZone);
     }
 
     public void addStageObject(StageObject stageObject) {

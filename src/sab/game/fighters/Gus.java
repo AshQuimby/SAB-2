@@ -3,12 +3,17 @@ package sab.game.fighters;
 import sab.game.Player;
 import sab.game.animation.Animation;
 import sab.game.attacks.Attack;
+import sab.game.attacks.melees.SussyVent;
 import sab.game.attacks.melees.Tongue;
 import sab.game.attacks.projectiles.Bullet;
+import sab.game.attacks.projectiles.MiniGus;
 
 public class Gus extends FighterType {
     private Animation shootAnimation;
     private Animation tongueAnimation;
+    private Animation placeMiniGusAnimation;
+
+    private Attack miniGus;
 
     @Override
     public void setDefaults(Fighter fighter) {
@@ -21,28 +26,54 @@ public class Gus extends FighterType {
         fighter.imageOffsetX = 0;
         fighter.imageOffsetY = 8;
         fighter.frames = 12;
-        fighter.speed = 0.5f;
+        fighter.speed = 7f;
+        fighter.acceleration = .75f;
         fighter.jumpHeight = 128;
-        fighter.friction = .1f;
-        fighter.mass = 1f;
+        fighter.friction = .175f;
+        fighter.mass = 2.8f;
         fighter.jumps = 1;
         fighter.walkAnimation = new Animation(0, 3, 7, true);
-        fighter.description = "Sus";
+        fighter.description = "First name Amon, This hazmat suit wearing astronaut is always getting into trouble no matter where they go. Sometimes they're the alien, sometimes they're chased by the alien, but they can never seem to catch a break.";
+        fighter.debut = "Around Ourselves";
+        fighter.costumes = 4;
 
         shootAnimation = new Animation(9, 10, 5, true);
         tongueAnimation = new Animation(4, 5, 7, true);
-        fighter.costumes = 4;
+        placeMiniGusAnimation = new Animation(new int[] {11, 0}, 8, false);
     }
 
     @Override
     public void neutralAttack(Fighter fighter, Player player) {
-        shootAnimation.reset();
-        player.startAttack(new Attack(new Bullet(), player), shootAnimation, 5, 5, false);
+        if (!player.usedRecovery) {
+            shootAnimation.reset();
+            player.startAttack(new Attack(new Bullet(), player), shootAnimation, 5, 5, false);
+        }
     }
 
     @Override
     public void sideAttack(Fighter fighter, Player player) {
-        tongueAnimation.reset();
-        player.startAttack(new Attack(new Tongue(), player), tongueAnimation, 5, 10, false);
+        if (!player.usedRecovery) {
+            tongueAnimation.reset();
+            player.startAttack(new Attack(new Tongue(), player), tongueAnimation, 1, 15, false);
+        }
+    }
+
+    @Override
+    public void downAttack(Fighter fighter, Player player) {
+        if (!player.usedRecovery) {
+            if (miniGus == null || !miniGus.alive) {
+                placeMiniGusAnimation.reset();
+                miniGus = new Attack(new MiniGus(), player);
+                player.startAttack(miniGus, placeMiniGusAnimation, 8, 12, false);
+            }
+        }
+    }
+
+    @Override
+    public void upAttack(Fighter fighter, Player player) {
+        if (!player.usedRecovery) {
+            player.startAttack(new Attack(new SussyVent(), player), 8, 12, false);
+            player.removeJumps();
+        }
     }
 }

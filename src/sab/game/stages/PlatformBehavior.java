@@ -1,12 +1,9 @@
 package sab.game.stages;
 
-public class PlatformBehavior {
-    public Platform ownerPlatform;
-    
-    public PlatformBehavior(Platform owner) {
-        this.ownerPlatform = owner;
+public class PlatformBehavior {    
+    public PlatformBehavior() {
     }
     
-    public void update() {
+    public void update(Platform platform) {
     }
 }

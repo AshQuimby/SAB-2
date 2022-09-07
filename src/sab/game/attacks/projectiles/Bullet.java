@@ -24,19 +24,22 @@ public class Bullet extends AttackType {
         attack.directional = true;
         attack.hitCooldown = 20;
         attack.collideWithStage = true;
+        attack.updatesPerTick = 4;
     }
 
     @Override
     public void update(Attack attack) {
-        attack.knockback.set(attack.direction * 1, 1);
+        attack.owner.battle.addParticle(new Particle(attack.hitbox.getCenter(new Vector2()),
+                new Vector2(0, MathUtils.random(-.2f, .2f)), 16, 16, 20, "smoke.png"));
     }
 
     @Override
     public void onSpawn(Attack attack, int[] data) {
+        attack.knockback.set(attack.direction * 1, 1);
         CollisionResolver.moveWithCollisions(attack.owner, new Vector2(attack.owner.direction * -4, 0), attack.owner.battle.getPlatforms());
         attack.hitbox.setCenter(attack.owner.hitbox.getCenter(new Vector2()));
         attack.hitbox.x += attack.direction * 20;
-        attack.velocity = new Vector2(16 * attack.owner.direction, 0);
+        attack.velocity = new Vector2(12 * attack.owner.direction, 0);
 
         attack.owner.battle.addParticle(new Particle(
             1.2f,

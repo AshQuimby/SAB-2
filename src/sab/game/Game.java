@@ -1,12 +1,12 @@
 package sab.game;
 
-import com.badlogic.gdx.graphics.g3d.Model;
 import com.seagull_engine.Messenger;
 import com.seagull_engine.Seagraphics;
 
 import sab.game.attacks.AttackType;
+import sab.game.fighters.BigSeagull;
 import sab.game.fighters.Chain;
-import sab.game.fighters.Fighter;
+import sab.game.fighters.EmperorEvil;
 import sab.game.fighters.FighterType;
 import sab.game.fighters.Gus;
 import sab.game.fighters.Marvin;
@@ -56,7 +56,7 @@ public class Game extends Messenger {
     public void load() {
         Settings.loadSettings();
         Mod baseGame = new Mod("Super Ass Brothers", "sab", "1.0", "base game assets");
-        baseGame.addFighters((Class<? extends FighterType>[]) new Class<?>[] {Marvin.class, Chain.class, Walouis.class, Gus.class});
+        baseGame.addFighters((Class<? extends FighterType>[]) new Class<?>[] {Marvin.class, Chain.class, Walouis.class, Gus.class, EmperorEvil.class, BigSeagull.class});
         baseGame.addStages((Class<? extends StageType>[]) new Class<?>[] {LastLocation.class, Warzone.class, Boxtopia.class});
         addMod(baseGame);
         loadMods();

@@ -42,16 +42,17 @@ public class JukeboxScreen extends ScreenAdapter {
         loadVanillaSongs();
     }
 
-    public void loadVanillaSongs() {
+    private void loadVanillaSongs() {
         addSong("lobby_music.mp3", "Lobby Music", "Beat Thorn");
-        addSong("lobby_music_old.mp3", "Lobby Music (Old)", "Beat Thorn");
-        addSong("loading_music.mp3", "Loading Music", "Beat Thorn/AshQuimby");
+        addSong("lobby_music_old.mp3", "Lobby Music (Legacy)", "Beat Thorn");
+        addSong("loading_music.mp3", "Loading Music", "Beat Thorn");
         addSong("last_location.mp3", "Last Location", "Beat Thorn");
         addSong("overgrown_armada.mp3", "Overgrown Armada", "a_viper");
         addSong("desert_bridge.mp3", "Desert Bridge", "AshQuimby");
         addSong("thumbaba_lair.mp3", "Thumbaba's Lair", "a_viper");
         addSong("our_sports.mp3", "Our Sports Resort", "Beat Thorn");
-        addSong("seagull_ultima.mp3", "Seagull Ultima", "Beat Thorn");
+        addSong("seagull_ultima.mp3", "Ultimatum of Seagull", "Beat Thorn");
+        addSong("wavezone.mp3", "Wavezone", "Beat Thorn");
         addSong("genetically_engineered_bad.mp3", "Genetically Engineered Bad", "AshQuimby");
         addSong("artificially_enhanced_trash.mp3", "Artificially Enchanced Trash", "AshQuimby");
         addSong("walouis_sax_solo.mp3", "Walouis' Sax Solo", "Beat Thorn");

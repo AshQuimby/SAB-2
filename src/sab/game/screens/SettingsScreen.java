@@ -52,7 +52,7 @@ public class SettingsScreen extends SelectorScreen {
                 setting = (int) (Float.parseFloat(settings.get("sfx_volume")) * 100) + "%";
             }
             default -> {
-                setting = "Save settings";
+                setting = "Save Settings";
                 textSize = 1.5f;
             }
         }
@@ -79,15 +79,15 @@ public class SettingsScreen extends SelectorScreen {
         switch (selectorId) {
             case 0 -> {
                 SABSounds.playSound(SABSounds.BLIP);
-                settings.replace("master_volume", Math.max(0, (int) (Float.parseFloat(settings.get("master_volume")) * 100) + 5) / 100f + "");
+                settings.replace("master_volume", Math.min(100, (int) (Float.parseFloat(settings.get("master_volume")) * 100) + 5) / 100f + "");
             }
             case 1 -> {
                 SABSounds.playSound(SABSounds.BLIP);
-                settings.replace("music_volume", Math.max(0, (int) (Float.parseFloat(settings.get("music_volume")) * 100) + 5) / 100f + "");
+                settings.replace("music_volume", Math.min(100, (int) (Float.parseFloat(settings.get("music_volume")) * 100) + 5) / 100f + "");
             }
             case 2 -> {
                 SABSounds.playSound(SABSounds.BLIP);
-                settings.replace("sfx_volume", Math.max(0, (int) (Float.parseFloat(settings.get("sfx_volume")) * 100) + 5) / 100f + "");
+                settings.replace("sfx_volume", Math.min(100, (int) (Float.parseFloat(settings.get("sfx_volume")) * 100) + 5) / 100f + "");
             }
             default -> {
 

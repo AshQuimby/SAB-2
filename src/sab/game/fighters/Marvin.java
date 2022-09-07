@@ -31,22 +31,13 @@ public class Marvin extends FighterType {
         fighter.imageOffsetX = 0;
         fighter.imageOffsetY = 2;
         fighter.frames = 12;
-        fighter.speed = 0.45f;
         fighter.jumpHeight = 160;
-        fighter.friction = .05f;
+        fighter.friction = .2f;
         fighter.mass = 5f;
         fighter.jumps = 1;
         fighter.walkAnimation = new Animation(0, 3, 5, true);
-        fighter.description = "    Retired Albany plumber now"
-        + "\nprincess saving daydreamer,"
-        + "\nMarvin is a troubled man "
-        + "\nwho is always distracted"
-        + "\nby his dreams about the "
-        + "\nthings he could be. He can't"
-        + "\nseem to escape from his brother's" 
-        + "\nsucess as a musician."
-        + "\n"
-        + "\nDebut: Super Marvin Plumber";
+        fighter.description = "Retired Albany plumber now princess saving daydreamer, Marvin is a troubled man who is always distracted by his dreams about the things he could be. He can't seem to escape from his brother's sucess as a musician.";
+        fighter.debut = "Super Marvin Plumber";
 
         swingAnimation = new Animation(new int[] {4, 5, 0}, 7, true);
         squatAnimation = new Animation(new int[] {6}, 4, true);
@@ -84,6 +75,7 @@ public class Marvin extends FighterType {
         if (!player.usedRecovery) {
             squatAnimation.reset();
             player.startAttack(new Attack(new Toilet(), player), squatAnimation, 4, 30, false);
+            player.removeJumps();
             player.usedRecovery = true;
         }
     }

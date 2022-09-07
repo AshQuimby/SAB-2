@@ -1,18 +1,23 @@
 package sab.game;
 
+import java.io.File;
+import java.util.HashMap;
 import java.util.List;
 
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.seagull_engine.GameObject;
 import com.seagull_engine.Seagraphics;
 
+import sab.game.ai.AI;
 import sab.game.animation.Animation;
 import sab.game.attacks.Attack;
 import sab.game.fighters.Fighter;
 import sab.game.particles.Particle;
 import sab.game.stages.Ledge;
 import sab.net.Keys;
+import sab.util.SabReader;
 
 public class Player extends GameObject implements Hittable {
     public final Battle battle;
@@ -24,6 +29,11 @@ public class Player extends GameObject implements Hittable {
     public boolean usedRecovery;
     public int costume;
     public Vector2 knockback;
+    public boolean invulnerable;
+
+    public GameStats gameStats;
+
+    private AI ai;
 
     private PlayerAction currentAction;
     private Direction collisionDirection;
@@ -37,31 +47,39 @@ public class Player extends GameObject implements Hittable {
     private int charge;
     private int ledgeCooldown;
     private int ledgeGrabs;
+    private int respawnTime;
     private int usedCharge;
     private int smokeGenerator;
     private int id;
     private int freezeFrame;
     private boolean repeatAttack;
     private boolean charging;
+    private boolean hide;
+    private boolean ledgeGrabbing;
 
     public Player(Fighter fighter, int costume, int id, Battle battle) {
         this.battle = battle;
-        
+
         velocity = new Vector2();
         knockback = new Vector2();
         keys = new InputState(6);
+
+        respawnTime = 0;
 
         currentAction = null;
 
         this.fighter = fighter;
 
         hitbox = new Rectangle(0, 0, fighter.hitboxWidth, fighter.hitboxHeight);
+        hitbox.setCenter(new Vector2(128 * (id == 0 ? -1 : 1), battle.getStage().getSafeBlastZone().height / 2 + Math.max(respawnTime, 120) - 512 - hitbox.height));
         drawRect = new Rectangle(0, 0, fighter.renderWidth, fighter.renderHeight);
 
         direction = 1;
 
         frameCount = fighter.frames;
         frame = 0;
+
+        invulnerable = false;
 
         imageName = fighter.id + ".png";
 
@@ -74,6 +92,7 @@ public class Player extends GameObject implements Hittable {
 
         this.costume = costume;
 
+        hide = false;
         stunned = 0;
         freezeFrame = 0;
         frozen = 0;
@@ -85,6 +104,13 @@ public class Player extends GameObject implements Hittable {
         knockbackDuration = 0;
         smokeGenerator = 0;
         this.id = id;
+
+        gameStats = new GameStats("Human " + fighter.name, id);
+    }
+
+    public void setAI(AI ai) {
+        if (ai != null) gameStats.setType("AI " + fighter.name, id);
+        this.ai = ai;
     }
 
     public void move(Vector2 v) {
@@ -101,7 +127,7 @@ public class Player extends GameObject implements Hittable {
             for (GameObject platform : passablePlatforms) {
                 if (!keys.isPressed(Keys.DOWN) && velocity.y <= 0
                         && hitbox.y > platform.hitbox.y + platform.hitbox.height - 12) {
-                    Direction tryDirection = CollisionResolver.resolveY(this, step, platform);
+                    Direction tryDirection = CollisionResolver.resolveY(this, step, platform.hitbox);
                     if (tryDirection != Direction.NONE)
                         collisionDirection = tryDirection;
                 }
@@ -162,9 +188,29 @@ public class Player extends GameObject implements Hittable {
     }
 
     public void kill(int livesCost) {
-        hitbox.setCenter(new Vector2());
+        for (int i = 0; i < 16; i++) {
+            battle.addParticle(new Particle(hitbox.getCenter(new Vector2()), hitbox.getCenter(new Vector2()).scl(-0.025f * MathUtils.random(0.125f, 1f)).rotateDeg(MathUtils.random(-2.5f, 2.5f)), 128, 128, "twinkle.png"));
+        }
+        velocity.scl(0);
+        knockback.scl(0);
+        usedRecovery = false;
+        stunned = 0;
+        frozen = 0;
+        knockbackDuration = 0;
+        respawnTime = 180;
+        gameStats.died();
+        battle.getPlayer(1 - id).gameStats.gotKill();
+        SABSounds.playSound("death.mp3");
         lives -= livesCost;
         damage = 0;
+
+        for (GameObject gameObject :  battle.getGameObjects()) {
+            if (Attack.class.isAssignableFrom(gameObject.getClass()) && ((Attack) gameObject).reflectable) {
+                if (((Attack) gameObject).owner == this) {
+                    battle.removeGameObject(gameObject);
+                }
+            }
+        }
     }
 
     @Override
@@ -182,10 +228,28 @@ public class Player extends GameObject implements Hittable {
     @Override
     public void update() {
         usedCharge = 0;
+
+        if (lives == 0) return;
+
+        if (respawnTime > 0) {
+            respawnTime--;
+            invulnerable = true;
+            hitbox.setCenter(new Vector2(128 * (id == 0 ? -1 : 1), battle.getStage().getSafeBlastZone().height / 2 + Math.max(respawnTime, 120) - 192 - hitbox.height));
+            frame = 0;
+            if ((keys.isPressed(Keys.RIGHT) || keys.isPressed(Keys.LEFT) || keys.isPressed(Keys.DOWN) || keys.isPressed(Keys.UP)) && respawnTime < 150 || respawnTime == 0) {
+                invulnerable = false;
+                respawnTime = 0;
+            } else {
+                return;
+            }
+        }
+
         if (stunned > 0) {
             stunned--;
             return;
         }
+        
+        if (ai != null) ai.update();
 
         if (frozen > 0) {
             frozen--;
@@ -193,6 +257,7 @@ public class Player extends GameObject implements Hittable {
 
         Ledge ledge = null;
         if (ledgeCooldown <= 0) ledge = battle.getStage().grabLedge(this);
+        ledgeGrabbing = ledge != null;
 
         if (knockbackDuration > 0) {
             if (currentAction != null && !currentAction.isImportant()) currentAction = null;
@@ -202,7 +267,8 @@ public class Player extends GameObject implements Hittable {
                 ledge = null;
             }
 
-            velocity = knockback.cpy().scl(1f / fighter.mass);
+            usedRecovery = false;
+            velocity = knockback.cpy().scl(1.5f / (fighter.mass / 2f + 2));
             gravityAndFriction();
             repeatAttack = false;
             usedCharge = 0;
@@ -255,7 +321,7 @@ public class Player extends GameObject implements Hittable {
                 charge = maxCharge;
             }
             fighter.charging(this, charge);
-            if (keys.isPressed(Keys.ATTACK)) {
+            if (keys.isPressed(Keys.ATTACK) || charge < minCharge) {
                 if (currentAction != null) {
                     currentAction.changeDelay(1);
                 }
@@ -269,6 +335,7 @@ public class Player extends GameObject implements Hittable {
                 if (charging) fighter.chargeAttack(this, charge);
                 usedCharge = charge;
                 charge = 0;
+                minCharge = 0;
                 charging = false;
             } else {
                 gravityAndFriction();
@@ -277,11 +344,11 @@ public class Player extends GameObject implements Hittable {
         }
 
         if (keys.isPressed(Keys.LEFT)) {
-            velocity.x -= fighter.speed;
+            velocity.x += Math.max(-fighter.acceleration, -fighter.speed - velocity.x);
             if (!keys.isPressed(Keys.RIGHT)) direction = -1;
         }
         if (keys.isPressed(Keys.RIGHT)) {
-            velocity.x += fighter.speed;
+            velocity.x += Math.min(fighter.acceleration, fighter.speed - velocity.x);
             if (!keys.isPressed(Keys.LEFT)) direction = 1;
         }
         if (keys.isJustPressed(Keys.UP)) {
@@ -321,12 +388,53 @@ public class Player extends GameObject implements Hittable {
         gravityAndFriction();
     }
 
+    public int getRemainingJumps() {
+        return fighter.jumps - extraJumpsUsed;
+    }
+
+    // Returns true if the player has a condition that would lock them out of normal control, like knockback, ledge grabing, being frozen, etc
+    public boolean stuckCondition() {
+        return frozen() || takingKnockback() || grabbingLedge() || stunned() || charging();
+    }
+
+    public boolean charging() {
+        return charging;
+    }
+
+    public boolean stunned() {
+        return stunned > 0;
+    }
+
+    public boolean grabbingLedge() {
+        return ledgeGrabbing;
+    }
+
     public int getCharge() {
         return charge;
     }
 
+    public boolean frozen() {
+        return frozen > 0;
+    }
+
+    public boolean respawning() {
+        return respawnTime > 0;
+    }
+
+    public boolean hasAction() {
+        return currentAction != null;
+    }
+
     public int getUsedCharge() {
         return usedCharge;
+    }
+
+    public void hide() {
+        hide = true;
+    }
+
+    public void reveal() {
+        hide = false;
     }
 
     public void stun(int ticks) {
@@ -359,7 +467,7 @@ public class Player extends GameObject implements Hittable {
     }
 
     public void gravityAndFriction() {
-        velocity.y -= 1.2f;
+        velocity.y -= 0.96f;
 
         applyForce(velocity.cpy().scl(-fighter.friction));
         if (touchingStage && (!(keys.isPressed(Keys.LEFT) ^ keys.isPressed(Keys.RIGHT)) || charging)) {
@@ -376,19 +484,26 @@ public class Player extends GameObject implements Hittable {
         
         if (knockbackDuration > 0) frame = fighter.knockbackAnimation.stepLooping();
         
-        if (hitbox.y < -704 / 2 - fighter.hitboxHeight) {
+        if ((knockbackDuration > 0 && !hitbox.overlaps(battle.getStage().getSafeBlastZone())) || (hitbox.x + hitbox.width < battle.getStage().getUnsafeBlastZone().x || hitbox.x > battle.getStage().getUnsafeBlastZone().x + battle.getStage().getUnsafeBlastZone().width || hitbox.y + hitbox.height < battle.getStage().getUnsafeBlastZone().y)) {
             kill(1);
         }
     }
 
+    public boolean takingKnockback() {
+        return knockbackDuration > 0;
+    }
+
     @Override
     public boolean canBeHit(DamageSource source) {
-        return true;
+        return !invulnerable;
     }
 
     @Override
     public boolean onHit(DamageSource source) {
+        int damageBefore = damage;
         damage += source.damage;
+
+        SABSounds.playSound("hit.mp3");
         Vector2 newKnockback = source.knockback.cpy().scl(4f).scl(damage / 100f + 1f);
         if (newKnockback.len() > knockback.len()) {
             smokeGenerator = 0;
@@ -396,23 +511,30 @@ public class Player extends GameObject implements Hittable {
         } else {
             knockback.setAngleRad(newKnockback.angleRad());
         }
-        knockbackDuration = (int) (knockback.len() * 0.25f);
+        knockbackDuration = (int) (knockback.len() * 0.225f);
+
+        gameStats.tookDamage(damage - damageBefore);
         return true;
     }
 
     @Override
     public void render(Seagraphics g) {
-        drawRect.setCenter(hitbox.getCenter(new Vector2()).add(fighter.imageOffsetX * direction, fighter.imageOffsetY));
-        String costumeString = fighter.id + (costume == 0 ? "" : "_alt_" + costume) + ".png";
-        if (frozen > 0) {
-            frame = freezeFrame;
-        }
-        preRender(g);
-        g.usefulDraw(g.imageProvider.getImage(costumeString), drawRect.x, drawRect.y, (int) drawRect.width, (int) drawRect.height, frame, frameCount, rotation, direction == 1, false);
-        postRender(g);
+        if (!hide) {
+            drawRect.setCenter(hitbox.getCenter(new Vector2()).add(fighter.imageOffsetX * direction, fighter.imageOffsetY));
+            String costumeString = fighter.id + (costume == 0 ? "" : "_alt_" + costume) + ".png";
+            if (frozen > 0) {
+                frame = freezeFrame;
+            }
+            preRender(g);
+            g.usefulDraw(g.imageProvider.getImage(costumeString), drawRect.x, drawRect.y, (int) drawRect.width, (int) drawRect.height, frame, frameCount, rotation, direction == 1, false);
+            postRender(g);
 
-        if (frozen > 0) {
-            g.usefulDraw(g.imageProvider.getImage("ice.png"), drawRect.x, drawRect.y, (int) drawRect.width, (int) drawRect.height, frame, frameCount, rotation, false, false);
+            if (frozen > 0) {
+                g.usefulDraw(g.imageProvider.getImage("ice.png"), drawRect.x, drawRect.y, (int) drawRect.width, (int) drawRect.height, 0, 1, rotation, false, false);
+            }
+            if (respawnTime > 0) {
+                g.usefulDraw(g.imageProvider.getImage("p" + (id + 1) + "_spawn_platform.png"), drawRect.getCenter(new Vector2()).x - 40, drawRect.y - 32, 80, 32, 0, 1, rotation, false, false);
+            }
         }
     }
 }

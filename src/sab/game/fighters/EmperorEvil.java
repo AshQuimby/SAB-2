@@ -8,50 +8,48 @@ import sab.game.Player;
 import sab.game.PlayerAction;
 import sab.game.animation.Animation;
 import sab.game.attacks.Attack;
+import sab.game.attacks.melees.Chomp;
+import sab.game.attacks.melees.ExplosiveBarrel;
 import sab.game.attacks.melees.Wrench;
-import sab.game.attacks.projectiles.Fireball;
+import sab.game.attacks.projectiles.Cannonball;
 import sab.game.attacks.projectiles.Frostball;
+import sab.game.attacks.projectiles.MagicBanana;
 import sab.game.attacks.projectiles.Toilet;
 import sab.game.particles.Particle;
 
 public class EmperorEvil extends FighterType {
-    private Animation swingAnimation;
-    private Animation squatAnimation;
+    private Animation shootAnimation;
+    private Animation chompAnimation;
+    private Animation barrel;
     private Animation chargeAnimation;
-    private Animation throwAnimation;
 
     @Override
     public void setDefaults(Fighter fighter) {
-        fighter.id = "marvin";
-        fighter.name = "Marvin";
-        fighter.hitboxWidth = 40;
-        fighter.hitboxHeight = 60;
-        fighter.renderWidth = 64;
-        fighter.renderHeight = 64;
-        fighter.imageOffsetX = 0;
-        fighter.imageOffsetY = 2;
-        fighter.frames = 12;
-        fighter.speed = 0.45f;
+        fighter.id = "emperor_evil";
+        fighter.name = "Emperor E. Vile";
+        fighter.hitboxWidth = 64;
+        fighter.hitboxHeight = 80;
+        fighter.renderWidth = 80;
+        fighter.renderHeight = 88;
+        fighter.imageOffsetX = -4;
+        fighter.imageOffsetY = 4;
+        fighter.frames = 14;
+        fighter.jumpHeight = 90;
+        fighter.doubleJumpMultiplier = 0.8f;
+        fighter.speed = 9.2f;
+        fighter.acceleration = .32f;
         fighter.jumpHeight = 160;
-        fighter.friction = .05f;
-        fighter.mass = 5f;
+        fighter.friction = .22f;
+        fighter.mass = 7.5f;
         fighter.jumps = 1;
-        fighter.walkAnimation = new Animation(0, 3, 5, true);
-        fighter.description = "    Retired Albany plumber now"
-        + "\nprincess saving daydreamer,"
-        + "\nMarvin is a troubled man "
-        + "\nwho is always distracted"
-        + "\nby his dreams about the "
-        + "\nthings he could be. He can't"
-        + "\nseem to escape from his brother's" 
-        + "\nsucess as a musician."
-        + "\n"
-        + "\nDebut: Super Marvin Plumber";
+        fighter.walkAnimation = new Animation(0, 3, 7, true);
+        fighter.description = "Emperor E. Vile is a big mean alligator who steals all of the bananas from the monkeys. He doesn't even eat bananas, nobody knows why he takes them in the first place.";
+        fighter.debut = "King Kong City";
 
-        swingAnimation = new Animation(new int[] {4, 5, 0}, 7, true);
-        squatAnimation = new Animation(new int[] {6}, 4, true);
-        chargeAnimation = new Animation(new int[] {9}, 4, true);
-        throwAnimation = new Animation(new int[] {10, 11}, 6, true);
+        shootAnimation = new Animation(new int[] {9, 5}, 18, true);
+        chompAnimation = new Animation(new int[] {4, 5}, 6, true);
+        barrel = new Animation(new int[] {10}, 60, true);
+        chargeAnimation = new Animation(new int[] {11, 12, 13}, 8, true);
         fighter.freefallAnimation = new Animation(new int[]{7}, 1, true);
         fighter.costumes = 3;
     }
@@ -64,26 +62,26 @@ public class EmperorEvil extends FighterType {
     @Override
     public void neutralAttack(Fighter fighter, Player player) {
         if (!player.usedRecovery) {
-            swingAnimation.reset();
-            player.startAttack(new Attack(new Fireball(), player), swingAnimation, 6, 10, false);
-            player.velocity.y /= 3;
-            player.velocity.x *= 0.9f;
+            shootAnimation.reset();
+            player.startAttack(new Attack(new Cannonball(), player), shootAnimation, 18, 18, false);
+            player.velocity.x *= 0.2f;
         }
     }
 
     @Override
     public void sideAttack(Fighter fighter, Player player) {
         if (!player.usedRecovery) {
-            swingAnimation.reset();
-            player.startAttack(new Attack(new Wrench(), player), swingAnimation, 4, 18, false);
+            chompAnimation.reset();
+            player.startAttack(new Attack(new Chomp(), player), chompAnimation, 4, 40, false);
         }
     }
 
     @Override
     public void upAttack(Fighter fighter, Player player) {
         if (!player.usedRecovery) {
-            squatAnimation.reset();
-            player.startAttack(new Attack(new Toilet(), player), squatAnimation, 4, 30, false);
+            barrel.reset();
+            player.startAttack(new Attack(new ExplosiveBarrel(), player), barrel, 1, 30, false);
+            player.removeJumps();
             player.usedRecovery = true;
         }
     }
@@ -91,25 +89,30 @@ public class EmperorEvil extends FighterType {
     @Override
     public void downAttack(Fighter fighter, Player player) {
         if (!player.usedRecovery) {
-            player.startChargeAttack(new PlayerAction(5, true, 0), 5, 60);
+            player.startChargeAttack(new PlayerAction(5, true, 0), 15, 120);
         }
     }
 
     @Override
     public void chargeAttack(Fighter fighter, Player player, int charge) {
-        throwAnimation.reset();
-        player.startAttack(new Attack(new Frostball(), player), throwAnimation, 7, 10, false, new int[]{charge});
-        player.velocity.y /= 3;
-        player.velocity.x *= 0.9f;
+        if (!player.usedRecovery) {
+            chargeAnimation.reset();
+            player.startAttack(new Attack(new MagicBanana(), player), chargeAnimation, 7, 10, false, new int[]{charge});
+            player.velocity.y /= 3;
+            player.velocity.x *= 0.9f;
+            for (int i = 0; i < 8; i++) {
+                player.battle.addParticle(new Particle(player.hitbox.getCenter(new Vector2()), new Vector2(2 * MathUtils.random(-1f, 1f), 4 * MathUtils.random()), 64, 64, 0, "bananafire.png"));
+            }
+        }
     }
 
     @Override
     public void charging(Fighter fighter, Player player, int charge) {
-        if (Game.game.window.getTick() % 5 == 0) {
-            for (int i = 0; i < 4; i++)
-            player.battle.addParticle(new Particle(player.hitbox.getCenter(new Vector2()).add(new Vector2(charge / 4f + 36 + MathUtils.sin(Game.game.window.getTick() / 8f) * 8f, 0).rotateDeg(i * 90 + Game.game.window.getTick() * 4)).add(0, 48), new Vector2(-1, 0).rotateDeg(i * 90 + Game.game.window.getTick() * 2), 32, 32, "frostfire.png"));
+        if (Game.game.window.getTick() % 15 == 0) {
+            for (int i = 0; i < 12; i++) {
+                player.battle.addParticle(new Particle(player.hitbox.getCenter(new Vector2()).add(0, 32).add(new Vector2(96 * charge / 120 / 2, 0).rotateDeg(i * 30f)), new Vector2(), 32, 32, "bananafire.png"));
+            }
         }
-        player.velocity.y *= 0.9f;
         player.frame = chargeAnimation.stepLooping();
     }
 }

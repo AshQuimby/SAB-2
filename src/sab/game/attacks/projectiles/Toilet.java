@@ -62,7 +62,7 @@ public class Toilet extends AttackType {
     public void onSpawn(Attack attack, int[] data) {
         attack.hitbox.setCenter(attack.owner.hitbox.getCenter(new Vector2()));
         attack.velocity = new Vector2(0, -1);
-        attack.knockback = new Vector2(0, -16);
+        attack.knockback = new Vector2(0, -4);
     }
 
     @Override

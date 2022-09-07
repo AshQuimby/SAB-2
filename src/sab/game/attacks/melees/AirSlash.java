@@ -4,6 +4,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.seagull_engine.GameObject;
 
+import sab.game.CollisionResolver;
 import sab.game.Player;
 import sab.game.attacks.Attack;
 import sab.game.attacks.AttackType;
@@ -20,7 +21,7 @@ public class AirSlash extends AttackType {
         attack.hitbox.height = 64;
         attack.drawRect.width = 120;
         attack.drawRect.height = 64;
-        attack.damage = 12;
+        attack.damage = 4;
         attack.direction = attack.owner.direction;
         attack.hitCooldown = 4;
         attack.reflectable = false;
@@ -33,7 +34,7 @@ public class AirSlash extends AttackType {
         attack.owner.velocity.y *= 0.98f;
         attack.hitbox.setCenter(attack.owner.hitbox.getCenter(new Vector2()).add(0, 4));
 
-        if (attack.owner.touchingStage) {
+        if (attack.owner.touchingStage || attack.owner.stuckCondition()) {
             attack.alive = false;
             attack.owner.resetAction();
         }
@@ -43,7 +44,7 @@ public class AirSlash extends AttackType {
         if (attack.life % 3 == 0) attack.owner.direction *= -1;
         if (attack.frame >= 6) attack.frame = 0;
 
-        if (attack.owner.keys.isJustPressed(Keys.ATTACK)) attack.owner.velocity.y += 5;
+        if (attack.owner.keys.isJustPressed(Keys.ATTACK)) attack.owner.velocity.y += 1.5f;
         if (attack.owner.keys.isPressed(Keys.RIGHT)) attack.owner.velocity.x += 0.5f;
         if (attack.owner.keys.isPressed(Keys.LEFT)) attack.owner.velocity.x -= 0.5f;
 
@@ -51,8 +52,9 @@ public class AirSlash extends AttackType {
 
     @Override
     public void successfulHit(Attack attack, GameObject hit) {
-        hit.hitbox.setCenter(attack.owner.hitbox.getCenter(new Vector2().add(MathUtils.sin(attack.frame * 2) * 4f, 0)));
-        if (hit instanceof Player) ((Player) hit).stun(5); 
+        CollisionResolver.moveWithCollisions(hit, attack.owner.hitbox.getCenter(new Vector2()).scl(0.1f), attack.owner.battle.getPlatforms());
+        if (hit instanceof Player) ((Player) hit).stun(4);
+        if (attack.life <= 8) attack.knockback = new Vector2(0, 12).rotateDeg(MathUtils.random(-1f, 1f) * 8);
     }
 
     @Override

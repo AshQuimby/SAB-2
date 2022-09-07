@@ -15,7 +15,6 @@ import sab.game.attacks.projectiles.TinyNote;
 import sab.game.particles.Particle;
 
 public class Walouis extends FighterType {
-
     private Animation throwAnimation;
 
     @Override
@@ -30,22 +29,16 @@ public class Walouis extends FighterType {
         fighter.imageOffsetY = 4;
         fighter.frames = 11;
         fighter.jumps = 1;
+        fighter.speed = 8.5f;
+        fighter.acceleration = .86f;
         fighter.doubleJumpMultiplier = 0.85f;
-        fighter.speed = 0.32f;
         fighter.jumpHeight = 160;
-        fighter.friction = .05f;
-        fighter.mass = 5.4f;
+        fighter.friction = .1f;
+        fighter.mass = 5.8f;
         fighter.walkAnimation = new Animation(0, 3, 5, true);
         throwAnimation = new Animation(new int[]{2, 4, 5}, 10, false);
-        fighter.description = "    Walouis, the world famous jazz"
-        + "\nmusician and singer is known"
-        + "\nfor his smash hit albums such as:"
-        + "\n'Waaht is Love', 'A Wah's Life',"
-        + "\nand 'Waaghing in the shadows.'"
-        + "\nHe also sees sucess in his"
-        + "\nprofessional badminton career." 
-        + "\n"
-        + "\nDebut: Marvin Badminton";
+        fighter.description = "Walouis, the world famous jazz musician and singer is known for his smash hit albums such as: 'Waaht is Love', 'A Wah's Life', and 'Waaghing in the shadows.' He also sees sucess in his professional badminton career.";
+        fighter.debut = "Marvin Badminton";
         fighter.costumes = 3;
     }
 

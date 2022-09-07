@@ -30,7 +30,6 @@ public class CharactersScreen extends ScreenAdapter {
 
     @Override
     public void render(Seagraphics g) {
-
         g.scalableDraw(g.imageProvider.getImage("character_description_background_layer_1.png"), -1152 / 2, -704 / 2, 1152, 704);
 
         g.scalableDraw(g.imageProvider.getImage(fighters.get(characterIndex).id + "_render.png"), 1152 / 2 - 512 - 8, -704 / 2 - 8, 512, 512);
@@ -39,7 +38,11 @@ public class CharactersScreen extends ScreenAdapter {
 
         g.drawText(fighters.get(characterIndex).name, g.imageProvider.getFont("SAB_font"), 0, 704 / 2 - 64, 3, Color.WHITE, 0);
 
-        g.drawText(fighters.get(characterIndex).description, g.imageProvider.getFont("SAB_font"), -1152 / 2 + 32, 704 / 2 - 220, 1, Color.WHITE, -1);
+        String description = "     " + fighters.get(characterIndex).description + " \n \nDebut: " + fighters.get(characterIndex).debut;
+
+        description = Utils.textWrap(g, description, 1, 400);
+
+        g.drawText(description, g.imageProvider.getFont("SAB_font"), -1152 / 2 + 32, 704 / 2 - 220, 1, Color.WHITE, -1);
 
         Rectangle dots = new Rectangle(0, -320, (16 + 8) * fighters.size(), 16);
         

@@ -49,4 +49,8 @@ public abstract class FighterType {
     public void charging(Fighter fighter, Player player, int charge) {
 
     }
+
+    public void onHit(Fighter fighter, Player player) {
+
+    }
 }

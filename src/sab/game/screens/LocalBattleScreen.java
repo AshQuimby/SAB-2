@@ -14,46 +14,48 @@ import sab.screen.*;
 public class LocalBattleScreen extends ScreenAdapter {
     private Battle battle;
 
-    public LocalBattleScreen(Fighter player1, Fighter player2, int[] costumes, Stage stage) {
-        battle = new Battle(player1, player2, costumes, stage);
+    public LocalBattleScreen(Fighter player1, Fighter player2, int[] costumes, Stage stage, int player1Type, int player2Type) {
+        battle = new Battle(player1, player2, costumes, stage, player1Type, player2Type);
         SABSounds.playMusic(battle.getStage().music, true);
     }
 
     @Override
     public Screen keyPressed(int keyCode) {
-        if (keyCode == Input.Keys.W) {
-            battle.getPlayer(0).keys.press(Keys.UP);
-        }
-        if (keyCode == Input.Keys.A) {
-            battle.getPlayer(0).keys.press(Keys.LEFT);
-        }
-        if (keyCode == Input.Keys.S) {
-            battle.getPlayer(0).keys.press(Keys.DOWN);
-        }
-        if (keyCode == Input.Keys.D) {
-            battle.getPlayer(0).keys.press(Keys.RIGHT);
-        }
-        if (keyCode == Input.Keys.F) {
-            battle.getPlayer(0).keys.press(Keys.ATTACK);
-        }
+        if (!battle.gameOver()) {
+            if (keyCode == Input.Keys.W) {
+                battle.getPlayer(0).keys.press(Keys.UP);
+            }
+            if (keyCode == Input.Keys.A) {
+                battle.getPlayer(0).keys.press(Keys.LEFT);
+            }
+            if (keyCode == Input.Keys.S) {
+                battle.getPlayer(0).keys.press(Keys.DOWN);
+            }
+            if (keyCode == Input.Keys.D) {
+                battle.getPlayer(0).keys.press(Keys.RIGHT);
+            }
+            if (keyCode == Input.Keys.F) {
+                battle.getPlayer(0).keys.press(Keys.ATTACK);
+            }
 
-        if (keyCode == Input.Keys.UP) {
-            battle.getPlayer(1).keys.press(Keys.UP);
-        }
-        if (keyCode == Input.Keys.LEFT) {
-            battle.getPlayer(1).keys.press(Keys.LEFT);
-        }
-        if (keyCode == Input.Keys.DOWN) {
-            battle.getPlayer(1).keys.press(Keys.DOWN);
-        }
-        if (keyCode == Input.Keys.RIGHT) {
-            battle.getPlayer(1).keys.press(Keys.RIGHT);
-        }
-        if (keyCode == Input.Keys.M) {
-            battle.getPlayer(1).keys.press(Keys.ATTACK);
-        }
+            if (keyCode == Input.Keys.UP) {
+                battle.getPlayer(1).keys.press(Keys.UP);
+            }
+            if (keyCode == Input.Keys.LEFT) {
+                battle.getPlayer(1).keys.press(Keys.LEFT);
+            }
+            if (keyCode == Input.Keys.DOWN) {
+                battle.getPlayer(1).keys.press(Keys.DOWN);
+            }
+            if (keyCode == Input.Keys.RIGHT) {
+                battle.getPlayer(1).keys.press(Keys.RIGHT);
+            }
+            if (keyCode == Input.Keys.M) {
+                battle.getPlayer(1).keys.press(Keys.ATTACK);
+            }
 
-        if (keyCode == Input.Keys.ESCAPE || keyCode == Input.Keys.SHIFT_RIGHT) battle.togglePause();
+            if (keyCode == Input.Keys.ESCAPE || keyCode == Input.Keys.SHIFT_RIGHT) battle.togglePause();
+        }
 
         // if (keyCode == Input.Keys.ENTER) if (battle.onSelect()) return Game.game.globalCharacterSelectScreen;
 
@@ -62,36 +64,38 @@ public class LocalBattleScreen extends ScreenAdapter {
 
     @Override
     public Screen keyReleased(int keyCode) {
-        if (keyCode == Input.Keys.W) {
-            battle.getPlayer(0).keys.release(Keys.UP);
-        }
-        if (keyCode == Input.Keys.A) {
-            battle.getPlayer(0).keys.release(Keys.LEFT);
-        }
-        if (keyCode == Input.Keys.S) {
-            battle.getPlayer(0).keys.release(Keys.DOWN);
-        }
-        if (keyCode == Input.Keys.D) {
-            battle.getPlayer(0).keys.release(Keys.RIGHT);
-        }
-        if (keyCode == Input.Keys.F) {
-            battle.getPlayer(0).keys.release(Keys.ATTACK);
-        }
+        if (!battle.gameOver()) {
+            if (keyCode == Input.Keys.W) {
+                battle.getPlayer(0).keys.release(Keys.UP);
+            }
+            if (keyCode == Input.Keys.A) {
+                battle.getPlayer(0).keys.release(Keys.LEFT);
+            }
+            if (keyCode == Input.Keys.S) {
+                battle.getPlayer(0).keys.release(Keys.DOWN);
+            }
+            if (keyCode == Input.Keys.D) {
+                battle.getPlayer(0).keys.release(Keys.RIGHT);
+            }
+            if (keyCode == Input.Keys.F) {
+                battle.getPlayer(0).keys.release(Keys.ATTACK);
+            }
 
-        if (keyCode == Input.Keys.UP) {
-            battle.getPlayer(1).keys.release(Keys.UP);
-        }
-        if (keyCode == Input.Keys.LEFT) {
-            battle.getPlayer(1).keys.release(Keys.LEFT);
-        }
-        if (keyCode == Input.Keys.DOWN) {
-            battle.getPlayer(1).keys.release(Keys.DOWN);
-        }
-        if (keyCode == Input.Keys.RIGHT) {
-            battle.getPlayer(1).keys.release(Keys.RIGHT);
-        }
-        if (keyCode == Input.Keys.M) {
-            battle.getPlayer(1).keys.release(Keys.ATTACK);
+            if (keyCode == Input.Keys.UP) {
+                battle.getPlayer(1).keys.release(Keys.UP);
+            }
+            if (keyCode == Input.Keys.LEFT) {
+                battle.getPlayer(1).keys.release(Keys.LEFT);
+            }
+            if (keyCode == Input.Keys.DOWN) {
+                battle.getPlayer(1).keys.release(Keys.DOWN);
+            }
+            if (keyCode == Input.Keys.RIGHT) {
+                battle.getPlayer(1).keys.release(Keys.RIGHT);
+            }
+            if (keyCode == Input.Keys.M) {
+                battle.getPlayer(1).keys.release(Keys.ATTACK);
+            }
         }
 
         return this;
@@ -100,7 +104,7 @@ public class LocalBattleScreen extends ScreenAdapter {
     @Override
     public Screen update() {
         if (battle.gameEnded) {
-            return Game.game.globalCharacterSelectScreen;
+            return new VictoryScreen(battle.winner, battle.loser);
         }
         battle.update();
         return this;

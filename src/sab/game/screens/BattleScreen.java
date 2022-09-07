@@ -39,8 +39,8 @@ public class BattleScreen extends ScreenAdapter {
         // player2 = new Player(new Chain(), this);
 
         platform = new Platform(-320, -128, 640, 64, "last_location.png");
-        platform.addBehavior(new PlatformBehavior(platform) {
-            public void update() {
+        platform.addBehavior(new PlatformBehavior() {
+            public void update(Platform platform) {
                 // ownerPlatform.velocity.x = (float) Math.sin(Game.game.window.getTick() / 16f) * 2;
                 // ownerPlatform.velocity.y = (float) Math.sin(Game.game.window.getTick() / 8f) * 4;
             }

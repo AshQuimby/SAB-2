@@ -10,7 +10,7 @@ public class ChainSlash extends AttackType {
     @Override
     public void onCreate(Attack attack) {
         attack.imageName = "chain_slash.png";
-        attack.life = 9;
+        attack.life = 8;
         attack.frameCount = 5;
         attack.velocity = new Vector2();
         attack.hitbox.width = 48;

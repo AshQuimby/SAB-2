@@ -21,9 +21,10 @@ public class StageSelectScreen extends ScreenAdapter {
     private List<Stage> stages;
     private int stageIndex, player1Costume, player2Costume;
     private Fighter player1, player2;
+    private int player1Type, player2Type;
     
 
-    public StageSelectScreen(Fighter player1, Fighter player2, int player1Costume, int player2Costume) {
+    public StageSelectScreen(Fighter player1, Fighter player2, int player1Costume, int player2Costume, int player1Type, int player2Type) {
         stages = new ArrayList<>();
         stageIndex = 0;
 
@@ -31,6 +32,8 @@ public class StageSelectScreen extends ScreenAdapter {
         this.player2 = player2;
         this.player1Costume = player1Costume;
         this.player2Costume = player2Costume;
+        this.player1Type = player1Type;
+        this.player2Type = player2Type;
 
         for (Class<? extends StageType> stage : Game.game.stages) {
             stages.add(new Stage(ModLoader.getStageType(stage)));
@@ -50,7 +53,7 @@ public class StageSelectScreen extends ScreenAdapter {
     public Screen keyPressed(int keyCode) {
         if (keyCode == Input.Keys.D || keyCode == Input.Keys.RIGHT) stageIndex = sab.util.Utils.loop(stageIndex, 1, stages.size(), 0);
         if (keyCode == Input.Keys.A || keyCode == Input.Keys.LEFT) stageIndex = sab.util.Utils.loop(stageIndex, -1, stages.size(), 0);
-        if (keyCode == Input.Keys.ENTER) return new LocalBattleScreen(player1, player2, new int[]{player1Costume, player2Costume}, stages.get(stageIndex));
+        if (keyCode == Input.Keys.ENTER) return new LocalBattleScreen(player1, player2, new int[]{player1Costume, player2Costume}, stages.get(stageIndex), player1Type, player2Type);
         if (keyCode == Input.Keys.ESCAPE) return Game.game.globalCharacterSelectScreen;
         SABSounds.playSound(SABSounds.BLIP);
         return this;

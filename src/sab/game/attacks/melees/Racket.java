@@ -50,6 +50,7 @@ public class Racket extends AttackType {
         if (swung) {
             if (attack.life % 4 == 0) attack.frame++;
         } else {
+            if (!attack.owner.charging()) attack.alive = false;
             attack.owner.frame = 9;
             attack.life = 24;
         }

@@ -2,6 +2,8 @@ package sab.game.attacks;
 
 import java.util.HashMap;
 
+import javax.swing.plaf.metal.MetalBorders.PaletteBorder;
+
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.seagull_engine.GameObject;
@@ -22,6 +24,7 @@ public class Attack extends DamageSource {
     public boolean directional;
     public boolean collideWithStage;
     public Direction collisionDirection;
+    public int updatesPerTick;
     private HashMap<GameObject, Integer> hitObjects;
 
     public Attack(AttackType type, Player player) {
@@ -31,14 +34,16 @@ public class Attack extends DamageSource {
         hitbox.setPosition(new Vector2());
         drawRect = new Rectangle();
         drawRect.setPosition(hitbox.getPosition(new Vector2()));
+        direction = 1;
         hitObjects = new HashMap<GameObject, Integer>();
         velocity = new Vector2();
         owner = player;
         knockback = new Vector2();
         reflectable = true;
+        updatesPerTick = 1;
+        canHit = true;
         this.type = type;
         type.onCreate(this);
-        canHit = true;
     }
 
     public void onSpawn(int[] data) {
@@ -47,15 +52,21 @@ public class Attack extends DamageSource {
     
     @Override
     public void preUpdate() {
-        if (collideWithStage) {
-            collisionDirection = CollisionResolver.moveWithCollisions(this, velocity, owner.battle.getPlatforms());
-        } else {
-            hitbox.x += velocity.x;
-            hitbox.y += velocity.y;
-        }
+        for (int i = 0; i < updatesPerTick; i++) {
+            if (collideWithStage) {
+                collisionDirection = CollisionResolver.moveWithCollisions(this, velocity, owner.battle.getPlatforms());
+            } else {
+                hitbox.x += velocity.x;
+                hitbox.y += velocity.y;
+            }
 
-        drawRect.setCenter(hitbox.getCenter(new Vector2()));
-        update();
+            drawRect.setCenter(hitbox.getCenter(new Vector2()));
+            update();
+            if (!alive) break;
+        }
+        if (--life == 0) {
+            alive = false;
+        }
         postUpdate();
     }
 
@@ -73,13 +84,9 @@ public class Attack extends DamageSource {
                 if (hitbox.overlaps(target.hitbox) && target != owner && (hitObjects.get(target) == null || hitObjects.get(target) <= 0)) {
                     if (((Hittable) target).canBeHit(this)) successfulHit(target);
                     hit(target);
-                    ((Hittable) target).onHit(this);
+                    if (((Hittable) target).canBeHit(this)) ((Hittable) target).onHit(this);
                 }
             }
-        }
-
-        if (--life == 0) {
-            alive = false;
         }
 
         if (directional) {
@@ -89,7 +96,9 @@ public class Attack extends DamageSource {
                 direction = -1;
             }
         }
+    }
 
+    public void postUpdate() {
         if (!alive) {
             kill();
         }
@@ -112,6 +121,8 @@ public class Attack extends DamageSource {
             hitObjects.replace(hit, hitCooldown);
         else 
            hitObjects.put(hit, hitCooldown);
+        
+        owner.gameStats.dealtDamage(damage);
 
         type.successfulHit(this, hit);
     }
@@ -124,5 +135,21 @@ public class Attack extends DamageSource {
     @Override
     public void render(Seagraphics g) {
         type.render(this, g);
+    }
+
+    // Finds the nearest opponent player in range of maxDistance, set maxDistance to less than 0 for infinite tracking. Returns null when there is not an eligible target
+    public Player getNearestOpponent(float maxDistance) {
+        float bestDistance = maxDistance;
+        Player bestTarget = null;
+        for (Player player : owner.battle.getPlayers()) {
+            if (player != owner) {
+                float distance = player.hitbox.getCenter(new Vector2()).dst(hitbox.getCenter(new Vector2()));
+                if (distance <= bestDistance || bestDistance < 0) {
+                    bestTarget = player;
+                    bestDistance = distance;
+                }
+            }
+        }
+        return bestTarget;
     }
 }

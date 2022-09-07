@@ -11,6 +11,8 @@ import com.badlogic.gdx.math.Vector2;
 import com.seagull_engine.GameObject;
 import com.seagull_engine.Seagraphics;
 
+import sab.game.ai.AI;
+import sab.game.ai.BaseAI;
 import sab.game.attacks.Attack;
 import sab.game.fighters.Chain;
 import sab.game.fighters.Fighter;
@@ -28,6 +30,9 @@ public class Battle {
     private Player player1;
     private Player player2;
 
+    public Player winner;
+    public Player loser;
+
     private Stage stage;
 
     private List<GameObject> gameObjects;
@@ -41,6 +46,8 @@ public class Battle {
     private Map<Integer, GameObject> gameObjectsById;
     private Map<GameObject, Integer> idsByGameObject;
     private int nextId;
+    private int endGameTimer;
+    private int endGameSlowdown;
 
     // Pause game variables
     // Pausing should not be avaliable on servers unless the server owner pauses the game
@@ -51,18 +58,24 @@ public class Battle {
     public boolean drawHitboxes;
     public boolean gameEnded;
 
-    public Battle(Fighter fighter1, Fighter fighter2, int[] costumes, Stage stage) {
+    public Battle(Fighter fighter1, Fighter fighter2, int[] costumes, Stage stage, int player1Type, int player2Type) {
+        this.stage = stage;
+
         players = new ArrayList<>();
         player1 = new Player(fighter1, costumes[0], 0, this);
+        player1.setAI(player1Type == 0 ? null : new BaseAI(player1, 60 - 10 * player1Type));
         player2 = new Player(fighter2, costumes[1], 1, this);
+        player2.setAI(player2Type == 0 ? null : new BaseAI(player2, 60 - 10 * player2Type));
         players.add(player1);
         players.add(player2);
         paused = false;
         pauseOverlayHidden = false;
         pauseMenuIndex = 0;
         gameEnded = false;
+        endGameTimer = 0;
 
-        this.stage = stage;
+        winner = null;
+        loser = null;
 
         gameObjects = new ArrayList<>();
         hittableGameObjects = new ArrayList<>();
@@ -87,37 +100,7 @@ public class Battle {
     }
 
     public Battle() {
-        this(new Fighter(new Marvin()), new Fighter(new Chain()), new int[]{0, 0}, new Stage(new LastLocation()));
-    }
-
-    public void reset() {
-        players.clear();
-        player1 = new Player(player1.fighter, player1.costume, 0, this);
-        player2 = new Player(player1.fighter, player1.costume, 1, this);
-        players.add(player1);
-        players.add(player2);
-        paused = false;
-        gameEnded = false;
-
-        this.stage = new Stage(new LastLocation());
-
-        gameObjects.clear();
-        hittableGameObjects.clear();
-        attacks.clear();
-        miscGameObjects.clear();
-        stageObjects.clear();
-        newGameObjects.clear();
-        gameObjectsById.clear();
-        idsByGameObject.clear();
-        particles.clear();
-        nextId = 0;
-
-        addGameObject(player1);
-        addGameObject(player2);
-
-        for (GameObject stageObject : stage.getStageObjects()) {
-            addGameObject(stageObject);
-        }
+        this(new Fighter(new Marvin()), new Fighter(new Chain()), new int[]{0, 0}, new Stage(new LastLocation()), 0, 0);
     }
 
     public void addGameObject(GameObject gameObject) {
@@ -135,7 +118,7 @@ public class Battle {
     }
 
     public void removeGameObject(GameObject gameObject) {
-        deadGameObjects.add(gameObject);
+        if (!deadGameObjects.contains(gameObject)) deadGameObjects.add(gameObject);
     }
 
     public List<GameObject> getGameObjects() {
@@ -148,6 +131,18 @@ public class Battle {
 
     public Stage getStage() {
         return stage;
+    }
+
+    public void freezeFrame(int duration, int slowdown, int slowdownDuration, boolean zoomIn) {
+
+    }
+
+    public void slowDown(int slowdown, int slowdownDuration) {
+
+    }
+
+    public void shakeCamera(int intensity) {
+
     }
 
     public int getIdByGameObject(GameObject gameObject) {
@@ -175,10 +170,41 @@ public class Battle {
     }
 
     public void update() {
+        if (endGameTimer > 0) {
+            endGameTimer++;
+            if (endGameTimer >= 120) {
+                gameEnded = true;
+            }
+        }
 
-        if (player1.getLives() <= 0 || player2.getLives() <= 0) endGame();
+        if (paused) return;   
 
-        if (paused) return;
+        if (winner == null) {
+            if (player1.getLives() == 0 && player2.getLives() == 0) {
+                winner = player1;
+                winner.fighter.name = "Tie";
+                winner.fighter.id = "tie";
+                winner.costume = 0;
+                loser = player2;
+                SABSounds.playSound("final_death.mp3");
+                SABSounds.stopMusic();
+                endGameTimer = 1;
+            }else if (player1.getLives() <= 0) {
+                winner = player2;
+                loser = player1;
+                SABSounds.playSound("final_death.mp3");
+                SABSounds.stopMusic();
+                endGameTimer = 1;
+            } else if (player2.getLives() <= 0){
+                winner = player1;
+                loser = player2;
+                SABSounds.playSound("final_death.mp3");
+                SABSounds.stopMusic();
+                endGameTimer = 1;
+            }
+        }
+
+        if (endGameTimer > 0 && Game.game.window.getTick() % 4 != 0) return;
 
         // if (paused) {
         //     if (player1.keys.isJustPressed(Keys.UP) || player2.keys.isJustPressed(Keys.UP)) pauseMenuIndex++;
@@ -261,6 +287,10 @@ public class Battle {
         }
     }
 
+    public boolean gameOver() {
+        return endGameTimer > 0;
+    }
+
     public void endGame() {
         gameEnded = true;
     }
@@ -281,22 +311,26 @@ public class Battle {
         return players.get(player);
     }
 
-    private void drawHitbox(GameObject gameObject) {
+    public List<Player> getPlayers() {
+        return players;
+    }
+
+    private void drawHitbox(GameObject gameObject, Seagraphics g) {
         Rectangle hitbox = gameObject.hitbox;
 
-        Game.game.window.shapeRenderer.setColor(1, 1, 0, 1);
+        g.shapeRenderer.setColor(1, 1, 0, 1);
         if (gameObject.getClass().isAssignableFrom(Player.class)) {
-            Game.game.window.shapeRenderer.setColor(0, 0, 1, 1);
+            g.shapeRenderer.setColor(0, 0, 1, 1);
         } else if (gameObject.getClass().isAssignableFrom(Platform.class)) {
-            Game.game.window.shapeRenderer.setColor(0, 1, 0, 1);
+            g.shapeRenderer.setColor(0, 1, 0, 1);
         } else if (gameObject.getClass().isAssignableFrom(Attack.class)) {
-            Game.game.window.shapeRenderer.setColor(1, 0, 1, 1);
-            Game.game.window.shapeRenderer.line(gameObject.hitbox.getCenter(new Vector2()),
+            g.shapeRenderer.setColor(1, 0, 1, 1);
+            g.shapeRenderer.line(gameObject.hitbox.getCenter(new Vector2()),
                     gameObject.hitbox.getCenter(new Vector2()).cpy().add(((Attack) gameObject).knockback));
-            Game.game.window.shapeRenderer.setColor(1, 0, 0, 1);
+                    g.shapeRenderer.setColor(1, 0, 0, 1);
         }
 
-        Game.game.window.shapeRenderer.rect(hitbox.x, hitbox.y, hitbox.width, hitbox.height);
+        g.shapeRenderer.rect(hitbox.x, hitbox.y, hitbox.width, hitbox.height);
     }
 
     public void render(Seagraphics g) {
@@ -304,19 +338,19 @@ public class Battle {
         
         for (GameObject misc : miscGameObjects) {
             misc.render(g);
-            if (drawHitboxes) drawHitbox(misc);
+            if (drawHitboxes) drawHitbox(misc, g);
         }
 
         stage.renderDetails(g);
 
         for (GameObject attack : attacks) {
             attack.render(g);
-            if (drawHitboxes) drawHitbox(attack);
+            if (drawHitboxes) drawHitbox(attack, g);
         }
 
         for (GameObject player : players) {
             player.render(g);
-            if (drawHitboxes) drawHitbox(player);
+            if (drawHitboxes) drawHitbox(player, g);
         }
 
         stage.renderPlatforms(g);
@@ -327,8 +361,8 @@ public class Battle {
 
         for (Ledge ledge : stage.getLedges()) {
             if (drawHitboxes) {
-                Game.game.window.shapeRenderer.setColor(new Color(0, 1, 1, 1));
-                Game.game.window.shapeRenderer.rect(ledge.grabBox.x, ledge.grabBox.y, ledge.grabBox.width, ledge.grabBox.height);
+                g.shapeRenderer.setColor(new Color(0, 1, 1, 1));
+                g.shapeRenderer.rect(ledge.grabBox.x, ledge.grabBox.y, ledge.grabBox.width, ledge.grabBox.height);
             }
         }
 
@@ -345,6 +379,11 @@ public class Battle {
 
         g.drawText(player1.damage + "%", g.imageProvider.getFont("SAB_font"), -256 + 116, -256 + 48, 1, Color.WHITE, 1);
         g.drawText(player2.damage + "%", g.imageProvider.getFont("SAB_font"), 256 - 128 + 116, -256 + 48, 1, Color.WHITE, 1);
+
+        if (endGameTimer > 0) {
+            g.usefulTintDraw(g.imageProvider.getImage("pixel.png"), -1152 / 2, -704 / 2, 1152, 704, 0, 1, 0, false, false, new Color(0, 0, 0, 1 - ((121f - endGameTimer) / 120)));
+            g.drawText("GAME END", g.imageProvider.getFont("SAB_font"), 0, 0, 2.5f - ((121f - endGameTimer) / 120) / 2, Color.WHITE, 0);
+        }
 
         if (paused && !pauseOverlayHidden) {
             g.usefulDraw(g.imageProvider.getImage("pause_overlay.png"), -1152 / 2, -704 / 2, 1152, 704, pauseMenuIndex, 3, 0, false, false);
