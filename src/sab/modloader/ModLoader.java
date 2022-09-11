@@ -18,6 +18,7 @@ import sab.game.Game;
 import sab.game.attacks.Attack;
 import sab.game.attacks.AttackType;
 import sab.game.fighters.FighterType;
+import sab.game.screens.JukeboxScreen;
 import sab.game.stages.StageType;
 import sab.util.SabReader;
 
@@ -124,6 +125,11 @@ public final class ModLoader {
         classLoader.close();
 
         return mod;
+    }
+
+    // Adds sound file to jukebox screen as a song
+    public void addSongToJukebox(String fileName, String songName, String artist) {
+        JukeboxScreen.addSong(fileName, songName, artist);
     }
 
     public static FighterType getFighterType(Class<? extends FighterType> type) {

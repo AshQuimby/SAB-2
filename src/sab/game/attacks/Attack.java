@@ -61,8 +61,8 @@ public class Attack extends DamageSource {
             }
 
             drawRect.setCenter(hitbox.getCenter(new Vector2()));
-            update();
             if (!alive) break;
+            update();
         }
         if (--life == 0) {
             alive = false;

@@ -3,16 +3,17 @@ package sab.game.ai;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 
 import sab.game.Game;
 import sab.game.Player;
+import sab.game.stages.Ledge;
 import sab.game.stages.Platform;
 import sab.net.Keys;
 import sab.util.Utils;
 
 public class BaseAI extends AI {
-
     private List<Vector2> opponentPositions;
     private int smarts;
     private int originalSmarts;
@@ -42,17 +43,6 @@ public class BaseAI extends AI {
         opponentPositions.add(target.hitbox.getCenter(new Vector2()));
         Platform targetPlatform = getNearestPlatform();
 
-        if (player.respawning()) {
-            if (Math.random() > 0.1) pressKey(Keys.DOWN);
-            return;
-        }
-
-        if (player.charging()) {
-            if (Math.random() > 0.5 && isAbovePlatform()) pressKey(Keys.ATTACK);
-            else releaseKey(Keys.ATTACK);
-            return;
-        }
-
         if (target == null || targetPlatform == null) return;
 
         Vector2 targetPosition = null;
@@ -66,42 +56,57 @@ public class BaseAI extends AI {
 
         Vector2 center = player.hitbox.getCenter(new Vector2());
 
-
-        if (!isAbovePlatform() && (player.getRemainingJumps() <= 0 || player.usedRecovery)) {
-            if (getNearestLedge() != null) {
-                targetPosition = getNearestLedge().grabBox.getCenter(new Vector2());
-            } else {
-                targetPosition = Utils.getNearestPointInRect(center, targetPlatform.hitbox);
-            }
-            attacking = false;
+        if (player.grabbingLedge()) {
+            pressKey(Keys.UP);
+            return;
         }
 
-        float distance = targetPosition.dst(center);
+        if (!isAbovePlatform()) {
+            if (player.hitbox.y > targetPlatform.hitbox.y + targetPlatform.hitbox.height) {
+                if (targetPosition.x > center.x) {
+                    pressKey(Keys.RIGHT);
+                } else if (targetPosition.x < center.x) {
+                    pressKey(Keys.LEFT);
+                }
 
-        if (!attacking || distance > 64 || Math.signum(player.direction) != Math.signum(targetPosition.cpy().sub(center).x)) {
+                pressKey(Keys.ATTACK);
+            }
+
+            Ledge ledge = getNearestLedge();
+            Vector2 ledgePosition = ledge == null ? Utils.getNearestPointInRect(center, targetPlatform.hitbox): ledge.grabBox.getPosition(new Vector2());
+
+            if (ledgePosition.x > center.x) {
+                pressKey(Keys.RIGHT);
+            } else if (ledgePosition.x < center.x) {
+                pressKey(Keys.LEFT);
+            }
+
+            if (ledgePosition.y > center.y + player.velocity.y * 2) {
+                if (Game.game.window.getTick() % (smarts + 1) == 0) {
+                    pressKey(Keys.UP);
+                    if (player.getRemainingJumps() == 0) {
+                        pressKey(Keys.ATTACK);
+                    }
+                }
+            }
+        } else {
+            if (target.hitbox.y > player.hitbox.y + player.hitbox.height) {
+                pressKey(Keys.UP);
+            }
+
+            if (player.hitbox.y > target.hitbox.y + target.hitbox.height && Math.abs(center.y - targetPosition.y) < 128) {
+                pressKey(Keys.DOWN);
+            }
+
             if (targetPosition.x > center.x) {
                 pressKey(Keys.RIGHT);
             } else if (targetPosition.x < center.x) {
                 pressKey(Keys.LEFT);
             }
-        }
 
-        if (player.grabbingLedge()) {
-            pressKey(Keys.UP);
-        }
-
-        if (targetPosition.y - 128 > center.y && player.velocity.y < 0 + smarts / 10) {
-            pressKey(Keys.UP);
-            if (player.getRemainingJumps() <= 0 && Game.game.window.getTick() % Math.max(smarts / 12, 1) == 0) pressKey(Keys.ATTACK);
-        } else if (targetPosition.y < center.y - 64) {
-            pressKey(Keys.DOWN);
-        }
-
-        if (attacking) {
-            if (distance < 128 || distance < 256 && Math.random() > 0.9) {
-                if (Game.game.window.getTick() % Math.max(smarts / 16, 1) == 0) pressKey(Keys.ATTACK);
+            if (center.dst(targetPosition) < 128) {
+                pressKey(Keys.ATTACK);
             }
-            if (Math.random() > 1 / (smarts + 1) + 0.7f) releaseKey(Keys.ATTACK);
         }
     }
 }

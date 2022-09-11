@@ -43,6 +43,8 @@ public class EvilSuck extends AttackType {
         if (attack.frame >= 4) attack.frame = 0;
         attack.hitbox.setCenter(attack.owner.hitbox.getCenter(new Vector2()).add(84 * attack.owner.direction, 0));
 
+        if (attack.owner.stuckCondition()) attack.alive = false;
+
         if (trappedPlayer != null) {
             attack.life = 2;
             trappedPlayer.hide();

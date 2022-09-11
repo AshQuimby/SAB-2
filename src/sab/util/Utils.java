@@ -3,6 +3,7 @@ package sab.util;
 import java.util.List;
 import java.util.ArrayList;
 
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.seagull_engine.Seagraphics;
@@ -54,5 +55,9 @@ public class Utils {
         nearest.y = Math.min(Math.max(target.y, rect.y), rect.y + rect.height);
 
         return nearest;
+    }
+
+    public static Vector2 randomPointInRect(Rectangle rect) {
+        return new Vector2(MathUtils.random(rect.x, rect.x + rect.width), MathUtils.random(rect.y, rect.y + rect.height));
     }
 }

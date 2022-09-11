@@ -1,5 +1,6 @@
 package sab.game;
 
+import com.badlogic.gdx.math.MathUtils;
 import com.seagull_engine.Messenger;
 import com.seagull_engine.Seagraphics;
 
@@ -12,6 +13,7 @@ import sab.game.fighters.Gus;
 import sab.game.fighters.Marvin;
 import sab.game.fighters.Walouis;
 import sab.game.screens.CharacterSelectScreen;
+import sab.game.screens.JukeboxScreen;
 import sab.game.screens.ModErrorScreen;
 import sab.game.screens.TitleScreen;
 import sab.game.stages.Boxtopia;
@@ -38,6 +40,7 @@ public class Game extends Messenger {
     public final List<Class<? extends StageType>> stages;
     public final HashMap<String, Class<? extends AttackType>> attacks;
     public final CharacterSelectScreen globalCharacterSelectScreen;
+    public static String titleBackground;
     private List<String> modErrors;
     private Screen screen;
 
@@ -45,11 +48,13 @@ public class Game extends Messenger {
 
     public Game() {
         mods = new HashMap<String, Mod>();
+        selectNewTitleScreen();
         fighters = new ArrayList<>();
         stages = new ArrayList<>();
         attacks = new HashMap<>();
         globalCharacterSelectScreen = new CharacterSelectScreen();
         modErrors = new ArrayList<>();
+        JukeboxScreen.loadVanillaSongs();
     }
     
     @Override
@@ -73,6 +78,20 @@ public class Game extends Messenger {
 
         if (modErrors.size() > 0) {
             screen = new ModErrorScreen(modErrors);
+        }
+    }
+
+    public static void selectNewTitleScreen() {
+        switch (MathUtils.random.nextInt(2)) {
+            case 0 -> {
+                titleBackground = "title_screen_background.png";
+            }
+            case 1 -> {
+                titleBackground = "title_screen_background_alt_1.png";
+            }
+            default -> {
+                titleBackground = "title_screen_background.png";
+            }
         }
     }
 

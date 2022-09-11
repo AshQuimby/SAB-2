@@ -13,6 +13,7 @@ import sab.game.attacks.projectiles.Bomb;
 import sab.game.attacks.projectiles.Note;
 import sab.game.attacks.projectiles.TinyNote;
 import sab.game.particles.Particle;
+import sab.util.Utils;
 
 public class Walouis extends FighterType {
     private Animation throwAnimation;
@@ -29,8 +30,8 @@ public class Walouis extends FighterType {
         fighter.imageOffsetY = 4;
         fighter.frames = 11;
         fighter.jumps = 1;
-        fighter.speed = 8.5f;
-        fighter.acceleration = .86f;
+        fighter.speed = 7.5f;
+        fighter.acceleration = .46f;
         fighter.doubleJumpMultiplier = 0.85f;
         fighter.jumpHeight = 160;
         fighter.friction = .1f;
@@ -79,7 +80,7 @@ public class Walouis extends FighterType {
 
     @Override
     public void charging(Fighter fighter, Player player, int charge) {
-        if (Game.game.window.getTick() % 4 == 0) player.battle.addParticle(new Particle(player.hitbox.getCenter(new Vector2()).add(0, 16), new Vector2(1, 0).rotateDeg(MathUtils.random() * 359), 24, 24, "fire.png"));
+        if (Game.game.window.getTick() % 4 == 0) player.battle.addParticle(new Particle(Utils.randomPointInRect(player.hitbox), new Vector2(1, 0).rotateDeg(MathUtils.random() * 359), 24, 24, "fire.png"));
         player.velocity.y *= 0.85f;
         player.velocity.x *= 0.95f;
     }

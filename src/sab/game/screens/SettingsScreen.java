@@ -16,7 +16,7 @@ public class SettingsScreen extends SelectorScreen {
     HashMap<String, String> settings;
 
     public SettingsScreen() {
-        super(new String[] {"Master Volume", "Music Volume", "SFX Volume", "Back"});
+        super(new String[] {"Static Camera", "Master Volume", "Music Volume", "SFX Volume", "Back"});
         settings = Settings.toHashMap();
     }
     
@@ -43,12 +43,15 @@ public class SettingsScreen extends SelectorScreen {
 
         switch(selectorId) {
             case 0 -> {
-                setting = (int) (Float.parseFloat(settings.get("master_volume")) * 100) + "%";
+                setting = Boolean.parseBoolean(settings.get("static_camera")) ? "On" : "Off";
             }
             case 1 -> {
-                setting = (int) (Float.parseFloat(settings.get("music_volume")) * 100) + "%";
+                setting = (int) (Float.parseFloat(settings.get("master_volume")) * 100) + "%";
             }
             case 2 -> {
+                setting = (int) (Float.parseFloat(settings.get("music_volume")) * 100) + "%";
+            }
+            case 3 -> {
                 setting = (int) (Float.parseFloat(settings.get("sfx_volume")) * 100) + "%";
             }
             default -> {
@@ -79,13 +82,17 @@ public class SettingsScreen extends SelectorScreen {
         switch (selectorId) {
             case 0 -> {
                 SABSounds.playSound(SABSounds.BLIP);
-                settings.replace("master_volume", Math.min(100, (int) (Float.parseFloat(settings.get("master_volume")) * 100) + 5) / 100f + "");
+                settings.replace("static_camera", "true");
             }
             case 1 -> {
                 SABSounds.playSound(SABSounds.BLIP);
-                settings.replace("music_volume", Math.min(100, (int) (Float.parseFloat(settings.get("music_volume")) * 100) + 5) / 100f + "");
+                settings.replace("master_volume", Math.min(100, (int) (Float.parseFloat(settings.get("master_volume")) * 100) + 5) / 100f + "");
             }
             case 2 -> {
+                SABSounds.playSound(SABSounds.BLIP);
+                settings.replace("music_volume", Math.min(100, (int) (Float.parseFloat(settings.get("music_volume")) * 100) + 5) / 100f + "");
+            }
+            case 3 -> {
                 SABSounds.playSound(SABSounds.BLIP);
                 settings.replace("sfx_volume", Math.min(100, (int) (Float.parseFloat(settings.get("sfx_volume")) * 100) + 5) / 100f + "");
             }
@@ -99,13 +106,17 @@ public class SettingsScreen extends SelectorScreen {
         switch (selectorId) {
             case 0 -> {
                 SABSounds.playSound(SABSounds.BLIP);
-                settings.replace("master_volume", Math.max(0, (int) (Float.parseFloat(settings.get("master_volume")) * 100) - 5) / 100f + "");
+                settings.replace("static_camera", "false");
             }
             case 1 -> {
                 SABSounds.playSound(SABSounds.BLIP);
-                settings.replace("music_volume", Math.max(0, (int) (Float.parseFloat(settings.get("music_volume")) * 100) - 5) / 100f + "");
+                settings.replace("master_volume", Math.max(0, (int) (Float.parseFloat(settings.get("master_volume")) * 100) - 5) / 100f + "");
             }
             case 2 -> {
+                SABSounds.playSound(SABSounds.BLIP);
+                settings.replace("music_volume", Math.max(0, (int) (Float.parseFloat(settings.get("music_volume")) * 100) - 5) / 100f + "");
+            }
+            case 3 -> {
                 SABSounds.playSound(SABSounds.BLIP);
                 settings.replace("sfx_volume", Math.max(0, (int) (Float.parseFloat(settings.get("sfx_volume")) * 100) - 5) / 100f + "");
             }
@@ -119,15 +130,18 @@ public class SettingsScreen extends SelectorScreen {
     public Screen onSelect(int selection) {
         switch(selection) {
             case 0 -> {
-
-            }
-            case 1 -> {
                 
             }
-            case 2 -> {
+            case 1 -> {
 
             }
+            case 2 -> {
+                
+            }
             case 3 -> {
+
+            }
+            case 4 -> {
                 Settings.fromHashMap(settings);
                 SABSounds.soundEngine.setCurrentMusicVolume(Settings.getMusicVolume() * Settings.getMasterVolume());
                 Settings.writeFile();

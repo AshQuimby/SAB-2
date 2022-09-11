@@ -104,6 +104,8 @@ public class LocalBattleScreen extends ScreenAdapter {
     @Override
     public Screen update() {
         if (battle.gameEnded) {
+            Game.game.window.camera.zoom = 1;
+            Game.game.window.camera.targetZoom = 1;
             return new VictoryScreen(battle.winner, battle.loser);
         }
         battle.update();

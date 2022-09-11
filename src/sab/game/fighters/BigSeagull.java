@@ -1,15 +1,19 @@
 package sab.game.fighters;
 
 import sab.game.Player;
+import sab.game.SABSounds;
 import sab.game.animation.Animation;
 import sab.game.attacks.Attack;
+import sab.game.attacks.melees.Glide;
 import sab.game.attacks.melees.Peck;
+import sab.game.attacks.projectiles.Gust;
 import sab.net.Keys;
 
 public class BigSeagull extends FighterType {
     private Animation hoverAnimation;
     private Animation flyingAnimation;
     private Animation peckAnimation;
+    private Animation gustAnimation;
 
     @Override
     public void setDefaults(Fighter fighter) {
@@ -30,6 +34,7 @@ public class BigSeagull extends FighterType {
         fighter.mass = 6.66f;
         fighter.jumps = 5;
         fighter.walkAnimation = new Animation(1, 6, 6, true);
+        fighter.ledgeAnimation = new Animation(new int[] {14}, 1, true);
         fighter.description = "Big Seagull is a True God so powerful that even other deities cannot survive its presence. Although Big Seagull has followers from the Church of Big Seagull, it does not need to be worshipped to sustain itself, unlike many other gods.";
         fighter.debut = "Real Life";
         fighter.costumes = 4;
@@ -37,6 +42,7 @@ public class BigSeagull extends FighterType {
         flyingAnimation = new Animation(7, 10, 8, true);
         hoverAnimation = new Animation(new int[] {13, 16, 17, 18}, 10, true);
         peckAnimation = new Animation(11, 12, 6, true);
+        gustAnimation = new Animation(new int[] {13, 5}, 12, true);
     }
 
     @Override
@@ -45,7 +51,7 @@ public class BigSeagull extends FighterType {
             player.frame = 1;
         }
 
-        if (!player.touchingStage) {
+        if (!player.touchingStage && !player.grabbingLedge()) {
             if (player.velocity.len() < 10) {
                 player.frame = hoverAnimation.stepLooping();
             } else {
@@ -61,16 +67,27 @@ public class BigSeagull extends FighterType {
         }
 
         if (player.velocity.y < 0) player.velocity.y *= 0.95f;
+        if (player.usedRecovery) player.velocity.y *= 0.85f;
     }
 
     @Override
     public void neutralAttack(Fighter fighter, Player player) {
-
+        gustAnimation.reset();
+        player.startAttack(new Attack(new Gust(), player), gustAnimation, 1, 24, true);
+        SABSounds.playSound("gust.mp3");
     }
 
     @Override
     public void sideAttack(Fighter fighter, Player player) {
         peckAnimation.reset();
-        player.startAttack(new Attack(new Peck(), player), peckAnimation, 1, 5, true);
+        player.startAttack(new Attack(new Peck(), player), peckAnimation, 1, 12, true);
+    }
+
+    @Override
+    public void upAttack(Fighter fighter, Player player) {
+        hoverAnimation.reset();
+        player.startAttack(new Attack(new Glide(), player), hoverAnimation, 4, 180, true);
+        player.velocity.y = 12;
+        SABSounds.playSound("gust.mp3");
     }
 }

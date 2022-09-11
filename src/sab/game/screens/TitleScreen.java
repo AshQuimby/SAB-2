@@ -19,7 +19,7 @@ public class TitleScreen extends SelectorScreen {
     
     @Override
     public void render(Seagraphics g) {
-        g.scalableDraw(g.imageProvider.getImage("title_screen_background.png"), -1152 / 2, -704 / 2, 1152, 704);
+        g.scalableDraw(g.imageProvider.getImage(Game.titleBackground), -1152 / 2, -704 / 2, 1152, 704);
         g.scalableDraw(g.imageProvider.getImage("title.png"), -488 / 2, 100 + MathUtils.sin(Game.game.window.getTick() / 64f) * 4, 488, 232);
 
         g.usefulTintDraw(g.imageProvider.getImage("pixel.png"), -400 / 2, -704 / 2, 400, 350, 0, 1, 0, false, false, new Color(0, 0, 0, 0.5f));

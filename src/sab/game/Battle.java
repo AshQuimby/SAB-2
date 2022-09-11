@@ -6,10 +6,13 @@ import java.util.List;
 import java.util.Map;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.seagull_engine.GameObject;
 import com.seagull_engine.Seagraphics;
+import com.seagull_engine.graphics.SeagullCamera;
 
 import sab.game.ai.AI;
 import sab.game.ai.BaseAI;
@@ -47,13 +50,21 @@ public class Battle {
     private Map<GameObject, Integer> idsByGameObject;
     private int nextId;
     private int endGameTimer;
-    private int endGameSlowdown;
+    private int cameraShake;
+    private int slowdown;
+    private int slowdownDuration;
+    private int freezeFrames;
+    private boolean zoomOnFreeze;
+    private boolean freezeUpdate;
+    private int screenShatter;
 
     // Pause game variables
     // Pausing should not be avaliable on servers unless the server owner pauses the game
     private boolean paused;
     private boolean pauseOverlayHidden;
     private int pauseMenuIndex;
+
+    //Screen effect variables
 
     public boolean drawHitboxes;
     public boolean gameEnded;
@@ -134,15 +145,19 @@ public class Battle {
     }
 
     public void freezeFrame(int duration, int slowdown, int slowdownDuration, boolean zoomIn) {
-
+        freezeFrames = duration;
+        slowdown(slowdown, slowdownDuration);
+        zoomOnFreeze = zoomIn;
+        freezeUpdate = true;
     }
 
-    public void slowDown(int slowdown, int slowdownDuration) {
-
+    public void slowdown(int slowdown, int slowdownDuration) {
+        this.slowdown = slowdown;
+        this.slowdownDuration = slowdownDuration;
     }
 
     public void shakeCamera(int intensity) {
-
+        if (intensity > cameraShake) cameraShake = intensity;
     }
 
     public int getIdByGameObject(GameObject gameObject) {
@@ -169,6 +184,65 @@ public class Battle {
         return platforms;
     }
 
+    public void updateCameraPosition() {
+        if (Settings.getStaticCamera()) {
+            Vector2 cameraPosition = new Vector2(Game.game.window.camera.position.x,
+                    Game.game.window.camera.position.y);
+            Vector2 velocity = stage.getSafeBlastZone().getCenter(new Vector2()).cpy().sub(cameraPosition).scl(.1f);
+            Game.game.window.camera.position.add(velocity.x, velocity.y, 0);
+            return;
+        }
+
+        SeagullCamera camera = Game.game.window.camera;
+
+        if (freezeFrames > 0 && zoomOnFreeze) {
+            camera.targetZoom = 0.5f;
+            camera.updateZoom(2);
+        }
+
+        camera.targetPosition = player1.hitbox.getCenter(new Vector2()).cpy().add(player2.hitbox.getCenter(new Vector2())).scl(0.5f);
+        float playerDist = player1.hitbox.getCenter(new Vector2()).dst(player2.hitbox.getCenter(new Vector2()));
+        camera.targetZoom = playerDist / 256;
+
+        camera.targetZoom = Math.max(Math.min(stage.maxZoomOut, camera.targetZoom), slowdownDuration > 0 ? 0.5f : 0.75f);
+
+        boolean badX = false;
+        boolean badY = false;
+        boolean badX2 = false;
+        boolean badY2 = false;
+
+        if ((camera.targetPosition.x - camera.viewportWidth / 2) * camera.zoom < stage.getSafeBlastZone().x) {
+            camera.targetPosition.x = stage.getSafeBlastZone().x + camera.viewportWidth / 2;
+            badX = true;
+        }
+        if ((camera.targetPosition.y - camera.viewportHeight / 2) * camera.zoom < stage.getSafeBlastZone().y) {
+            camera.targetPosition.y = stage.getSafeBlastZone().y + camera.viewportHeight / 2;
+            badY = true;
+        }
+        if ((camera.targetPosition.x + camera.viewportWidth / 2) * camera.zoom > stage.getSafeBlastZone().x + stage.getSafeBlastZone().width) {
+            camera.targetPosition.x = stage.getSafeBlastZone().x + stage.getSafeBlastZone().width - camera.viewportWidth / 2;
+            badX2 = true;
+        }
+        if ((camera.targetPosition.y + camera.viewportHeight / 2) * camera.zoom > stage.getSafeBlastZone().y + stage.getSafeBlastZone().height) {
+            camera.targetPosition.y = stage.getSafeBlastZone().y + stage.getSafeBlastZone().height - camera.viewportHeight / 2;
+            badY2 = true;
+        }
+
+        if (badX && badX2) camera.targetPosition.x = stage.getSafeBlastZone().x + stage.getSafeBlastZone().width / 2;
+        if (badY && badY2) camera.targetPosition.y = stage.getSafeBlastZone().y + stage.getSafeBlastZone().height / 2;
+
+        if (slowdownDuration > 0) camera.updateSeagullCamera(32 + slowdown * 4); else camera.updateSeagullCamera(8);
+    }
+
+    public void updateCameraEffects() {
+        float shakeX = MathUtils.random(-cameraShake * cameraShake / 2f, cameraShake * cameraShake / 2f);
+        float shakeY = MathUtils.random(-cameraShake * cameraShake / 2f, cameraShake * cameraShake / 2f);
+
+        Game.game.window.camera.position.add(shakeX, shakeY, 0);
+
+        if (cameraShake > 0) cameraShake--;
+    }
+
     public void update() {
         if (endGameTimer > 0) {
             endGameTimer++;
@@ -177,7 +251,21 @@ public class Battle {
             }
         }
 
-        if (paused) return;   
+        if (paused) return;
+
+        if (freezeFrames > 0) {
+            freezeFrames--;
+            if (!freezeUpdate) {
+                return;
+            } else {
+                freezeUpdate = false;
+            }
+        } else {
+            if (slowdownDuration > 0) {
+                slowdownDuration--;
+                if (Game.game.window.getTick() % slowdown != 0) return;
+            }
+        }
 
         if (winner == null) {
             if (player1.getLives() == 0 && player2.getLives() == 0) {
@@ -248,6 +336,7 @@ public class Battle {
         }
         particles.removeAll(deadParticles);
         
+        updateCameraEffects();
 
         for (GameObject deadGameObject : deadGameObjects) {
             gameObjects.remove(deadGameObject);
@@ -292,7 +381,17 @@ public class Battle {
     }
 
     public void endGame() {
+        Game.game.window.camera.viewportWidth = 1152;
+        Game.game.window.camera.viewportHeight = 704;
+        Game.game.window.camera.position.x = 0;
+        Game.game.window.camera.position.y = 0;
         gameEnded = true;
+    }
+
+    public void smashScreen() {
+        freezeFrame(15, 8, 60, true);
+        screenShatter = 75;
+        SABSounds.playSound("shatter.mp3");
     }
 
     public void pause() {
@@ -334,7 +433,11 @@ public class Battle {
     }
 
     public void render(Seagraphics g) {
+        g.useStaticCamera();
         g.scalableDraw(g.imageProvider.getImage(stage.background), -1152 / 2, -704 / 2, 1152, 704);
+        g.useDynamicCamera();
+
+        updateCameraPosition();
         
         for (GameObject misc : miscGameObjects) {
             misc.render(g);
@@ -366,6 +469,7 @@ public class Battle {
             }
         }
 
+        g.useStaticCamera();
         g.scalableDraw(g.imageProvider.getImage("in_battle_hud_p1.png"), -256, -256 - 64, 128, 128);
 
         g.scalableDraw(g.imageProvider.getImage("in_battle_hud_p2.png"), 256 - 128, -256 - 64, 128, 128);
@@ -387,6 +491,10 @@ public class Battle {
 
         if (paused && !pauseOverlayHidden) {
             g.usefulDraw(g.imageProvider.getImage("pause_overlay.png"), -1152 / 2, -704 / 2, 1152, 704, pauseMenuIndex, 3, 0, false, false);
+        }
+        if (screenShatter > 0) {
+            g.scalableDraw(g.imageProvider.getImage("screen_shatter.png"), -1152 / 2, -704 / 2, 1152, 704);
+            screenShatter--;
         }
     }
 }

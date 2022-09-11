@@ -13,6 +13,7 @@ public class Stage {
     public String name;
     public String background;
     public String music;
+    public float maxZoomOut;
 
     protected List<StageObject> stageObjects;
     protected List<Ledge> ledges;
@@ -32,6 +33,7 @@ public class Stage {
         music = "last_location.mp3";
         stageObjects = new ArrayList<>();
         ledges = new ArrayList<>();
+        maxZoomOut = 1;
 
         safeBlastZone = new Rectangle(-1152 / 2 - 64, -704 / 2 - 64, 1152 + 128, 704 + 128);
         unsafeBlastZone = new Rectangle(-1152 / 2 - 128, -704 / 2 - 128, 1152 + 256, 704 + 256);

@@ -17,7 +17,7 @@ public class ExtrasScreen extends SelectorScreen {
     
     @Override
     public void render(Seagraphics g) {
-        g.scalableDraw(g.imageProvider.getImage("title_screen_background.png"), -1152 / 2, -704 / 2, 1152, 704);
+        g.scalableDraw(g.imageProvider.getImage(Game.titleBackground), -1152 / 2, -704 / 2, 1152, 704);
 
         g.scalableDraw(g.imageProvider.getImage("title.png"), -488 / 2, 100 + MathUtils.sin(Game.game.window.getTick() / 64f) * 4, 488, 232);
 

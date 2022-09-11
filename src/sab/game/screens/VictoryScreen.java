@@ -9,6 +9,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.seagull_engine.Seagraphics;
 
 import sab.game.Game;
+import sab.game.GameStats;
 import sab.game.Player;
 import sab.game.SABSounds;
 import sab.game.Settings;
@@ -30,6 +31,10 @@ public class VictoryScreen extends ScreenAdapter {
         SABSounds.playMusic("leadup.mp3", false);
         setupTimer = -360;
         if (Settings.getMusicVolume() == 0 || Settings.getMasterVolume() == 0) setupTimer = -60;
+        Game.game.window.camera.viewportWidth = 1152;
+        Game.game.window.camera.viewportHeight = 704;
+        Game.game.window.camera.position.x = 0;
+        Game.game.window.camera.position.y = 0;
     }
 
     @Override
@@ -65,9 +70,10 @@ public class VictoryScreen extends ScreenAdapter {
             if (setupTimer > 0) {
                 SABSounds.playSound(SABSounds.BLIP);
                 SABSounds.playMusic("lobby_music.mp3", true);
+                Game.selectNewTitleScreen();
                 return Game.game.globalCharacterSelectScreen;
             } else {
-                setupTimer = 0;
+                setupTimer = -1;
             }
         }
         

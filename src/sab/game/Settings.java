@@ -8,6 +8,7 @@ import java.util.HashMap;
 import sab.util.SabReader;
 
 public class Settings {
+    private static boolean staticCamera;
     private static float masterVolume;
     private static float sfxVolume;
     private static float musicVolume;
@@ -39,9 +40,11 @@ public class Settings {
         masterVolume = 0.5f;
         sfxVolume = 1f;
         musicVolume = 1f;
+        staticCamera = false;
     }
 
-    public static void setSettings(float volumeSetting, float musicSetting, float sfxSetting) {
+    public static void setSettings(boolean staticCameraSetting, float volumeSetting, float musicSetting, float sfxSetting) {
+        staticCamera = staticCameraSetting;
         masterVolume = volumeSetting;
         musicVolume = musicSetting;
         sfxVolume = sfxSetting;
@@ -57,6 +60,7 @@ public class Settings {
 
     public static HashMap<String, String> toHashMap() {
         HashMap<String, String> settings = new HashMap<String, String>();
+        settings.put("static_camera", Boolean.toString(staticCamera));
         settings.put("master_volume", Float.toString(masterVolume));
         settings.put("sfx_volume", Float.toString(sfxVolume));
         settings.put("music_volume", Float.toString(musicVolume));
@@ -64,11 +68,16 @@ public class Settings {
     }
 
     public static void fromHashMap(HashMap<String, String> settings) {
+        staticCamera = Boolean.parseBoolean(settings.get("static_camera"));
         masterVolume = Float.parseFloat(settings.get("master_volume"));
         sfxVolume = Float.parseFloat(settings.get("sfx_volume"));
         musicVolume = Float.parseFloat(settings.get("music_volume"));
     }
 
+    public static boolean getStaticCamera() {
+        return staticCamera;
+    }
+    
     public static float getMasterVolume() {
         return masterVolume;
     }

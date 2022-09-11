@@ -13,9 +13,9 @@ import sab.screen.ScreenAdapter;
 import sab.util.Utils;
 
 public class JukeboxScreen extends ScreenAdapter {
-    private List<String> songIDs;
-    private List<String> songNames;
-    private List<String> songCredits;
+    private static List<String> songIDs = new ArrayList<String>();
+    private static List<String> songNames = new ArrayList<String>();
+    private static List<String> songCredits = new ArrayList<String>();
     private int songIndex;
     private int widgetIndex;
     private int playing;
@@ -28,9 +28,6 @@ public class JukeboxScreen extends ScreenAdapter {
     private boolean johnSleeping;
 
     public JukeboxScreen() {
-        songIDs = new ArrayList<String>();
-        songNames = new ArrayList<String>();
-        songCredits = new ArrayList<String>();
         songIndex = 0;
         widgetIndex = 0;
         johnFrame = 0;
@@ -39,10 +36,9 @@ public class JukeboxScreen extends ScreenAdapter {
         johnSleeping = true;
         loopAnimationTimer = 0;
         paused = true;
-        loadVanillaSongs();
     }
 
-    private void loadVanillaSongs() {
+    public static void loadVanillaSongs() {
         addSong("lobby_music.mp3", "Lobby Music", "Beat Thorn");
         addSong("lobby_music_old.mp3", "Lobby Music (Legacy)", "Beat Thorn");
         addSong("loading_music.mp3", "Loading Music", "Beat Thorn");
@@ -58,7 +54,7 @@ public class JukeboxScreen extends ScreenAdapter {
         addSong("walouis_sax_solo.mp3", "Walouis' Sax Solo", "Beat Thorn");
     }
 
-    public void addSong(String fileName, String songName, String artist) {
+    public static void addSong(String fileName, String songName, String artist) {
         songIDs.add(fileName);
         songNames.add(songName);
         songCredits.add(artist);

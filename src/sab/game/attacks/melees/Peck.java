@@ -14,25 +14,26 @@ public class Peck extends AttackType {
         attack.hitbox.width = 48;
         attack.hitbox.height = 36;
         attack.drawRect.width = 48;
-        attack.drawRect.height = 96;
-        attack.damage = 4;
+        attack.drawRect.height = 36;
+        attack.damage = 16;
         attack.direction = attack.owner.direction;
-        attack.hitCooldown = 10;
+        attack.hitCooldown = 13;
         attack.reflectable = false;
     }
 
     @Override
     public void update(Attack attack) {
-        if (attack.life % 4 == 0) {
-            attack.frame++;
-        }
+        attack.frame = 3 - (int) (attack.life / 4f);
 
-        attack.hitbox.setCenter(attack.owner.hitbox.getCenter(new Vector2()).add(attack.direction * 24, 0));
+        attack.hitbox.setCenter(attack.owner.hitbox.getCenter(new Vector2())
+                .add(attack.direction * (attack.hitbox.width / 2 + attack.owner.hitbox.width / 2 + 4), 12));
         attack.direction = attack.owner.direction;
+        attack.knockback.set(attack.direction * 5, 5);
     }
 
     @Override
     public void onSpawn(Attack attack, int[] data) {
-        attack.hitbox.setCenter(attack.owner.hitbox.getCenter(new Vector2()).add(attack.direction * 24, 0));
+        attack.hitbox.setCenter(attack.owner.hitbox.getCenter(new Vector2()).add(attack.direction * (attack.hitbox.width / 2 + attack.owner.hitbox.width / 2 + 4), 12));
+        attack.knockback.set(attack.direction * 5, 5);
     }
 }

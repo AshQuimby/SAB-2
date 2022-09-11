@@ -14,6 +14,7 @@ import sab.net.Keys;
 public class MagicBanana extends AttackType {
 
     private boolean controlled;
+    private float kbMult;
     private Animation anime = new Animation(new int[]{11, 12, 13}, 8, false);
 
     @Override
@@ -30,6 +31,7 @@ public class MagicBanana extends AttackType {
         attack.hitCooldown = 30;
         attack.directional = false;
         attack.collideWithStage = true;
+        attack.reflectable = false;
     }
 
     @Override
@@ -86,6 +88,7 @@ public class MagicBanana extends AttackType {
     @Override
     public void hit(Attack attack, GameObject hit) {
         attack.velocity.scl(2);
+        attack.knockback.scl(1 + kbMult);
         if (attack.life > 30) attack.life = 30;
         controlled = false;
     }
@@ -96,6 +99,7 @@ public class MagicBanana extends AttackType {
         attack.velocity = new Vector2(0, 5);
         attack.direction = attack.velocity.x > 0 ? 1 : -1;
         attack.knockback = new Vector2(6 * attack.owner.direction, 5);
+        kbMult = data[0] / 45f;
         attack.damage += data[0] / 4;
         controlled = true;
     }
