@@ -10,7 +10,7 @@ import sab.game.particles.Particle;
 
 public class Banana extends AttackType {
     @Override
-    public void onCreate(Attack attack) {
+    public void setDefaults(Attack attack) {
         attack.imageName = "falling_banana.png";
         attack.life = 60;
         attack.frameCount = 1;

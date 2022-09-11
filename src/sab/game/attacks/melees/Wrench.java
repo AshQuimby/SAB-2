@@ -11,7 +11,7 @@ public class Wrench extends AttackType {
     private float swing;
 
     @Override
-    public void onCreate(Attack attack) {
+    public void setDefaults(Attack attack) {
         attack.imageName = "wrench.png";
         if (attack.owner.costume == 1929) {
             attack.imageName = "wrэnch.png";
@@ -41,12 +41,13 @@ public class Wrench extends AttackType {
         attack.rotation = -(swing - 45) * attack.direction;
         attack.hitbox.y -= MathUtils.sinDeg(swing - 45) * wrenchLength / 2;
         
-        for (GameObject gameObject : attack.owner.battle.getGameObjects()) {
-            if (Attack.class.isAssignableFrom(gameObject.getClass()) && ((Attack) gameObject).reflectable) {
-                if (((Attack) gameObject).owner != attack.owner && ((Attack) gameObject).hitbox.overlaps(attack.hitbox)) {
-                    ((Attack) gameObject).velocity.scl(-1);
-                    ((Attack) gameObject).owner = attack.owner;
-                }
+        for (Attack other : attack.owner.battle.getAttacks()) {
+            if (other.reflectable) {
+                if (other == attack) continue;
+
+                    attack.velocity.x *= -1;
+                    attack.knockback.x *= -1;
+                    attack.owner = attack.owner;
             }
         }
     }

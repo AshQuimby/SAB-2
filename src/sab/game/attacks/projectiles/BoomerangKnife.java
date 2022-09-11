@@ -12,7 +12,7 @@ public class BoomerangKnife extends AttackType {
     private boolean returning;
 
     @Override
-    public void onCreate(Attack attack) {
+    public void setDefaults(Attack attack) {
         attack.imageName = "chain_knife.png";
         attack.life = -1;
         attack.frameCount = 8;

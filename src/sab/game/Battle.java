@@ -40,7 +40,7 @@ public class Battle {
 
     private List<GameObject> gameObjects;
     private List<GameObject> hittableGameObjects;
-    private List<GameObject> attacks;
+    private List<Attack> attacks;
     private List<GameObject> miscGameObjects;
     private List<GameObject> stageObjects;
     private List<GameObject> newGameObjects;
@@ -103,7 +103,7 @@ public class Battle {
         addGameObject(player1);
         addGameObject(player2);
 
-        drawHitboxes = true;
+        drawHitboxes = false;
 
         for (GameObject stageObject : stage.getStageObjects()) {
             addGameObject(stageObject);
@@ -185,19 +185,19 @@ public class Battle {
     }
 
     public void updateCameraPosition() {
+        SeagullCamera camera = Game.game.window.camera;
+
         if (Settings.getStaticCamera()) {
-            Vector2 cameraPosition = new Vector2(Game.game.window.camera.position.x,
-                    Game.game.window.camera.position.y);
-            Vector2 velocity = stage.getSafeBlastZone().getCenter(new Vector2()).cpy().sub(cameraPosition).scl(.1f);
-            Game.game.window.camera.position.add(velocity.x, velocity.y, 0);
+            camera.zoom = stage.maxZoomOut;
+            camera.position.set(stage.getSafeBlastZone().getCenter(new Vector2()), 0);
             return;
         }
 
-        SeagullCamera camera = Game.game.window.camera;
 
         if (freezeFrames > 0 && zoomOnFreeze) {
             camera.targetZoom = 0.5f;
-            camera.updateZoom(2);
+            camera.targetPosition = (player1.takingKnockback()) ? player1.hitbox.getCenter(new Vector2()) : player2.hitbox.getCenter(new Vector2());
+            camera.updateSeagullCamera(1);
         }
 
         camera.targetPosition = player1.hitbox.getCenter(new Vector2()).cpy().add(player2.hitbox.getCenter(new Vector2())).scl(0.5f);
@@ -211,20 +211,20 @@ public class Battle {
         boolean badX2 = false;
         boolean badY2 = false;
 
-        if ((camera.targetPosition.x - camera.viewportWidth / 2) * camera.zoom < stage.getSafeBlastZone().x) {
-            camera.targetPosition.x = stage.getSafeBlastZone().x + camera.viewportWidth / 2;
+        if ((camera.targetPosition.x - camera.viewportWidth * camera.zoom / 2) < stage.getSafeBlastZone().x) {
+            camera.targetPosition.x = stage.getSafeBlastZone().x + camera.viewportWidth * camera.zoom / 2;
             badX = true;
         }
-        if ((camera.targetPosition.y - camera.viewportHeight / 2) * camera.zoom < stage.getSafeBlastZone().y) {
-            camera.targetPosition.y = stage.getSafeBlastZone().y + camera.viewportHeight / 2;
+        if ((camera.targetPosition.y - camera.viewportHeight * camera.zoom / 2) < stage.getSafeBlastZone().y) {
+            camera.targetPosition.y = stage.getSafeBlastZone().y + camera.viewportHeight * camera.zoom / 2;
             badY = true;
         }
-        if ((camera.targetPosition.x + camera.viewportWidth / 2) * camera.zoom > stage.getSafeBlastZone().x + stage.getSafeBlastZone().width) {
-            camera.targetPosition.x = stage.getSafeBlastZone().x + stage.getSafeBlastZone().width - camera.viewportWidth / 2;
+        if ((camera.targetPosition.x + camera.viewportWidth * camera.zoom / 2) > stage.getSafeBlastZone().x + stage.getSafeBlastZone().width) {
+            camera.targetPosition.x = stage.getSafeBlastZone().x + stage.getSafeBlastZone().width - camera.viewportWidth * camera.zoom / 2;
             badX2 = true;
         }
-        if ((camera.targetPosition.y + camera.viewportHeight / 2) * camera.zoom > stage.getSafeBlastZone().y + stage.getSafeBlastZone().height) {
-            camera.targetPosition.y = stage.getSafeBlastZone().y + stage.getSafeBlastZone().height - camera.viewportHeight / 2;
+        if ((camera.targetPosition.y + camera.viewportHeight * camera.zoom / 2) > stage.getSafeBlastZone().y + stage.getSafeBlastZone().height) {
+            camera.targetPosition.y = stage.getSafeBlastZone().y + stage.getSafeBlastZone().height - camera.viewportHeight * camera.zoom / 2;
             badY2 = true;
         }
 
@@ -314,7 +314,7 @@ public class Battle {
             }
 
             if (newGameObject instanceof Attack) {
-                attacks.add(newGameObject);
+                attacks.add((Attack) newGameObject);
                 misc = false;
             }
 
@@ -371,6 +371,8 @@ public class Battle {
             gameObject.preUpdate();
         }
 
+        stage.update(this);
+
         for (Player player : players) {
             player.keys.update();
         }
@@ -414,6 +416,10 @@ public class Battle {
         return players;
     }
 
+    public List<Attack> getAttacks() {
+        return attacks;
+    }
+
     private void drawHitbox(GameObject gameObject, Seagraphics g) {
         Rectangle hitbox = gameObject.hitbox;
 
@@ -438,6 +444,8 @@ public class Battle {
         g.useDynamicCamera();
 
         updateCameraPosition();
+
+        stage.renderBackground(g);
         
         for (GameObject misc : miscGameObjects) {
             misc.render(g);
@@ -470,6 +478,7 @@ public class Battle {
         }
 
         g.useStaticCamera();
+        stage.renderOverlay(g);
         g.scalableDraw(g.imageProvider.getImage("in_battle_hud_p1.png"), -256, -256 - 64, 128, 128);
 
         g.scalableDraw(g.imageProvider.getImage("in_battle_hud_p2.png"), 256 - 128, -256 - 64, 128, 128);

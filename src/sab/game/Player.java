@@ -127,7 +127,7 @@ public class Player extends GameObject implements Hittable {
             for (GameObject platform : passablePlatforms) {
                 if (!keys.isPressed(Keys.DOWN) && velocity.y <= 0
                         && hitbox.y > platform.hitbox.y + platform.hitbox.height - 12) {
-                    Direction tryDirection = CollisionResolver.resolveY(this, step, platform.hitbox);
+                    Direction tryDirection = CollisionResolver.resolveY(this, step.y, platform.hitbox);
                     if (tryDirection != Direction.NONE)
                         collisionDirection = tryDirection;
                 }
@@ -243,9 +243,9 @@ public class Player extends GameObject implements Hittable {
         if (respawnTime > 0) {
             respawnTime--;
             invulnerable = true;
-            hitbox.setCenter(new Vector2(128 * (id == 0 ? -1 : 1), battle.getStage().getSafeBlastZone().height / 2 + Math.max(respawnTime, 120) - 360 + hitbox.height));
+            hitbox.setCenter(new Vector2(128 * (id == 0 ? -1 : 1), battle.getStage().getSafeBlastZone().height / 2 + Math.max(respawnTime * 2, 120) - 280 + hitbox.height / 2));
             frame = 0;
-            if ((keys.isPressed(Keys.RIGHT) || keys.isPressed(Keys.LEFT) || keys.isPressed(Keys.DOWN) || keys.isPressed(Keys.UP)) && respawnTime < 150 || respawnTime == 0) {
+            if ((keys.isPressed(Keys.RIGHT) || keys.isPressed(Keys.LEFT) || keys.isPressed(Keys.DOWN) || keys.isPressed(Keys.UP)) && respawnTime < 100 || respawnTime == 0) {
                 invulnerable = false;
                 respawnTime = 0;
             } else {
@@ -499,7 +499,7 @@ public class Player extends GameObject implements Hittable {
         
         if (knockbackDuration > 0) frame = fighter.knockbackAnimation.stepLooping();
         
-        if (lives > 1 && ((knockbackDuration > 0 && !hitbox.overlaps(battle.getStage().getSafeBlastZone())) || (hitbox.x + hitbox.width < battle.getStage().getUnsafeBlastZone().x || hitbox.x > battle.getStage().getUnsafeBlastZone().x + battle.getStage().getUnsafeBlastZone().width || hitbox.y + hitbox.height < battle.getStage().getUnsafeBlastZone().y))) {
+        if (lives > 0 && ((knockbackDuration > 0 && !hitbox.overlaps(battle.getStage().getSafeBlastZone())) || (hitbox.x + hitbox.width < battle.getStage().getUnsafeBlastZone().x || hitbox.x > battle.getStage().getUnsafeBlastZone().x + battle.getStage().getUnsafeBlastZone().width || hitbox.y + hitbox.height < battle.getStage().getUnsafeBlastZone().y))) {
             kill(1);
         }
     }
@@ -531,9 +531,10 @@ public class Player extends GameObject implements Hittable {
         }
         knockbackDuration = (int) (knockback.len() * 0.225f);
 
+        boolean shouldDie = false;
+
         if (knockback.len() > 30) {
 
-            boolean shouldDie = false;
             Rectangle death = new Rectangle(hitbox);
             Vector2 tempKnockback = knockback.cpy();
 
@@ -553,6 +554,8 @@ public class Player extends GameObject implements Hittable {
                 battle.shakeCamera(10);
             }
         }
+
+        battle.getStage().onPlayerHit(this, source, shouldDie);
 
         gameStats.tookDamage(damage - damageBefore);
         return true;

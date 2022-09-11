@@ -7,7 +7,7 @@ import sab.game.attacks.AttackType;
 
 public class Peck extends AttackType {
     @Override
-    public void onCreate(Attack attack) {
+    public void setDefaults(Attack attack) {
         attack.imageName = "peck.png";
         attack.life = 12;
         attack.frameCount = 3;
@@ -28,12 +28,12 @@ public class Peck extends AttackType {
         attack.hitbox.setCenter(attack.owner.hitbox.getCenter(new Vector2())
                 .add(attack.direction * (attack.hitbox.width / 2 + attack.owner.hitbox.width / 2 + 4), 12));
         attack.direction = attack.owner.direction;
-        attack.knockback.set(attack.direction * 5, 5);
+        attack.knockback.set(attack.direction * 5, 3.5f);
     }
 
     @Override
     public void onSpawn(Attack attack, int[] data) {
         attack.hitbox.setCenter(attack.owner.hitbox.getCenter(new Vector2()).add(attack.direction * (attack.hitbox.width / 2 + attack.owner.hitbox.width / 2 + 4), 12));
-        attack.knockback.set(attack.direction * 5, 5);
+        attack.knockback.set(attack.direction * 5, 3.5f);
     }
 }

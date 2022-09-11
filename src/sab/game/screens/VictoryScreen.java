@@ -47,7 +47,7 @@ public class VictoryScreen extends ScreenAdapter {
 
         g.scalableDraw(g.imageProvider.getImage("victory_background_layer_1.png"), -1152 / 2, -704 / 2, 1152, 704);
 
-        g.scalableDraw(g.imageProvider.getImage(winner.fighter.id + "_render.png"), 1152 / 2 - 512 - 8, -704 / 2 - 8, 512, 512);
+        g.scalableDraw(g.imageProvider.getImage(winner.fighter.id + "_render" + (winner.costume == 0 ? "" : ("_alt_" + winner.costume)) + ".png"), 1152 / 2 - 512 - 8, -704 / 2 - 8, 512, 512);
 
         g.scalableDraw(g.imageProvider.getImage("victory_background_layer_2.png"), -1152 / 2, -704 / 2, 1152, 704);
 

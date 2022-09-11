@@ -8,7 +8,7 @@ import sab.game.attacks.AttackType;
 
 public class ChainSlash extends AttackType {
     @Override
-    public void onCreate(Attack attack) {
+    public void setDefaults(Attack attack) {
         attack.imageName = "chain_slash.png";
         attack.life = 8;
         attack.frameCount = 5;

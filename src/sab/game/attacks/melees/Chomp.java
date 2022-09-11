@@ -15,7 +15,7 @@ import sab.net.Keys;
 
 public class Chomp extends AttackType {
     @Override
-    public void onCreate(Attack attack) {
+    public void setDefaults(Attack attack) {
         attack.imageName = "bite.png";
         attack.hitbox.width = 76;
         attack.hitbox.height = 64;

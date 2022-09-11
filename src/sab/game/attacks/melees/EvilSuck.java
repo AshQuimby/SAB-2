@@ -18,7 +18,7 @@ public class EvilSuck extends AttackType {
     private int chompTime;
 
     @Override
-    public void onCreate(Attack attack) {
+    public void setDefaults(Attack attack) {
         attack.imageName = "suck.png";
         attack.hitbox.width = 116;
         attack.hitbox.height = 108;

@@ -14,7 +14,7 @@ import sab.game.attacks.AttackType;
 public class TinyNote extends AttackType {
 
     @Override
-    public void onCreate(Attack attack) {
+    public void setDefaults(Attack attack) {
         attack.imageName = "small_note.png";
         attack.life = 20;
         attack.frameCount = 3;

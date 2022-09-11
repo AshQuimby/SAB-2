@@ -15,7 +15,7 @@ public class Bomb extends AttackType {
     private volatile boolean exploded;
 
     @Override
-    public void onCreate(Attack attack) {
+    public void setDefaults(Attack attack) {
         attack.imageName = "bomb.png";
         attack.life = 240;
         attack.frameCount = 4;

@@ -6,7 +6,6 @@ public class GameStats {
     private int damageTaken;
     private int kills;
     private int deaths;
-    private boolean winner;
     private String type;
     private int playerId;
 
@@ -15,7 +14,6 @@ public class GameStats {
         damageTaken = 0;
         kills = 0;
         deaths = 0;
-        winner = false;
         this.type = type;
         this.playerId = playerId + 1;
     }
@@ -39,10 +37,6 @@ public class GameStats {
 
     public void died() {
         deaths++;
-    }
-
-    public void won() {
-        winner = true;;
     }
 
     @Override

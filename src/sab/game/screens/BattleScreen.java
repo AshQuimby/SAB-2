@@ -11,8 +11,10 @@ import sab.game.Hittable;
 import sab.game.Player;
 import sab.game.SABSounds;
 import sab.game.DamageSource;
+import sab.game.stages.LastLocation;
 import sab.game.stages.Platform;
-import sab.game.stages.PlatformBehavior;
+import sab.game.stages.StageObjectBehaviour;
+import sab.game.stages.Stage;
 import sab.net.Connection;
 import sab.net.Keys;
 import sab.net.Packets;
@@ -38,8 +40,8 @@ public class BattleScreen extends ScreenAdapter {
         // player1 = new Player(new Marvin(), this);
         // player2 = new Player(new Chain(), this);
 
-        platform = new Platform(-320, -128, 640, 64, "last_location.png");
-        platform.addBehavior(new PlatformBehavior() {
+        platform = new Platform(-320, -128, 640, 64, "last_location.png", new Stage(new LastLocation()));
+        platform.addBehavior(new StageObjectBehaviour() {
             public void update(Platform platform) {
                 // ownerPlatform.velocity.x = (float) Math.sin(Game.game.window.getTick() / 16f) * 2;
                 // ownerPlatform.velocity.y = (float) Math.sin(Game.game.window.getTick() / 8f) * 4;

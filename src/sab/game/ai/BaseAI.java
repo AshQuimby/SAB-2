@@ -4,10 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
+import sab.game.CollisionResolver;
 import sab.game.Game;
 import sab.game.Player;
+import sab.game.attacks.Attack;
 import sab.game.stages.Ledge;
 import sab.game.stages.Platform;
 import sab.net.Keys;
@@ -27,9 +30,88 @@ public class BaseAI extends AI {
         opponentPositions = new ArrayList<>();
     }
 
+    // Run when the player is in danger of falling into the void
+    private void recover(Platform targetPlatform, Ledge targetLedge) {
+        Vector2 center = player.hitbox.getCenter(new Vector2());
+
+        // If the player is not over the platform but still above it
+        if (player.hitbox.y > targetPlatform.hitbox.y + targetPlatform.hitbox.height) {
+            // Calculate if the player has enough time to reach the platform before falling below it
+
+            boolean canLandOnPlatform = false;
+
+            Vector2 platformMiddle = new Vector2(targetPlatform.hitbox.x + targetPlatform.hitbox.width / 2, targetPlatform.hitbox.y + targetPlatform.hitbox.height);
+            Rectangle futureHitbox = new Rectangle(player.hitbox);
+            Vector2 futureVelocity = player.velocity.cpy();
+            for (int i = 0; i < 20; i++) {
+                futureHitbox.x += futureVelocity.x;
+                futureHitbox.y += futureVelocity.y;
+                futureVelocity.sub(futureVelocity.cpy().scl(player.fighter.friction));
+                futureVelocity.y -= .96f;
+
+                if (platformMiddle.x > futureHitbox.x + futureHitbox.width / 2) {
+                    futureVelocity.x += Math.max(-player.fighter.acceleration, -player.fighter.speed - futureVelocity.x);
+                } else if (platformMiddle.x < futureHitbox.x + futureHitbox.width / 2) {
+                    futureVelocity.x += Math.min(player.fighter.acceleration, player.fighter.speed - futureVelocity.x);
+                }
+
+                if (futureHitbox.overlaps(targetPlatform.hitbox)) {
+                    canLandOnPlatform = true;
+                }
+            }
+
+            if (canLandOnPlatform) {
+                if (platformMiddle.x > center.x) {
+                    pressKey(Keys.RIGHT);
+                } else if (platformMiddle.x < center.x) {
+                    pressKey(Keys.LEFT);
+                }
+            }
+        } else {
+            Ledge ledge = getNearestLedge();
+            Vector2 ledgePosition = ledge == null ? Utils.getNearestPointInRect(center, targetPlatform.hitbox)
+                    : ledge.grabBox.getPosition(new Vector2());
+
+            if (ledgePosition.x > center.x) {
+                pressKey(Keys.RIGHT);
+            } else if (ledgePosition.x < center.x) {
+                pressKey(Keys.LEFT);
+            }
+
+            if (ledgePosition.y > center.y + player.velocity.y * 2) {
+                if (Game.game.window.getTick() % (smarts + 1) == 0) {
+                    pressKey(Keys.UP);
+                    if (player.getRemainingJumps() == 0) {
+                        pressKey(Keys.ATTACK);
+                    }
+                }
+            }
+        }
+    }
+
+    private Vector2 getFutureCollision(Attack attack) {
+        Rectangle futureHitbox = new Rectangle(player.hitbox);
+        Vector2 futureVelocity = player.velocity.cpy();
+
+        Rectangle futureAttackHitbox = new Rectangle(attack.hitbox);
+        for (int i = 0; i < 20; i++) {
+            futureHitbox.x += futureVelocity.x;
+            futureHitbox.y += futureVelocity.y;
+            if (!player.touchingStage) futureVelocity.y -= .96f;
+
+            futureAttackHitbox.x += attack.velocity.x;
+            futureAttackHitbox.y += attack.velocity.y;
+
+            if (futureHitbox.overlaps(futureAttackHitbox)) {
+                return futureHitbox.getCenter(new Vector2());
+            }
+        }
+
+        return null;
+    }
+
     @Override
     public void update() {
-
         smarts = (int) Math.max(0, originalSmarts - 50 / ((float) player.getLives() / (float) originalLives + 1) + 25);
 
         releaseKey(Keys.RIGHT);
@@ -58,37 +140,10 @@ public class BaseAI extends AI {
 
         if (player.grabbingLedge()) {
             pressKey(Keys.UP);
-            return;
         }
 
         if (!isAbovePlatform()) {
-            if (player.hitbox.y > targetPlatform.hitbox.y + targetPlatform.hitbox.height) {
-                if (targetPosition.x > center.x) {
-                    pressKey(Keys.RIGHT);
-                } else if (targetPosition.x < center.x) {
-                    pressKey(Keys.LEFT);
-                }
-
-                pressKey(Keys.ATTACK);
-            }
-
-            Ledge ledge = getNearestLedge();
-            Vector2 ledgePosition = ledge == null ? Utils.getNearestPointInRect(center, targetPlatform.hitbox): ledge.grabBox.getPosition(new Vector2());
-
-            if (ledgePosition.x > center.x) {
-                pressKey(Keys.RIGHT);
-            } else if (ledgePosition.x < center.x) {
-                pressKey(Keys.LEFT);
-            }
-
-            if (ledgePosition.y > center.y + player.velocity.y * 2) {
-                if (Game.game.window.getTick() % (smarts + 1) == 0) {
-                    pressKey(Keys.UP);
-                    if (player.getRemainingJumps() == 0) {
-                        pressKey(Keys.ATTACK);
-                    }
-                }
-            }
+            recover(targetPlatform, getNearestLedge());
         } else {
             if (target.hitbox.y > player.hitbox.y + player.hitbox.height) {
                 pressKey(Keys.UP);
@@ -106,6 +161,16 @@ public class BaseAI extends AI {
 
             if (center.dst(targetPosition) < 128) {
                 pressKey(Keys.ATTACK);
+            }
+
+            if (target.charging()) {
+                if (target.direction == 1 && targetPosition.x < center.x) {
+                    pressKey(Keys.UP);
+                    pressKey(Keys.LEFT);
+                } else if (target.direction == -1 && targetPosition.x > center.x) {
+                    pressKey(Keys.UP);
+                    pressKey(Keys.RIGHT);
+                }
             }
         }
     }

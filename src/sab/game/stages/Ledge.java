@@ -19,10 +19,12 @@ public class Ledge {
     public Ledge(Platform attachment, Vector2 anchor, float width, float height, int direction) {
         grabBox.set(attachment.hitbox.getCenter(new Vector2()).x + anchor.x, attachment.hitbox.getCenter(new Vector2()).y + anchor.y, width, height);
         this.direction = direction;
+        this.anchor = anchor;
+        platform = attachment;
     }
 
     public void update() {
-        grabBox.setPosition(platform.hitbox.getCenter(new Vector2()).x + anchor.x, platform.hitbox.getCenter(new Vector2()).y + anchor.y);
+        if (platform != null) grabBox.setPosition(platform.hitbox.getCenter(new Vector2()).x + anchor.x, platform.hitbox.getCenter(new Vector2()).y + anchor.y);
     }
 
     public Vector2 getGrabPosition(Rectangle other) {

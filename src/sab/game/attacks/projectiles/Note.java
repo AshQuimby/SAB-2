@@ -13,7 +13,7 @@ import sab.game.particles.Particle;
 
 public class Note extends AttackType {
     @Override
-    public void onCreate(Attack attack) {
+    public void setDefaults(Attack attack) {
         attack.imageName = "note.png";
         attack.life = 30;
         attack.frameCount = 4;

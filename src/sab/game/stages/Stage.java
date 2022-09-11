@@ -6,6 +6,8 @@ import java.util.List;
 import com.badlogic.gdx.math.Rectangle;
 import com.seagull_engine.Seagraphics;
 
+import sab.game.Battle;
+import sab.game.DamageSource;
 import sab.game.Player;
 
 public class Stage {
@@ -35,6 +37,7 @@ public class Stage {
         ledges = new ArrayList<>();
         maxZoomOut = 1;
 
+
         safeBlastZone = new Rectangle(-1152 / 2 - 64, -704 / 2 - 64, 1152 + 128, 704 + 128);
         unsafeBlastZone = new Rectangle(-1152 / 2 - 128, -704 / 2 - 128, 1152 + 256, 704 + 256);
         
@@ -42,9 +45,10 @@ public class Stage {
         this.type.init(this);
     }
 
-    public void update() {
+    public void update(Battle battle) {
+        type.update(battle, this);
         for (StageObject stageObject : stageObjects) {
-            stageObject.preUpdate();
+            stageObject.updateStageObject(battle);
         }
         for (Ledge ledge : ledges) {
             ledge.update();
@@ -61,6 +65,10 @@ public class Stage {
         return null;
     }
 
+    public void onPlayerHit(Player player, DamageSource damageSource, boolean finishingBlow) {
+        type.onPlayerHit(this, player, damageSource, finishingBlow);
+    }
+
     public List<Ledge> getLedges() {
         return ledges;
     }
@@ -71,6 +79,10 @@ public class Stage {
 
     public Rectangle getUnsafeBlastZone() {
         return new Rectangle(unsafeBlastZone);
+    }
+
+    public void addStageObject(StageObject stageObject, int index) {
+        stageObjects.add(index, stageObject);
     }
 
     public void addStageObject(StageObject stageObject) {
@@ -95,5 +107,13 @@ public class Stage {
         for (StageObject platform : stageObjects) {
             if (!platform.inBackground()) platform.render(g);
         }
+    }
+
+    public void renderBackground(Seagraphics g) {
+        type.renderBackground(this, g);
+    }
+
+    public void renderOverlay(Seagraphics g) {
+        type.renderOverlay(this, g);
     }
 }

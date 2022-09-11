@@ -13,7 +13,7 @@ public class Frostball extends AttackType {
     boolean bounced;
 
     @Override
-    public void onCreate(Attack attack) {
+    public void setDefaults(Attack attack) {
         attack.imageName = "frostball.png";
         attack.life = 90;
         attack.frameCount = 1;

@@ -9,7 +9,7 @@ import sab.net.Keys;
 
 public class SussyVent extends AttackType {
     @Override
-    public void onCreate(Attack attack) {
+    public void setDefaults(Attack attack) {
         attack.imageName = "vent.png";
         attack.life = 400;
         attack.frameCount = 4;

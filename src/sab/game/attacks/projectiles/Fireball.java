@@ -10,7 +10,7 @@ import sab.game.particles.Particle;
 
 public class Fireball extends AttackType {
     @Override
-    public void onCreate(Attack attack) {
+    public void setDefaults(Attack attack) {
         attack.imageName = "fireball.png";
         attack.life = 180;
         attack.frameCount = 4;

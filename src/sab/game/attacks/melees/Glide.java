@@ -12,7 +12,7 @@ import sab.util.Utils;
 
 public class Glide extends AttackType {
     @Override
-    public void onCreate(Attack attack) {
+    public void setDefaults(Attack attack) {
         attack.life = 180;
         attack.hitbox.width = 96;
         attack.hitbox.height = 96;

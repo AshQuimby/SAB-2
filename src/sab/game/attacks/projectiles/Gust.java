@@ -8,7 +8,7 @@ import sab.game.attacks.AttackType;
 
 public class Gust extends AttackType {
     @Override
-    public void onCreate(Attack attack) {
+    public void setDefaults(Attack attack) {
         attack.imageName = "gust.png";
         attack.life = 24;
         attack.frameCount = 4;
@@ -26,15 +26,14 @@ public class Gust extends AttackType {
     public void update(Attack attack) {
         attack.frame = 4 - (int) (attack.life / 6f);       
 
-        for (GameObject gameObject : attack.owner.battle.getGameObjects()) {
-            if (Attack.class.isAssignableFrom(gameObject.getClass()) && ((Attack) gameObject).reflectable) {
-                Attack otherAttack = (Attack) gameObject;
-                if (otherAttack.type == this) continue;
+        for (Attack other : attack.owner.battle.getAttacks()) {
+            if (other.reflectable) {
+                if (other == attack) continue;
 
-                if (otherAttack.hitbox.overlaps(attack.hitbox)) {
-                    otherAttack.velocity.add(attack.direction * 2, 0);
-                    otherAttack.knockback.set(otherAttack.velocity);
-                    otherAttack.owner = attack.owner;
+                if (other.hitbox.overlaps(attack.hitbox)) {
+                    other.velocity.add(attack.direction * 2, 0);
+                    other.knockback.set(other.velocity);
+                    other.owner = attack.owner;
                 }
             }
         }

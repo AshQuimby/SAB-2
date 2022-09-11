@@ -12,7 +12,7 @@ import sab.game.particles.Particle;
 
 public class Bullet extends AttackType {
     @Override
-    public void onCreate(Attack attack) {
+    public void setDefaults(Attack attack) {
         attack.imageName = "bullet.png";
         attack.life = 100;
         attack.frameCount = 1;

@@ -5,6 +5,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.seagull_engine.GameObject;
 
 import sab.game.Player;
+import sab.game.attacks.Attack;
 import sab.game.stages.Ledge;
 import sab.game.stages.Platform;
 import sab.util.Utils;
@@ -50,6 +51,19 @@ public class AI {
                     bestTarget = target;
                     bestDistance = distance;
                 }
+            }
+        }
+        return bestTarget;
+    }
+
+    public final Attack getNearestEnemyAttack() {
+        float bestDistance = -1;
+        Attack bestTarget = null;
+        for (Attack target : player.battle.getAttacks()) {
+            float distance = player.hitbox.getCenter(new Vector2()).dst(target.hitbox.getCenter(new Vector2()));
+            if (distance <= bestDistance || bestDistance < 0) {
+                bestTarget = target;
+                bestDistance = distance;
             }
         }
         return bestTarget;

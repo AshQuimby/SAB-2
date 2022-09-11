@@ -17,7 +17,7 @@ import sab.net.Keys;
 public class Cannonball extends AttackType {
 
     @Override
-    public void onCreate(Attack attack) {
+    public void setDefaults(Attack attack) {
         attack.imageName = "cannonball.png";
         attack.life = 90;
         attack.hitbox.width = 32;

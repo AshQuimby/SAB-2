@@ -13,7 +13,7 @@ import sab.game.particles.Particle;
 public class ExplosiveBarrel extends AttackType {
 
     @Override
-    public void onCreate(Attack attack) {
+    public void setDefaults(Attack attack) {
         attack.imageName = "barrel.png";
         attack.hitbox.width = 64;
         attack.hitbox.height = 80;

@@ -225,7 +225,7 @@ public class CharacterSelectScreen extends ScreenAdapter {
             updateTimesPlayed();
             shouldResetSelection = true;
             SABSounds.playSound(SABSounds.BLIP);
-            return new StageSelectScreen(player1Fighters.get(player1Index), player2Fighters.get(player2Index), player1CostumeIndex, player2CostumeIndex, player1Type, player2Type);
+            return new StageSelectScreen(player1Fighters.get(player1Index).copy(), player2Fighters.get(player2Index).copy(), player1CostumeIndex, player2CostumeIndex, player1Type, player2Type);
         } else if (keyCode == Input.Keys.F) {
             player1Ready = !player1Ready;
             if (player1Ready) SABSounds.playSound(SABSounds.SELECT); else SABSounds.playSound("deselect.mp3"); 

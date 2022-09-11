@@ -15,7 +15,7 @@ public class MiniGus extends AttackType {
     private Animation ventAnimation;
 
     @Override
-    public void onCreate(Attack attack) {
+    public void setDefaults(Attack attack) {
         attack.imageName = "mini_gus";
         if (attack.owner.costume != 0) {
             attack.imageName += "_alt_" + attack.owner.costume;

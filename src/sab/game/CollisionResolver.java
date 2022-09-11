@@ -21,41 +21,29 @@ public class CollisionResolver {
 
         a.x += velocity.x;
         for (GameObject collider : colliders) {
-            Direction tryDirection = resolveX(gameObject, velocity, collider.hitbox);
+            Direction tryDirection = resolveX(gameObject, velocity.x, collider.hitbox);
             if (tryDirection != Direction.NONE) collisionDirection = tryDirection;
             if (collider.velocity.x != 0 && collider.velocity.y != 0) movingColliders.add(collider);
         }
 
         a.y += velocity.y;
         for (GameObject collider : colliders) {
-            Direction tryDirection = resolveY(gameObject, velocity, collider.hitbox);
+            Direction tryDirection = resolveY(gameObject, velocity.y, collider.hitbox);
             if (tryDirection != Direction.NONE) collisionDirection = tryDirection;
-        }
-
-        for (GameObject collider : movingColliders) {
-            if (resolveX(gameObject, collider.velocity.cpy().scl(-1), new Rectangle(collider.hitbox.x + collider.velocity.x, collider.hitbox.y, collider.hitbox.width, collider.hitbox.height)) != Direction.NONE) gameObject.hitbox.x += collider.velocity.x;
-        }
-
-        for (GameObject collider : movingColliders) {
-            Direction tryDirection = resolveY(gameObject, collider.velocity.cpy().scl(-1), new Rectangle(collider.hitbox.x, collider.hitbox.y + collider.velocity.y, collider.hitbox.width, collider.hitbox.height));
-            if (tryDirection != Direction.NONE) {
-                gameObject.hitbox.y += collider.velocity.y;
-                collisionDirection = tryDirection;
-            }
         }
 
         return collisionDirection;
     }
 
-    public static Direction resolveX(GameObject gameObject, Vector2 velocity, Rectangle b) {
+    public static Direction resolveX(GameObject gameObject, float dX, Rectangle b) {
         Direction collisionDirection = Direction.NONE;
         Rectangle a = gameObject.hitbox;
 
         if (a.overlaps(b)) {
-            if (velocity.x > 0) {
+            if (dX > 0) {
                 a.x = b.x - a.width;
                 collisionDirection = Direction.RIGHT;
-            } else if (velocity.x < 0) {
+            } else if (dX < 0) {
                 a.x = b.x + b.width;
                 collisionDirection = Direction.LEFT;
             }
@@ -64,15 +52,15 @@ public class CollisionResolver {
         return collisionDirection;
     }
 
-    public static Direction resolveY(GameObject gameObject, Vector2 velocity, Rectangle b) {
+    public static Direction resolveY(GameObject gameObject, float dY, Rectangle b) {
         Direction collisionDirection = Direction.NONE;
         Rectangle a = gameObject.hitbox;
 
         if (a.overlaps(b)) {
-            if (velocity.y > 0) {
+            if (dY > 0) {
                 a.y = b.y - a.height;
                 collisionDirection = Direction.UP;
-            } else if (velocity.y <= 0) {
+            } else if (dY <= 0) {
                 a.y = b.y + b.height;
                 collisionDirection = Direction.DOWN;
             }

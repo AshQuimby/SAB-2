@@ -16,7 +16,7 @@ public class Racket extends AttackType {
     private boolean swung = false;
 
     @Override
-    public void onCreate(Attack attack) {
+    public void setDefaults(Attack attack) {
         attack.imageName = "badminton.png";
         attack.life = 90;
         attack.frameCount = 6;
@@ -67,7 +67,18 @@ public class Racket extends AttackType {
             if (attack.direction == 1) attack.hitbox.x += 152;
         }
 
-        attack.canHit = attack.frame == 2 || attack.frame == 3;
+        if (attack.frame == 2 || attack.frame == 3) {
+            for (Attack other : attack.owner.battle.getAttacks()) {
+                if (other.reflectable) {
+                    if (other == attack) continue;
+    
+                        attack.velocity.x *= -1;
+                        attack.knockback.x *= -1;
+                        attack.owner = attack.owner;
+                }
+            }
+            attack.canHit = true;
+        }
     }
 
     @Override

@@ -17,8 +17,12 @@ import sab.game.screens.JukeboxScreen;
 import sab.game.screens.ModErrorScreen;
 import sab.game.screens.TitleScreen;
 import sab.game.stages.Boxtopia;
+import sab.game.stages.COBS;
+import sab.game.stages.DesertBridge;
 import sab.game.stages.LastLocation;
+import sab.game.stages.OurSports;
 import sab.game.stages.StageType;
+import sab.game.stages.ThumbabasLair;
 import sab.game.stages.Warzone;
 import sab.modloader.Mod;
 import sab.modloader.ModLoader;
@@ -62,7 +66,7 @@ public class Game extends Messenger {
         Settings.loadSettings();
         Mod baseGame = new Mod("Super Ass Brothers", "sab", "1.0", "base game assets");
         baseGame.addFighters((Class<? extends FighterType>[]) new Class<?>[] {Marvin.class, Chain.class, Walouis.class, Gus.class, EmperorEvil.class, BigSeagull.class});
-        baseGame.addStages((Class<? extends StageType>[]) new Class<?>[] {LastLocation.class, Warzone.class, Boxtopia.class});
+        baseGame.addStages((Class<? extends StageType>[]) new Class<?>[] {LastLocation.class, Warzone.class, DesertBridge.class, ThumbabasLair.class, OurSports.class, COBS.class, Boxtopia.class});
         addMod(baseGame);
         loadMods();
         

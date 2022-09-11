@@ -14,7 +14,7 @@ public class FallingKnife extends AttackType {
     private boolean onGround;
     
     @Override
-    public void onCreate(Attack attack) {
+    public void setDefaults(Attack attack) {
         attack.imageName = "knife_spike.png";
         attack.life = 200;
         attack.frameCount = 1;

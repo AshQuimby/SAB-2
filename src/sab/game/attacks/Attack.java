@@ -43,7 +43,7 @@ public class Attack extends DamageSource {
         updatesPerTick = 1;
         canHit = true;
         this.type = type;
-        type.onCreate(this);
+        type.setDefaults(this);
     }
 
     public void onSpawn(int[] data) {

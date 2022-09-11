@@ -4,7 +4,7 @@ import com.seagull_engine.GameObject;
 import com.seagull_engine.Seagraphics;
 
 public class AttackType implements Cloneable {
-    public void onCreate(Attack attack) {
+    public void setDefaults(Attack attack) {
     }
 
     public void update(Attack attack) {

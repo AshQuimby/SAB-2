@@ -6,6 +6,7 @@ import sab.game.animation.Animation;
 import sab.game.attacks.Attack;
 import sab.game.attacks.melees.Glide;
 import sab.game.attacks.melees.Peck;
+import sab.game.attacks.projectiles.FeatherDart;
 import sab.game.attacks.projectiles.Gust;
 import sab.net.Keys;
 
@@ -48,7 +49,7 @@ public class BigSeagull extends FighterType {
     @Override
     public void update(Fighter fighter, Player player) {
         if (Math.abs(player.velocity.x) < 0.1f && player.velocity.y == 0 && player.keys.isPressed(Keys.DOWN)) {
-            player.frame = 1;
+            player.frame = 12;
         }
 
         if (!player.touchingStage && !player.grabbingLedge()) {
@@ -89,5 +90,11 @@ public class BigSeagull extends FighterType {
         player.startAttack(new Attack(new Glide(), player), hoverAnimation, 4, 180, true);
         player.velocity.y = 12;
         SABSounds.playSound("gust.mp3");
+    }
+
+    @Override
+    public void downAttack(Fighter fighter, Player player) {
+        gustAnimation.reset();
+        player.startAttack(new Attack(new FeatherDart(), player), gustAnimation, 1, 24, true, new int[] {0});
     }
 }

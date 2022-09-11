@@ -18,7 +18,7 @@ public class MagicBanana extends AttackType {
     private Animation anime = new Animation(new int[]{11, 12, 13}, 8, false);
 
     @Override
-    public void onCreate(Attack attack) {
+    public void setDefaults(Attack attack) {
         attack.imageName = "banana.png";
         attack.life = 360;
         attack.frameCount = 1;

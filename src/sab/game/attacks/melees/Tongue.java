@@ -12,7 +12,7 @@ public class Tongue extends AttackType {
     private Rectangle tipper;
     
     @Override
-    public void onCreate(Attack attack) {
+    public void setDefaults(Attack attack) {
         attack.imageName = "tongue.png";
         attack.life = 14;
         attack.frameCount = 2;

@@ -13,7 +13,7 @@ public class Toilet extends AttackType {
     private boolean playerLaunched;
 
     @Override
-    public void onCreate(Attack attack) {
+    public void setDefaults(Attack attack) {
         attack.imageName = "toilet.png";
         attack.life = 320;
         attack.frameCount = 2;

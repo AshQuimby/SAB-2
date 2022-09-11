@@ -1,53 +1,80 @@
 package sab.game.stages;
 
+import com.badlogic.gdx.math.Vector2;
+
+import sab.game.Battle;
+import sab.game.CollisionResolver;
+import sab.game.Player;
+
 public class Platform extends StageObject {
-    protected PlatformBehavior behavior;
     protected boolean updates;
 
-    public Platform(float x, float y, float width, float height, String imageName) {
-        super(x, y, width, height, imageName);
+    public Platform(float x, float y, float width, float height, String imageName, Stage stage) {
+        super(x, y, width, height, imageName, stage, null);
         hitbox = drawRect;
         updates = false;
         frame = 0;
         frameCount = 1;
+        this.stage = stage;
     }
 
-    public Platform(float x, float y, float width, float height, String imageName, PlatformBehavior behavior) {
-        super(x, y, width, height, imageName);
-        this.behavior = behavior;
+    public Platform(float x, float y, float width, float height, String imageName, StageObjectBehaviour behavior, Stage stage) {
+        super(x, y, width, height, imageName, stage, behavior);
         updates = true;
         hitbox = drawRect;
         frame = 0;
         frameCount = 1;
+        this.stage = stage;
     }
 
-    public Platform(float x, float y, float width, float height, int frameCount, String imageName) {
-        super(x, y, width, height, imageName);
+    public Platform(float x, float y, float width, float height, int frameCount, String imageName, Stage stage) {
+        super(x, y, width, height, imageName, stage, null);
         hitbox = drawRect;
         updates = false;
         frame = 0;
         this.frameCount = frameCount;
+        this.stage = stage;
     }
 
-    public Platform(float x, float y, float width, float height, int frameCount, String imageName, PlatformBehavior behavior) {
-        super(x, y, width, height, imageName);
-        this.behavior = behavior;
+    public Platform(float x, float y, float width, float height, int frameCount, String imageName, StageObjectBehaviour behavior, Stage stage) {
+        super(x, y, width, height, imageName, stage, behavior);
         updates = true;
         hitbox = drawRect;
         frame = 0;
         this.frameCount = frameCount;
-    }
-
-    public void addBehavior(PlatformBehavior behavior) {
-        this.behavior = behavior;
-        if (behavior != null) updates = true; else updates = false;        
+        this.stage = stage;
     }
 
     @Override
-    public void update() {
-        if (!updates) return; 
-        behavior.update(this);
+    public void preUpdate() {
+        update();
         postUpdate();
+    }
+
+    @Override
+    public void updateStageObject(Battle battle) {
+
+        hitbox.x += velocity.x;
+        if (isSolid())for (Player player : battle.getPlayers()) {
+            if (velocity.x > 0) {
+                CollisionResolver.resolveX(player, 1, hitbox);
+            } else if (velocity.x < 0) {
+                CollisionResolver.resolveX(player, 1, hitbox);
+            }
+        }
+
+        hitbox.y += velocity.y;
+        if (isSolid())for (Player player : battle.getPlayers()) {
+            if (velocity.y > 0) {
+                CollisionResolver.resolveY(player, -1, hitbox);
+            } else if (velocity.y < 0) {
+                CollisionResolver.resolveY(player, 1, hitbox);
+            }
+        }
+        drawRect.setCenter(hitbox.getCenter(new Vector2()));
+
+        if (!updates) return;
+        behavior.update(this, battle);
     }
 
     @Override
