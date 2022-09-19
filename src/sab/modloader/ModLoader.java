@@ -23,6 +23,8 @@ import sab.game.stages.StageType;
 import sab.util.SabReader;
 
 public final class ModLoader {
+	
+    // Loads a mod's "mod.sab" file from a mod file
     private static Map<String, String> getModSettings(File modFile) throws IOException {
         JarFile jar = new JarFile(modFile);
         JarEntry settingsEntry = jar.getJarEntry("mod.sab");
@@ -45,6 +47,7 @@ public final class ModLoader {
         return settings;
     }
 
+    // Attempts to load an entire mod from a file object
     public static Mod loadMod(File modFile, Game game) throws IOException {
         if (modFile.isDirectory()) {
             Game.game.addModError("Mod " + modFile.getName() + " failed to load: File cannot be a directory");
@@ -132,6 +135,7 @@ public final class ModLoader {
         JukeboxScreen.addSong(fileName, songName, artist);
     }
 
+    // Returns a fighter type from its respective Class
     public static FighterType getFighterType(Class<? extends FighterType> type) {
         try {
 			return type.getDeclaredConstructor().newInstance();
@@ -141,6 +145,7 @@ public final class ModLoader {
 		}
     }
 
+    // Returns a fighter type from its respective Class
     public static StageType getStageType(Class<? extends StageType> type) {
         try {
 			return type.getDeclaredConstructor().newInstance();
@@ -150,6 +155,7 @@ public final class ModLoader {
 		}
     }
 
+    // Returns a fighter type from its respective Class
     public static AttackType getAttackType(Class<? extends AttackType> type) {
         try {
 			return type.getDeclaredConstructor().newInstance();
@@ -159,6 +165,8 @@ public final class ModLoader {
 		}
     }
 
+    // Returns an AttackType based on an all lowercase version of the class name (this is the one a modder would use)
+    // Ex: SuperCharge -> "supercharge"
     public static AttackType getAttack(String id) {
         return Game.game.getAttackType(id);
     }
