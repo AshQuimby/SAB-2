@@ -8,6 +8,8 @@ import sab.game.attacks.AttackType;
 import sab.game.fighters.FighterType;
 import sab.game.stages.StageType;
 
+// Everything here is handled by the game, unless a mod dev really wants to understand how the game works, reading this file is optional
+
 public class Mod {
     public final String displayName;
     public final String namespace;
