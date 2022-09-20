@@ -61,6 +61,7 @@ public class Game extends Messenger {
         JukeboxScreen.loadVanillaSongs();
     }
     
+    // Initial load tasks (like from among us)
     @Override
     public void load() {
         Settings.loadSettings();
@@ -85,6 +86,7 @@ public class Game extends Messenger {
         }
     }
 
+    // Randomly selects a title screen background
     public static void selectNewTitleScreen() {
         switch (MathUtils.random.nextInt(2)) {
             case 0 -> {
@@ -99,43 +101,52 @@ public class Game extends Messenger {
         }
     }
 
+    // Get an AttackType from a String ID, idential to the ModLoader.getAttackType method
     public AttackType getAttackType(String id) {
         return ModLoader.getAttackType(attacks.get(id));
     }
     
+    // Called when an error is detected loading mods
     public void addModError(String errorMessage) {
         modErrors.add(errorMessage);
     }
 
+    // Adds a mod to the mod list
     private void addMod(Mod mod) {
         mods.put(mod.namespace, mod);
     }
 
+    // Called when a key is released
     @Override
     public void keyUp(int keyCode) {
         screen = screen.keyReleased(keyCode);
     }
 
+    // Called when a key is pressed
     @Override
     public void keyDown(int keyCode) {
         screen = screen.keyPressed(keyCode);
     }
     
+    // Updates every tick
     @Override
     public void update() {
         screen = screen.update();
     }
 
+    // Renders every tick
     @Override
     public void render(Seagraphics g) {
         screen.render(g);
     }
 
+    // Called when the window is closed
     @Override
     public void close() {
         screen.close();
     }
 
+    // Loads mods in the mods folder
     public void loadMods() {
         File modResources = new File("../mods/resources");
         boolean createResources = false;
