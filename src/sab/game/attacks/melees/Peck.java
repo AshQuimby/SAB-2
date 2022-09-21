@@ -3,9 +3,9 @@ package sab.game.attacks.melees;
 import com.badlogic.gdx.math.Vector2;
 
 import sab.game.attacks.Attack;
-import sab.game.attacks.AttackType;
+import sab.game.attacks.MeleeAttackType;
 
-public class Peck extends AttackType {
+public class Peck extends MeleeAttackType {
     @Override
     public void setDefaults(Attack attack) {
         attack.imageName = "peck.png";
@@ -19,21 +19,21 @@ public class Peck extends AttackType {
         attack.direction = attack.owner.direction;
         attack.hitCooldown = 13;
         attack.reflectable = false;
+
+        offset = new Vector2(64, 12);
+        usePlayerDirection = true;
     }
 
     @Override
     public void update(Attack attack) {
+        super.update(attack);
         attack.frame = 3 - (int) (attack.life / 4f);
-
-        attack.hitbox.setCenter(attack.owner.hitbox.getCenter(new Vector2())
-                .add(attack.direction * (attack.hitbox.width / 2 + attack.owner.hitbox.width / 2 + 4), 12));
-        attack.direction = attack.owner.direction;
         attack.knockback.set(attack.direction * 5, 3.5f);
     }
 
     @Override
     public void onSpawn(Attack attack, int[] data) {
-        attack.hitbox.setCenter(attack.owner.hitbox.getCenter(new Vector2()).add(attack.direction * (attack.hitbox.width / 2 + attack.owner.hitbox.width / 2 + 4), 12));
+        super.onSpawn(attack, data);
         attack.knockback.set(attack.direction * 5, 3.5f);
     }
 }

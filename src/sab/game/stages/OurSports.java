@@ -29,14 +29,14 @@ public class OurSports extends StageType {
         stormTime = 0;
         lightning = 0;
 
-        platform = new Platform(-256 / 2, -128, 256, 24, "our_sports_platform.png", new StageObjectBehaviour() {
+        platform = new Platform(-256 / 2, -128, 256, 24, "our_sports_platform.png", stage, new StageObjectBehaviour() {
             @Override
             public void update(StageObject stageObject, Battle battle) {
                 if (stormy) {
                     stageObject.velocity.y = -0.5f;
                 }
             }
-        }, stage);
+        });
         stage.addLedge(new Ledge(platform, new Vector2(256 / 2, -32), 24, 32, -1));
         stage.addLedge(new Ledge(platform, new Vector2(-256 / 2 - 24, -32), 24, 32, 1));
 
@@ -52,14 +52,14 @@ public class OurSports extends StageType {
         }));
         stage.addStageObject(new StageObject(-256 / 2, -128 - 704 + 24, 256, 704, "our_sports_platform_supports_solo.png", stage));
 
-        platform = new Platform(-192 / 2, -128, 192, 24, "our_sports_platform_white_ring.png", new StageObjectBehaviour() {
+        platform = new Platform(-192 / 2, -128, 192, 24, "our_sports_platform_white_ring.png", stage, new StageObjectBehaviour() {
             @Override
             public void update(StageObject stageObject, Battle battle) {
                 if (stormy) {
                     stageObject.velocity.y = -0.25f;
                 }
             }
-        }, stage);
+        });
         stage.addStageObject(platform, 0);
         
         platform = new Platform(-132 / 2, -128, 132, 24, "our_sports_platform_blue_ring.png", stage);

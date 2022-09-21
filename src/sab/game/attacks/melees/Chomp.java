@@ -1,19 +1,13 @@
 package sab.game.attacks.melees;
 
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
-import com.seagull_engine.GameObject;
-import com.seagull_engine.Seagraphics;
 
-import sab.game.Player;
 import sab.game.SABSounds;
-import sab.game.animation.Animation;
 import sab.game.attacks.Attack;
 import sab.game.attacks.AttackType;
-import sab.game.particles.Particle;
-import sab.net.Keys;
+import sab.game.attacks.MeleeAttackType;
 
-public class Chomp extends AttackType {
+public class Chomp extends MeleeAttackType {
     @Override
     public void setDefaults(Attack attack) {
         attack.imageName = "bite.png";
@@ -25,17 +19,19 @@ public class Chomp extends AttackType {
         attack.frameCount = 5;
         attack.hitCooldown = 8;
         attack.damage = 24;
+
+        offset = new Vector2(52, 8);
+        usePlayerDirection = true;
     }
 
     @Override
     public void onSpawn(Attack attack, int[] data) {
-        attack.hitbox.setCenter(attack.owner.hitbox.getCenter(new Vector2()).add(52 * attack.owner.direction, 8));
+        super.onSpawn(attack, data);
     }
 
     @Override
     public void update(Attack attack) {
-        attack.hitbox.setCenter(attack.owner.hitbox.getCenter(new Vector2()).add(52 * attack.owner.direction, 8));
-        attack.direction = attack.owner.direction;
+        super.update(attack);
         attack.canHit = attack.frame == 1;
         if (attack.life % 8 == 0) attack.frame++;
         if (attack.life == 32) SABSounds.playSound("chomp.mp3");

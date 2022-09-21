@@ -60,4 +60,8 @@ public class Utils {
     public static Vector2 randomPointInRect(Rectangle rect) {
         return new Vector2(MathUtils.random(rect.x, rect.x + rect.width), MathUtils.random(rect.y, rect.y + rect.height));
     }
+
+    public static String appendCostumeToFilename(String base, int costume, String fileFormat) {
+        return base + (costume == 0 ? "" : "_alt_" + costume) + "." + fileFormat;
+        }
 }

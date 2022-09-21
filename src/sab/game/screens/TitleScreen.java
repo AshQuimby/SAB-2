@@ -42,22 +42,22 @@ public class TitleScreen extends SelectorScreen {
         SABSounds.playSound(SABSounds.SELECT);
         
         switch(selection) {
-            case 0 -> {
+            case 0 : {
                 return Game.game.globalCharacterSelectScreen;
             }
-            case 1 -> {
+            case 1 : {
                 return new HostGameScreen();
             }
-            case 2 -> {
+            case 2 : {
                 return new JoinGameScreen();
             }
-            case 3 -> {
+            case 3 : {
                 return new SettingsScreen();
             }
-            case 4 -> {
+            case 4 : {
                 return new ExtrasScreen();
             }
-            case 5 -> {
+            case 5 : {
                 Gdx.app.exit();
                 return this;
             }

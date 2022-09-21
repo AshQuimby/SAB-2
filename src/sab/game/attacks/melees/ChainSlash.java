@@ -4,9 +4,9 @@ import com.badlogic.gdx.math.Vector2;
 import com.seagull_engine.GameObject;
 
 import sab.game.attacks.Attack;
-import sab.game.attacks.AttackType;
+import sab.game.attacks.MeleeAttackType;
 
-public class ChainSlash extends AttackType {
+public class ChainSlash extends MeleeAttackType {
     @Override
     public void setDefaults(Attack attack) {
         attack.imageName = "chain_slash.png";
@@ -21,12 +21,14 @@ public class ChainSlash extends AttackType {
         attack.direction = attack.owner.direction;
         attack.hitCooldown = 10;
         attack.reflectable = false;
+
+        offset = new Vector2(32, 4);
+        usePlayerDirection = true;
     }
 
     @Override
     public void update(Attack attack) {
-        attack.hitbox.setCenter(attack.owner.hitbox.getCenter(new Vector2()).add(32 * attack.owner.direction, 4));
-
+        super.update(attack);
         if (attack.life % 2 == 0) attack.frame++;
     }
 
@@ -36,7 +38,7 @@ public class ChainSlash extends AttackType {
 
     @Override
     public void onSpawn(Attack attack, int[] data) {
-        attack.hitbox.setCenter(attack.owner.hitbox.getCenter(new Vector2()).add(32 * attack.owner.direction, 4));
+        super.onSpawn(attack, data);
         attack.knockback = new Vector2(8 * attack.owner.direction, 4);
     }
 }

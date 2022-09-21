@@ -52,7 +52,7 @@ public class BoomerangKnife extends AttackType {
             }
         }
 
-        attack.knockback.set(attack.velocity);
+        attack.knockback.set(attack.velocity.cpy().scl(0.5f));
         attack.knockback.y += 6;
     }
 

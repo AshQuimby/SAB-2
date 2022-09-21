@@ -18,7 +18,7 @@ public class Platform extends StageObject {
         this.stage = stage;
     }
 
-    public Platform(float x, float y, float width, float height, String imageName, StageObjectBehaviour behavior, Stage stage) {
+    public Platform(float x, float y, float width, float height, String imageName, Stage stage, StageObjectBehaviour behavior) {
         super(x, y, width, height, imageName, stage, behavior);
         updates = true;
         hitbox = drawRect;
@@ -36,7 +36,7 @@ public class Platform extends StageObject {
         this.stage = stage;
     }
 
-    public Platform(float x, float y, float width, float height, int frameCount, String imageName, StageObjectBehaviour behavior, Stage stage) {
+    public Platform(float x, float y, float width, float height, int frameCount, String imageName, Stage stage, StageObjectBehaviour behavior) {
         super(x, y, width, height, imageName, stage, behavior);
         updates = true;
         hitbox = drawRect;

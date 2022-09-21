@@ -8,9 +8,10 @@ import sab.game.CollisionResolver;
 import sab.game.Player;
 import sab.game.attacks.Attack;
 import sab.game.attacks.AttackType;
+import sab.game.attacks.MeleeAttackType;
 import sab.net.Keys;
 
-public class AirSlash extends AttackType {
+public class AirSlash extends MeleeAttackType {
     @Override
     public void setDefaults(Attack attack) {
         attack.imageName = "air_slash.png";
@@ -25,14 +26,17 @@ public class AirSlash extends AttackType {
         attack.direction = attack.owner.direction;
         attack.hitCooldown = 4;
         attack.reflectable = false;
+
+        offset = new Vector2(0, 4);
+        usePlayerDirection = false;
     }
 
     @Override
     public void update(Attack attack) {
+        super.update(attack);
         attack.owner.velocity.y += 1.5f;
         attack.owner.velocity.x *= 0.95f;
         attack.owner.velocity.y *= 0.93f;
-        attack.hitbox.setCenter(attack.owner.hitbox.getCenter(new Vector2()).add(0, 4));
 
         if (attack.owner.touchingStage || attack.owner.stuckCondition()) {
             attack.alive = false;
@@ -61,8 +65,8 @@ public class AirSlash extends AttackType {
 
     @Override
     public void onSpawn(Attack attack, int[] data) {
+        super.onSpawn(attack, data);
         attack.owner.velocity.y *= 0.05f;
-        attack.hitbox.setCenter(attack.owner.hitbox.getCenter(new Vector2()).add(0, 4));
         attack.owner.touchingStage = false;
         attack.knockback = new Vector2(0, 1);
     }

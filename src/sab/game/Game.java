@@ -11,6 +11,7 @@ import sab.game.fighters.EmperorEvil;
 import sab.game.fighters.FighterType;
 import sab.game.fighters.Gus;
 import sab.game.fighters.Marvin;
+import sab.game.fighters.Snas;
 import sab.game.fighters.Walouis;
 import sab.game.screens.CharacterSelectScreen;
 import sab.game.screens.JukeboxScreen;
@@ -65,7 +66,7 @@ public class Game extends Messenger {
     public void load() {
         Settings.loadSettings();
         Mod baseGame = new Mod("Super Ass Brothers", "sab", "1.0", "base game assets");
-        baseGame.addFighters((Class<? extends FighterType>[]) new Class<?>[] {Marvin.class, Chain.class, Walouis.class, Gus.class, EmperorEvil.class, BigSeagull.class});
+        baseGame.addFighters((Class<? extends FighterType>[]) new Class<?>[] {Marvin.class, Chain.class, Walouis.class, Gus.class, EmperorEvil.class, Snas.class, BigSeagull.class});
         baseGame.addStages((Class<? extends StageType>[]) new Class<?>[] {LastLocation.class, Warzone.class, DesertBridge.class, ThumbabasLair.class, OurSports.class, COBS.class, Boxtopia.class});
         addMod(baseGame);
         loadMods();
@@ -87,13 +88,15 @@ public class Game extends Messenger {
 
     public static void selectNewTitleScreen() {
         switch (MathUtils.random.nextInt(2)) {
-            case 0 -> {
+            case 0 : {
                 titleBackground = "title_screen_background.png";
+                break;
             }
-            case 1 -> {
+            case 1 : {
                 titleBackground = "title_screen_background_alt_1.png";
+                break;
             }
-            default -> {
+            default : {
                 titleBackground = "title_screen_background.png";
             }
         }

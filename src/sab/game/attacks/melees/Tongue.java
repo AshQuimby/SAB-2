@@ -47,12 +47,12 @@ public class Tongue extends AttackType {
 
     @Override
     public void successfulHit(Attack attack, GameObject hit) {
-        if (hit.hitbox.overlaps(tipper)) attack.knockback = new Vector2(12 * attack.direction, 8);
+        if (hit.hitbox.overlaps(tipper)) attack.knockback = new Vector2(7 * attack.direction, 5);
     }
 
     @Override
     public void onSpawn(Attack attack, int[] data) {
         attack.hitbox.setCenter(attack.owner.hitbox.getCenter(new Vector2()).add(32 * attack.owner.direction, 4));
-        attack.knockback = new Vector2(-6 * attack.owner.direction, 7);
+        attack.knockback = new Vector2(-3 * attack.owner.direction, 4);
     }
 }

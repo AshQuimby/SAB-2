@@ -10,10 +10,11 @@ import sab.game.SABSounds;
 import sab.game.animation.Animation;
 import sab.game.attacks.Attack;
 import sab.game.attacks.AttackType;
+import sab.game.attacks.MeleeAttackType;
 import sab.game.particles.Particle;
 import sab.net.Keys;
 
-public class EvilSuck extends AttackType {
+public class EvilSuck extends MeleeAttackType {
     private Player trappedPlayer;
     private int chompTime;
 
@@ -29,19 +30,21 @@ public class EvilSuck extends AttackType {
         trappedPlayer = null;
         attack.hitCooldown = 1;
         chompTime = 0;
+
+        offset = new Vector2(84, 0);
+        usePlayerDirection = true;
     }
 
     @Override
     public void onSpawn(Attack attack, int[] data) {
-        attack.hitbox.setCenter(attack.owner.hitbox.getCenter(new Vector2()).add(84 * attack.owner.direction, 0));
-        attack.direction = attack.owner.direction;
+        super.onSpawn(attack, data);
     }
 
     @Override
-    public void update(Attack attack) {        
+    public void update(Attack attack) {  
+        super.update(attack);     
         if (attack.life % 8 == 0) attack.frame++;
         if (attack.frame >= 4) attack.frame = 0;
-        attack.hitbox.setCenter(attack.owner.hitbox.getCenter(new Vector2()).add(84 * attack.owner.direction, 0));
 
         if (attack.owner.stuckCondition()) attack.alive = false;
 

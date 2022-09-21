@@ -191,6 +191,7 @@ public class Player extends GameObject implements Hittable {
         for (int i = 0; i < 16; i++) {
             battle.addParticle(new Particle(hitbox.getCenter(new Vector2()), hitbox.getCenter(new Vector2()).scl(-0.025f * MathUtils.random(0.125f, 1f)).rotateDeg(MathUtils.random(-2.5f, 2.5f)), 128, 128, "twinkle.png"));
         }
+        battle.shakeCamera(5);
         rotation = 0;
         velocity.scl(0);
         knockback.scl(0);
@@ -219,6 +220,7 @@ public class Player extends GameObject implements Hittable {
         if (lives <= 0) {
             stunned = 100000;
             respawnTime = 0;
+            battle.shakeCamera(10);
         }
     }
 
@@ -399,7 +401,6 @@ public class Player extends GameObject implements Hittable {
 
         if (usedRecovery) frame = fighter.freefallAnimation.stepLooping();
 
-        fighter.update(this);
         gravityAndFriction();
     }
 
@@ -492,7 +493,6 @@ public class Player extends GameObject implements Hittable {
 
     @Override
     public void postUpdate() {
-
         touchingStage = false;
 
         if (stunned <= 0) move(velocity);
@@ -502,6 +502,8 @@ public class Player extends GameObject implements Hittable {
         if (lives > 0 && ((knockbackDuration > 0 && !hitbox.overlaps(battle.getStage().getSafeBlastZone())) || (hitbox.x + hitbox.width < battle.getStage().getUnsafeBlastZone().x || hitbox.x > battle.getStage().getUnsafeBlastZone().x + battle.getStage().getUnsafeBlastZone().width || hitbox.y + hitbox.height < battle.getStage().getUnsafeBlastZone().y))) {
             kill(1);
         }
+        
+        fighter.update(this);
     }
 
     public boolean takingKnockback() {

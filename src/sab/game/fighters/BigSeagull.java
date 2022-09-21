@@ -86,10 +86,13 @@ public class BigSeagull extends FighterType {
 
     @Override
     public void upAttack(Fighter fighter, Player player) {
-        hoverAnimation.reset();
-        player.startAttack(new Attack(new Glide(), player), hoverAnimation, 4, 180, true);
-        player.velocity.y = 12;
-        SABSounds.playSound("gust.mp3");
+        if (!player.usedRecovery) {
+            hoverAnimation.reset();
+            player.startAttack(new Attack(new Glide(), player), hoverAnimation, 4, 180, true);
+            player.velocity.y = 12;
+            SABSounds.playSound("gust.mp3");
+            player.usedRecovery = true;
+        }
     }
 
     @Override

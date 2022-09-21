@@ -48,6 +48,7 @@ public class Battle {
     private List<Particle> particles;
     private Map<Integer, GameObject> gameObjectsById;
     private Map<GameObject, Integer> idsByGameObject;
+    private Vector2 cameraShakeVector;
     private int nextId;
     private int endGameTimer;
     private int cameraShake;
@@ -84,6 +85,7 @@ public class Battle {
         pauseMenuIndex = 0;
         gameEnded = false;
         endGameTimer = 0;
+        cameraShakeVector = new Vector2();
 
         winner = null;
         loser = null;
@@ -238,7 +240,7 @@ public class Battle {
         float shakeX = MathUtils.random(-cameraShake * cameraShake / 2f, cameraShake * cameraShake / 2f);
         float shakeY = MathUtils.random(-cameraShake * cameraShake / 2f, cameraShake * cameraShake / 2f);
 
-        Game.game.window.camera.position.add(shakeX, shakeY, 0);
+        cameraShakeVector = new Vector2(shakeX, shakeY);
 
         if (cameraShake > 0) cameraShake--;
     }
@@ -439,11 +441,13 @@ public class Battle {
     }
 
     public void render(Seagraphics g) {
+        g.getDynamicCamera().position.sub(cameraShakeVector.x, cameraShakeVector.y, 0);
         g.useStaticCamera();
         g.scalableDraw(g.imageProvider.getImage(stage.background), -1152 / 2, -704 / 2, 1152, 704);
         g.useDynamicCamera();
 
         updateCameraPosition();
+        g.getDynamicCamera().position.add(cameraShakeVector.x, cameraShakeVector.y, 0);
 
         stage.renderBackground(g);
         

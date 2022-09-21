@@ -6,11 +6,11 @@ import com.seagull_engine.Seagraphics;
 
 import sab.game.SABSounds;
 import sab.game.attacks.Attack;
-import sab.game.attacks.AttackType;
+import sab.game.attacks.MeleeAttackType;
 import sab.game.attacks.projectiles.Banana;
 import sab.game.particles.Particle;
 
-public class ExplosiveBarrel extends AttackType {
+public class ExplosiveBarrel extends MeleeAttackType {
 
     @Override
     public void setDefaults(Attack attack) {
@@ -25,19 +25,21 @@ public class ExplosiveBarrel extends AttackType {
         attack.damage = 0;
         attack.knockback = new Vector2();
         attack.canHit = false;
+
+        offset = new Vector2();
+        usePlayerDirection = true;
     }
 
     @Override
     public void onSpawn(Attack attack, int[] data) {
-        attack.hitbox.setCenter(attack.owner.hitbox.getCenter(new Vector2()));
-        attack.direction = attack.owner.direction;
+        super.onSpawn(attack, data);
     }
 
     @Override
-    public void update(Attack attack) {        
+    public void update(Attack attack) {       
+        super.update(attack); 
         attack.owner.frame = 10;
-        attack.owner.velocity.y *= 0.2f;     
-        attack.hitbox.setCenter(attack.owner.hitbox.getCenter(new Vector2()));
+        attack.owner.velocity.y *= 0.2f;
     }
 
     @Override

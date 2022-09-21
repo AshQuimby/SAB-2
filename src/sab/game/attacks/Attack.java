@@ -2,8 +2,6 @@ package sab.game.attacks;
 
 import java.util.HashMap;
 
-import javax.swing.plaf.metal.MetalBorders.PaletteBorder;
-
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.seagull_engine.GameObject;

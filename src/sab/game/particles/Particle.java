@@ -77,7 +77,7 @@ public class Particle extends GameObject {
         type = 1;
     }
 
-    public Particle(float gravity,Vector2 position, Vector2 velocity, float width, float height, String image) {
+    public Particle(float gravity, Vector2 position, Vector2 velocity, float width, float height, String image) {
         alive = true;
         imageName = image;
         hitbox = new Rectangle();
