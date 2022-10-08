@@ -1,5 +1,8 @@
 package sab.net;
 
+import sab.net.packet.Packet;
+import sab.net.packet.PacketManager;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -10,133 +13,76 @@ public class Connection {
     private final DataOutputStream out;
     private final DataInputStream in;
 
-    public Connection(String address, int port) {
-        try {
-            this.socket = new Socket(address, port);
-            socket.setTcpNoDelay(true);
+    public Connection(String address, int port) throws IOException {
+        this.socket = new Socket(address, port);
+        socket.setTcpNoDelay(true);
 
-            out = new DataOutputStream(this.socket.getOutputStream());
-            in = new DataInputStream(this.socket.getInputStream());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        out = new DataOutputStream(this.socket.getOutputStream());
+        in = new DataInputStream(this.socket.getInputStream());
     }
 
-    public Connection(Socket socket) {
+    public Connection(Socket socket) throws IOException {
         this.socket = socket;
-
-        try {
-            socket.setTcpNoDelay(true);
-            out = new DataOutputStream(this.socket.getOutputStream());
-            in = new DataInputStream(this.socket.getInputStream());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        socket.setTcpNoDelay(true);
+        out = new DataOutputStream(this.socket.getOutputStream());
+        in = new DataInputStream(this.socket.getInputStream());
     }
 
-    public void close() {
-        try {
-            socket.close();
-            out.close();
-            in.close();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+    public boolean isConnected() {
+        return socket.isConnected();
     }
 
-    public boolean readBoolean() {
-        try {
-            return in.readBoolean();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+    public void close() throws IOException {
+        socket.close();
+        out.close();
+        in.close();
     }
 
-    public byte readByte() {
-        try {
-            return in.readByte();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+    public boolean readBoolean() throws IOException {
+        return in.readBoolean();
     }
 
-    public int readInt() {
-        try {
-            return in.readInt();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+    public byte readByte() throws IOException {
+        return in.readByte();
     }
 
-    public long readLong() {
-        try {
-            return in.readLong();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+    public int readInt() throws IOException {
+        return in.readInt();
     }
 
-    public float readFloat() {
-        try {
-            return in.readFloat();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+    public long readLong() throws IOException {
+        return in.readLong();
     }
 
-    public String readUTF() {
-        try {
-			return in.readUTF();
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
+    public float readFloat() throws IOException {
+        return in.readFloat();
     }
 
-    public void writeBoolean(boolean b) {
-        try {
-            out.writeBoolean(b);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+    public String readUTF() throws IOException {
+        return in.readUTF();
     }
 
-    public void writeByte(byte b) {
-        try {
-            out.writeByte(b);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+    public void writeBoolean(boolean b) throws IOException {
+        out.writeBoolean(b);
     }
 
-    public void writeInt(int i) {
-        try {
-            out.writeInt(i);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+    public void writeByte(byte b) throws IOException {
+        out.writeByte(b);
     }
 
-    public void writeLong(long l) {
-        try {
-            out.writeLong(l);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+    public void writeInt(int i) throws IOException {
+        out.writeInt(i);
     }
 
-    public void writeFloat(float f) {
-        try {
-            out.writeFloat(f);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+    public void writeLong(long l) throws IOException {
+        out.writeLong(l);
     }
 
-    public void writeUTF(String utf) {
-        try {
-            out.writeUTF(utf);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+    public void writeFloat(float f) throws IOException {
+        out.writeFloat(f);
+    }
+
+    public void writeUTF(String utf) throws IOException {
+        out.writeUTF(utf);
     }
 }

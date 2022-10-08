@@ -9,24 +9,23 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
 import com.seagull_engine.GameObject;
 import com.seagull_engine.Seagraphics;
 import com.seagull_engine.graphics.SeagullCamera;
 
-import sab.game.ai.AI;
 import sab.game.ai.BaseAI;
-import sab.game.attacks.Attack;
-import sab.game.fighters.Chain;
-import sab.game.fighters.Fighter;
-import sab.game.fighters.Marvin;
-import sab.game.particles.Particle;
-import sab.game.stages.LastLocation;
-import sab.game.stages.Ledge;
-import sab.game.stages.PassablePlatform;
-import sab.game.stages.Platform;
-import sab.game.stages.Stage;
-import sab.game.stages.StageObject;
+import sab.game.attack.Attack;
+import sab.game.fighter.Chain;
+import sab.game.fighter.Fighter;
+import sab.game.fighter.Marvin;
+import sab.game.particle.Particle;
+import sab.game.stage.LastLocation;
+import sab.game.stage.Ledge;
+import sab.game.stage.PassablePlatform;
+import sab.game.stage.Platform;
+import sab.game.stage.Stage;
+import sab.game.stage.StageObject;
+import sab.net.VoidFunction;
 
 public class Battle {
     private List<Player> players;
@@ -60,15 +59,17 @@ public class Battle {
     private int screenShatter;
 
     // Pause game variables
-    // Pausing should not be avaliable on servers unless the server owner pauses the game
+    // Pausing should not be available on servers unless the server owner pauses the game
     private boolean paused;
     private boolean pauseOverlayHidden;
     private int pauseMenuIndex;
 
-    //Screen effect variables
-
+    // Screen effect variables
     public boolean drawHitboxes;
     public boolean gameEnded;
+
+    // Callbacks
+    private VoidFunction<Particle> spawnParticleCallback;
 
     public Battle(Fighter fighter1, Fighter fighter2, int[] costumes, Stage stage, int player1Type, int player2Type) {
         this.stage = stage;
@@ -110,10 +111,16 @@ public class Battle {
         for (GameObject stageObject : stage.getStageObjects()) {
             addGameObject(stageObject);
         }
+
+        spawnParticleCallback = (Particle p) -> {};
     }
 
     public Battle() {
         this(new Fighter(new Marvin()), new Fighter(new Chain()), new int[]{0, 0}, new Stage(new LastLocation()), 0, 0);
+    }
+
+    public void onSpawnParticle(VoidFunction<Particle> callback) {
+        spawnParticleCallback = callback;
     }
 
     public void addGameObject(GameObject gameObject) {
@@ -128,6 +135,7 @@ public class Battle {
     // Do NOT call this method from a particle
     public void addParticle(Particle particle) {
         particles.add(particle);
+        spawnParticleCallback.execute(particle);
     }
 
     public void removeGameObject(GameObject gameObject) {

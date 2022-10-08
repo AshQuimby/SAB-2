@@ -1,7 +1,5 @@
 package sab.game;
 
-import java.io.File;
-import java.util.HashMap;
 import java.util.List;
 
 import com.badlogic.gdx.math.MathUtils;
@@ -12,12 +10,11 @@ import com.seagull_engine.Seagraphics;
 
 import sab.game.ai.AI;
 import sab.game.animation.Animation;
-import sab.game.attacks.Attack;
-import sab.game.fighters.Fighter;
-import sab.game.particles.Particle;
-import sab.game.stages.Ledge;
+import sab.game.attack.Attack;
+import sab.game.fighter.Fighter;
+import sab.game.particle.Particle;
+import sab.game.stage.Ledge;
 import sab.net.Keys;
-import sab.util.SabReader;
 
 public class Player extends GameObject implements Hittable {
     public final Battle battle;
@@ -181,6 +178,10 @@ public class Player extends GameObject implements Hittable {
     public void startRepeatingAttack(Attack attack, Animation animation, int delay, int endLag, boolean important, int[] data) {
         currentAction = new PlayerAction(delay, attack, animation, important, endLag, data);
         repeatAttack = true;
+    }
+
+    public int getId() {
+        return id;
     }
 
     public int getLives() {

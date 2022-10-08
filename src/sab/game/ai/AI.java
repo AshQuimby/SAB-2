@@ -5,9 +5,9 @@ import com.badlogic.gdx.math.Vector2;
 import com.seagull_engine.GameObject;
 
 import sab.game.Player;
-import sab.game.attacks.Attack;
-import sab.game.stages.Ledge;
-import sab.game.stages.Platform;
+import sab.game.attack.Attack;
+import sab.game.stage.Ledge;
+import sab.game.stage.Platform;
 import sab.util.Utils;
 
 public class AI {
