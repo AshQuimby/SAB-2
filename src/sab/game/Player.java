@@ -136,7 +136,12 @@ public class Player extends GameObject implements Hittable {
 
             if (knockbackDuration > 0) {
                 if (smokeGenerator-- <= 0) {
-                    battle.addParticle(new Particle(hitbox.getCenter(new Vector2()), new Vector2(), 32, 32, 6, 4,
+                    battle.addParticle(new Particle(
+                            hitbox.getCenter(new Vector2()),
+                            new Vector2(),
+                            32, 32,
+                            6,
+                            4,
                             "p" + (id + 1) + "_smoke.png"));
                     smokeGenerator = 60;
                 }
