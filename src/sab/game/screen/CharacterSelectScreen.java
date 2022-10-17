@@ -159,7 +159,7 @@ public class CharacterSelectScreen extends ScreenAdapter {
             try {
                 Files.createFile(Paths.get("../saves/timesplayed.sab"));
             } catch (IOException err) {
-                throw new RuntimeException(err);
+                err.printStackTrace();
             }
         }
     }
