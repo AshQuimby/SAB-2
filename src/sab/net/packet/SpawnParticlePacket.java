@@ -20,11 +20,11 @@ public class SpawnParticlePacket implements Packet {
 
     @Override
     public void send(Connection connection) throws IOException {
-        Vector2 position = particle.hitbox.getPosition(new Vector2());
+        Vector2 center = particle.hitbox.getCenter(new Vector2());
         Vector2 dimensions = particle.hitbox.getSize(new Vector2());
 
-        connection.writeFloat(position.x);
-        connection.writeFloat(position.y);
+        connection.writeFloat(center.x);
+        connection.writeFloat(center.y);
 
         connection.writeFloat(particle.velocity.x);
         connection.writeFloat(particle.velocity.y);
@@ -44,7 +44,7 @@ public class SpawnParticlePacket implements Packet {
 
     @Override
     public void receive(Connection connection) throws IOException {
-        Vector2 position = new Vector2(connection.readFloat(), connection.readFloat());
+        Vector2 center = new Vector2(connection.readFloat(), connection.readFloat());
         Vector2 velocity = new Vector2(connection.readFloat(), connection.readFloat());
         float width = connection.readFloat();
         float height = connection.readFloat();
@@ -60,7 +60,7 @@ public class SpawnParticlePacket implements Packet {
 
         String imageName = connection.readUTF();
 
-        particle = new Particle(position, velocity, width, height, rotationSpeed, tint, imageName);
+        particle = new Particle(center, velocity, width, height, rotationSpeed, tint, imageName);
         particle.type = type;
         particle.frameCount = frameCount;
         particle.frameLength = frameLength;
