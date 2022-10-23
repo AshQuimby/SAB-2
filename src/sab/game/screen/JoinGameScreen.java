@@ -4,9 +4,10 @@ import com.badlogic.gdx.Input;
 import com.seagull_engine.Seagraphics;
 
 import sab.game.Battle;
-import sab.net.Connection;
 import sab.error.SabError;
 import sab.net.Keys;
+import sab.net.client.Client;
+import sab.net.client.ClientListener;
 import sab.net.packet.*;
 import sab.screen.Screen;
 import sab.screen.ScreenAdapter;
@@ -14,67 +15,36 @@ import sab.screen.ScreenAdapter;
 import java.io.IOException;
 
 public class JoinGameScreen extends ScreenAdapter {
-    private Battle battle;
-    private volatile byte id;
-    private Connection connection;
-    private PacketManager packets;
+    private volatile Client client;
+    private volatile SabError error;
 
-    private SabError error;
+    private Battle battle;
 
     public JoinGameScreen() {
-        id = -1;
-
-        try {
-            connection = new Connection("localhost", 25565);
-
-            new Thread(() -> {
-                try {
-                    id = connection.readByte();
-                } catch (IOException ignored) {
-
-                }
-            }).start();
-
-            long timestamp = System.currentTimeMillis();
-            while (System.currentTimeMillis() - timestamp < 3000) {
-                if (id != -1) {
-                    break;
-                }
-            }
-
-            if (id == -1) {
-                error = new SabError("Connection refused", "Failed to connect to server");
-                connection.close();
-            }
-        } catch(IOException e) {
-            error = new SabError("Connection refused", "Failed to connect to server");
-        }
-        if (error != null) return;
-
-        packets = new PacketManager();
-        packets.register(KeyEventPacket.class);
-        packets.register(KickPacket.class);
-        packets.register(PlayerStatePacket.class);
-        packets.register(SpawnParticlePacket.class);
-
-        battle = new Battle();
-
-        new Thread(() -> {
-            while (true) {
-                try {
-                    byte header = connection.readByte();
-                    Packet packet = packets.getPacket(header);
-
-                    if (packet == null) { // Invalid packet type or error creating packet
-                        error = new SabError("Invalid server packet", "Received invalid packet type: " + Byte.toUnsignedInt(header));
-                        break;
-                    } else {
-                        packet.receive(connection);
+        Thread connect = new Thread(
+                () -> {
+                    try {
+                        client = new Client("localhost", 25565, new SabPacketManager());
+                    } catch (IOException ignored) {
                     }
+                }
+        );
 
+        connect.setName("Client Connection");
+        connect.setDaemon(true);
+        connect.start();
+
+        long timestamp = System.currentTimeMillis();
+        while (System.currentTimeMillis() - timestamp < 3000) {
+            if (client != null) break;
+        }
+
+        if (client != null) {
+            client.addClientListener(new ClientListener() {
+                @Override
+                public void received(Packet packet) {
                     if (packet instanceof KickPacket kickPacket) {
                         error = new SabError("Kicked", kickPacket.message);
-                        break;
                     }
 
                     if (packet instanceof PlayerStatePacket playerStatePacket) {
@@ -84,32 +54,29 @@ public class JoinGameScreen extends ScreenAdapter {
                     if (packet instanceof SpawnParticlePacket particlePacket) {
                         battle.addParticle(particlePacket.particle);
                     }
-                } catch (IOException e) {
-                    error = new SabError("Disconnected", "Lost connection to the server");
-                    break;
                 }
-            }
-        }).start();
+
+                @Override
+                public void disconnected() {
+                    error = new SabError("Disconnected", "Lost connection to the server");
+                }
+            });
+        } else {
+            error = new SabError("Connection refused", "Failed to connect to server");
+            return;
+        }
+
+        battle = new Battle();
     }
 
     private void pressKey(byte key) {
         battle.getPlayer(1).keys.press(key);
-
-        try {
-            packets.sendPacket(connection, new KeyEventPacket(key, true));
-        } catch (IOException e) {
-            error = new SabError("Disconnected", "Lost connection to the server");
-        }
+        client.send(new KeyEventPacket(key, true));
     }
 
     private void releaseKey(byte key) {
         battle.getPlayer(1).keys.release(key);
-
-        try {
-            packets.sendPacket(connection, new KeyEventPacket(key, false));
-        } catch (IOException e) {
-            error = new SabError("Disconnected", "Lost connection to the server");
-        }
+        client.send(new KeyEventPacket(key, false));
     }
 
     @Override
@@ -162,12 +129,9 @@ public class JoinGameScreen extends ScreenAdapter {
     @Override
     public Screen update() {
         if (error != null) {
-            if (connection != null) {
-                try {
-                    connection.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+            try {
+                client.close();
+            } catch (IOException ignored) {
             }
 
             return new ErrorScreen(error);
@@ -180,9 +144,8 @@ public class JoinGameScreen extends ScreenAdapter {
     @Override
     public void close() {
         try {
-            connection.close();
-        } catch (IOException e) {
-            e.printStackTrace();
+            client.close();
+        } catch (IOException ignored) {
         }
     }
 }
