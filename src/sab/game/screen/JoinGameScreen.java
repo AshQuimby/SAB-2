@@ -129,9 +129,11 @@ public class JoinGameScreen extends ScreenAdapter {
     @Override
     public Screen update() {
         if (error != null) {
-            try {
-                client.close();
-            } catch (IOException ignored) {
+            if (client != null) {
+                try {
+                    client.close();
+                } catch (IOException ignored) {
+                }
             }
 
             return new ErrorScreen(error);
