@@ -42,7 +42,6 @@ public class Battle {
     private List<GameObject> hittableGameObjects;
     private List<Attack> attacks;
     private List<GameObject> miscGameObjects;
-    private List<GameObject> stageObjects;
     private List<GameObject> newGameObjects;
     private List<GameObject> deadGameObjects;
     private List<Particle> particles;
@@ -94,7 +93,6 @@ public class Battle {
         hittableGameObjects = new ArrayList<>();
         attacks = new ArrayList<>();
         miscGameObjects = new ArrayList<>();
-        stageObjects = new ArrayList<>();
         newGameObjects = new ArrayList<>();
         particles = new ArrayList<>();
         deadGameObjects = new ArrayList<>();
@@ -106,10 +104,6 @@ public class Battle {
         addGameObject(player2);
 
         drawHitboxes = false;
-
-        for (GameObject stageObject : stage.getStageObjects()) {
-            addGameObject(stageObject);
-        }
     }
 
     public Battle() {
@@ -172,7 +166,7 @@ public class Battle {
 
     public List<GameObject> getPlatforms() {
         List<GameObject> platforms = new ArrayList<>();
-        for (GameObject stageObject : stageObjects) {
+        for (GameObject stageObject : stage.getStageObjects()) {
             if (((StageObject) stageObject).isSolid()) platforms.add(stageObject);
         }
         return platforms;
@@ -180,7 +174,7 @@ public class Battle {
 
     public List<GameObject> getPassablePlatforms() {
         List<GameObject> platforms = new ArrayList<>();
-        for (GameObject stageObject : stageObjects) {
+        for (GameObject stageObject : stage.getStageObjects()) {
             if (stageObject instanceof PassablePlatform) platforms.add(stageObject);
         }
         return platforms;
@@ -321,7 +315,7 @@ public class Battle {
             }
 
             if (newGameObject instanceof StageObject) {
-                stageObjects.add(newGameObject);
+                stage.addStageObject((StageObject) newGameObject);
             }
 
             if (misc) {
@@ -359,7 +353,7 @@ public class Battle {
             }
 
             if (deadGameObject instanceof StageObject) {
-                stageObjects.remove(deadGameObject);
+                stage.getStageObjects().remove(deadGameObject);
             }
 
             if (misc) {
@@ -443,7 +437,7 @@ public class Battle {
     public void render(Seagraphics g) {
         g.getDynamicCamera().position.sub(cameraShakeVector.x, cameraShakeVector.y, 0);
         g.useStaticCamera();
-        g.scalableDraw(g.imageProvider.getImage(stage.background), -1152 / 2, -704 / 2, 1152, 704);
+        g.scalableDraw(g.imageProvider.getImage(stage.background), -1280 / 2, -720 / 2, 1280, 720);
         g.useDynamicCamera();
 
         updateCameraPosition();

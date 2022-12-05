@@ -10,10 +10,12 @@ public class Ledge {
 
     private Platform platform;
     private Vector2 anchor;
+    public boolean hasPlatform;
 
     public Ledge(Vector2 position, float width, float height, int direction) {
         grabBox.set(position.x, position.y, width, height);
         this.direction = direction;
+        hasPlatform = false;
     }
 
     public Ledge(Platform attachment, Vector2 anchor, float width, float height, int direction) {
@@ -21,6 +23,11 @@ public class Ledge {
         this.direction = direction;
         this.anchor = anchor;
         platform = attachment;
+        hasPlatform = attachment != null;
+    }
+
+    public boolean ownerRemoved() {
+        return hasPlatform && platform == null;
     }
 
     public void update() {

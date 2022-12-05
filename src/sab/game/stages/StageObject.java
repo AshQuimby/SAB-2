@@ -9,6 +9,7 @@ import sab.game.Battle;
 public class StageObject extends GameObject {
     protected StageObjectBehaviour behavior;
     protected boolean updates;
+    public boolean alive;
     public Stage stage;
 
     public StageObject(float x, float y, float width, float height, String imageName, Stage stage) {
@@ -19,6 +20,7 @@ public class StageObject extends GameObject {
         drawRect = new Rectangle(x, y, width, height);
         hitbox = new Rectangle(drawRect);
         this.stage = stage;
+        alive = true;
     }
 
     public StageObject(float x, float y, float width, float height, String imageName, Stage stage, StageObjectBehaviour behavior) {
@@ -29,6 +31,7 @@ public class StageObject extends GameObject {
         drawRect = new Rectangle(x, y, width, height);
         hitbox = new Rectangle(drawRect);
         this.stage = stage;
+        alive = true;
     }
 
     public void addBehavior(StageObjectBehaviour behavior) {
@@ -39,6 +42,10 @@ public class StageObject extends GameObject {
     public void updateStageObject(Battle battle) {
         if (!updates) return;
         behavior.update(this, battle);
+    }
+    
+    public void kill() {
+        alive = false;
     }
 
     public boolean inBackground() {

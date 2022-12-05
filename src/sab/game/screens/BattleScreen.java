@@ -1,6 +1,5 @@
 package sab.game.screens;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.badlogic.gdx.Input;
@@ -9,12 +8,8 @@ import com.seagull_engine.Seagraphics;
 
 import sab.game.Hittable;
 import sab.game.Player;
-import sab.game.SABSounds;
 import sab.game.DamageSource;
-import sab.game.stages.LastLocation;
 import sab.game.stages.Platform;
-import sab.game.stages.StageObjectBehaviour;
-import sab.game.stages.Stage;
 import sab.net.Connection;
 import sab.net.Keys;
 import sab.net.Packets;
@@ -36,7 +31,7 @@ public class BattleScreen extends ScreenAdapter {
     private Connection client;
     private Connection toClient;
 
-    public BattleScreen() {
+    /* public BattleScreen() {
         // player1 = new Player(new Marvin(), this);
         // player2 = new Player(new Chain(), this);
 
@@ -119,7 +114,7 @@ public class BattleScreen extends ScreenAdapter {
         //         }
         //     }
         // }).start();
-    }
+    } */
 
     private void addGameObject(GameObject gameObject) {
         gameObjects.add(gameObject);

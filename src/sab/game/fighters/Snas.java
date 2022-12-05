@@ -1,10 +1,7 @@
 package sab.game.fighters;
 
-import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 
-import sab.game.Game;
 import sab.game.Player;
 import sab.game.PlayerAction;
 import sab.game.SABSounds;
@@ -12,7 +9,6 @@ import sab.game.animation.Animation;
 import sab.game.attacks.Attack;
 import sab.game.attacks.melees.GlasterBaster;
 import sab.game.attacks.projectiles.BoneSpike;
-import sab.game.attacks.projectiles.Frostball;
 import sab.game.attacks.projectiles.SpinnyBone;
 import sab.game.particles.Particle;
 import sab.util.Utils;

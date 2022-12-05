@@ -47,12 +47,22 @@ public class Stage {
 
     public void update(Battle battle) {
         type.update(battle, this);
+        List<StageObject> deadStageObjects = new ArrayList<>();
         for (StageObject stageObject : stageObjects) {
             stageObject.updateStageObject(battle);
+            if (!stageObject.alive) {
+                deadStageObjects.add(stageObject);
+            }
         }
+        stageObjects.removeAll(deadStageObjects);
+        List<Ledge> deadLedges = new ArrayList<>();
         for (Ledge ledge : ledges) {
             ledge.update();
+            if (ledge.ownerRemoved()) {
+                deadLedges.add(ledge);
+            }
         }
+        ledges.removeAll(deadLedges);
     }
 
     public Ledge grabLedge(Player player) {
