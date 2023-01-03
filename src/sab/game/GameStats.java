@@ -1,7 +1,6 @@
 package sab.game;
 
 public class GameStats {
-    
     private int damageDealt;
     private int damageTaken;
     private int kills;

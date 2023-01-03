@@ -39,32 +39,32 @@ public class JoinGameScreen extends ScreenAdapter {
             if (client != null) break;
         }
 
-        if (client != null) {
-            client.addClientListener(new ClientListener() {
-                @Override
-                public void received(Packet packet) {
-                    if (packet instanceof KickPacket kickPacket) {
-                        error = new SabError("Kicked", kickPacket.message);
-                    }
-
-                    if (packet instanceof PlayerStatePacket playerStatePacket) {
-                        playerStatePacket.syncPlayer(battle.getPlayer(playerStatePacket.playerId));
-                    }
-
-                    if (packet instanceof SpawnParticlePacket particlePacket) {
-                        battle.addParticle(particlePacket.particle);
-                    }
-                }
-
-                @Override
-                public void disconnected() {
-                    error = new SabError("Disconnected", "Lost connection to the server");
-                }
-            });
-        } else {
-            error = new SabError("Connection refused", "Failed to connect to server");
-            return;
-        }
+//        if (client != null) {
+//            client.addClientListener(new ClientListener() {
+//                @Override
+//                public void received(Packet packet) {
+//                    if (packet instanceof KickPacket kickPacket) {
+//                        error = new SabError("Kicked", kickPacket.message);
+//                    }
+//
+//                    if (packet instanceof PlayerStatePacket playerStatePacket) {
+//                        playerStatePacket.syncPlayer(battle.getPlayer(playerStatePacket.playerId));
+//                    }
+//
+//                    if (packet instanceof SpawnParticlePacket particlePacket) {
+//                        battle.addParticle(particlePacket.particle);
+//                    }
+//                }
+//
+//                @Override
+//                public void disconnected() {
+//                    error = new SabError("Disconnected", "Lost connection to the server");
+//                }
+//            });
+//        } else {
+//            error = new SabError("Connection refused", "Failed to connect to server");
+//            return;
+//        }
 
         battle = new Battle();
     }
@@ -140,7 +140,7 @@ public class JoinGameScreen extends ScreenAdapter {
         }
 
         battle.update();
-        return this;
+        return new JoinedCharacterSelectScreen(client);
     }
 
     @Override

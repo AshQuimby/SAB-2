@@ -3,6 +3,8 @@ package sab.game.screen;
 import com.badlogic.gdx.graphics.Color;
 import com.seagull_engine.Seagraphics;
 import sab.error.SabError;
+import sab.game.Game;
+import sab.net.packet.Packet;
 import sab.net.packet.SabPacketManager;
 import sab.net.server.Server;
 import sab.net.server.ServerListener;
@@ -23,6 +25,7 @@ public class HostGameScreen extends ScreenAdapter {
             server = new Server(new SabPacketManager(), 25565);
             serverStarted = true;
         } catch (IOException ignored) {
+            return;
         }
 
         Thread connectionReceiver = new Thread(
@@ -67,7 +70,8 @@ public class HostGameScreen extends ScreenAdapter {
         }
 
         if (hasRemoteConnection) {
-            return new HostedBattleScreen(server, remoteClient);
+            return new HostedCharacterSelectScreen(server, remoteClient);
+            //return new HostedBattleScreen(server, remoteClient);
         }
 
         return this;
