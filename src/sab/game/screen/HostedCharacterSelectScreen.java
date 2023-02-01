@@ -32,7 +32,9 @@ public class HostedCharacterSelectScreen extends CharacterSelectScreen {
                 if (packet instanceof CharacterSelectPacket) {
                     CharacterSelectPacket characterSelectPacket = (CharacterSelectPacket) packet;
 
-                    player2.setSelection(characterSelectPacket.character, characterSelectPacket.costume, player2Fighters);
+                    if (!(characterSelectPacket.character < 0 || characterSelectPacket.costume < 0 || characterSelectPacket.character >= player2Fighters.size() || characterSelectPacket.costume >= player2Fighters.get(player2.index).costumes)) {
+                        player2.setSelection(characterSelectPacket.character, characterSelectPacket.costume, player2Fighters);
+                    }
                 }
             }
         };

@@ -12,6 +12,7 @@ public class Settings {
     private static float masterVolume;
     private static float sfxVolume;
     private static float musicVolume;
+    private static int hostingPort;
 
     public static void loadSettings() {
         HashMap<String, String> settings = null;
@@ -41,13 +42,15 @@ public class Settings {
         sfxVolume = 1f;
         musicVolume = 1f;
         staticCamera = false;
+        hostingPort = 19128;
     }
 
-    public static void setSettings(boolean staticCameraSetting, float volumeSetting, float musicSetting, float sfxSetting) {
+    public static void setSettings(boolean staticCameraSetting, float volumeSetting, float musicSetting, float sfxSetting, int hostingPortSetting) {
         staticCamera = staticCameraSetting;
         masterVolume = volumeSetting;
         musicVolume = musicSetting;
         sfxVolume = sfxSetting;
+        hostingPort = hostingPortSetting;
     }
 
     public static void writeFile() {
@@ -64,6 +67,7 @@ public class Settings {
         settings.put("master_volume", Float.toString(masterVolume));
         settings.put("sfx_volume", Float.toString(sfxVolume));
         settings.put("music_volume", Float.toString(musicVolume));
+        settings.put("hosting_port", Integer.toString(hostingPort));
         return settings;
     }
 
@@ -72,6 +76,7 @@ public class Settings {
         masterVolume = Float.parseFloat(settings.get("master_volume"));
         sfxVolume = Float.parseFloat(settings.get("sfx_volume"));
         musicVolume = Float.parseFloat(settings.get("music_volume"));
+        hostingPort = Integer.parseInt(settings.get("hosting_port"));
     }
 
     public static boolean getStaticCamera() {
@@ -88,5 +93,9 @@ public class Settings {
 
     public static float getSFXVolume() {
         return sfxVolume;
+    }
+
+    public static int getHostingPort() {
+        return hostingPort;
     }
 }

@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.seagull_engine.Seagraphics;
 import sab.error.SabError;
 import sab.game.Game;
+import sab.game.Settings;
 import sab.net.packet.Packet;
 import sab.net.packet.SabPacketManager;
 import sab.net.server.Server;
@@ -22,7 +23,7 @@ public class HostGameScreen extends ScreenAdapter {
 
     public HostGameScreen() {
         try {
-            server = new Server(new SabPacketManager(), 25565);
+            server = new Server(new SabPacketManager(), Settings.getHostingPort());
             serverStarted = true;
         } catch (IOException ignored) {
             return;

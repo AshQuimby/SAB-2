@@ -45,7 +45,7 @@ public class JukeboxScreen extends ScreenAdapter {
         addSong("last_location.mp3", "Last Location", "Beat Thorn");
         addSong("overgrown_armada.mp3", "Overgrown Armada", "a_viper");
         addSong("desert_bridge.mp3", "Desert Bridge", "AshQuimby");
-        addSong("thumbaba_lair.mp3", "Thumbaba's Lair", "a_viper");
+        addSong("thumbabas_lair.mp3", "Thumbaba's Lair", "a_viper");
         addSong("our_sports.mp3", "Our Sports Resort", "Beat Thorn");
         addSong("seagull_ultima.mp3", "Ultimatum of Seagull", "Beat Thorn");
         addSong("wavezone.mp3", "Wavezone", "Beat Thorn");

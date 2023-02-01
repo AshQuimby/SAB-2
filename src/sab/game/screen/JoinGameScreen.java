@@ -5,6 +5,7 @@ import com.seagull_engine.Seagraphics;
 
 import sab.game.Battle;
 import sab.error.SabError;
+import sab.game.Settings;
 import sab.net.Keys;
 import sab.net.client.Client;
 import sab.net.client.ClientListener;
@@ -24,7 +25,7 @@ public class JoinGameScreen extends ScreenAdapter {
         Thread connect = new Thread(
                 () -> {
                     try {
-                        client = new Client("localhost", 25565, new SabPacketManager());
+                        client = new Client("localhost", Settings.getHostingPort(), new SabPacketManager());
                     } catch (IOException ignored) {
                     }
                 }
