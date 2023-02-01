@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import sab.game.attacks.AttackType;
-import sab.game.fighters.FighterType;
-import sab.game.stages.StageType;
+import sab.game.attack.AttackType;
+import sab.game.fighter.FighterType;
+import sab.game.stage.StageType;
 
 // Everything here is handled by the game, unless a mod dev really wants to understand how the game works, reading this file is optional
 

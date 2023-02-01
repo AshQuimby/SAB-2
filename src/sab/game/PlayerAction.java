@@ -3,7 +3,7 @@ package sab.game;
 import com.badlogic.gdx.math.Vector2;
 
 import sab.game.animation.Animation;
-import sab.game.attacks.Attack;
+import sab.game.attack.Attack;
 
 public class PlayerAction {
     private int delay;
