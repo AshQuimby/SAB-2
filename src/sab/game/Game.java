@@ -1,8 +1,11 @@
 package sab.game;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.MathUtils;
 import com.seagull_engine.Messenger;
 import com.seagull_engine.Seagraphics;
+import com.seagull_engine.SeagullManager;
 
 import sab.game.attack.AttackType;
 import sab.game.fighter.BigSeagull;
@@ -25,6 +28,8 @@ import sab.game.stage.OurSports;
 import sab.game.stage.StageType;
 import sab.game.stage.ThumbabasLair;
 import sab.game.stage.Warzone;
+import sab.game.fighter.EmptySoldier;
+import sab.game.fighter.Stephane;
 import sab.modloader.Mod;
 import sab.modloader.ModLoader;
 import sab.screen.Screen;
@@ -46,6 +51,7 @@ public class Game extends Messenger {
     public final HashMap<String, Class<? extends AttackType>> attacks;
     public final CharacterSelectScreen globalCharacterSelectScreen;
     public static String titleBackground;
+    protected SeagullManager manager;
     private List<String> modErrors;
     private Screen screen;
 
@@ -67,7 +73,7 @@ public class Game extends Messenger {
     public void load() {
         Settings.loadSettings();
         Mod baseGame = new Mod("Super Ass Brothers", "sab", "1.0", "base game assets");
-        baseGame.addFighters((Class<? extends FighterType>[]) new Class<?>[] {Marvin.class, Chain.class, Walouis.class, Gus.class, EmperorEvil.class, Snas.class, BigSeagull.class});
+        baseGame.addFighters((Class<? extends FighterType>[]) new Class<?>[] {Marvin.class, Chain.class, Walouis.class, Gus.class, EmperorEvil.class, Snas.class, Stephane.class, EmptySoldier.class, BigSeagull.class});
         baseGame.addStages((Class<? extends StageType>[]) new Class<?>[] {LastLocation.class, Warzone.class, DesertBridge.class, ThumbabasLair.class, OurSports.class, COBS.class, Boxtopia.class});
         addMod(baseGame);
         loadMods();
@@ -128,6 +134,9 @@ public class Game extends Messenger {
     // Called when a key is pressed
     @Override
     public void keyDown(int keyCode) {
+        if (keyCode == Input.Keys.F11) {
+            Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
+        }
         screen = screen.keyPressed(keyCode);
     }
     

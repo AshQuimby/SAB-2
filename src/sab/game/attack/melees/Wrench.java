@@ -14,7 +14,7 @@ public class Wrench extends AttackType {
     public void setDefaults(Attack attack) {
         attack.imageName = "wrench.png";
         if (attack.owner.costume == 1929) {
-            attack.imageName = "wrэnch.png";
+            attack.imageName = "wrench_russian.png";
         }
         attack.life = 15;
         attack.frameCount = 1;
