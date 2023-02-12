@@ -8,10 +8,10 @@ import sab.game.Game;
 import sab.game.Player;
 import sab.game.animation.Animation;
 import sab.game.attack.Attack;
-import sab.game.attack.melees.Racket;
-import sab.game.attack.projectiles.Bomb;
-import sab.game.attack.projectiles.Note;
-import sab.game.attack.projectiles.TinyNote;
+import sab.game.attack.walouis.Racket;
+import sab.game.attack.walouis.Bomb;
+import sab.game.attack.walouis.Note;
+import sab.game.attack.walouis.TinyNote;
 import sab.game.particle.Particle;
 import sab.util.Utils;
 

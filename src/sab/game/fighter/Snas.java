@@ -7,9 +7,9 @@ import sab.game.PlayerAction;
 import sab.game.SABSounds;
 import sab.game.animation.Animation;
 import sab.game.attack.Attack;
-import sab.game.attack.melees.GlasterBaster;
-import sab.game.attack.projectiles.BoneSpike;
-import sab.game.attack.projectiles.SpinnyBone;
+import sab.game.attack.snas.GlasterBaster;
+import sab.game.attack.snas.BoneSpike;
+import sab.game.attack.snas.SpinnyBone;
 import sab.game.particle.Particle;
 import sab.util.Utils;
 

@@ -3,7 +3,7 @@ package sab.game.fighter;
 import sab.game.Player;
 import sab.game.animation.Animation;
 import sab.game.attack.Attack;
-import sab.game.attack.melees.ChainSlash;
+import sab.game.attack.chain.ChainSlash;
 
 public class EmptySoldier extends FighterType {
     private int spirit;

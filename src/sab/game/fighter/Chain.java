@@ -3,10 +3,10 @@ package sab.game.fighter;
 import sab.game.Player;
 import sab.game.animation.Animation;
 import sab.game.attack.Attack;
-import sab.game.attack.melees.AirSlash;
-import sab.game.attack.melees.ChainSlash;
-import sab.game.attack.projectiles.BoomerangKnife;
-import sab.game.attack.projectiles.FallingKnife;
+import sab.game.attack.chain.AirSlash;
+import sab.game.attack.chain.ChainSlash;
+import sab.game.attack.chain.BoomerangKnife;
+import sab.game.attack.chain.FallingKnife;
 
 public class Chain extends FighterType {
     public boolean hasBoomerang;

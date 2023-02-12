@@ -8,10 +8,10 @@ import sab.game.Player;
 import sab.game.PlayerAction;
 import sab.game.animation.Animation;
 import sab.game.attack.Attack;
-import sab.game.attack.melees.Chomp;
-import sab.game.attack.melees.ExplosiveBarrel;
-import sab.game.attack.projectiles.Cannonball;
-import sab.game.attack.projectiles.MagicBanana;
+import sab.game.attack.emperor_evil.Chomp;
+import sab.game.attack.emperor_evil.ExplosiveBarrel;
+import sab.game.attack.emperor_evil.Cannonball;
+import sab.game.attack.emperor_evil.MagicBanana;
 import sab.game.particle.Particle;
 
 public class EmperorEvil extends FighterType {

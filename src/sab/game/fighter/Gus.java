@@ -3,10 +3,10 @@ package sab.game.fighter;
 import sab.game.Player;
 import sab.game.animation.Animation;
 import sab.game.attack.Attack;
-import sab.game.attack.melees.SussyVent;
-import sab.game.attack.melees.Tongue;
-import sab.game.attack.projectiles.Bullet;
-import sab.game.attack.projectiles.MiniGus;
+import sab.game.attack.gus.SussyVent;
+import sab.game.attack.gus.Tongue;
+import sab.game.attack.gus.Bullet;
+import sab.game.attack.gus.MiniGus;
 
 public class Gus extends FighterType {
     private Animation shootAnimation;

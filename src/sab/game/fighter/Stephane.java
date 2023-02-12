@@ -1,32 +1,14 @@
 package sab.game.fighter;
 
-import java.util.List;
-
-import org.lwjgl.system.linux.X11;
-
-import java.util.ArrayList;
-
-import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 
 import sab.game.Battle;
-import sab.game.Game;
 import sab.game.Player;
-import sab.game.PlayerAction;
-import sab.game.SABSounds;
 import sab.game.animation.Animation;
-import sab.game.attack.Attack;
-import sab.game.attack.melees.GlasterBaster;
-import sab.game.attack.projectiles.BoneSpike;
-import sab.game.attack.projectiles.Frostball;
-import sab.game.attack.projectiles.SpinnyBone;
-import sab.game.particle.Particle;
 import sab.game.stage.Platform;
 import sab.game.stage.Stage;
 import sab.game.stage.StageObject;
 import sab.game.stage.StageObjectBehaviour;
-import sab.util.Utils;
 
 public class Stephane extends FighterType {
     

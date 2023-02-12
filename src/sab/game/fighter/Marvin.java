@@ -8,10 +8,10 @@ import sab.game.Player;
 import sab.game.PlayerAction;
 import sab.game.animation.Animation;
 import sab.game.attack.Attack;
-import sab.game.attack.melees.Wrench;
-import sab.game.attack.projectiles.Fireball;
-import sab.game.attack.projectiles.Frostball;
-import sab.game.attack.projectiles.Toilet;
+import sab.game.attack.marvin.Wrench;
+import sab.game.attack.marvin.Fireball;
+import sab.game.attack.marvin.Frostball;
+import sab.game.attack.marvin.Toilet;
 import sab.game.particle.Particle;
 
 public class Marvin extends FighterType {

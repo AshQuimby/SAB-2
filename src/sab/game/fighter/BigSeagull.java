@@ -4,10 +4,10 @@ import sab.game.Player;
 import sab.game.SABSounds;
 import sab.game.animation.Animation;
 import sab.game.attack.Attack;
-import sab.game.attack.melees.Glide;
-import sab.game.attack.melees.Peck;
-import sab.game.attack.projectiles.FeatherDart;
-import sab.game.attack.projectiles.Gust;
+import sab.game.attack.big_seagull.Glide;
+import sab.game.attack.big_seagull.Peck;
+import sab.game.attack.big_seagull.FeatherDart;
+import sab.game.attack.big_seagull.Gust;
 import sab.net.Keys;
 
 public class BigSeagull extends FighterType {
