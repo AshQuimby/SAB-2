@@ -13,7 +13,7 @@
 24 Net Code
 20 a_viper
 34
-24 Art Direction
+24 Art Director
 20 AshQuimby
 34
 24 Artists
@@ -23,11 +23,11 @@
 20 AshQuimby
 34
 24 Composers
-20 Beat Thorn, a_viper, AshQuimby
+20 Beat Thorn (Birdthorn), a_viper, AshQuimby
 34
 24 Seagull Engine Team
 20 AshQuimby, a_viper
-20 Seagull Engine made with libGDX
+18 Seagull Engine made with libGDX
 34
 24 Mod Loader Developers
 20 AshQuimby, a_viper
@@ -44,11 +44,20 @@
 16 Birdthorn, Watil, JCswitch, a_kraken, SBsteveyHops, G1B3R1SH
 18
 20 SBsteveyHops
-16 Making an unofficial/official SAB website
+16 Making an un/official SAB website
 18  
 20 Honorable Costume Contest Submissions
 16 Gigachad John Joseph (Birdthorn)
 16 Bowser Emperor E. Vile (JCswitch)
+18
+20 The Slipperiest of Beans
+16 SlipperyManBean
+18
+20 Mommy
+16 spirit.rain
+18
+20 Consumer of Hookers
+16 vrissta
 18
 20 And the (albeit small) SAB community
 16 The game would be nothing without you
@@ -57,3 +66,6 @@
 2560
 24 Major Inconvenience
 16 Cow Tip Mooment
+253440
+24 Bb, F, G [below the Bb], E
+16 Iaiz

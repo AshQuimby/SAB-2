@@ -12,7 +12,7 @@ import sab.game.particle.Particle;
 
 public class Bullet extends AttackType {
     @Override
-    public void setDefaults(sab.game.attack.Attack attack) {
+    public void setDefaults(Attack attack) {
         attack.imageName = "bullet.png";
         attack.life = 100;
         attack.frameCount = 1;
@@ -28,13 +28,12 @@ public class Bullet extends AttackType {
     }
 
     @Override
-    public void update(sab.game.attack.Attack attack) {
-        attack.owner.battle.addParticle(new Particle(attack.hitbox.getCenter(new Vector2()),
-                new Vector2(0, MathUtils.random(-.2f, .2f)), 16, 16, 20, "smoke.png"));
+    public void update(Attack attack) {
+        attack.owner.battle.addParticle(new Particle(attack.hitbox.getCenter(new Vector2()), new Vector2(0, MathUtils.random(-.2f, .2f)), 16, 16, 20, "smoke.png"));
     }
 
     @Override
-    public void onSpawn(sab.game.attack.Attack attack, int[] data) {
+    public void onSpawn(Attack attack, int[] data) {
         attack.knockback.set(attack.direction * 1, 1);
         CollisionResolver.moveWithCollisions(attack.owner, new Vector2(attack.owner.direction * -4, 0), attack.owner.battle.getPlatforms());
         attack.hitbox.setCenter(attack.owner.hitbox.getCenter(new Vector2()));

@@ -28,7 +28,7 @@ public class Walouis extends FighterType {
         fighter.renderHeight = 96;
         fighter.imageOffsetX = 8;
         fighter.imageOffsetY = 4;
-        fighter.frames = 11;
+        fighter.frames = 12;
         fighter.jumps = 1;
         fighter.speed = 7.5f;
         fighter.acceleration = .46f;

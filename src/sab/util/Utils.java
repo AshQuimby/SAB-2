@@ -1,8 +1,11 @@
 package sab.util;
 
 import java.util.List;
+import java.time.LocalDateTime;
+import java.time.Month;
 import java.util.ArrayList;
 
+import sab.game.Game;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
@@ -32,7 +35,7 @@ public class Utils {
         } else {
             for (String string : splitText) {
                 reader += string + " ";
-                if (g.getTextBounds(reader, g.imageProvider.getFont("SAB_font"), -1152 / 2 + 32, 704 / 2 - 220, size, -1).width > maxLength || string.equals("\n")) {
+                if (g.getTextBounds(reader, g.imageProvider.getFont("SAB_font"), -Game.game.window.resolutionX / 2 + 32, Game.game.window.resolutionY / 2 - 220, size, -1).width > maxLength || string.equals("\n")) {
                     if(!(reader.equals("") || text.equals(" ")) && !string.equals("\n")) textLines.add(reader);
                     if (!string.equals("\n")) reader = "";
                 }
@@ -47,6 +50,14 @@ public class Utils {
         }
 
         return reader;
+    }
+
+    public static boolean aprilFools() {
+        return LocalDateTime.now().getDayOfMonth() == 1 && LocalDateTime.now().getMonth() == Month.APRIL;
+    }
+
+    public static boolean christmas() {
+        return (LocalDateTime.now().getDayOfMonth() == 24 || LocalDateTime.now().getDayOfMonth() == 25) && LocalDateTime.now().getMonth() == Month.DECEMBER;
     }
 
     public static Vector2 getNearestPointInRect(Vector2 target, Rectangle rect) {

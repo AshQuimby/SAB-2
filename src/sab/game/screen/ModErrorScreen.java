@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Rectangle;
 import com.seagull_engine.Seagraphics;
 
+import sab.game.Game;
 import sab.screen.ScreenAdapter;
 import sab.screen.Screen;
 
@@ -25,7 +26,7 @@ public class ModErrorScreen extends ScreenAdapter {
     public void render(Seagraphics g) {
         scrollDistance += scrollAmount;
         if (scrollDistance < 0) scrollDistance = 0;
-        g.scalableDraw(g.imageProvider.getImage("error_background.png"), -1152 / 2, -704 / 2, 1152, 704);
+        g.scalableDraw(g.imageProvider.getImage("error_background.png"), -Game.game.window.resolutionX / 2, -Game.game.window.resolutionY / 2, Game.game.window.resolutionX, Game.game.window.resolutionY);
         float length = 0;
         for (int i = 0; i < errors.size(); i++) {
             float size;

@@ -104,4 +104,12 @@ public class Marvin extends FighterType {
         player.velocity.y *= 0.9f;
         player.frame = chargeAnimation.stepLooping();
     }
+
+    @Override
+    public String getVictorySongId(Fighter fighter, Player player) {
+        if (player.costume != 1929) {
+            return super.getVictorySongId(fighter, player);
+        }
+        return "starvin_victory.mp3";
+    }
 }

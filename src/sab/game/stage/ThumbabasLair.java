@@ -1,6 +1,7 @@
 package sab.game.stage;
 
 import com.badlogic.gdx.math.Rectangle;
+import sab.game.Game;
 
 public class ThumbabasLair extends StageType {
     @Override
@@ -14,7 +15,7 @@ public class ThumbabasLair extends StageType {
         Rectangle platform3 = new Rectangle(platform1);
         Rectangle platform4 = new Rectangle(platform1);
 
-        stage.addStageObject(new StageObject(-1152 / 2, -704 / 2 - 64, 1152, 704, "thumbabas_fingers.png", stage));
+        stage.addStageObject(new StageObject(-Game.game.window.resolutionX / 2, -Game.game.window.resolutionY / 2 - 64, Game.game.window.resolutionX, Game.game.window.resolutionY, "thumbabas_fingers.png", stage));
 
         platform1.setCenter(200, -38 - 64);
         platform2.setCenter(408, -82 - 64);

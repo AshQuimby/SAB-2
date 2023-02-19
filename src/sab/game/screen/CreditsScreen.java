@@ -13,6 +13,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Rectangle;
 import com.seagull_engine.Seagraphics;
 
+import sab.game.Game;
 import sab.screen.Screen;
 import sab.screen.ScreenAdapter;
 
@@ -26,7 +27,7 @@ public class CreditsScreen extends ScreenAdapter {
         speedUp = false;
         text = new ArrayList<>();
         sizes = new ArrayList<>();
-        scrollDistance = -704 / 2 - 8;
+        scrollDistance = -Game.game.window.resolutionY / 2 - 8;
         FileHandle credits = Gdx.files.internal("assets/texts/credits.txt");
         File creditsFile = credits.file();
         try {
@@ -50,7 +51,7 @@ public class CreditsScreen extends ScreenAdapter {
     public void render(Seagraphics g) {
         scrollDistance += 0.25f;
         if (speedUp) scrollDistance += 4.75f;
-        g.scalableDraw(g.imageProvider.getImage("background.png"), -1152 / 2, -704 / 2, 1152, 704);
+        g.scalableDraw(g.imageProvider.getImage("background.png"), -Game.game.window.resolutionX / 2, -Game.game.window.resolutionY / 2, Game.game.window.resolutionX, Game.game.window.resolutionY);
         float length = 0;
         for (int i = 0; i < text.size(); i++) {
             Rectangle bounds = g.drawText(text.get(i), g.imageProvider.getFont("SAB_font"), 0, scrollDistance - length, sizes.get(i) / 25, Color.WHITE, 0);
