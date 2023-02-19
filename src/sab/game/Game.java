@@ -58,7 +58,7 @@ public class Game extends Messenger {
     public final Map<String, Mod> mods;
 
     public Game() {
-        mods = new HashMap<String, Mod>();
+        mods = new HashMap<>();
         selectNewTitleScreen();
         fighters = new ArrayList<>();
         stages = new ArrayList<>();
@@ -68,11 +68,11 @@ public class Game extends Messenger {
         JukeboxScreen.loadVanillaSongs();
     }
     
-    // Initial load tasks (like from among us)
+    // Initial load tasks (like from Among Us)
     @Override
     public void load() {
         Settings.loadSettings();
-        Mod baseGame = new Mod("Super Ass Brothers", "sab", "1.0", "base game assets");
+        Mod baseGame = new Mod("Super Ass Brothers", "sab", "1.0", "Base game content");
         baseGame.addFighters((Class<? extends FighterType>[]) new Class<?>[] {Marvin.class, Chain.class, Walouis.class, Gus.class, EmperorEvil.class, Snas.class, Stephane.class, EmptySoldier.class, BigSeagull.class});
         baseGame.addStages((Class<? extends StageType>[]) new Class<?>[] {LastLocation.class, Warzone.class, DesertBridge.class, ThumbabasLair.class, OurSports.class, COBS.class, Boxtopia.class});
         addMod(baseGame);

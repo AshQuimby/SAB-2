@@ -5,7 +5,6 @@ import com.seagull_engine.SeagullEngine;
 import com.seagull_engine.SeagullManager;
 
 public class LocalGame {
-
     // Launch the application
     public static void main(String[] args) {
         // SeagullEngine so we do less work

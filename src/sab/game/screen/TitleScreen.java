@@ -13,7 +13,7 @@ import sab.screen.Screen;
 public class TitleScreen extends SelectorScreen {
     
     public TitleScreen(boolean playMusic) {
-        super(new String[] {"Play", "Host", "Join", "Settings", "Extras", "Quit"});
+        super(new String[] {"Play", "Host", "Join", "Campaign", "Settings", "Extras", "Quit"});
         if (playMusic) SABSounds.playMusic("lobby_music.mp3", true);
     }
     
@@ -52,12 +52,15 @@ public class TitleScreen extends SelectorScreen {
                 return new JoinGameScreen();
             }
             case 3 : {
-                return new SettingsScreen();
+                return new CampaignScreen();
             }
             case 4 : {
-                return new ExtrasScreen();
+                return new SettingsScreen();
             }
             case 5 : {
+                return new ExtrasScreen();
+            }
+            case 6 : {
                 Gdx.app.exit();
                 return this;
             }
