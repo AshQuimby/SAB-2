@@ -3,16 +3,14 @@ package sab.game.ai;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
-import sab.game.CollisionResolver;
 import sab.game.Game;
 import sab.game.Player;
-import sab.game.attacks.Attack;
-import sab.game.stages.Ledge;
-import sab.game.stages.Platform;
+import sab.game.attack.Attack;
+import sab.game.stage.Ledge;
+import sab.game.stage.Platform;
 import sab.net.Keys;
 import sab.util.Utils;
 
