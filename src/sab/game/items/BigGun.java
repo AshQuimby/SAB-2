@@ -4,8 +4,8 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
 import sab.game.Player;
-import sab.game.attacks.Attack;
-import sab.game.attacks.projectiles.BigBullet;
+import sab.game.attack.Attack;
+import sab.game.attack.unnamed_duck.BigBullet;
 
 public class BigGun extends Item {
 

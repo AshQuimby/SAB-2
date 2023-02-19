@@ -5,8 +5,8 @@ import com.badlogic.gdx.math.Vector2;
 
 import sab.game.Player;
 import sab.game.animation.Animation;
-import sab.game.attacks.Attack;
-import sab.game.attacks.melees.DuckItem;
+import sab.game.attack.Attack;
+import sab.game.attack.unnamed_duck.DuckItem;
 
 public class Rake extends Item {
 

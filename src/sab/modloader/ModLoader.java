@@ -15,10 +15,10 @@ import java.util.jar.JarFile;
 import java.util.jar.JarInputStream;
 
 import sab.game.Game;
-import sab.game.attacks.AttackType;
-import sab.game.fighters.FighterType;
-import sab.game.screens.JukeboxScreen;
-import sab.game.stages.StageType;
+import sab.game.attack.AttackType;
+import sab.game.fighter.FighterType;
+import sab.game.screen.JukeboxScreen;
+import sab.game.stage.StageType;
 import sab.util.SabReader;
 
 public final class ModLoader {

@@ -9,9 +9,9 @@ import sab.game.animation.Animation;
 public class Fighter implements Cloneable {
     public final FighterType type;
     /*
-     * The "id" value may be confusing but it works internally
+     * The "id" value may be confusing, but it works internally
      * Instead of having to have multiple different strings for every possible image the character uses
-     * we use "id" to tell the program the first word in all of the image files.
+     * we use "id" to tell the program the first word in all the image files.
      * This does mean that the names of images for fighters have to be standardized:
      * 
      * In battle art is "<id>.png"
@@ -69,7 +69,7 @@ public class Fighter implements Cloneable {
     // Increases fall speed and decreases knockback
     public float mass;
 
-    // The animations all characters have
+    // The animations all characters must have to function
     public Animation walkAnimation;
     public Animation ledgeAnimation;
     public Animation knockbackAnimation;
@@ -156,6 +156,10 @@ public class Fighter implements Cloneable {
 
     public void renderUI(Player player, Seagraphics g) {
         type.renderUI(this, player, g);
+    }
+
+    public String getVictorySongID(Player player) {
+        return type.getVictorySongId(this, player);
     }
 
     public Fighter copy() {

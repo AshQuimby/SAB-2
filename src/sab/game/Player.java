@@ -10,11 +10,11 @@ import com.seagull_engine.Seagraphics;
 
 import sab.game.ai.AI;
 import sab.game.animation.Animation;
-import sab.game.attacks.Attack;
-import sab.game.fighters.Fighter;
+import sab.game.attack.Attack;
+import sab.game.fighter.Fighter;
 import sab.game.items.Item;
-import sab.game.particles.Particle;
-import sab.game.stages.Ledge;
+import sab.game.particle.Particle;
+import sab.game.stage.Ledge;
 import sab.net.Keys;
 
 public class Player extends GameObject implements Hittable {
@@ -613,5 +613,9 @@ public class Player extends GameObject implements Hittable {
             fighter.render(this, g);
             if (hasItem()) heldItem.renderHeld(this, g);
         }
+    }
+
+    public int getId() {
+        return id;
     }
 }

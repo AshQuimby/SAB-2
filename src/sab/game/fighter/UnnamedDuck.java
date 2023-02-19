@@ -1,4 +1,4 @@
-package sab.game.fighters;
+package sab.game.fighter;
 
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
@@ -7,12 +7,12 @@ import sab.game.Game;
 import sab.game.Player;
 import sab.game.PlayerAction;
 import sab.game.animation.Animation;
-import sab.game.attacks.Attack;
+import sab.game.attack.Attack;
 import sab.game.items.BigGun;
 import sab.game.items.Item;
 import sab.game.items.Knife;
 import sab.game.items.Rake;
-import sab.game.particles.Particle;
+import sab.game.particle.Particle;
 import sab.util.WeightedCollection;
 
 public class UnnamedDuck extends FighterType {

@@ -1,4 +1,4 @@
-package sab.game.attacks.projectiles;
+package sab.game.attack.stephane;
 
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
@@ -9,9 +9,9 @@ import com.seagull_engine.Seagraphics;
 import sab.game.Direction;
 import sab.game.Hittable;
 import sab.game.SABSounds;
-import sab.game.attacks.Attack;
-import sab.game.attacks.AttackType;
-import sab.game.particles.Particle;
+import sab.game.attack.Attack;
+import sab.game.attack.AttackType;
+import sab.game.particle.Particle;
 
 public class Firework extends AttackType {
 

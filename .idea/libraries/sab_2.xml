@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="sab_2">
-    <CLASSES>
-      <root url="jar://$PROJECT_DIR$/seagull-engine.jar!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>

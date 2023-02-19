@@ -1,4 +1,4 @@
-package sab.game.fighters;
+package sab.game.fighter;
 import com.badlogic.gdx.math.Vector2;
 import com.seagull_engine.Seagraphics;
 
@@ -6,14 +6,14 @@ import sab.game.Battle;
 import sab.game.Game;
 import sab.game.Player;
 import sab.game.animation.Animation;
-import sab.game.attacks.Attack;
-import sab.game.attacks.melees.Baguette;
-import sab.game.attacks.projectiles.Arrow;
-import sab.game.attacks.projectiles.Firework;
-import sab.game.stages.Platform;
-import sab.game.stages.Stage;
-import sab.game.stages.StageObject;
-import sab.game.stages.StageObjectBehaviour;
+import sab.game.attack.Attack;
+import sab.game.attack.stephane.Baguette;
+import sab.game.attack.stephane.Arrow;
+import sab.game.attack.stephane.Firework;
+import sab.game.stage.Platform;
+import sab.game.stage.Stage;
+import sab.game.stage.StageObject;
+import sab.game.stage.StageObjectBehaviour;
 import sab.net.Keys;
 
 public class Stephane extends FighterType {

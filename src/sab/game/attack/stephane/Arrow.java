@@ -1,10 +1,10 @@
-package sab.game.attacks.projectiles;
+package sab.game.attack.stephane;
 
 import com.badlogic.gdx.math.Vector2;
 import com.seagull_engine.Seagraphics;
 
-import sab.game.attacks.Attack;
-import sab.game.attacks.AttackType;
+import sab.game.attack.Attack;
+import sab.game.attack.AttackType;
 
 public class Arrow extends AttackType {
     @Override

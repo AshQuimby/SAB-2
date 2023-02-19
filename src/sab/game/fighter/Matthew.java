@@ -1,4 +1,4 @@
-package sab.game.fighters;
+package sab.game.fighter;
 
 public class Matthew extends FighterType {
 

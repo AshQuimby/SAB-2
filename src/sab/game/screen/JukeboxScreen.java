@@ -1,4 +1,4 @@
-package sab.game.screens;
+package sab.game.screen;
 
 import java.util.ArrayList;
 import java.util.List;

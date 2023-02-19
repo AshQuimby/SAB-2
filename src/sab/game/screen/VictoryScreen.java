@@ -1,4 +1,4 @@
-package sab.game.screens;
+package sab.game.screen;
 
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;

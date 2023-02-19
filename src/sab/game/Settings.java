@@ -72,11 +72,17 @@ public class Settings {
     }
 
     public static void fromHashMap(HashMap<String, String> settings) {
-        staticCamera = Boolean.parseBoolean(settings.get("static_camera"));
-        masterVolume = Float.parseFloat(settings.get("master_volume"));
-        sfxVolume = Float.parseFloat(settings.get("sfx_volume"));
-        musicVolume = Float.parseFloat(settings.get("music_volume"));
-        hostingPort = Integer.parseInt(settings.get("hosting_port"));
+        try {
+            staticCamera = Boolean.parseBoolean(settings.get("static_camera"));
+            masterVolume = Float.parseFloat(settings.get("master_volume"));
+            sfxVolume = Float.parseFloat(settings.get("sfx_volume"));
+            musicVolume = Float.parseFloat(settings.get("music_volume"));
+            hostingPort = Integer.parseInt(settings.get("hosting_port"));
+        } catch (Exception e) {
+            defaultSettings();
+            writeFile();
+            loadSettings();
+        }
     }
 
     public static boolean getStaticCamera() {

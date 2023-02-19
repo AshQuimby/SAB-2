@@ -1,4 +1,4 @@
-package sab.game.stages;
+package sab.game.stage;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.MathUtils;
@@ -9,7 +9,7 @@ import sab.game.Battle;
 import sab.game.DamageSource;
 import sab.game.Player;
 import sab.game.SABSounds;
-import sab.game.particles.Particle;
+import sab.game.particle.Particle;
 import sab.game.Game;
 
 public class OurSports extends StageType {

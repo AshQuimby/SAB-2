@@ -1,4 +1,4 @@
-package sab.game.attacks.projectiles;
+package sab.game.attack.gus;
 
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
@@ -6,9 +6,9 @@ import com.seagull_engine.GameObject;
 
 import sab.game.CollisionResolver;
 import sab.game.SABSounds;
-import sab.game.attacks.Attack;
-import sab.game.attacks.AttackType;
-import sab.game.particles.Particle;
+import sab.game.attack.Attack;
+import sab.game.attack.AttackType;
+import sab.game.particle.Particle;
 
 public class Bullet extends AttackType {
     @Override

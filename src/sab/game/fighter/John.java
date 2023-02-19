@@ -1,4 +1,4 @@
-package sab.game.fighters;
+package sab.game.fighter;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.MathUtils;
@@ -10,13 +10,13 @@ import sab.game.Player;
 import sab.game.PlayerAction;
 import sab.game.SABSounds;
 import sab.game.animation.Animation;
-import sab.game.attacks.Attack;
-import sab.game.attacks.melees.Wrench;
-import sab.game.attacks.projectiles.Fireball;
-import sab.game.attacks.projectiles.Frostball;
-import sab.game.attacks.projectiles.Toilet;
-import sab.game.particles.Particle;
-import sab.game.screens.VictoryScreen;
+import sab.game.attack.Attack;
+import sab.game.attack.marvin.Wrench;
+import sab.game.attack.marvin.Fireball;
+import sab.game.attack.marvin.Frostball;
+import sab.game.attack.marvin.Toilet;
+import sab.game.particle.Particle;
+import sab.game.screen.VictoryScreen;
 
 public class John extends FighterType {
     private Animation swingAnimation;
@@ -113,7 +113,7 @@ public class John extends FighterType {
 
     @Override
     public String getVictorySongId(Fighter fighter, Player player) {
-        if (player.costume == 2) return "gigachad_johnh_victory.mp3";
+        if (player.costume == 2) return "gigachad_john_victory.mp3";
         if (player.costume == 3) return "slippery_john_victory.mp3";
         return super.getVictorySongId(fighter, player);
     }

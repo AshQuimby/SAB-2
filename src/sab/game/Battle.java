@@ -14,17 +14,10 @@ import com.seagull_engine.Seagraphics;
 import com.seagull_engine.graphics.SeagullCamera;
 
 import sab.game.ai.BaseAI;
-import sab.game.attacks.Attack;
-import sab.game.fighters.Chain;
-import sab.game.fighters.Fighter;
-import sab.game.fighters.Marvin;
-import sab.game.particles.Particle;
-import sab.game.stages.LastLocation;
-import sab.game.stages.Ledge;
-import sab.game.stages.PassablePlatform;
-import sab.game.stages.Platform;
-import sab.game.stages.Stage;
-import sab.game.stages.StageObject;
+import sab.game.attack.Attack;
+import sab.game.fighter.*;
+import sab.game.particle.Particle;
+import sab.game.stage.*;
 
 public class Battle {
     private List<Player> players;
@@ -119,6 +112,7 @@ public class Battle {
 
     // Do NOT call this method from a particle
     public void addParticle(Particle particle) {
+        onSpawnParticle(particle);
         particles.add(particle);
     }
 
@@ -505,5 +499,8 @@ public class Battle {
             g.scalableDraw(g.imageProvider.getImage("screen_shatter.png"), -Game.game.window.resolutionX / 2, -Game.game.window.resolutionY / 2, Game.game.window.resolutionX, Game.game.window.resolutionY);
             screenShatter--;
         }
+    }
+
+    public void onSpawnParticle(Particle particle) {
     }
 }

@@ -1,11 +1,11 @@
-package sab.game.attacks.melees;
+package sab.game.attack.stephane;
 
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.seagull_engine.GameObject;
 
-import sab.game.attacks.Attack;
-import sab.game.attacks.AttackType;
+import sab.game.attack.Attack;
+import sab.game.attack.AttackType;
 
 public class Baguette extends AttackType {
     private float swing;
