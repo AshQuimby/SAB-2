@@ -9,6 +9,7 @@ import com.seagull_engine.Seagraphics;
 import sab.game.Game;
 import sab.game.SABSounds;
 import sab.screen.Screen;
+import sab.util.Utils;
 
 public class TitleScreen extends SelectorScreen {
     
@@ -19,10 +20,14 @@ public class TitleScreen extends SelectorScreen {
     
     @Override
     public void render(Seagraphics g) {
-        g.scalableDraw(g.imageProvider.getImage(Game.titleBackground), -1152 / 2, -704 / 2, 1152, 704);
-        g.scalableDraw(g.imageProvider.getImage("title.png"), -488 / 2, 100 + MathUtils.sin(Game.game.window.getTick() / 64f) * 4, 488, 232);
+        g.scalableDraw(g.imageProvider.getImage(Game.titleBackground), -Game.game.window.resolutionX / 2, -Game.game.window.resolutionY / 2, Game.game.window.resolutionX, Game.game.window.resolutionY);
+        if (Utils.christmas()) {
+            g.scalableDraw(g.imageProvider.getImage("title_pagan.png"), -488 / 2, 92 + MathUtils.sin(Game.game.window.getTick() / 64f) * 4, 488, 248);
+        } else {
+            g.scalableDraw(g.imageProvider.getImage("title.png"), -488 / 2, 100 + MathUtils.sin(Game.game.window.getTick() / 64f) * 4, 488, 232);
+        }
 
-        g.usefulTintDraw(g.imageProvider.getImage("pixel.png"), -400 / 2, -704 / 2, 400, 350, 0, 1, 0, false, false, new Color(0, 0, 0, 0.5f));
+        g.usefulTintDraw(g.imageProvider.getImage("pixel.png"), -400 / 2, -Game.game.window.resolutionY / 2, 400, 350, 0, 1, 0, false, false, new Color(0, 0, 0, 0.5f));
 
         for (int i = 0; i < options.length; i++) {
             Rectangle bounds = g.drawText(options[i], g.imageProvider.getFont("SAB_font"), 0,  i * -52 - 16, 1.5f, Color.WHITE, 0);

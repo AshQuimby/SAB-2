@@ -1,5 +1,8 @@
 package sab.game.fighters;
 
+import com.badlogic.gdx.math.Vector2;
+import com.seagull_engine.Seagraphics;
+
 import sab.game.Player;
 import sab.game.animation.Animation;
 
@@ -38,7 +41,10 @@ public class Fighter implements Cloneable {
     public int imageOffsetX;
     public int imageOffsetY;
 
-    // The number of mid-air jumps this character can use
+    // The offset of held items based off of the selected fighter
+    public Vector2 itemOffset;
+
+    // The number of midair jumps this character can use
     public int jumps;
 
     // The description of the character to display in the "Fighters" screen
@@ -57,7 +63,7 @@ public class Fighter implements Cloneable {
     public float jumpHeight;
     public float doubleJumpMultiplier;
 
-    // The multiplier of the players velocity, larger numbers make characters more "slippery" (greater than zero but less than one)
+    // The multiplier of the player's velocity, larger numbers make characters more "slippery" (greater than zero but less than one)
     public float friction;
 
     // Increases fall speed and decreases knockback
@@ -68,6 +74,7 @@ public class Fighter implements Cloneable {
     public Animation ledgeAnimation;
     public Animation knockbackAnimation;
     public Animation freefallAnimation;
+    public Animation idleAnimation;
 
     public Fighter(FighterType type) {
         id = "fighter";
@@ -90,8 +97,10 @@ public class Fighter implements Cloneable {
         ledgeAnimation = new Animation(new int[]{8}, 1, false);
         knockbackAnimation = new Animation(new int[]{7}, 1, false);
         freefallAnimation = new Animation(new int[]{6}, 1, false);
+        idleAnimation = new Animation(new int[]{0}, 60, false);
         description = "This is the default description. Change it by changing the \"description\" field. Text wrapping is handled by the engine so you don't have to add new lines.";
         debut = "This is the debut, it is the \"game\" your character originates from.";
+        itemOffset = new Vector2();
         this.type = type;
         type.setDefaults(this);
     }
@@ -126,6 +135,27 @@ public class Fighter implements Cloneable {
 
     public void onHit(Player player) {
         type.onHit(this, player);
+    }
+
+    public void onKill(Player player) {
+        type.onKill(this, player);
+    }
+
+    public void useItem(Player player) {
+        type.useItem(this, player);
+    }
+
+    // Return false to override player's default render code
+    public boolean preRender(Player player, Seagraphics g) {
+        return type.preRender(this, player, g);
+    }
+
+    public void render(Player player, Seagraphics g) {
+        type.render(this, player, g);
+    }
+
+    public void renderUI(Player player, Seagraphics g) {
+        type.renderUI(this, player, g);
     }
 
     public Fighter copy() {

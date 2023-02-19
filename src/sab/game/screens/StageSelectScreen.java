@@ -42,10 +42,10 @@ public class StageSelectScreen extends ScreenAdapter {
 
     @Override
     public void render(Seagraphics g) {
-        g.scalableDraw(g.imageProvider.getImage(stages.get(stageIndex).background), -1152 / 2, -704 / 2, 1152, 704);
+        g.scalableDraw(g.imageProvider.getImage(stages.get(stageIndex).background), -Game.game.window.resolutionX / 2, -Game.game.window.resolutionY / 2, Game.game.window.resolutionX, Game.game.window.resolutionY);
         stages.get(stageIndex).renderDetails(g);
         stages.get(stageIndex).renderPlatforms(g);
-        g.usefulTintDraw(g.imageProvider.getImage("pixel.png"), -1152 / 2, -704 / 2, 1152, 704, 0, 1, 0, false, false, new Color(0, 0, 0, 0.5f));
+        g.usefulTintDraw(g.imageProvider.getImage("pixel.png"), -Game.game.window.resolutionX / 2, -Game.game.window.resolutionY / 2, Game.game.window.resolutionX, Game.game.window.resolutionY, 0, 1, 0, false, false, new Color(0, 0, 0, 0.5f));
         g.drawText(stages.get(stageIndex).name, g.imageProvider.getFont("SAB_font"), 0, 256, 2, Color.WHITE, 0);
     }
 

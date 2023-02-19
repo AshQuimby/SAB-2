@@ -15,7 +15,6 @@ import java.util.jar.JarFile;
 import java.util.jar.JarInputStream;
 
 import sab.game.Game;
-import sab.game.attacks.Attack;
 import sab.game.attacks.AttackType;
 import sab.game.fighters.FighterType;
 import sab.game.screens.JukeboxScreen;
@@ -106,12 +105,15 @@ public final class ModLoader {
                     Class<?> clazz = classLoader
                             .loadClass(entry.getName().replace("/", ".").substring(0, entry.getName().length() - 6));
                     if (FighterType.class.isAssignableFrom(clazz)) {
+                        // This is "unsafe" but we know that it will always be safe as long as mods are up to date
                         mod.addFighter((Class<? extends FighterType>) clazz);
                     }
                     if (StageType.class.isAssignableFrom(clazz)) {
+                        // This is "unsafe" but we know that it will always be safe as long as mods are up to date
                         mod.addStage((Class<? extends StageType>) clazz);
                     }
                     if (AttackType.class.isAssignableFrom(clazz)) {
+                        // This is "unsafe" but we know that it will always be safe as long as mods are up to date
                         String id = clazz.getSimpleName().toLowerCase();
                         mod.addAttack(mod.namespace + ":" + id, (Class<? extends AttackType>) clazz);
                     }

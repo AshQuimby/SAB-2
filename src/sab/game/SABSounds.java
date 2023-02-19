@@ -1,5 +1,6 @@
 package sab.game;
 
+import com.badlogic.gdx.audio.Sound;
 import com.seagull_engine.SeagullSounds;
 
 public class SABSounds {
@@ -14,6 +15,10 @@ public class SABSounds {
 
     public static void playMusic(String name, boolean loops) {
         soundEngine.playMusic(name, loops, 1, false, Settings.getMusicVolume() * Settings.getMasterVolume());
+    }
+
+    public static Sound getSound(String name) {
+        return soundEngine.getSound(name);
     }
 
     public static void stopMusic() {

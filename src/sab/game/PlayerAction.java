@@ -72,6 +72,10 @@ public class PlayerAction {
         animation.reset();
     }
 
+    public boolean usingAnimation(Animation animation) {
+        return animation == this.animation;
+    }
+
     public boolean finished() {
         return delay < -endLag;
     }

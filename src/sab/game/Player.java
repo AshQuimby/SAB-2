@@ -1,7 +1,5 @@
 package sab.game;
 
-import java.io.File;
-import java.util.HashMap;
 import java.util.List;
 
 import com.badlogic.gdx.math.MathUtils;
@@ -14,10 +12,10 @@ import sab.game.ai.AI;
 import sab.game.animation.Animation;
 import sab.game.attacks.Attack;
 import sab.game.fighters.Fighter;
+import sab.game.items.Item;
 import sab.game.particles.Particle;
 import sab.game.stages.Ledge;
 import sab.net.Keys;
-import sab.util.SabReader;
 
 public class Player extends GameObject implements Hittable {
     public final Battle battle;
@@ -37,6 +35,7 @@ public class Player extends GameObject implements Hittable {
 
     private PlayerAction currentAction;
     private Direction collisionDirection;
+    private Item heldItem;
     private int knockbackDuration;
     private int lives;
     private int frozen;
@@ -83,7 +82,7 @@ public class Player extends GameObject implements Hittable {
 
         imageName = fighter.id + ".png";
 
-        lives = 5;
+        lives = 2;
 
         damage = 0;
 
@@ -104,6 +103,8 @@ public class Player extends GameObject implements Hittable {
         knockbackDuration = 0;
         smokeGenerator = 0;
         this.id = id;
+
+        heldItem = null;
 
         gameStats = new GameStats("Human " + fighter.name, id);
     }
@@ -224,10 +225,16 @@ public class Player extends GameObject implements Hittable {
         }
     }
 
+    public boolean usingAnimation(Animation animation) {
+        if (currentAction == null) return false;
+        return currentAction.usingAnimation(animation);
+    }
+
     @Override
     public void preUpdate() {
         update();
         postUpdate();
+        if (hasItem()) heldItem.updateHeld(this);
     }
 
     public void applyForce(Vector2 force) {
@@ -391,8 +398,10 @@ public class Player extends GameObject implements Hittable {
             } else if (keys.isPressed(Keys.UP)) {
                 fighter.upAttack(this);
             } else if (keys.isPressed(Keys.LEFT) || keys.isPressed(Keys.RIGHT)) {
+                if (heldItem != null) fighter.useItem(this);
                 fighter.sideAttack(this);
             } else {
+                if (heldItem != null) fighter.useItem(this);
                 fighter.neutralAttack(this);
             }
         } else {
@@ -462,6 +471,16 @@ public class Player extends GameObject implements Hittable {
         freezeFrame = frame;
     }
 
+    public void pickupItem(Item item) {
+        heldItem = item;
+        heldItem.onPickup(this);
+    }
+
+    public void tossItem() {
+        heldItem.onToss(this);
+        heldItem = null;
+    }
+
     private float getJumpVelocity() {
         // Don't ask. -a_viper
         // I highly recommend DMing a_viper and asking -AshQuimby
@@ -506,6 +525,14 @@ public class Player extends GameObject implements Hittable {
         fighter.update(this);
     }
 
+    public void useItem() {
+        heldItem.onUse(this);
+    }
+
+    public boolean hasItem() {
+        return heldItem != null;
+    }
+
     public boolean takingKnockback() {
         return knockbackDuration > 0;
     }
@@ -521,10 +548,10 @@ public class Player extends GameObject implements Hittable {
         damage += source.damage;
 
         battle.shakeCamera(2);
-        battle.freezeFrame(2 + (source.damage / 25), 0, 0, false);
+        battle.freezeFrame(3 + (source.damage / 25), 0, 0, false);
 
         SABSounds.playSound("hit.mp3");
-        Vector2 newKnockback = source.knockback.cpy().scl(4f).scl(damage / 100f + 1f);
+        Vector2 newKnockback = source.knockback.cpy().scl(3f).scl(damage / 100f + 1f);
         if (newKnockback.len() > knockback.len()) {
             smokeGenerator = 0;
             knockback.set(newKnockback);
@@ -566,21 +593,25 @@ public class Player extends GameObject implements Hittable {
     @Override
     public void render(Seagraphics g) {
         if (!hide) {
-            drawRect.setCenter(hitbox.getCenter(new Vector2()).add(fighter.imageOffsetX * direction, fighter.imageOffsetY));
-            String costumeString = fighter.id + (costume == 0 ? "" : "_alt_" + costume) + ".png";
-            if (frozen > 0) {
-                frame = freezeFrame;
-            }
-            preRender(g);
-            g.usefulDraw(g.imageProvider.getImage(costumeString), drawRect.x, drawRect.y, (int) drawRect.width, (int) drawRect.height, frame, frameCount, rotation, direction == 1, false);
-            postRender(g);
+            if (fighter.preRender(this, g)) {
+                drawRect.setCenter(hitbox.getCenter(new Vector2()).add(fighter.imageOffsetX * direction, fighter.imageOffsetY));
+                String costumeString = fighter.id + (costume == 0 ? "" : "_alt_" + costume) + ".png";
+                if (frozen > 0) {
+                    frame = freezeFrame;
+                }
+                preRender(g);
+                g.usefulDraw(g.imageProvider.getImage(costumeString), drawRect.x, drawRect.y, (int) drawRect.width, (int) drawRect.height, frame, frameCount, rotation, direction == 1, false);
+                postRender(g);
 
-            if (frozen > 0) {
-                g.usefulDraw(g.imageProvider.getImage("ice.png"), drawRect.x, drawRect.y, (int) drawRect.width, (int) drawRect.height, 0, 1, rotation, false, false);
+                if (frozen > 0) {
+                    g.usefulDraw(g.imageProvider.getImage("ice.png"), drawRect.x, drawRect.y, (int) drawRect.width, (int) drawRect.height, 0, 1, rotation, false, false);
+                }
+                if (respawnTime > 0) {
+                    g.usefulDraw(g.imageProvider.getImage("p" + (id + 1) + "_spawn_platform.png"), drawRect.getCenter(new Vector2()).x - 40, drawRect.y - 32, 80, 32, 0, 1, rotation, false, false);
+                }
             }
-            if (respawnTime > 0) {
-                g.usefulDraw(g.imageProvider.getImage("p" + (id + 1) + "_spawn_platform.png"), drawRect.getCenter(new Vector2()).x - 40, drawRect.y - 32, 80, 32, 0, 1, rotation, false, false);
-            }
+            fighter.render(this, g);
+            if (hasItem()) heldItem.renderHeld(this, g);
         }
     }
 }

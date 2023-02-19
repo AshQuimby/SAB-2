@@ -5,7 +5,6 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.MathUtils;
 import com.seagull_engine.Messenger;
 import com.seagull_engine.Seagraphics;
-import com.seagull_engine.SeagullManager;
 
 import sab.game.attacks.AttackType;
 import sab.game.fighters.BigSeagull;
@@ -14,9 +13,11 @@ import sab.game.fighters.EmperorEvil;
 import sab.game.fighters.EmptySoldier;
 import sab.game.fighters.FighterType;
 import sab.game.fighters.Gus;
+import sab.game.fighters.John;
 import sab.game.fighters.Marvin;
 import sab.game.fighters.Snas;
 import sab.game.fighters.Stephane;
+import sab.game.fighters.UnnamedDuck;
 import sab.game.fighters.Walouis;
 import sab.game.screens.CharacterSelectScreen;
 import sab.game.screens.JukeboxScreen;
@@ -33,6 +34,7 @@ import sab.game.stages.Warzone;
 import sab.modloader.Mod;
 import sab.modloader.ModLoader;
 import sab.screen.Screen;
+import sab.util.Utils;
 
 import java.io.File;
 import java.io.IOException;
@@ -51,9 +53,9 @@ public class Game extends Messenger {
     public final HashMap<String, Class<? extends AttackType>> attacks;
     public final CharacterSelectScreen globalCharacterSelectScreen;
     public static String titleBackground;
-    protected SeagullManager manager;
     private List<String> modErrors;
     private Screen screen;
+    private boolean fullScreen;
 
     public final Map<String, Mod> mods;
 
@@ -73,11 +75,14 @@ public class Game extends Messenger {
     public void load() {
         Settings.loadSettings();
         Mod baseGame = new Mod("Super Ass Brothers", "sab", "1.0", "base game assets");
-        baseGame.addFighters((Class<? extends FighterType>[]) new Class<?>[] {Marvin.class, Chain.class, Walouis.class, Gus.class, EmperorEvil.class, Snas.class, Stephane.class, EmptySoldier.class, BigSeagull.class});
+
+        // Class casting to have stuff work with the modloader (The program treats vanilla characters and stages like a mod)
+        baseGame.addFighters((Class<? extends FighterType>[]) new Class<?>[] {Marvin.class, Chain.class, Walouis.class, Gus.class, EmperorEvil.class, Snas.class, Stephane.class, UnnamedDuck.class, EmptySoldier.class, John.class, BigSeagull.class});
         baseGame.addStages((Class<? extends StageType>[]) new Class<?>[] {LastLocation.class, Warzone.class, DesertBridge.class, ThumbabasLair.class, OurSports.class, COBS.class, Boxtopia.class});
         addMod(baseGame);
         loadMods();
         
+        // Adding modded content to the game
         for (Mod mod : Game.game.mods.values()) {
             fighters.addAll(mod.fighters);
             stages.addAll(mod.stages);
@@ -95,6 +100,10 @@ public class Game extends Messenger {
 
     // Randomly selects a title screen background
     public static void selectNewTitleScreen() {
+        if (Utils.christmas()) { 
+            titleBackground = "title_screen_background_christmas.png";
+            return;
+        }
         switch (MathUtils.random.nextInt(2)) {
             case 0 : {
                 titleBackground = "title_screen_background.png";
@@ -102,6 +111,10 @@ public class Game extends Messenger {
             }
             case 1 : {
                 titleBackground = "title_screen_background_alt_1.png";
+                break;
+            }
+            case 2 : {
+                titleBackground = "title_screen_background_alt_2.png";
                 break;
             }
             default : {
@@ -135,7 +148,9 @@ public class Game extends Messenger {
     @Override
     public void keyDown(int keyCode) {
         if (keyCode == Input.Keys.F11) {
-            Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
+            if (fullScreen) Gdx.graphics.setWindowedMode(window.resolutionX, window.resolutionY);
+            else Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
+            fullScreen = !fullScreen;
         }
         screen = screen.keyPressed(keyCode);
     }
@@ -160,6 +175,7 @@ public class Game extends Messenger {
 
     // Loads mods in the mods folder
     public void loadMods() {
+        // Jar file extraction
         File modResources = new File("../mods/resources");
         boolean createResources = false;
 
@@ -208,8 +224,7 @@ public class Game extends Messenger {
                 }
             }
         } catch (IOException e) {
-            e.printStackTrace();
-            System.exit(69);
+            throw new RuntimeException(e);
         }
     }
 }

@@ -9,6 +9,7 @@ import com.seagull_engine.Seagraphics;
 
 import sab.game.SABSounds;
 import sab.game.Settings;
+import sab.game.Game;
 import sab.screen.Screen;
 
 public class SettingsScreen extends SelectorScreen {
@@ -22,19 +23,19 @@ public class SettingsScreen extends SelectorScreen {
     
     @Override
     public void render(Seagraphics g) {
-        g.scalableDraw(g.imageProvider.getImage("settings_screen_background.png"), -1152 / 2, -704 / 2, 1152, 704);
+        g.scalableDraw(g.imageProvider.getImage("settings_screen_background.png"), -Game.game.window.resolutionX / 2, -Game.game.window.resolutionY / 2, Game.game.window.resolutionX, Game.game.window.resolutionY);
 
-        g.usefulTintDraw(g.imageProvider.getImage("pixel.png"), 1152 / 2 - 400, -704 / 2, 400, 350, 0, 1, 0, false, false, new Color(0, 0, 0, 0.5f));
+        g.usefulTintDraw(g.imageProvider.getImage("pixel.png"), Game.game.window.resolutionX / 2 - 400, -Game.game.window.resolutionY / 2, 400, 350, 0, 1, 0, false, false, new Color(0, 0, 0, 0.5f));
 
         for (int i = 0; i < options.length; i++) {
-            Rectangle bounds = g.drawText(options[i], g.imageProvider.getFont("SAB_font"), 1152 / 2 - 8,  i * -52 - 16, 1.5f, Color.WHITE, 1);
+            Rectangle bounds = g.drawText(options[i], g.imageProvider.getFont("SAB_font"), Game.game.window.resolutionX / 2 - 8,  i * -52 - 16, 1.5f, Color.WHITE, 1);
 
             float color = i == selectorId ? 1f : 0;
 
             g.usefulTintDraw(g.imageProvider.getImage("pixel.png"), bounds.x - 4, bounds.y + 4, (int) bounds.width + 9, (int) -bounds.height - 9, 1, 0, 0, false, false,
                     new Color(color, color, color, 0.5f));
 
-            g.drawText(options[i], g.imageProvider.getFont("SAB_font"),  1152 / 2 - 8,  i * -52 - 16, 1.5f, Color.WHITE, 1);
+            g.drawText(options[i], g.imageProvider.getFont("SAB_font"),  Game.game.window.resolutionX / 2 - 8,  i * -52 - 16, 1.5f, Color.WHITE, 1);
         }
 
         String setting = "";

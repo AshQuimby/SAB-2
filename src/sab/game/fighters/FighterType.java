@@ -1,8 +1,12 @@
 package sab.game.fighters;
 
-import sab.game.Player;
+import com.seagull_engine.Seagraphics;
 
-public abstract class FighterType { 
+import sab.game.Player;
+import sab.game.screens.VictoryScreen;
+
+public abstract class FighterType {
+
     public void setDefaults(Fighter fighter) {
     }
 
@@ -52,5 +56,34 @@ public abstract class FighterType {
 
     public void onHit(Fighter fighter, Player player) {
 
+    }
+
+    public void onKill(Fighter fighter, Player player) {
+
+    }
+
+    // Return false to override player's default render code
+    public boolean preRender(Fighter fighter, Player player, Seagraphics g) {
+        return true;
+    }
+
+    public void render(Fighter fighter, Player player, Seagraphics g) {
+
+    }
+
+    public void renderUI(Fighter fighter, Player player, Seagraphics g) {
+
+    }
+
+    public void useItem(Fighter fighter, Player player) {
+        player.useItem();
+    }
+
+    public void renderVictoryScreen(Fighter fighter, Player player, Player opponent, VictoryScreen victoryScreen, Seagraphics g) {
+        
+    }
+
+    public String getVictorySongId(Fighter fighter, Player player) {
+        return fighter.id + "_victory.mp3";
     }
 }

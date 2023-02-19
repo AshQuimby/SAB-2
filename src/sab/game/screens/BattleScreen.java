@@ -6,6 +6,7 @@ import com.badlogic.gdx.Input;
 import com.seagull_engine.GameObject;
 import com.seagull_engine.Seagraphics;
 
+import sab.game.Game;
 import sab.game.Hittable;
 import sab.game.Player;
 import sab.game.DamageSource;
@@ -207,7 +208,7 @@ public class BattleScreen extends ScreenAdapter {
 
     @Override
     public void render(Seagraphics g) {
-        g.scalableDraw(g.imageProvider.getImage("background.png"), -1152 / 2, -704 / 2, 1152, 704);
+        g.scalableDraw(g.imageProvider.getImage("background.png"), -Game.game.window.resolutionX / 2, -Game.game.window.resolutionY / 2, Game.game.window.resolutionX, Game.game.window.resolutionY);
 
         platform.render(g);
 

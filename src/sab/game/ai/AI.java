@@ -4,6 +4,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.seagull_engine.GameObject;
 
+import sab.game.Game;
 import sab.game.Player;
 import sab.game.attacks.Attack;
 import sab.game.stages.Ledge;
@@ -98,7 +99,7 @@ public class AI {
     }
 
     public final boolean isAbovePlatform() {
-        Rectangle scan = new Rectangle(player.hitbox.x, player.hitbox.y - 704, player.hitbox.width, 704);
+        Rectangle scan = new Rectangle(player.hitbox.x, player.hitbox.y - Game.game.window.resolutionY, player.hitbox.width, Game.game.window.resolutionY);
         for (GameObject platform : player.battle.getPlatforms()) {
             if (platform.hitbox.overlaps(scan)) return true;
         }

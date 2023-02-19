@@ -9,6 +9,7 @@ import com.seagull_engine.Seagraphics;
 import sab.game.Battle;
 import sab.game.DamageSource;
 import sab.game.Player;
+import sab.game.Game;
 
 public class Stage {
     public String id;
@@ -38,8 +39,8 @@ public class Stage {
         maxZoomOut = 1;
 
 
-        safeBlastZone = new Rectangle(-1152 / 2 - 64, -704 / 2 - 64, 1152 + 128, 704 + 128);
-        unsafeBlastZone = new Rectangle(-1152 / 2 - 128, -704 / 2 - 128, 1152 + 256, 704 + 256);
+        safeBlastZone = new Rectangle(-Game.game.window.resolutionX / 2 - 64, -Game.game.window.resolutionY / 2 - 64, Game.game.window.resolutionX + 128, Game.game.window.resolutionY + 128);
+        unsafeBlastZone = new Rectangle(-Game.game.window.resolutionX / 2 - 128, -Game.game.window.resolutionY / 2 - 128, Game.game.window.resolutionX + 256, Game.game.window.resolutionY + 256);
         
         this.type = type;
         this.type.init(this);

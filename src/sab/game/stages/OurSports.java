@@ -1,7 +1,5 @@
 package sab.game.stages;
 
-
-import com.badlogic.gdx.LifecycleListener;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
@@ -12,6 +10,7 @@ import sab.game.DamageSource;
 import sab.game.Player;
 import sab.game.SABSounds;
 import sab.game.particles.Particle;
+import sab.game.Game;
 
 public class OurSports extends StageType {
     private Platform platform;
@@ -42,7 +41,7 @@ public class OurSports extends StageType {
 
         stage.addStageObject(platform);
 
-        stage.addStageObject(new StageObject(-256 / 2, -128 - 704 + 24, 256, 704, "our_sports_platform_supports.png", stage, new StageObjectBehaviour() {
+        stage.addStageObject(new StageObject(-256 / 2, -128 - Game.game.window.resolutionY + 24, 256, Game.game.window.resolutionY, "our_sports_platform_supports.png", stage, new StageObjectBehaviour() {
             @Override
             public void update(StageObject stageObject, Battle battle) {
                 if (stormy) {
@@ -50,7 +49,7 @@ public class OurSports extends StageType {
                 }
             }
         }));
-        stage.addStageObject(new StageObject(-256 / 2, -128 - 704 + 24, 256, 704, "our_sports_platform_supports_solo.png", stage));
+        stage.addStageObject(new StageObject(-256 / 2, -128 - Game.game.window.resolutionY + 24, 256, Game.game.window.resolutionY, "our_sports_platform_supports_solo.png", stage));
 
         platform = new Platform(-192 / 2, -128, 192, 24, "our_sports_platform_white_ring.png", stage, new StageObjectBehaviour() {
             @Override
@@ -78,7 +77,7 @@ public class OurSports extends StageType {
                 lightning--;
             }
             if (stormTime % 4 == 0) {
-                battle.addParticle(new Particle(0, new Vector2(MathUtils.random(stage.getUnsafeBlastZone().x, stage.getUnsafeBlastZone().x + stage.getUnsafeBlastZone().width + 1152/2), stage.getSafeBlastZone().height), new Vector2(-15, -15), 25, 25, 0, "rain.png"));
+                battle.addParticle(new Particle(0, new Vector2(MathUtils.random(stage.getUnsafeBlastZone().x, stage.getUnsafeBlastZone().x + stage.getUnsafeBlastZone().width + Game.game.window.resolutionX/2), stage.getSafeBlastZone().height), new Vector2(-15, -15), 25, 25, 0, "rain.png"));
             }
             if (stormTime % 600 == 0) {
                 lightning = 30;
@@ -91,7 +90,7 @@ public class OurSports extends StageType {
     public void renderOverlay(Stage stage, Seagraphics g) {
         if (lightning > 0) {
             if (lightning == 30) SABSounds.playSound("thunder.mp3");
-            g.usefulTintDraw(g.imageProvider.getImage("pixel.png"), -1152/2, -704/2, 1152, 704, 0, 1, 0, false, false, new Color(1, 1, 1, lightning / 30f));
+            g.usefulTintDraw(g.imageProvider.getImage("pixel.png"), -Game.game.window.resolutionX/2, -Game.game.window.resolutionY/2, Game.game.window.resolutionX, Game.game.window.resolutionY, 0, 1, 0, false, false, new Color(1, 1, 1, lightning / 30f));
         }
     }
 

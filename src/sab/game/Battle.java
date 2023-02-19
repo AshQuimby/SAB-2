@@ -9,12 +9,10 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
 import com.seagull_engine.GameObject;
 import com.seagull_engine.Seagraphics;
 import com.seagull_engine.graphics.SeagullCamera;
 
-import sab.game.ai.AI;
 import sab.game.ai.BaseAI;
 import sab.game.attacks.Attack;
 import sab.game.fighters.Chain;
@@ -103,7 +101,7 @@ public class Battle {
         addGameObject(player1);
         addGameObject(player2);
 
-        drawHitboxes = false;
+        drawHitboxes = true;
     }
 
     public Battle() {
@@ -379,8 +377,8 @@ public class Battle {
     }
 
     public void endGame() {
-        Game.game.window.camera.viewportWidth = 1152;
-        Game.game.window.camera.viewportHeight = 704;
+        Game.game.window.camera.viewportWidth = Game.game.window.resolutionX;
+        Game.game.window.camera.viewportHeight = Game.game.window.resolutionY;
         Game.game.window.camera.position.x = 0;
         Game.game.window.camera.position.y = 0;
         gameEnded = true;
@@ -491,16 +489,20 @@ public class Battle {
         g.drawText(player1.damage + "%", g.imageProvider.getFont("SAB_font"), -256 + 116, -256 + 48, 1, Color.WHITE, 1);
         g.drawText(player2.damage + "%", g.imageProvider.getFont("SAB_font"), 256 - 128 + 116, -256 + 48, 1, Color.WHITE, 1);
 
+        for (Player player : players) {
+            player.fighter.renderUI(player, g);
+        }
+
         if (endGameTimer > 0) {
-            g.usefulTintDraw(g.imageProvider.getImage("pixel.png"), -1152 / 2, -704 / 2, 1152, 704, 0, 1, 0, false, false, new Color(0, 0, 0, 1 - ((121f - endGameTimer) / 120)));
+            g.usefulTintDraw(g.imageProvider.getImage("pixel.png"), -Game.game.window.resolutionX / 2, -Game.game.window.resolutionY / 2, Game.game.window.resolutionX, Game.game.window.resolutionY, 0, 1, 0, false, false, new Color(0, 0, 0, 1 - ((121f - endGameTimer) / 120)));
             g.drawText("GAME END", g.imageProvider.getFont("SAB_font"), 0, 0, 2.5f - ((121f - endGameTimer) / 120) / 2, Color.WHITE, 0);
         }
 
         if (paused && !pauseOverlayHidden) {
-            g.usefulDraw(g.imageProvider.getImage("pause_overlay.png"), -1152 / 2, -704 / 2, 1152, 704, pauseMenuIndex, 3, 0, false, false);
+            g.usefulDraw(g.imageProvider.getImage("pause_overlay.png"), -Game.game.window.resolutionX / 2, -Game.game.window.resolutionY / 2, Game.game.window.resolutionX, Game.game.window.resolutionY, pauseMenuIndex, 3, 0, false, false);
         }
         if (screenShatter > 0) {
-            g.scalableDraw(g.imageProvider.getImage("screen_shatter.png"), -1152 / 2, -704 / 2, 1152, 704);
+            g.scalableDraw(g.imageProvider.getImage("screen_shatter.png"), -Game.game.window.resolutionX / 2, -Game.game.window.resolutionY / 2, Game.game.window.resolutionX, Game.game.window.resolutionY);
             screenShatter--;
         }
     }
