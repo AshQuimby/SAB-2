@@ -274,12 +274,15 @@ public class Player extends GameObject implements Hittable {
 
         Ledge ledge = null;
         if (ledgeCooldown <= 0 && ledgeGrabs > 0) ledge = battle.getStage().grabLedge(this);
-        if (ledge != null && currentAction != null && !currentAction.isImportant()) {
-            ledgeGrabbing = ledge != null;
-            currentAction = null;
+        if (ledge != null) {
+            if (currentAction != null) {
+                currentAction = null;
+            }
         } else {
             ledge = null;
         }
+
+        ledgeGrabbing = ledge != null;
 
         if (knockbackDuration > 0) {
             if (currentAction != null && !currentAction.isImportant()) currentAction = null;
