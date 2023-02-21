@@ -10,7 +10,7 @@ public class Warzone extends StageType {
         stage.name = "Warzone";
         platform = new Platform(-512 / 2, -128, 512, 56, "warzone.png", stage);
         stage.background = "warzone_background.png";
-        stage.music = "overgrown_armada.mp3";
+        stage.music = "invasion.mp3";
         stage.id = "warzone";
         stage.addStageObject(platform);
         stage.addLedge(new sab.game.stage.Ledge(platform, new Vector2(-512 / 2 - 24, -32), 24, 52, 1));
