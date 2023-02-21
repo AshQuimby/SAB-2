@@ -52,7 +52,7 @@ public class Attack extends DamageSource {
     public void preUpdate() {
         for (int i = 0; i < updatesPerTick; i++) {
             if (collideWithStage) {
-                collisionDirection = CollisionResolver.moveWithCollisions(this, velocity, owner.battle.getPlatforms());
+                collisionDirection = CollisionResolver.moveWithCollisions(this, velocity, owner.battle.getSolidStageObjects());
             } else {
                 hitbox.x += velocity.x;
                 hitbox.y += velocity.y;

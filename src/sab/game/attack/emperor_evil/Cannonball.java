@@ -64,7 +64,7 @@ public class Cannonball extends AttackType {
 
     @Override
     public void onSpawn(sab.game.attack.Attack attack, int[] data) {
-        CollisionResolver.moveWithCollisions(attack.owner, new Vector2(attack.owner.direction * -8, 0), attack.owner.battle.getPlatforms());
+        CollisionResolver.moveWithCollisions(attack.owner, new Vector2(attack.owner.direction * -8, 0), attack.owner.battle.getSolidStageObjects());
         attack.hitbox.setCenter(attack.owner.hitbox.getCenter(new Vector2()).add(8 * attack.owner.direction, 20));
         attack.velocity = new Vector2(10 * attack.owner.direction, 0);
         attack.knockback = new Vector2(8 * attack.owner.direction, 5.5f);

@@ -49,7 +49,7 @@ public class BoneSpike extends AttackType {
             attack.hitbox.setCenter(attack.owner.hitbox.getCenter(new Vector2()).add(8 * attack.direction, -12));
             attack.knockback.set(attack.direction * 5, 2);
             for (int i = 0; i < 10; i++) {
-                if (CollisionResolver.moveWithCollisions(attack, new Vector2(0, -56), attack.owner.battle.getPlatforms()) == Direction.NONE) {
+                if (CollisionResolver.moveWithCollisions(attack, new Vector2(0, -56), attack.owner.battle.getSolidStageObjects()) == Direction.NONE) {
                     if (i == 9) attack.hitbox.setCenter(attack.owner.hitbox.getCenter(new Vector2()).add(8 * attack.direction, -12));
                 } else {
                     break;
