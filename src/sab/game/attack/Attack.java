@@ -51,6 +51,12 @@ public class Attack extends DamageSource {
             Vector2 step = movement.cpy().limit(1);
             movement.sub(step);
             collisionDirection = CollisionResolver.moveWithCollisions(this, step, owner.battle.getSolidStageObjects());
+
+            for (GameObject gameObject : owner.battle.getPassablePlatforms()) {
+                if (velocity.y >= 0) {
+                    collisionDirection = CollisionResolver.resolveY(this, step.y, gameObject.hitbox);
+                }
+            }
         }
     }
 
