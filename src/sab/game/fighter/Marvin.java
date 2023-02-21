@@ -53,7 +53,7 @@ public class Marvin extends FighterType {
 
     @Override
     public AI getAI(Player player, int difficulty) {
-        return new BaseAI(player, difficulty) {
+        return new BaseAI(player, difficulty, 150) {
             @Override
             public void attack(Vector2 center, Player target, Vector2 targetPosition) {
                 if (player.getCharge() > Math.random() * 50 + 10) {
@@ -61,19 +61,25 @@ public class Marvin extends FighterType {
                     return;
                 }
 
-                if (isDirectlyHorizontal(target.hitbox)) {
-                    if (Math.abs(center.x - target.hitbox.x) > 100) {
-                        releaseKey(Keys.LEFT);
-                        releaseKey(Keys.RIGHT);
-
-                        if (Math.random() * 20 < difficulty) pressKey(Keys.DOWN);
+                if (isDirectlyHorizontal(target.hitbox) && Math.random() * 25 < difficulty) {
+                    if (Math.abs(center.x - targetPosition.x) < 60 && Math.random() < .5) {
+                        if (center.x < targetPosition.x) pressKey(Keys.RIGHT);
+                        if (center.x > targetPosition.x) pressKey(Keys.LEFT);
                         pressKey(Keys.ATTACK);
                     } else {
                         releaseKey(Keys.LEFT);
                         releaseKey(Keys.RIGHT);
-                        pressKey(Keys.ATTACK);
+
+                        if (target.damage >= 60) {
+                            if (Math.random() * 20 - (target.damage / 30f) < difficulty) pressKey(Keys.DOWN);
+                        }
                     }
-                } else if (isDirectlyAbove(target.hitbox) || isDirectlyBelow(target.hitbox)) {
+
+                    if (target.damage >= 60) {
+                        if (Math.random() * 20 - (target.damage / 30f) < difficulty) pressKey(Keys.DOWN);
+                    }
+                    pressKey(Keys.ATTACK);
+                } else if ((isDirectlyAbove(target.hitbox) || isDirectlyBelow(target.hitbox)) && Math.random() * 20 < difficulty) {
                     releaseKey(Keys.LEFT);
                     releaseKey(Keys.RIGHT);
                     pressKey(Keys.UP);

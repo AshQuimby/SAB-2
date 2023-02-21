@@ -123,13 +123,14 @@ public class Player extends GameObject implements Hittable {
 
             collisionDirection = CollisionResolver.moveWithCollisions(this, step, battle.getSolidStageObjects());
 
-            List<GameObject> passablePlatforms = battle.getPassablePlatforms();
-            
-            for (GameObject platform : passablePlatforms) {
-                if (!keys.isPressed(Keys.DOWN) && velocity.y <= 0 && hitbox.y > platform.hitbox.y + platform.hitbox.height - 12) {
-                    Direction tryDirection = CollisionResolver.resolveY(this, step.y, platform.hitbox);
-                    if (tryDirection != Direction.NONE)
-                        collisionDirection = tryDirection;
+            if (!keys.isPressed(Keys.DOWN)) {
+                List<GameObject> passablePlatforms = battle.getPassablePlatforms();
+                for (GameObject platform : passablePlatforms) {
+                    if (velocity.y <= 0 && hitbox.y > platform.hitbox.y + platform.hitbox.height - 12) {
+                        Direction tryDirection = CollisionResolver.resolveY(this, step.y, platform.hitbox);
+                        if (tryDirection != Direction.NONE)
+                            collisionDirection = tryDirection;
+                    }
                 }
             }
 

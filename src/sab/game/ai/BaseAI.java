@@ -6,11 +6,21 @@ import com.badlogic.gdx.math.Vector2;
 import sab.game.Player;
 import sab.game.attack.Attack;
 import sab.game.stage.Ledge;
+import sab.game.stage.PassablePlatform;
 import sab.game.stage.Platform;
 import sab.net.Keys;
 
 public class BaseAI extends AI {
     private int mashCooldown;
+    protected float preferredHorizontalDistance;
+    private boolean movingToCenter;
+    private int moveToCenterTime;
+    private Platform platformToCenterOn;
+
+    public BaseAI(Player player, int difficulty, float preferredHorizontalDistance) {
+        super(player, difficulty);
+        this.preferredHorizontalDistance = preferredHorizontalDistance;
+    }
 
     public BaseAI(Player player, int difficulty) {
         super(player, difficulty);
@@ -97,6 +107,7 @@ public class BaseAI extends AI {
         if (mashCooldown > 0) mashCooldown--;
 
         Player target = getNearestOpponent();
+        Platform targetPlatform = getNearestPlatform();
         if (target == null) return;
 
         Vector2 targetPosition = target.hitbox.getCenter(new Vector2());
@@ -104,15 +115,56 @@ public class BaseAI extends AI {
 
         Platform platformBelow = getPlatformBelow();
         if (platformBelow == null) {
-            Platform targetPlatform = getNearestPlatform();
             recover(targetPlatform, getNearestLedge());
             return;
         }
 
-        if (player.hitbox.x + player.hitbox.width < target.hitbox.x || (center.x < targetPosition.x && player.direction == -1)) {
-            pressKey(Keys.RIGHT);
-        } else if (player.hitbox.x > target.hitbox.x + target.hitbox.width || (center.x > targetPosition.x && player.direction == 1)) {
-            pressKey(Keys.LEFT);
+        if (movingToCenter) {
+            pressKey(Keys.UP);
+            if (player.getRemainingJumps() == 0) {
+                pressKey(Keys.ATTACK);
+            }
+
+            if (center.x < platformToCenterOn.hitbox.x + platformToCenterOn.hitbox.width / 2) {
+                pressKey(Keys.RIGHT);
+            }
+            if (center.x > platformToCenterOn.hitbox.x + platformToCenterOn.hitbox.width / 2) {
+                pressKey(Keys.LEFT);
+            }
+
+            if (++moveToCenterTime >= 120 || Math.abs(center.x - platformToCenterOn.hitbox.x + platformToCenterOn.hitbox.width / 2) < player.hitbox.width) {
+                moveToCenterTime = 0;
+                movingToCenter = false;
+                platformToCenterOn = null;
+            }
+
+            return;
+        }
+
+        if (Math.abs(center.x - targetPosition.x) < preferredHorizontalDistance && isDirectlyHorizontal(target.hitbox)) {
+            if (center.x < targetPosition.x) pressKey(Keys.LEFT);
+            if (center.x > targetPosition.x) pressKey(Keys.RIGHT);
+
+            if (Math.abs(center.x - platformBelow.hitbox.x) < player.hitbox.width * 2) {
+                releaseKey(Keys.LEFT);
+                pressKey(Keys.RIGHT);
+                pressKey(Keys.UP);
+                platformToCenterOn = platformBelow;
+                movingToCenter = true;
+            }
+            if (Math.abs(center.x - (platformBelow.hitbox.x + platformBelow.hitbox.width)) < player.hitbox.width * 2) {
+                releaseKey(Keys.RIGHT);
+                pressKey(Keys.LEFT);
+                pressKey(Keys.UP);
+                platformToCenterOn = platformBelow;
+                movingToCenter = true;
+            }
+        } else {
+            if (player.hitbox.x + player.hitbox.width + preferredHorizontalDistance < target.hitbox.x || (center.x < targetPosition.x && player.direction == -1)) {
+                pressKey(Keys.RIGHT);
+            } else if (player.hitbox.x - preferredHorizontalDistance > target.hitbox.x + target.hitbox.width || (center.x > targetPosition.x && player.direction == 1)) {
+                pressKey(Keys.LEFT);
+            }
         }
 
         Attack nearestAttack = getNearestEnemyAttack();
@@ -138,6 +190,10 @@ public class BaseAI extends AI {
             if (Math.abs(center.x - targetPosition.x) < (player.hitbox.width / 2 + target.hitbox.width / 2) * 3) {
                 pressKey(Keys.UP);
             }
+        }
+
+        if (targetPlatform != null && !targetPlatform.isSolid() && center.y > targetPosition.y) {
+            pressKey(Keys.DOWN);
         }
 
         attack(center, target, targetPosition);
