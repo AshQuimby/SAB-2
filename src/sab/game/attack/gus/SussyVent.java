@@ -82,7 +82,7 @@ public class SussyVent extends AttackType {
     }
 
     @Override
-    public void kill(Attack attack) {
+    public void onKill(Attack attack) {
         attack.owner.reveal();
     }
 }

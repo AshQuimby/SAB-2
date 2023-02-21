@@ -17,13 +17,12 @@ public class CollisionResolver {
 
         Direction collisionDirection = Direction.NONE;
 
-        List<GameObject> movingColliders = new ArrayList<>();
-
         a.x += velocity.x;
         for (GameObject collider : colliders) {
             Direction tryDirection = resolveX(gameObject, velocity.x, collider.hitbox);
-            if (tryDirection != Direction.NONE) collisionDirection = tryDirection;
-            if (collider.velocity.x != 0 && collider.velocity.y != 0) movingColliders.add(collider);
+            if (tryDirection != Direction.NONE) {
+                collisionDirection = tryDirection;
+            }
         }
 
         a.y += velocity.y;

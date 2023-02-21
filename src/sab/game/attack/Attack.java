@@ -1,6 +1,7 @@
 package sab.game.attack;
 
 import java.util.HashMap;
+import java.util.List;
 
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
@@ -12,6 +13,8 @@ import sab.game.Direction;
 import sab.game.Hittable;
 import sab.game.Player;
 import sab.game.CollisionResolver;
+import sab.game.particle.Particle;
+import sab.net.Keys;
 
 public class Attack extends DamageSource {
     public sab.game.attack.AttackType type;
@@ -44,6 +47,16 @@ public class Attack extends DamageSource {
         type.setDefaults(this);
     }
 
+    private void move(Vector2 v) {
+        Vector2 movement = v.cpy();
+
+        while (movement.len() > 0) {
+            Vector2 step = movement.cpy().limit(1);
+            movement.sub(step);
+            collisionDirection = CollisionResolver.moveWithCollisions(this, step, owner.battle.getPlatforms());
+        }
+    }
+
     public void onSpawn(int[] data) {
         type.onSpawn(this, data);
     }
@@ -52,7 +65,7 @@ public class Attack extends DamageSource {
     public void preUpdate() {
         for (int i = 0; i < updatesPerTick; i++) {
             if (collideWithStage) {
-                collisionDirection = CollisionResolver.moveWithCollisions(this, velocity, owner.battle.getPlatforms());
+                move(velocity);
             } else {
                 hitbox.x += velocity.x;
                 hitbox.y += velocity.y;
@@ -126,7 +139,7 @@ public class Attack extends DamageSource {
     }
 
     public void kill() {
-        type.kill(this);
+        type.onKill(this);
         if (!alive) owner.battle.removeGameObject(this);
     }
 

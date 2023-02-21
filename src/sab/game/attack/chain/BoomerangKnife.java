@@ -69,7 +69,7 @@ public class BoomerangKnife extends AttackType {
     }
 
     @Override
-    public void kill(Attack attack) {
+    public void onKill(Attack attack) {
         ((Chain) originalOwner.fighter.type).hasBoomerang = true;
     }
 }

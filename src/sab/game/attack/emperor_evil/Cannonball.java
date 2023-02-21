@@ -56,7 +56,7 @@ public class Cannonball extends AttackType {
     }
 
     @Override
-    public void kill(sab.game.attack.Attack attack) {
+    public void onKill(sab.game.attack.Attack attack) {
         for (int i = 0; i < 6 ; i++) {
             attack.owner.battle.addParticle(new Particle(attack.hitbox.getCenter(new Vector2()), new Vector2(4 * MathUtils.random(), 0).rotateDeg(MathUtils.random() * 360), 48, 48, 0, "smoke.png"));
         }

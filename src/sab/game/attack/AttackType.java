@@ -24,7 +24,7 @@ public class AttackType implements Cloneable {
     public void successfulHit(Attack attack, GameObject hit) {
     }
 
-    public void kill(Attack attack) {
+    public void onKill(Attack attack) {
     }
 
     public void onSpawn(Attack attack, int[] data) {

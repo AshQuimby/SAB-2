@@ -5,6 +5,7 @@ import com.badlogic.gdx.math.Vector2;
 import sab.game.Battle;
 import sab.game.CollisionResolver;
 import sab.game.Player;
+import sab.game.attack.Attack;
 
 public class Platform extends StageObject {
     protected boolean updates;
@@ -55,22 +56,21 @@ public class Platform extends StageObject {
     public void updateStageObject(Battle battle) {
 
         hitbox.x += velocity.x;
-        if (isSolid())for (Player player : battle.getPlayers()) {
-            if (velocity.x > 0) {
-                CollisionResolver.resolveX(player, 1, hitbox);
-            } else if (velocity.x < 0) {
-                CollisionResolver.resolveX(player, 1, hitbox);
-            }
+        for (Player player : battle.getPlayers()) {
+            CollisionResolver.resolveX(player, player.velocity.x, this.hitbox);
+        }
+        for (Attack attack : battle.getAttacks()) {
+            CollisionResolver.resolveX(attack, attack.velocity.x, this.hitbox);
         }
 
         hitbox.y += velocity.y;
-        if (isSolid())for (Player player : battle.getPlayers()) {
-            if (velocity.y > 0) {
-                CollisionResolver.resolveY(player, -1, hitbox);
-            } else if (velocity.y < 0) {
-                CollisionResolver.resolveY(player, 1, hitbox);
-            }
+        for (Player player : battle.getPlayers()) {
+            CollisionResolver.resolveY(player, player.velocity.y, this.hitbox);
         }
+        for (Attack attack : battle.getAttacks()) {
+            CollisionResolver.resolveY(attack, attack.velocity.y, this.hitbox);
+        }
+
         drawRect.setCenter(hitbox.getCenter(new Vector2()));
 
         if (!updates) return;
