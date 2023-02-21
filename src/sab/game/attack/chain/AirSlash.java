@@ -55,7 +55,7 @@ public class AirSlash extends MeleeAttackType {
 
     @Override
     public void successfulHit(Attack attack, GameObject hit) {
-        CollisionResolver.moveWithCollisions(hit, attack.owner.hitbox.getCenter(new Vector2()).sub(hit.hitbox.getCenter(new Vector2())).scl(0.75f), attack.owner.battle.getPlatforms());
+        CollisionResolver.moveWithCollisions(hit, attack.owner.hitbox.getCenter(new Vector2()).sub(hit.hitbox.getCenter(new Vector2())).scl(0.75f), attack.owner.battle.getSolidStageObjects());
         if (hit instanceof Player) ((Player) hit).stun(4);
         if (attack.life <= 4) {
             attack.knockback = new Vector2(0, 8).rotateDeg(MathUtils.random(-1f, 1f) * 16);

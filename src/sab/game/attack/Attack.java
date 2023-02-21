@@ -1,7 +1,6 @@
 package sab.game.attack;
 
 import java.util.HashMap;
-import java.util.List;
 
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
@@ -13,8 +12,6 @@ import sab.game.Direction;
 import sab.game.Hittable;
 import sab.game.Player;
 import sab.game.CollisionResolver;
-import sab.game.particle.Particle;
-import sab.net.Keys;
 
 public class Attack extends DamageSource {
     public sab.game.attack.AttackType type;

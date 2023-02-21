@@ -35,7 +35,7 @@ public class BigBullet extends AttackType {
     @Override
     public void onSpawn(Attack attack, int[] data) {
         attack.knockback.set(attack.direction * 1, 1);
-        CollisionResolver.moveWithCollisions(attack.owner, new Vector2(attack.owner.direction * -4, 0), attack.owner.battle.getPlatforms());
+        CollisionResolver.moveWithCollisions(attack.owner, new Vector2(attack.owner.direction * -4, 0), attack.owner.battle.getSolidStageObjects());
         attack.hitbox.setCenter(attack.owner.hitbox.getCenter(new Vector2()));
         attack.direction = attack.owner.direction;
         attack.hitbox.x += attack.direction * 40;

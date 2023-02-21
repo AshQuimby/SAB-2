@@ -68,6 +68,8 @@ public class AI {
         float bestDistance = -1;
         Attack bestTarget = null;
         for (Attack target : player.battle.getAttacks()) {
+            if (target.owner == player) continue;
+
             float distance = player.hitbox.getCenter(new Vector2()).dst(target.hitbox.getCenter(new Vector2()));
             if (distance <= bestDistance || bestDistance < 0) {
                 bestTarget = target;
@@ -97,6 +99,7 @@ public class AI {
         for (GameObject target : player.battle.getPlatforms()) {
             if (target.hitbox.x < player.hitbox.x + player.hitbox.width && target.hitbox.x + target.hitbox.width > player.hitbox.x) {
                 float verticalDistance = player.hitbox.y - (target.hitbox.y + target.hitbox.height);
+                if (verticalDistance < 0) continue;
                 if (verticalDistance <= bestVerticalDistance || bestVerticalDistance < 0) {
                     bestTarget = target;
                     bestVerticalDistance = verticalDistance;

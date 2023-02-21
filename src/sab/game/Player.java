@@ -121,7 +121,7 @@ public class Player extends GameObject implements Hittable {
             Vector2 step = movement.cpy().limit(1);
             movement.sub(step);
 
-            collisionDirection = CollisionResolver.moveWithCollisions(this, step, battle.getPlatforms());
+            collisionDirection = CollisionResolver.moveWithCollisions(this, step, battle.getSolidStageObjects());
 
             List<GameObject> passablePlatforms = battle.getPassablePlatforms();
             

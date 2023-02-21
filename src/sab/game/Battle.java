@@ -179,7 +179,15 @@ public class Battle {
     public List<GameObject> getPlatforms() {
         List<GameObject> platforms = new ArrayList<>();
         for (GameObject stageObject : stage.getStageObjects()) {
-            if (((StageObject) stageObject).isSolid()) platforms.add(stageObject);
+            if (stageObject instanceof Platform) platforms.add(stageObject);
+        }
+        return platforms;
+    }
+
+    public List<GameObject> getSolidStageObjects() {
+        List<GameObject> platforms = new ArrayList<>();
+        for (StageObject stageObject : stage.getStageObjects()) {
+            if (stageObject.isSolid()) platforms.add(stageObject);
         }
         return platforms;
     }
