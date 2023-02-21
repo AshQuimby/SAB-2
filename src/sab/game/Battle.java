@@ -398,6 +398,10 @@ public class Battle {
         return endGameTimer > 0;
     }
 
+    public void onSpawnParticle(Particle particle) {
+
+    }
+
     public void endGame() {
         Game.game.window.camera.viewportWidth = 1152;
         Game.game.window.camera.viewportHeight = 704;
