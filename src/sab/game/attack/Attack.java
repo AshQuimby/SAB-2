@@ -23,7 +23,7 @@ public class Attack extends DamageSource {
     public boolean collideWithStage;
     public Direction collisionDirection;
     public int updatesPerTick;
-    private HashMap<GameObject, Integer> hitObjects;
+    private final HashMap<GameObject, Integer> hitObjects;
 
     public Attack(AttackType type, Player player) {
         alive = true;
@@ -33,7 +33,7 @@ public class Attack extends DamageSource {
         drawRect = new Rectangle();
         drawRect.setPosition(hitbox.getPosition(new Vector2()));
         direction = 1;
-        hitObjects = new HashMap<GameObject, Integer>();
+        hitObjects = new HashMap<>();
         velocity = new Vector2();
         owner = player;
         knockback = new Vector2();
@@ -50,7 +50,7 @@ public class Attack extends DamageSource {
         while (movement.len() > 0) {
             Vector2 step = movement.cpy().limit(1);
             movement.sub(step);
-            collisionDirection = CollisionResolver.moveWithCollisions(this, step, owner.battle.getPlatforms());
+            collisionDirection = CollisionResolver.moveWithCollisions(this, step, owner.battle.getSolidStageObjects());
         }
     }
 
