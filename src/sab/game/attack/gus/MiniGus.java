@@ -78,7 +78,7 @@ public class MiniGus extends AttackType {
     }
 
     @Override
-    public void kill(Attack attack) {
+    public void onKill(Attack attack) {
         for (int i = 0; i < 5; i++) {
             attack.owner.battle.addParticle(new Particle(attack.hitbox.getCenter(new Vector2()).add(0, -12),
                     new Vector2(MathUtils.random(-1f, 1f), MathUtils.random(0f,

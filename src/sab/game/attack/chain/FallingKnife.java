@@ -76,7 +76,7 @@ public class FallingKnife extends AttackType {
     }
 
     @Override
-    public void kill(Attack attack) {
+    public void onKill(Attack attack) {
         for (int i = 0; i < 5; i++) {
             attack.owner.battle.addParticle(
                     new Particle(attack.hitbox.getCenter(new Vector2()), new Vector2(MathUtils.random(-2f, 2f), MathUtils.random(1f, 3f)), 32, 32, 30, "smoke.png"));

@@ -4,7 +4,9 @@ import com.badlogic.gdx.math.Vector2;
 
 import sab.game.Battle;
 import sab.game.CollisionResolver;
+import sab.game.Direction;
 import sab.game.Player;
+import sab.game.attack.Attack;
 
 public class Platform extends StageObject {
     protected boolean updates;
@@ -54,23 +56,32 @@ public class Platform extends StageObject {
     @Override
     public void updateStageObject(Battle battle) {
 
-        hitbox.x += velocity.x;
-        if (isSolid())for (Player player : battle.getPlayers()) {
-            if (velocity.x > 0) {
-                CollisionResolver.resolveX(player, 1, hitbox);
-            } else if (velocity.x < 0) {
-                CollisionResolver.resolveX(player, 1, hitbox);
+        if (isSolid()) {
+            hitbox.x += velocity.x;
+            for (Player player : battle.getPlayers()) {
+                if (CollisionResolver.resolveX(player, -velocity.x, this.hitbox) != Direction.NONE) {
+                    player.hitbox.x += velocity.x;
+                }
+            }
+            for (Attack attack : battle.getAttacks()) {
+                if (CollisionResolver.resolveX(attack, -velocity.x, this.hitbox) != Direction.NONE) {
+                    attack.hitbox.x += velocity.x;
+                }
+            }
+
+            hitbox.y += velocity.y;
+            for (Player player : battle.getPlayers()) {
+                if (CollisionResolver.resolveY(player, -velocity.y, this.hitbox) != Direction.NONE) {
+                    player.hitbox.y += velocity.y;
+                }
+            }
+            for (Attack attack : battle.getAttacks()) {
+                if (CollisionResolver.resolveY(attack, -velocity.y, this.hitbox) != Direction.NONE) {
+                    attack.hitbox.y += velocity.y;
+                }
             }
         }
 
-        hitbox.y += velocity.y;
-        if (isSolid())for (Player player : battle.getPlayers()) {
-            if (velocity.y > 0) {
-                CollisionResolver.resolveY(player, -1, hitbox);
-            } else if (velocity.y < 0) {
-                CollisionResolver.resolveY(player, 1, hitbox);
-            }
-        }
         drawRect.setCenter(hitbox.getCenter(new Vector2()));
 
         if (!updates) return;

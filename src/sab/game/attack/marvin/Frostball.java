@@ -63,7 +63,7 @@ public class Frostball extends AttackType {
     }
 
     @Override
-    public void kill(sab.game.attack.Attack attack) {
+    public void onKill(sab.game.attack.Attack attack) {
         for (int i = 0; i < 8 ; i++) {
             attack.owner.battle.addParticle(new Particle(attack.hitbox.getCenter(new Vector2()), new Vector2(4 * MathUtils.random(), 0).rotateDeg(MathUtils.random() * 360), 96, 96, 0, "frostfire.png"));
         }
@@ -73,7 +73,7 @@ public class Frostball extends AttackType {
     public void onSpawn(Attack attack, int[] data) {
         attack.hitbox.setCenter(attack.owner.hitbox.getCenter(new Vector2()).add(0, 48));
         attack.velocity = new Vector2(10 * attack.owner.direction, 0);
-        attack.knockback = new Vector2(1 * attack.owner.direction, 0.33f).scl(attack.owner.getCharge() / 14f + 10f);
+        attack.knockback = new Vector2(1 * attack.owner.direction, 0.33f).scl(attack.owner.getCharge() / 8f + 10f);
         attack.damage = data[0] / 2 + 8;
         attack.resize(attack.hitbox.width + data[0] / 2, attack.hitbox.height + data[0] / 2);
         attack.drawRect.set(attack.hitbox);

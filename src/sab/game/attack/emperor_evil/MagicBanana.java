@@ -79,7 +79,7 @@ public class MagicBanana extends AttackType {
     }
 
     @Override
-    public void kill(Attack attack) {
+    public void onKill(Attack attack) {
         for (int i = 0; i < 4 ; i++) {
             attack.owner.battle.addParticle(new Particle(attack.hitbox.getCenter(new Vector2()), new Vector2(4 * MathUtils.random(), 0).rotateDeg(MathUtils.random() * 360), 32, 32, 0, "smoke.png"));
         }

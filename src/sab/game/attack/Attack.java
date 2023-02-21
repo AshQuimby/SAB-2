@@ -23,7 +23,7 @@ public class Attack extends DamageSource {
     public boolean collideWithStage;
     public Direction collisionDirection;
     public int updatesPerTick;
-    private HashMap<GameObject, Integer> hitObjects;
+    private final HashMap<GameObject, Integer> hitObjects;
 
     public Attack(AttackType type, Player player) {
         alive = true;
@@ -33,7 +33,7 @@ public class Attack extends DamageSource {
         drawRect = new Rectangle();
         drawRect.setPosition(hitbox.getPosition(new Vector2()));
         direction = 1;
-        hitObjects = new HashMap<GameObject, Integer>();
+        hitObjects = new HashMap<>();
         velocity = new Vector2();
         owner = player;
         knockback = new Vector2();
@@ -44,6 +44,22 @@ public class Attack extends DamageSource {
         type.setDefaults(this);
     }
 
+    private void move(Vector2 v) {
+        Vector2 movement = v.cpy();
+
+        while (movement.len() > 0) {
+            Vector2 step = movement.cpy().limit(1);
+            movement.sub(step);
+            collisionDirection = CollisionResolver.moveWithCollisions(this, step, owner.battle.getSolidStageObjects());
+
+            for (GameObject gameObject : owner.battle.getPassablePlatforms()) {
+                if (velocity.y >= 0) {
+                    collisionDirection = CollisionResolver.resolveY(this, step.y, gameObject.hitbox);
+                }
+            }
+        }
+    }
+
     public void onSpawn(int[] data) {
         type.onSpawn(this, data);
     }
@@ -52,7 +68,7 @@ public class Attack extends DamageSource {
     public void preUpdate() {
         for (int i = 0; i < updatesPerTick; i++) {
             if (collideWithStage) {
-                collisionDirection = CollisionResolver.moveWithCollisions(this, velocity, owner.battle.getSolidStageObjects());
+                move(velocity);
             } else {
                 hitbox.x += velocity.x;
                 hitbox.y += velocity.y;
@@ -126,7 +142,7 @@ public class Attack extends DamageSource {
     }
 
     public void kill() {
-        type.kill(this);
+        type.onKill(this);
         if (!alive) owner.battle.removeGameObject(this);
     }
 

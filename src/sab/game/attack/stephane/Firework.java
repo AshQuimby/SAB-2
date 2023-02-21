@@ -49,7 +49,7 @@ public class Firework extends AttackType {
     }
 
     @Override
-    public void kill(Attack attack) {
+    public void onKill(Attack attack) {
         if (!exploded) {
             attack.alive = true;
             exploded = true;
