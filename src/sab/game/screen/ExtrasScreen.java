@@ -40,7 +40,7 @@ public class ExtrasScreen extends SelectorScreen {
         switch(selection) {
             case 0 -> {
                 SABSounds.playSound(SABSounds.SELECT);
-                return new CharactersScreen();
+                return new FightersScreen();
             }
             case 1 -> {
                 SABSounds.playSound(SABSounds.SELECT);

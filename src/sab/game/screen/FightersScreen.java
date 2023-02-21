@@ -17,11 +17,11 @@ import sab.screen.Screen;
 import sab.screen.ScreenAdapter;
 import sab.util.Utils;
 
-public class CharactersScreen extends ScreenAdapter {
+public class FightersScreen extends ScreenAdapter {
     private int characterIndex;
     private List<Fighter> fighters = new ArrayList<>();
 
-    public CharactersScreen() {
+    public FightersScreen() {
         characterIndex = 0;
         for (Class<? extends FighterType> fighter : Game.game.fighters) {
             fighters.add(new Fighter(ModLoader.getFighterType(fighter)));

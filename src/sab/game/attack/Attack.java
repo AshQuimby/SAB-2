@@ -52,9 +52,11 @@ public class Attack extends DamageSource {
             movement.sub(step);
             collisionDirection = CollisionResolver.moveWithCollisions(this, step, owner.battle.getSolidStageObjects());
 
+            Direction tryDirection;
             for (GameObject gameObject : owner.battle.getPassablePlatforms()) {
-                if (velocity.y >= 0) {
-                    collisionDirection = CollisionResolver.resolveY(this, step.y, gameObject.hitbox);
+                if (velocity.y <= 0) {
+                    tryDirection = CollisionResolver.resolveY(this, step.y, gameObject.hitbox);
+                    if (tryDirection != Direction.NONE) collisionDirection = tryDirection;
                 }
             }
         }

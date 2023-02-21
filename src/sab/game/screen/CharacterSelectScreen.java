@@ -97,7 +97,7 @@ public class CharacterSelectScreen extends ScreenAdapter {
         player1Fighters.get(player1.index).walkAnimation.stepLooping();
         player2Fighters.get(player2.index).walkAnimation.stepLooping();
 
-        g.scalableDraw(g.imageProvider.getImage("character_selector_background_layer_1.png"), -1152 / 2, -704 / 2, 1152, 704);
+        g.scalableDraw(g.imageProvider.getImage("character_selector_background_layer_1.png"), -Game.game.window.resolutionX / 2, -Game.game.window.resolutionY / 2, Game.game.window.resolutionX, Game.game.window.resolutionY);
 
         String player1Costume = player1.costume == 0 ? "" : "_alt_" + player1.costume;
         String player2Costume = player2.costume == 0 ? "" : "_alt_" + player2.costume;
@@ -105,31 +105,31 @@ public class CharacterSelectScreen extends ScreenAdapter {
         if (player1Fighters.get(player1.index).id.equals("gus") && player1.costume == 2 && player1.sus) player1Costume += "_alt";
         if (player2Fighters.get(player2.index).id.equals("gus") && player2.costume == 2 && player2.sus) player2Costume += "_alt";
 
-        g.usefulDraw(g.imageProvider.getImage(player1Fighters.get(player1.index).id + "_render" + player1Costume + ".png"), -1152 / 2, -704 / 2, 512, 512, 0, 1, 0, true, false);
-        g.usefulDraw(g.imageProvider.getImage(player1Fighters.get(player1.index).id + player1Costume + ".png"), -1156 / 2 + 256 - player1Fighters.get(player1.index).renderWidth / 2, 704 / 2 - 160, player1Fighters.get(player1.index).renderWidth, player1Fighters.get(player1.index).renderHeight, player1Fighters.get(player1.index).walkAnimation.getFrame(), player1Fighters.get(player1.index).frames, 0, true, false);
+        g.usefulDraw(g.imageProvider.getImage(player1Fighters.get(player1.index).id + "_render" + player1Costume + ".png"), -Game.game.window.resolutionX / 2, -Game.game.window.resolutionY / 2, 512, 512, 0, 1, 0, true, false);
+        g.usefulDraw(g.imageProvider.getImage(player1Fighters.get(player1.index).id + player1Costume + ".png"), -1156 / 2 + 256 - player1Fighters.get(player1.index).renderWidth / 2, Game.game.window.resolutionY / 2 - 160, player1Fighters.get(player1.index).renderWidth, player1Fighters.get(player1.index).renderHeight, player1Fighters.get(player1.index).walkAnimation.getFrame(), player1Fighters.get(player1.index).frames, 0, true, false);
 
-        g.usefulTintDraw(g.imageProvider.getImage(player1Fighters.get(Utils.loop(player1.index, 1, fighterCount, 0)).id + ".png"), -1156 / 2 + 376 - player1Fighters.get(Utils.loop(player1.index, 1, fighterCount, 0)).renderWidth / 2, 704 / 2 - 172, player1Fighters.get(Utils.loop(player1.index, 1, fighterCount, 0)).renderWidth, player1Fighters.get(Utils.loop(player1.index, 1, fighterCount, 0)).renderHeight, 0, player1Fighters.get(Utils.loop(player1.index, 1, fighterCount, 0)).frames, 0, true, false, new Color(0.5f, 0.5f, 0.5f, 1f));
-        g.usefulTintDraw(g.imageProvider.getImage(player1Fighters.get(Utils.loop(player1.index, -1, fighterCount, 0)).id + ".png"), -1156 / 2 + 132 - player1Fighters.get(Utils.loop(player1.index, -1, fighterCount, 0)).renderWidth / 2, 704 / 2 - 172, player1Fighters.get(Utils.loop(player1.index, -1, fighterCount, 0)).renderWidth, player1Fighters.get(Utils.loop(player1.index, -1, fighterCount, 0)).renderHeight, 0, player1Fighters.get(Utils.loop(player1.index, -1, fighterCount, 0)).frames, 0, true, false, new Color(0.5f, 0.5f, 0.5f, 1f));
+        g.usefulTintDraw(g.imageProvider.getImage(player1Fighters.get(Utils.loop(player1.index, 1, fighterCount, 0)).id + ".png"), -1156 / 2 + 376 - player1Fighters.get(Utils.loop(player1.index, 1, fighterCount, 0)).renderWidth / 2, Game.game.window.resolutionY / 2 - 172, player1Fighters.get(Utils.loop(player1.index, 1, fighterCount, 0)).renderWidth, player1Fighters.get(Utils.loop(player1.index, 1, fighterCount, 0)).renderHeight, 0, player1Fighters.get(Utils.loop(player1.index, 1, fighterCount, 0)).frames, 0, true, false, new Color(0.5f, 0.5f, 0.5f, 1f));
+        g.usefulTintDraw(g.imageProvider.getImage(player1Fighters.get(Utils.loop(player1.index, -1, fighterCount, 0)).id + ".png"), -1156 / 2 + 132 - player1Fighters.get(Utils.loop(player1.index, -1, fighterCount, 0)).renderWidth / 2, Game.game.window.resolutionY / 2 - 172, player1Fighters.get(Utils.loop(player1.index, -1, fighterCount, 0)).renderWidth, player1Fighters.get(Utils.loop(player1.index, -1, fighterCount, 0)).renderHeight, 0, player1Fighters.get(Utils.loop(player1.index, -1, fighterCount, 0)).frames, 0, true, false, new Color(0.5f, 0.5f, 0.5f, 1f));
 
-        g.usefulDraw(g.imageProvider.getImage(player2Fighters.get(player2.index).id + "_render" + player2Costume + ".png"), 1152 / 2 - 512, -704 / 2, 512, 512, 0, 1, 0, false, false);
-        g.usefulDraw(g.imageProvider.getImage(player2Fighters.get(player2.index).id + player2Costume + ".png"), 1156 / 2 - 260 - player2Fighters.get(player2.index).renderWidth / 2, 704 / 2 - 160, player2Fighters.get(player2.index).renderWidth, player2Fighters.get(player2.index).renderHeight, player2Fighters.get(player2.index).walkAnimation.getFrame(), player2Fighters.get(player2.index).frames, 0, false, false);
+        g.usefulDraw(g.imageProvider.getImage(player2Fighters.get(player2.index).id + "_render" + player2Costume + ".png"), Game.game.window.resolutionX / 2 - 512, -Game.game.window.resolutionY / 2, 512, 512, 0, 1, 0, false, false);
+        g.usefulDraw(g.imageProvider.getImage(player2Fighters.get(player2.index).id + player2Costume + ".png"), 1156 / 2 - 260 - player2Fighters.get(player2.index).renderWidth / 2, Game.game.window.resolutionY / 2 - 160, player2Fighters.get(player2.index).renderWidth, player2Fighters.get(player2.index).renderHeight, player2Fighters.get(player2.index).walkAnimation.getFrame(), player2Fighters.get(player2.index).frames, 0, false, false);
 
-        g.usefulTintDraw(g.imageProvider.getImage(player2Fighters.get(Utils.loop(player2.index, -1, fighterCount, 0)).id + ".png"), 1156 / 2 - 380 - player2Fighters.get(Utils.loop(player2.index, -1, fighterCount, 0)).renderWidth / 2, 704 / 2 - 172, player2Fighters.get(Utils.loop(player2.index, -1, fighterCount, 0)).renderWidth, player2Fighters.get(Utils.loop(player2.index, -1, fighterCount, 0)).renderHeight, 0, player2Fighters.get(Utils.loop(player2.index, -1, fighterCount, 0)).frames, 0, false, false, new Color(0.5f, 0.5f, 0.5f, 1f));
-        g.usefulTintDraw(g.imageProvider.getImage(player2Fighters.get(Utils.loop(player2.index, 1, fighterCount, 0)).id + ".png"), 1156 / 2 - 136 - player2Fighters.get(Utils.loop(player2.index, 1, fighterCount, 0)).renderWidth / 2, 704 / 2 - 172, player2Fighters.get(Utils.loop(player2.index, 1, fighterCount, 0)).renderWidth, player2Fighters.get(Utils.loop(player2.index, 1, fighterCount, 0)).renderHeight, 0, player2Fighters.get(Utils.loop(player2.index, 1, fighterCount, 0)).frames, 0, false, false, new Color(0.5f, 0.5f, 0.5f, 1f));
+        g.usefulTintDraw(g.imageProvider.getImage(player2Fighters.get(Utils.loop(player2.index, -1, fighterCount, 0)).id + ".png"), 1156 / 2 - 380 - player2Fighters.get(Utils.loop(player2.index, -1, fighterCount, 0)).renderWidth / 2, Game.game.window.resolutionY / 2 - 172, player2Fighters.get(Utils.loop(player2.index, -1, fighterCount, 0)).renderWidth, player2Fighters.get(Utils.loop(player2.index, -1, fighterCount, 0)).renderHeight, 0, player2Fighters.get(Utils.loop(player2.index, -1, fighterCount, 0)).frames, 0, false, false, new Color(0.5f, 0.5f, 0.5f, 1f));
+        g.usefulTintDraw(g.imageProvider.getImage(player2Fighters.get(Utils.loop(player2.index, 1, fighterCount, 0)).id + ".png"), 1156 / 2 - 136 - player2Fighters.get(Utils.loop(player2.index, 1, fighterCount, 0)).renderWidth / 2, Game.game.window.resolutionY / 2 - 172, player2Fighters.get(Utils.loop(player2.index, 1, fighterCount, 0)).renderWidth, player2Fighters.get(Utils.loop(player2.index, 1, fighterCount, 0)).renderHeight, 0, player2Fighters.get(Utils.loop(player2.index, 1, fighterCount, 0)).frames, 0, false, false, new Color(0.5f, 0.5f, 0.5f, 1f));
         
-        g.scalableDraw(g.imageProvider.getImage("character_selector_background_layer_2.png"), -1152 / 2, -704 / 2, 1152, 704);
+        g.scalableDraw(g.imageProvider.getImage("character_selector_background_layer_2.png"), -Game.game.window.resolutionX / 2, -Game.game.window.resolutionY / 2, Game.game.window.resolutionX, Game.game.window.resolutionY);
 
         if (player1.ready && player2.ready) {
-            g.usefulDraw(g.imageProvider.getImage("fight_button.png"), 0 - 320 / 2, 704 / 2 -100 - 44, 320, 100, (Game.game.window.getTick() / 4) % 10, 11, 0, false, false);
+            g.usefulDraw(g.imageProvider.getImage("fight_button.png"), 0 - 320 / 2, Game.game.window.resolutionY / 2 -100 - 44, 320, 100, (Game.game.window.getTick() / 4) % 10, 11, 0, false, false);
         }
 
         // 92 x 64
 
-        g.usefulDraw(g.imageProvider.getImage("player_type_indicators.png"), -1152 / 2 + 368, 704 / 2 - 256, 132, 52, player1.type == 0 ? 0 : player1.type + 1, 7, 0, false, false);
-        g.usefulDraw(g.imageProvider.getImage("player_type_indicators.png"), -1152 / 2 + 368 + 284, 704 / 2 - 256, 132, 52, player2.type + 1, 7, 0, false, false);
+        g.usefulDraw(g.imageProvider.getImage("player_type_indicators.png"), -Game.game.window.resolutionX / 2 + 368, Game.game.window.resolutionY / 2 - 256, 132, 52, player1.type == 0 ? 0 : player1.type + 1, 7, 0, false, false);
+        g.usefulDraw(g.imageProvider.getImage("player_type_indicators.png"), -Game.game.window.resolutionX / 2 + 368 + 284, Game.game.window.resolutionY / 2 - 256, 132, 52, player2.type + 1, 7, 0, false, false);
 
-        g.usefulDraw(g.imageProvider.getImage("fighter_selectors.png"), -1152 / 2, -704 / 2, 512, 512, player1.ready ? 1 : 0, 4, 0, false, false);
-        g.usefulDraw(g.imageProvider.getImage("fighter_selectors.png"), 1152 / 2 - 512, -704 / 2, 512, 512, player2.ready ? 3 : 2, 4, 0, false, false);
+        g.usefulDraw(g.imageProvider.getImage("fighter_selectors.png"), -Game.game.window.resolutionX / 2, -Game.game.window.resolutionY / 2, 512, 512, player1.ready ? 1 : 0, 4, 0, false, false);
+        g.usefulDraw(g.imageProvider.getImage("fighter_selectors.png"), Game.game.window.resolutionX / 2 - 512, -Game.game.window.resolutionY / 2, 512, 512, player2.ready ? 3 : 2, 4, 0, false, false);
 
     }
 

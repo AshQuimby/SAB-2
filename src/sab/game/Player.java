@@ -126,8 +126,7 @@ public class Player extends GameObject implements Hittable {
             List<GameObject> passablePlatforms = battle.getPassablePlatforms();
             
             for (GameObject platform : passablePlatforms) {
-                if (!keys.isPressed(Keys.DOWN) && velocity.y <= 0
-                        && hitbox.y > platform.hitbox.y + platform.hitbox.height - 12) {
+                if (!keys.isPressed(Keys.DOWN) && velocity.y <= 0 && hitbox.y > platform.hitbox.y + platform.hitbox.height - 12) {
                     Direction tryDirection = CollisionResolver.resolveY(this, step.y, platform.hitbox);
                     if (tryDirection != Direction.NONE)
                         collisionDirection = tryDirection;
@@ -275,7 +274,12 @@ public class Player extends GameObject implements Hittable {
 
         Ledge ledge = null;
         if (ledgeCooldown <= 0 && ledgeGrabs > 0) ledge = battle.getStage().grabLedge(this);
-        ledgeGrabbing = ledge != null;
+        if (ledge != null && currentAction != null && !currentAction.isImportant()) {
+            ledgeGrabbing = ledge != null;
+            currentAction = null;
+        } else {
+            ledge = null;
+        }
 
         if (knockbackDuration > 0) {
             if (currentAction != null && !currentAction.isImportant()) currentAction = null;

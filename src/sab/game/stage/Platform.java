@@ -64,7 +64,7 @@ public class Platform extends StageObject {
                 }
             }
             for (Attack attack : battle.getAttacks()) {
-                if (CollisionResolver.resolveX(attack, -velocity.x, this.hitbox) != Direction.NONE) {
+                if (attack.collideWithStage && CollisionResolver.resolveX(attack, -velocity.x, this.hitbox) != Direction.NONE) {
                     attack.hitbox.x += velocity.x;
                 }
             }
@@ -76,7 +76,7 @@ public class Platform extends StageObject {
                 }
             }
             for (Attack attack : battle.getAttacks()) {
-                if (CollisionResolver.resolveY(attack, -velocity.y, this.hitbox) != Direction.NONE) {
+                if (attack.collideWithStage && CollisionResolver.resolveY(attack, -velocity.y, this.hitbox) != Direction.NONE) {
                     attack.hitbox.y += velocity.y;
                 }
             }
