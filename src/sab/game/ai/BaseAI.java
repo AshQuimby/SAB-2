@@ -75,6 +75,10 @@ public class BaseAI extends AI {
         return null;
     }
 
+    protected void attack(Vector2 center, Player target, Vector2 targetCenter) {
+
+    }
+
     @Override
     public void update() {
         releaseAllKeys();
@@ -135,5 +139,7 @@ public class BaseAI extends AI {
                 pressKey(Keys.UP);
             }
         }
+
+        attack(center, target, targetPosition);
     }
 }

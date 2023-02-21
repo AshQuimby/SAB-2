@@ -6,6 +6,8 @@ import com.badlogic.gdx.math.Vector2;
 import sab.game.Game;
 import sab.game.Player;
 import sab.game.PlayerAction;
+import sab.game.ai.AI;
+import sab.game.ai.BaseAI;
 import sab.game.animation.Animation;
 import sab.game.attack.Attack;
 import sab.game.attack.marvin.Wrench;
@@ -13,6 +15,8 @@ import sab.game.attack.marvin.Fireball;
 import sab.game.attack.marvin.Frostball;
 import sab.game.attack.marvin.Toilet;
 import sab.game.particle.Particle;
+import sab.net.Keys;
+import sab.util.Utils;
 
 public class Marvin extends FighterType {
     private Animation swingAnimation;
@@ -45,6 +49,38 @@ public class Marvin extends FighterType {
         throwAnimation = new Animation(new int[] {10, 11}, 6, true);
         fighter.freefallAnimation = new Animation(new int[]{7}, 1, true);
         fighter.costumes = 3;
+    }
+
+    @Override
+    public AI getAI(Player player, int difficulty) {
+        return new BaseAI(player, difficulty) {
+            @Override
+            public void attack(Vector2 center, Player target, Vector2 targetPosition) {
+                if (player.getCharge() > Math.random() * 50 + 10) {
+                    releaseKey(Keys.ATTACK);
+                    return;
+                }
+
+                if (isDirectlyHorizontal(target.hitbox)) {
+                    if (Math.abs(center.x - target.hitbox.x) > 100) {
+                        releaseKey(Keys.LEFT);
+                        releaseKey(Keys.RIGHT);
+
+                        if (Math.random() * 20 < difficulty) pressKey(Keys.DOWN);
+                        pressKey(Keys.ATTACK);
+                    } else {
+                        releaseKey(Keys.LEFT);
+                        releaseKey(Keys.RIGHT);
+                        pressKey(Keys.ATTACK);
+                    }
+                } else if (isDirectlyAbove(target.hitbox) || isDirectlyBelow(target.hitbox)) {
+                    releaseKey(Keys.LEFT);
+                    releaseKey(Keys.RIGHT);
+                    pressKey(Keys.UP);
+                    pressKey(Keys.ATTACK);
+                }
+            }
+        };
     }
 
     @Override

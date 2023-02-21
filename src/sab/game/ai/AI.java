@@ -4,6 +4,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.seagull_engine.GameObject;
 
+import sab.game.CollisionResolver;
 import sab.game.Game;
 import sab.game.Player;
 import sab.game.attack.Attack;
@@ -45,8 +46,19 @@ public class AI {
     }
 
     public final void releaseAllKeys() {
-        for (int i = 0; i < 6; i++)
-        player.keys.release(i);
+        for (int i = 0; i < 6; i++) player.keys.release(i);
+    }
+
+    public boolean isDirectlyHorizontal(Rectangle rect) {
+        return player.hitbox.y < rect.y + rect.height && player.hitbox.y + player.hitbox.height > rect.y;
+    }
+
+    public boolean isDirectlyAbove(Rectangle rect) {
+        return (player.hitbox.x < rect.x + rect.width && player.hitbox.x + player.hitbox.width > rect.x) && player.hitbox.y > rect.y;
+    }
+
+    public boolean isDirectlyBelow(Rectangle rect) {
+        return (player.hitbox.x < rect.x + rect.width && player.hitbox.x + player.hitbox.width > rect.x) && player.hitbox.y < rect.y;
     }
     
     public final Player getNearestOpponent() {
