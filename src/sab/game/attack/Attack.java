@@ -1,5 +1,6 @@
 package sab.game.attack;
 
+import java.awt.*;
 import java.util.HashMap;
 
 import com.badlogic.gdx.math.Rectangle;
@@ -30,6 +31,7 @@ public class Attack extends DamageSource {
         life = 120;
         hitbox = new Rectangle();
         hitbox.setPosition(new Vector2());
+        previousPosition = new Vector2();
         drawRect = new Rectangle();
         drawRect.setPosition(hitbox.getPosition(new Vector2()));
         direction = 1;
@@ -52,22 +54,28 @@ public class Attack extends DamageSource {
             movement.sub(step);
             collisionDirection = CollisionResolver.moveWithCollisions(this, step, owner.battle.getSolidStageObjects());
 
-            Direction tryDirection;
-            for (GameObject gameObject : owner.battle.getPassablePlatforms()) {
-                if (velocity.y <= 0) {
-                    tryDirection = CollisionResolver.resolveY(this, step.y, gameObject.hitbox);
-                    if (tryDirection != Direction.NONE) collisionDirection = tryDirection;
+            if (velocity.y <= 0) {
+                Direction tryDirection;
+                for (GameObject gameObject : owner.battle.getPassablePlatforms()) {
+                    if (previousPosition.y > gameObject.hitbox.y + gameObject.hitbox.height) {
+                        tryDirection = CollisionResolver.resolveY(this, step.y, gameObject.hitbox);
+                        if (tryDirection != Direction.NONE) collisionDirection = tryDirection;
+                    }
                 }
             }
         }
     }
 
     public void onSpawn(int[] data) {
+        if (directional) {
+            direction = owner.direction;
+        }
         type.onSpawn(this, data);
     }
     
     @Override
     public void preUpdate() {
+        previousPosition = new Vector2(hitbox.x, hitbox.y);
         for (int i = 0; i < updatesPerTick; i++) {
             if (collideWithStage) {
                 move(velocity);

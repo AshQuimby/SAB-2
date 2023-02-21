@@ -14,11 +14,7 @@ public class SABSounds {
     }
 
     public static void playMusic(String name, boolean loops) {
-        soundEngine.playMusic(name, loops, 1, false, Settings.getMusicVolume() * Settings.getMasterVolume());
-    }
-
-    public static Sound getSound(String name) {
-        return soundEngine.getSound(name);
+        soundEngine.playMusic(name, loops, 1, Settings.getMusicVolume() * Settings.getMasterVolume(), 0);
     }
 
     public static void stopMusic() {

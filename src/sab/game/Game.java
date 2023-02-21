@@ -96,15 +96,16 @@ public class Game extends Messenger {
     // Randomly selects a title screen background
     public static void selectNewTitleScreen() {
         switch (MathUtils.random.nextInt(2)) {
-            case 0 : {
+            case 0 -> {
                 titleBackground = "title_screen_background.png";
-                break;
             }
-            case 1 : {
+            case 1 -> {
                 titleBackground = "title_screen_background_alt_1.png";
-                break;
             }
-            default : {
+            case 2 -> {
+                titleBackground = "title_screen_background_alt_1.png";
+            }
+            default -> {
                 titleBackground = "title_screen_background.png";
             }
         }
