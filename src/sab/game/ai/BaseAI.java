@@ -3,13 +3,11 @@ package sab.game.ai;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
-import sab.game.Game;
 import sab.game.Player;
 import sab.game.attack.Attack;
 import sab.game.stage.Ledge;
 import sab.game.stage.Platform;
 import sab.net.Keys;
-import sab.util.Utils;
 
 public class BaseAI extends AI {
     private int mashCooldown;
@@ -22,7 +20,7 @@ public class BaseAI extends AI {
     protected void recover(Platform targetPlatform, Ledge targetLedge) {
         Vector2 center = player.hitbox.getCenter(new Vector2());
 
-        if (player.hitbox.y > targetPlatform.hitbox.y + targetPlatform.hitbox.height) {
+        if (targetPlatform != null && player.hitbox.y > targetPlatform.hitbox.y + targetPlatform.hitbox.height) {
             if (center.x < targetPlatform.hitbox.x + targetPlatform.hitbox.width / 2) {
                 pressKey(Keys.RIGHT);
             } else if (center.x > targetPlatform.hitbox.x + targetPlatform.hitbox.width / 2) {
@@ -36,16 +34,22 @@ public class BaseAI extends AI {
             return;
         }
 
-        if (player.hitbox.x + player.hitbox.width < targetLedge.grabBox.x) {
-            pressKey(Keys.RIGHT);
-        } else if (player.hitbox.x > targetLedge.grabBox.x + targetLedge.grabBox.width) {
-            pressKey(Keys.LEFT);
+        if (targetLedge != null) {
+            if (player.hitbox.x + player.hitbox.width < targetLedge.grabBox.x) {
+                pressKey(Keys.RIGHT);
+            } else if (player.hitbox.x > targetLedge.grabBox.x + targetLedge.grabBox.width) {
+                pressKey(Keys.LEFT);
+            }
         }
 
-        pressKey(Keys.UP);
         if (player.getRemainingJumps() == 0 && mashCooldown == 0) {
+            pressKey(Keys.UP);
             pressKey(Keys.ATTACK);
             mashCooldown = 30 - difficulty * 3;
+        } else {
+            if (player.velocity.y <= 0) {
+                pressKey(Keys.UP);
+            }
         }
     }
 
