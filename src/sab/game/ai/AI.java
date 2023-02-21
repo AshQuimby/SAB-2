@@ -12,10 +12,12 @@ import sab.game.stage.Platform;
 import sab.util.Utils;
 
 public class AI {
-    protected Player player;
+    protected final Player player;
+    protected int difficulty;
 
-    public AI(Player player) {
+    public AI(Player player, int difficulty) {
         this.player = player;
+        this.difficulty = difficulty;
     }
 
     public void update() {
@@ -40,6 +42,11 @@ public class AI {
     public final void toggleKey(int keyCode) {
         if (player.keys.isPressed(keyCode)) player.keys.release(keyCode);
         else player.keys.release(keyCode);
+    }
+
+    public final void releaseAllKeys() {
+        for (int i = 0; i < 6; i++)
+        player.keys.release(i);
     }
     
     public final Player getNearestOpponent() {
@@ -84,6 +91,21 @@ public class AI {
         return (Platform) bestTarget;
     }
 
+    public final Platform getPlatformBelow() {
+        float bestVerticalDistance = -1;
+        GameObject bestTarget = null;
+        for (GameObject target : player.battle.getPlatforms()) {
+            if (target.hitbox.x < player.hitbox.x + player.hitbox.width && target.hitbox.x + target.hitbox.width > player.hitbox.x) {
+                float verticalDistance = player.hitbox.y - (target.hitbox.y + target.hitbox.height);
+                if (verticalDistance <= bestVerticalDistance || bestVerticalDistance < 0) {
+                    bestTarget = target;
+                    bestVerticalDistance = verticalDistance;
+                }
+            }
+        }
+        return (Platform) bestTarget;
+    }
+
     public final Ledge getNearestLedge() {
         float bestDistance = -1;
         Ledge bestTarget = null;
@@ -95,14 +117,6 @@ public class AI {
                 bestDistance = distance;
             }
         }
-        return (Ledge) bestTarget;
-    }
-
-    public final boolean isAbovePlatform() {
-        Rectangle scan = new Rectangle(player.hitbox.x, player.hitbox.y - Game.game.window.resolutionY, player.hitbox.width, Game.game.window.resolutionY);
-        for (GameObject platform : player.battle.getPlatforms()) {
-            if (platform.hitbox.overlaps(scan)) return true;
-        }
-        return false;
+        return bestTarget;
     }
 }

@@ -4,6 +4,8 @@ import com.badlogic.gdx.math.Vector2;
 import com.seagull_engine.Seagraphics;
 
 import sab.game.Player;
+import sab.game.ai.AI;
+import sab.game.ai.BaseAI;
 import sab.game.animation.Animation;
 
 public class Fighter implements Cloneable {
@@ -103,6 +105,10 @@ public class Fighter implements Cloneable {
         itemOffset = new Vector2();
         this.type = type;
         type.setDefaults(this);
+    }
+
+    public AI getAI(Player player, int difficulty) {
+        return type.getAI(player, difficulty);
     }
 
     public void update(Player player) {

@@ -1,6 +1,7 @@
 package sab.game.fighter;
 
 import sab.game.Player;
+import sab.game.ai.AI;
 import sab.game.animation.Animation;
 import sab.game.attack.Attack;
 import sab.game.attack.chain.AirSlash;

@@ -2,7 +2,6 @@ package sab.game.ai;
 
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-
 import sab.game.Game;
 import sab.game.Player;
 import sab.game.attack.Attack;
@@ -11,10 +10,8 @@ import sab.game.stage.Platform;
 import sab.net.Keys;
 import sab.util.Utils;
 
-public class BaseAI extends AI {
-    private int mashCooldown;
-
-    public BaseAI(Player player, int difficulty) {
+public class LegacyAI extends AI {
+    public LegacyAI(Player player, int difficulty) {
         super(player, difficulty);
     }
 
@@ -84,12 +81,12 @@ public class BaseAI extends AI {
         }
     }
 
-    private Vector2 getFutureCollision(Attack attack, int maxFramesAhead) {
+    private Vector2 getFutureCollision(Attack attack) {
         Rectangle futureHitbox = new Rectangle(player.hitbox);
         Vector2 futureVelocity = player.velocity.cpy();
 
         Rectangle futureAttackHitbox = new Rectangle(attack.hitbox);
-        for (int i = 0; i < maxFramesAhead; i++) {
+        for (int i = 0; i < 20; i++) {
             futureHitbox.x += futureVelocity.x;
             futureHitbox.y += futureVelocity.y;
             if (!player.touchingStage)
@@ -110,19 +107,6 @@ public class BaseAI extends AI {
     public void update() {
         releaseAllKeys();
 
-        if (player.frozen() && mashCooldown == 0) {
-            pressKey(Keys.ATTACK);
-            mashCooldown = 30 - difficulty * 3;
-            return;
-        }
-
-        if (player.grabbingLedge()) {
-            pressKey(Keys.UP);
-            return;
-        }
-
-        if (mashCooldown > 0) mashCooldown--;
-
         Player target = getNearestOpponent();
         Platform targetPlatform = getNearestPlatform();
 
@@ -130,23 +114,17 @@ public class BaseAI extends AI {
             return;
 
         Vector2 targetPosition = target.hitbox.getCenter(new Vector2());
+
         Vector2 center = player.hitbox.getCenter(new Vector2());
 
-        Platform platformBelow = getPlatformBelow();
-        if (platformBelow == null) {
+        if (player.grabbingLedge()) {
+            pressKey(Keys.UP);
+        }
+
+        if (getPlatformBelow() == null) {
             recover(targetPlatform, getNearestLedge());
             return;
         } else {
-            if (!platformBelow.isSolid()) {
-                pressKey(Keys.DOWN);
-                System.out.println("On passable platform");
-                if (Math.random() * 25 < difficulty) {
-                    pressKey(Keys.ATTACK);
-                }
-
-                return;
-            }
-
             Rectangle opponentHitbox = new Rectangle(target.hitbox);
             opponentHitbox.setCenter(opponentHitbox.x + opponentHitbox.width / 2,
                     targetPlatform.hitbox.y + targetPlatform.hitbox.height / 2);
@@ -184,7 +162,7 @@ public class BaseAI extends AI {
                 pressKey(Keys.ATTACK);
             }
 
-            if (target.charging() && Math.random() * 5 < difficulty) {
+            if (target.charging()) {
                 if (target.direction == 1 && targetPosition.x < center.x) {
                     pressKey(Keys.UP);
                     pressKey(Keys.LEFT);
@@ -199,7 +177,7 @@ public class BaseAI extends AI {
 
         Attack nearestAttack = getNearestEnemyAttack();
         if (nearestAttack != null) {
-            Vector2 collision = getFutureCollision(nearestAttack, difficulty * 5);
+            Vector2 collision = getFutureCollision(nearestAttack);
 
             if (collision != null) {
                 if (collision.y > player.hitbox.y + player.hitbox.height) {

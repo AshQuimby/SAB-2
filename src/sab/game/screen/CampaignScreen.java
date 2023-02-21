@@ -4,6 +4,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.MathUtils;
 import com.seagull_engine.Seagraphics;
+import sab.game.SABSounds;
 import sab.game.fighter.*;
 import sab.game.stage.*;
 import sab.screen.Screen;
@@ -43,13 +44,16 @@ public class CampaignScreen implements Screen {
         if (keyCode == Input.Keys.LEFT || keyCode == Input.Keys.A) {
             selection = getRelativeSelection(-1);
             animationTimer = -30;
+            SABSounds.playSound(SABSounds.BLIP);
         }
         if (keyCode == Input.Keys.RIGHT || keyCode == Input.Keys.D) {
             selection = getRelativeSelection(1);
             animationTimer = 30;
+            SABSounds.playSound(SABSounds.BLIP);
         }
         if (keyCode == Input.Keys.ENTER) {
-            return new LocalBattleScreen(new Fighter(new Marvin()), levels[selection].opponent, new int[] {0, 0}, levels[selection].stage, 0, levels[selection].difficulty);
+            SABSounds.playSound(SABSounds.SELECT);
+            return new LocalBattleScreen(new Fighter(new Marvin()), levels[selection].opponent, new int[] {0, 0}, levels[selection].stage, 0, levels[selection].difficulty, 3);
         }
         return this;
     }

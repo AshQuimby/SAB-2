@@ -63,13 +63,13 @@ public class HostedBattleScreen extends ScreenAdapter {
             }
         });
 
-        battle = new Battle() {
-            @Override
-            public void onSpawnParticle(Particle particle) {
-                server.sendToAll(new SpawnParticlePacket(particle));
-            }
-
-        };
+//        battle = new Battle() {
+//            @Override
+//            public void onSpawnParticle(Particle particle) {
+//                server.sendToAll(new SpawnParticlePacket(particle));
+//            }
+//
+//        };
 
         // TODO: Ask wilson to explain this
 //        battle.onSpawnParticle(
