@@ -67,7 +67,7 @@ public class Attack extends DamageSource {
     }
 
     public void onSpawn(int[] data) {
-        if (directional) {
+        if (directional && owner != null) {
             direction = owner.direction;
         }
         type.onSpawn(this, data);
