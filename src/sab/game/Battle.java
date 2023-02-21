@@ -70,14 +70,14 @@ public class Battle {
     // Callbacks
     private VoidFunction<Particle> spawnParticleCallback;
 
-    public Battle(Fighter fighter1, Fighter fighter2, int[] costumes, Stage stage, int player1Type, int player2Type) {
+    public Battle(Fighter fighter1, Fighter fighter2, int[] costumes, Stage stage, int player1Type, int player2Type, int lives) {
         this.stage = stage;
 
         players = new ArrayList<>();
-        player1 = new Player(fighter1, costumes[0], 0, this);
-        player1.setAI(player1Type == 0 ? null : new BaseAI(player1, 60 - 10 * player1Type));
-        player2 = new Player(fighter2, costumes[1], 1, this);
-        player2.setAI(player2Type == 0 ? null : new BaseAI(player2, 60 - 10 * player2Type));
+        player1 = new Player(fighter1, costumes[0], 0, lives, this);
+        player1.setAI(player1Type == 0 ? null : player1.fighter.getAI(player1, player1Type));
+        player2 = new Player(fighter2, costumes[1], 1, lives, this);
+        player2.setAI(player2Type == 0 ? null : player2.fighter.getAI(player2, player2Type));
         players.add(player1);
         players.add(player2);
         paused = false;
@@ -114,7 +114,7 @@ public class Battle {
     }
 
     public Battle() {
-        this(new Fighter(new Marvin()), new Fighter(new Chain()), new int[]{0, 0}, new Stage(new LastLocation()), 0, 0);
+        this(new Fighter(new Marvin()), new Fighter(new Chain()), new int[] {0, 0}, new Stage(new LastLocation()), 0, 0, 3);
     }
 
     public void onSpawnParticle(VoidFunction<Particle> callback) {

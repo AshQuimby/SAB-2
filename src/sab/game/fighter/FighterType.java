@@ -2,10 +2,17 @@ package sab.game.fighter;
 
 import com.seagull_engine.Seagraphics;
 import sab.game.Player;
+import sab.game.ai.AI;
+import sab.game.ai.BaseAI;
 import sab.game.screen.VictoryScreen;
 
-public abstract class FighterType { 
+public abstract class FighterType {
     public void setDefaults(Fighter fighter) {
+
+    }
+
+    public AI getAI(Player player, int difficulty) {
+        return new BaseAI(player, difficulty);
     }
 
     public void update(Fighter fighter, Player player) {

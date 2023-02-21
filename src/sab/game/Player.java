@@ -56,7 +56,7 @@ public class Player extends GameObject implements Hittable {
     private boolean hide;
     private boolean ledgeGrabbing;
 
-    public Player(Fighter fighter, int costume, int id, Battle battle) {
+    public Player(Fighter fighter, int costume, int id, int lives, Battle battle) {
         this.battle = battle;
 
         velocity = new Vector2();
@@ -82,7 +82,7 @@ public class Player extends GameObject implements Hittable {
 
         imageName = fighter.id + ".png";
 
-        lives = 2;
+        this.lives = lives;
 
         damage = 0;
 

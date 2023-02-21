@@ -53,7 +53,7 @@ public class StageSelectScreen extends ScreenAdapter {
     public Screen keyPressed(int keyCode) {
         if (keyCode == Input.Keys.D || keyCode == Input.Keys.RIGHT) stageIndex = sab.util.Utils.loop(stageIndex, 1, stages.size(), 0);
         if (keyCode == Input.Keys.A || keyCode == Input.Keys.LEFT) stageIndex = sab.util.Utils.loop(stageIndex, -1, stages.size(), 0);
-        if (keyCode == Input.Keys.ENTER) return new LocalBattleScreen(player1, player2, new int[] {player1Costume, player2Costume}, stages.get(stageIndex), player1Type, player2Type);
+        if (keyCode == Input.Keys.ENTER) return new LocalBattleScreen(player1, player2, new int[] {player1Costume, player2Costume}, stages.get(stageIndex), player1Type, player2Type, 3);
         if (keyCode == Input.Keys.ESCAPE) return Game.game.globalCharacterSelectScreen;
         SABSounds.playSound(SABSounds.BLIP);
         return this;
