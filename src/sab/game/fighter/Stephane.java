@@ -1,7 +1,11 @@
 package sab.game.fighter;
+import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.seagull_engine.GameObject;
 import com.seagull_engine.Seagraphics;
 
+import org.w3c.dom.css.Rect;
 import sab.game.Battle;
 import sab.game.Game;
 import sab.game.Player;
@@ -21,7 +25,6 @@ public class Stephane extends FighterType {
     private Animation bowAnimation;
     private Animation bowFastAnimation;
     private Animation bowFireworkAnimation;
-    private float fallingFor = 0;
 
     @Override
     public void setDefaults(Fighter fighter) {
@@ -34,13 +37,13 @@ public class Stephane extends FighterType {
         fighter.imageOffsetX = 2;
         fighter.imageOffsetY = 4;
         fighter.frames = 15;
-        fighter.acceleration = .28f;
+        fighter.acceleration = .3f;
         fighter.jumpHeight = 130;
-        fighter.friction = .225f;
+        fighter.friction = .2f;
         fighter.mass = 5.4f;
         fighter.jumps = 1;
         fighter.walkAnimation = new Animation(0, 3, 5, true);
-        fighter.description = "Nobody knows where Stephane came from as nobody knows what he is saying. All that comes from his mouth are ancient tounges and utterances like \"oui\" and \"tu comprends?\"";
+        fighter.description = "Nobody knows where Stephane came from as nobody knows what he is saying. All that comes from his mouth are ancient tongues and utterances like \"oui\" and \"tu comprends?\"";
         fighter.debut = "Blockbreak";
         
         fighter.freefallAnimation = new Animation(new int[]{7}, 1, true);
@@ -53,7 +56,7 @@ public class Stephane extends FighterType {
     }
 
     public boolean createBlock(Stage stage, Vector2 position) {
-        Platform block = new Platform((int) (position.x / 32) * 32, (int) (position.y / 32) * 32, 32, 32, "block.png", stage, new StageObjectBehaviour() {
+        Platform block = new Platform(position.x, position.y, 32, 32, "block.png", stage, new StageObjectBehaviour() {
             private int life = 240;
             
             @Override
@@ -84,14 +87,6 @@ public class Stephane extends FighterType {
                 player.startAttack(new Attack(new Firework(), player), bowFireworkAnimation, 24, 16, false);
             }
         }
-        if (player.touchingStage) {
-            if (fallingFor >= Game.game.window.resolutionY) {
-                player.kill(1);
-            }
-            fallingFor = 0;
-        } else if (player.velocity.y < 0) {
-            fallingFor -= player.velocity.y;
-        }
     }
 
     @Override
@@ -121,10 +116,27 @@ public class Stephane extends FighterType {
 
     @Override
     public void downAttack(Fighter fighter, Player player) {
-        Vector2 position = player.hitbox.getCenter(new Vector2());
-        position.y -= player.hitbox.height / 2 + 16;
-        // position.x -= 16;
-        createBlock(player.battle.getStage(), position);
+
+        Vector2 point = new Vector2(0, 0);
+        point = player.getCenter();
+        point.y -= player.hitbox.height / 2 + 17;
+        boolean moveUp = false;
+        for (GameObject gameObject : player.battle.getSolidStageObjects()) {
+            if (gameObject.hitbox.contains(point)) {
+                moveUp = true;
+                player.move(new Vector2(0, 32));
+                break;
+            }
+        }
+        player.velocity.y = 0;
+        Rectangle virtualBlock = new Rectangle(0, 0, 32, 32);
+        virtualBlock.setCenter(player.getCenter());
+        virtualBlock.y -= player.hitbox.height / 2 + 16;
+        virtualBlock.x = (int) ((virtualBlock.x + 16) / 32) * 32;
+        virtualBlock.y = (int) ((virtualBlock.y) / 32) * 32;
+        if (moveUp) player.hitbox.y = virtualBlock.y + virtualBlock.height;
+
+        createBlock(player.battle.getStage(), virtualBlock.getPosition(new Vector2()));
     }
 
     @Override

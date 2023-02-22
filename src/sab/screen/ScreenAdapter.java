@@ -1,5 +1,6 @@
 package sab.screen;
 
+import com.badlogic.gdx.controllers.Controller;
 import com.seagull_engine.Seagraphics;
 
 public class ScreenAdapter implements Screen {
@@ -15,6 +16,11 @@ public class ScreenAdapter implements Screen {
 
     @Override
     public Screen update() {
+        return this;
+    }
+
+    @Override
+    public Screen controllerAxisMoved(Controller controller, int axis, float value, float deltaValue) {
         return this;
     }
 

@@ -2,6 +2,7 @@ package sab.game;
 
 import java.util.List;
 
+import com.badlogic.gdx.controllers.Controller;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
@@ -230,10 +231,30 @@ public class Player extends GameObject implements Hittable {
         return currentAction.usingAnimation(animation);
     }
 
+    public void checkController() {
+//        if (Game.playerController.controllerMap.containsKey(id)) {
+//            Controller controller = Game.playerController.controllerMap.get(id);
+//            if (controller.getAxis(0) > 0.5f) {
+//                keys.press(Keys.RIGHT);
+//            } else {
+//                keys.release(Keys.RIGHT);
+//            }
+//
+//            if (controller.getAxis(2) > 0.5f) {
+//                keys.press(Keys.LEFT);
+//            } else {
+//                keys.release(Keys.LEFT);
+//            }
+//        }
+    }
+
     @Override
     public void preUpdate() {
+        checkController();
+
         update();
         postUpdate();
+
         if (hasItem()) heldItem.updateHeld(this);
     }
 
