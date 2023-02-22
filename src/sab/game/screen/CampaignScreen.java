@@ -8,8 +8,9 @@ import sab.game.SABSounds;
 import sab.game.fighter.*;
 import sab.game.stage.*;
 import sab.screen.Screen;
+import sab.screen.ScreenAdapter;
 
-public class CampaignScreen implements Screen {
+public class CampaignScreen extends ScreenAdapter {
     private static final int CARD_WIDTH = 136 * 4;
     private static final int CARD_HEIGHT = 161 * 4;
 

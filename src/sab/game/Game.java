@@ -2,20 +2,14 @@ package sab.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.controllers.*;
 import com.badlogic.gdx.math.MathUtils;
 import com.seagull_engine.Messenger;
 import com.seagull_engine.Seagraphics;
 import com.seagull_engine.SeagullManager;
 
 import sab.game.attack.AttackType;
-import sab.game.fighter.BigSeagull;
-import sab.game.fighter.Chain;
-import sab.game.fighter.EmperorEvil;
-import sab.game.fighter.FighterType;
-import sab.game.fighter.Gus;
-import sab.game.fighter.Marvin;
-import sab.game.fighter.Snas;
-import sab.game.fighter.Walouis;
+import sab.game.fighter.*;
 import sab.game.screen.CharacterSelectScreen;
 import sab.game.screen.JukeboxScreen;
 import sab.game.screen.ModErrorScreen;
@@ -28,8 +22,6 @@ import sab.game.stage.OurSports;
 import sab.game.stage.StageType;
 import sab.game.stage.ThumbabasLair;
 import sab.game.stage.Warzone;
-import sab.game.fighter.EmptySoldier;
-import sab.game.fighter.Stephane;
 import sab.modloader.Mod;
 import sab.modloader.ModLoader;
 import sab.screen.Screen;
@@ -38,13 +30,12 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Game extends Messenger {
     public static final Game game = new Game();
+
+    public static PlayerController playerController = new PlayerController();
     
     public final List<Class<? extends FighterType>> fighters;
     public final List<Class<? extends StageType>> stages;
@@ -71,9 +62,10 @@ public class Game extends Messenger {
     // Initial load tasks (like from Among Us)
     @Override
     public void load() {
+        Controllers.addListener(playerController);
         Settings.loadSettings();
         Mod baseGame = new Mod("Super Ass Brothers", "sab", "1.0", "Base game content");
-        baseGame.addFighters((Class<? extends FighterType>[]) new Class<?>[] {Marvin.class, Chain.class, Walouis.class, Gus.class, EmperorEvil.class, Snas.class, Stephane.class, EmptySoldier.class, BigSeagull.class});
+        baseGame.addFighters((Class<? extends FighterType>[]) new Class<?>[] {Marvin.class, Chain.class, Walouis.class, Gus.class, EmperorEvil.class, Snas.class, Stephane.class, UnnamedDuck.class, BigSeagull.class});
         baseGame.addStages((Class<? extends StageType>[]) new Class<?>[] {LastLocation.class, Warzone.class, DesertBridge.class, ThumbabasLair.class, OurSports.class, COBS.class, Boxtopia.class});
         addMod(baseGame);
         loadMods();
@@ -111,7 +103,11 @@ public class Game extends Messenger {
         }
     }
 
-    // Get an AttackType from a String ID, idential to the ModLoader.getAttackType method
+    public void controllerAxisMoved(Controller controller, int axis, float value, float deltaValue) {
+        screen = screen.controllerAxisMoved(controller, axis, value, deltaValue);
+    }
+
+    // Get an AttackType from a String ID, identical to the ModLoader.getAttackType method
     public AttackType getAttackType(String id) {
         return ModLoader.getAttackType(attacks.get(id));
     }
