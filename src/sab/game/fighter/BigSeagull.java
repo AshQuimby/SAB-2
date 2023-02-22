@@ -1,7 +1,10 @@
 package sab.game.fighter;
 
+import com.badlogic.gdx.math.Vector2;
 import sab.game.Player;
 import sab.game.SABSounds;
+import sab.game.ai.AI;
+import sab.game.ai.BaseAI;
 import sab.game.animation.Animation;
 import sab.game.attack.Attack;
 import sab.game.attack.big_seagull.Glide;
@@ -44,6 +47,33 @@ public class BigSeagull extends FighterType {
         hoverAnimation = new Animation(new int[] {13, 16, 17, 18}, 10, true);
         peckAnimation = new Animation(11, 12, 6, true);
         gustAnimation = new Animation(new int[] {13, 5}, 12, true);
+    }
+
+    @Override
+    public AI getAI(Player player, int difficulty) {
+        return new BaseAI(player, difficulty, 0) {
+            @Override
+            public void attack(Vector2 center, Player target, Vector2 targetPosition) {
+                if (isDirectlyHorizontal(target.hitbox) && Math.random() * 20 < difficulty) {
+                    if (target.damage > 30 && Math.random() * 100 + target.damage > 100) {
+                        releaseKey(Keys.LEFT);
+                        releaseKey(Keys.RIGHT);
+                        pressKey(Keys.ATTACK);
+                    } else {
+                        if (Math.random() < .2) {
+                            releaseKey(Keys.LEFT);
+                            releaseKey(Keys.RIGHT);
+                            pressKey(Keys.DOWN);
+                            pressKey(Keys.ATTACK);
+                        } else {
+                            pressKey(Keys.ATTACK);
+                        }
+                    }
+                } else if ((isDirectlyAbove(target.hitbox) || isDirectlyBelow(target.hitbox)) && Math.random() * 15 < difficulty) {
+                    pressKey(Keys.UP);
+                }
+            }
+        };
     }
 
     @Override

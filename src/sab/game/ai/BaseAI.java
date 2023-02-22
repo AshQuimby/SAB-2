@@ -120,9 +120,11 @@ public class BaseAI extends AI {
         }
 
         if (movingToCenter) {
-            pressKey(Keys.UP);
-            if (player.getRemainingJumps() == 0) {
-                pressKey(Keys.ATTACK);
+            if (player.velocity.y <= 0) {
+                pressKey(Keys.UP);
+                if (player.getRemainingJumps() == 0 && Math.abs(center.x - platformToCenterOn.hitbox.x + platformToCenterOn.hitbox.width / 2) < preferredHorizontalDistance) {
+                    pressKey(Keys.ATTACK);
+                }
             }
 
             if (center.x < platformToCenterOn.hitbox.x + platformToCenterOn.hitbox.width / 2) {
@@ -141,18 +143,20 @@ public class BaseAI extends AI {
             return;
         }
 
+        // The minimum distance to the edge of the platform the player can get before it tries to get to the center.
+        float minDistanceToEdge = Math.min(player.hitbox.width * 2, Math.max(platformBelow.hitbox.width - preferredHorizontalDistance, 0));
         if (Math.abs(center.x - targetPosition.x) < preferredHorizontalDistance && isDirectlyHorizontal(target.hitbox)) {
             if (center.x < targetPosition.x) pressKey(Keys.LEFT);
             if (center.x > targetPosition.x) pressKey(Keys.RIGHT);
 
-            if (Math.abs(center.x - platformBelow.hitbox.x) < player.hitbox.width * 2) {
+            if (Math.abs(center.x - platformBelow.hitbox.x) < minDistanceToEdge) {
                 releaseKey(Keys.LEFT);
                 pressKey(Keys.RIGHT);
                 pressKey(Keys.UP);
                 platformToCenterOn = platformBelow;
                 movingToCenter = true;
             }
-            if (Math.abs(center.x - (platformBelow.hitbox.x + platformBelow.hitbox.width)) < player.hitbox.width * 2) {
+            if (Math.abs(center.x - (platformBelow.hitbox.x + platformBelow.hitbox.width)) < minDistanceToEdge) {
                 releaseKey(Keys.RIGHT);
                 pressKey(Keys.LEFT);
                 pressKey(Keys.UP);

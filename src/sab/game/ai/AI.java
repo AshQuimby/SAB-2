@@ -10,6 +10,7 @@ import sab.game.Player;
 import sab.game.attack.Attack;
 import sab.game.stage.Ledge;
 import sab.game.stage.Platform;
+import sab.net.Keys;
 import sab.util.Utils;
 
 public class AI {
@@ -59,6 +60,39 @@ public class AI {
 
     public boolean isDirectlyBelow(Rectangle rect) {
         return (player.hitbox.x < rect.x + rect.width && player.hitbox.x + player.hitbox.width > rect.x) && player.hitbox.y < rect.y;
+    }
+
+    public boolean isFacing(float x) {
+        float dx = Math.signum(x - (player.hitbox.x + player.hitbox.width / 2));
+        return dx == player.direction || dx == 0;
+    }
+
+    public void useNeutralAttack() {
+        releaseAllKeys();
+        pressKey(Keys.ATTACK);
+    }
+
+    public void useSideAttack(int direction) {
+        releaseAllKeys();
+        if (direction == -1) pressKey(Keys.LEFT);
+        else pressKey(Keys.RIGHT);
+        pressKey(Keys.ATTACK);
+    }
+
+    public void useSideAttack() {
+        useSideAttack(player.direction);
+    }
+
+    public void useUpAttack() {
+        releaseAllKeys();
+        pressKey(Keys.UP);
+        pressKey(Keys.ATTACK);
+    }
+
+    public void useDownAttack() {
+        releaseAllKeys();
+        pressKey(Keys.DOWN);
+        pressKey(Keys.ATTACK);
     }
     
     public final Player getNearestOpponent() {
