@@ -1,12 +1,18 @@
 package sab.game.fighter;
 
+import com.badlogic.gdx.math.Vector2;
 import sab.game.Player;
+import sab.game.ai.AI;
+import sab.game.ai.BaseAI;
 import sab.game.animation.Animation;
 import sab.game.attack.Attack;
 import sab.game.attack.gus.SussyVent;
 import sab.game.attack.gus.Tongue;
 import sab.game.attack.gus.Bullet;
 import sab.game.attack.gus.MiniGus;
+import sab.game.stage.Ledge;
+import sab.game.stage.Platform;
+import sab.net.Keys;
 
 public class Gus extends FighterType {
     private Animation shootAnimation;
@@ -40,6 +46,105 @@ public class Gus extends FighterType {
         shootAnimation = new Animation(9, 10, 5, true);
         tongueAnimation = new Animation(4, 5, 7, true);
         placeMiniGusAnimation = new Animation(new int[] {11, 0}, 8, false);
+    }
+
+    @Override
+    public AI getAI(Player player, int difficulty) {
+        return new BaseAI(player, difficulty, 80) {
+            @Override
+            protected void recover(Platform targetPlatform, Ledge targetLedge) {
+                Vector2 center = player.hitbox.getCenter(new Vector2());
+
+                boolean vented = false;
+                for (Attack attack : player.battle.getAttacks()) {
+                    if (attack.owner == player && attack.alive && attack.type instanceof SussyVent) {
+                        vented = true;
+                        break;
+                    }
+                }
+
+                if (vented) {
+                    if (targetPlatform != null) {
+                        if (isDirectlyAbove(targetPlatform.hitbox)) {
+                            pressKey(Keys.ATTACK);
+                            return;
+                        }
+                        if (isDirectlyBelow(targetPlatform.hitbox)) {
+                            if (targetPlatform.isSolid()) {
+                                float distanceToLeftEdge = Math.abs(targetPlatform.hitbox.x - (player.hitbox.x + player.hitbox.width));
+                                float distanceToRightEdge = Math.abs(targetPlatform.hitbox.x + targetPlatform.hitbox.width - player.hitbox.x);
+                                pressKey(distanceToLeftEdge < distanceToRightEdge ? Keys.LEFT : Keys.RIGHT);
+                            } else {
+                                pressKey(Keys.UP);
+                            }
+
+                            return;
+                        }
+
+                        float platformCenterX = targetPlatform.hitbox.x + targetPlatform.hitbox.width / 2;
+                        if (center.x < platformCenterX) pressKey(Keys.RIGHT);
+                        else if (center.x > platformCenterX) pressKey(Keys.LEFT);
+
+                        if (player.hitbox.y < targetPlatform.hitbox.y + targetPlatform.hitbox.height) pressKey(Keys.UP);
+                    } else if (targetLedge != null) {
+                        Vector2 ledgePosition = targetLedge.grabBox.getCenter(new Vector2());
+                        if (center.x < ledgePosition.x) pressKey(Keys.RIGHT);
+                        if (center.x > ledgePosition.x) pressKey(Keys.LEFT);
+                        if (center.y < ledgePosition.y) pressKey(Keys.UP);
+                        if (center.y > ledgePosition.y) pressKey(Keys.DOWN);
+                    }
+                } else {
+                    if (player.getRemainingJumps() == 0 && !player.hasAction()) {
+                            pressKey(Keys.UP);
+                            pressKey(Keys.ATTACK);
+                    } else {
+                        if (player.velocity.y <= 0) {
+                            pressKey(Keys.UP);
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void attack(Vector2 center, Player target, Vector2 targetPosition) {
+                preferredHorizontalDistance = Math.max(0, 80 - target.damage / 2);
+
+                boolean vented = false;
+                for (Attack attack : player.battle.getAttacks()) {
+                    if (attack.owner == player && attack.alive && attack.type instanceof SussyVent) {
+                        vented = true;
+                        break;
+                    }
+                }
+                if (vented) {
+                    if (targetPosition.y > center.y) {
+                        pressKey(Keys.UP);
+                    } else {
+                        pressKey(Keys.ATTACK);
+                        return;
+                    }
+                }
+
+                if (Math.random() * 15 > difficulty) return;
+                if (isDirectlyHorizontal(target.hitbox) && isFacing(targetPosition.x)) {
+                    float horizontalDistance = Math.abs(center.x - targetPosition.x);
+
+                    if (horizontalDistance <= 120) {
+                        useSideAttack();
+                    } else {
+                        Gus gus = (Gus) player.fighter.type;
+                        if (gus.miniGus == null || !gus.miniGus.alive) {
+                            useDownAttack();
+                        } else {
+                            useNeutralAttack();
+                        }
+                    }
+                } else if (isDirectlyBelow(target.hitbox)) {
+                    pressKey(Keys.UP);
+                    pressKey(Keys.ATTACK);
+                }
+            }
+        };
     }
 
     @Override

@@ -1,13 +1,16 @@
 package sab.game.fighter;
 
+import com.badlogic.gdx.math.Vector2;
 import sab.game.Player;
 import sab.game.ai.AI;
+import sab.game.ai.BaseAI;
 import sab.game.animation.Animation;
 import sab.game.attack.Attack;
 import sab.game.attack.chain.AirSlash;
 import sab.game.attack.chain.ChainSlash;
 import sab.game.attack.chain.BoomerangKnife;
 import sab.game.attack.chain.FallingKnife;
+import sab.net.Keys;
 
 public class Chain extends FighterType {
     public boolean hasBoomerang;
@@ -43,6 +46,32 @@ public class Chain extends FighterType {
         swingAnimation = new Animation(new int[] {4, 5, 3}, 5, true);
         flyingAnimation = new Animation(new int[] {6}, 5, true);
         fighter.freefallAnimation = new Animation(new int[]{3}, 1, false);
+    }
+
+    @Override
+    public AI getAI(Player player, int difficulty) {
+        return new BaseAI(player, difficulty, 24) {
+            private static final int SLASH_DISTANCE = 40;
+
+            @Override
+            public void attack(Vector2 center, Player target, Vector2 targetPosition) {
+                if (Math.random() * 20 > difficulty) return;
+
+                if (isDirectlyHorizontal(target.hitbox) && isFacing(targetPosition.x)) {
+                    float horizontalDistance = Math.abs(center.x - targetPosition.x);
+
+                    if (horizontalDistance <= SLASH_DISTANCE) {
+                        useNeutralAttack();
+                    } else {
+                        useSideAttack();
+                    }
+                } else if (isDirectlyBelow(target.hitbox) && Math.abs(center.y - targetPosition.y) > 32 && Math.random() * 20 < difficulty) {
+                    useDownAttack();
+                } else {
+                    useUpAttack();
+                }
+            }
+        };
     }
 
     @Override

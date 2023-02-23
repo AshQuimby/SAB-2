@@ -283,12 +283,12 @@ public class Player extends GameObject implements Hittable {
             }
         }
 
+        if (ai != null) ai.update();
+
         if (stunned > 0) {
             stunned--;
             return;
         }
-        
-        if (ai != null) ai.update();
 
         if (frozen > 0) {
             frozen--;
@@ -469,6 +469,10 @@ public class Player extends GameObject implements Hittable {
 
     public boolean frozen() {
         return frozen > 0;
+    }
+
+    public boolean isHidden() {
+        return hide;
     }
 
     public boolean respawning() {
