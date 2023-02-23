@@ -1,6 +1,7 @@
 package sab.game.fighter;
 
 import com.badlogic.gdx.math.Vector2;
+import com.seagull_engine.GameObject;
 import sab.game.Player;
 import sab.game.ai.AI;
 import sab.game.ai.BaseAI;
@@ -11,6 +12,7 @@ import sab.game.attack.gus.Tongue;
 import sab.game.attack.gus.Bullet;
 import sab.game.attack.gus.MiniGus;
 import sab.game.stage.Ledge;
+import sab.game.stage.PassablePlatform;
 import sab.game.stage.Platform;
 import sab.net.Keys;
 
@@ -50,7 +52,7 @@ public class Gus extends FighterType {
 
     @Override
     public AI getAI(Player player, int difficulty) {
-        return new BaseAI(player, difficulty, 80) {
+        return new BaseAI(player, difficulty, 100) {
             @Override
             protected void recover(Platform targetPlatform, Ledge targetLedge) {
                 Vector2 center = player.hitbox.getCenter(new Vector2());
@@ -107,7 +109,7 @@ public class Gus extends FighterType {
 
             @Override
             public void attack(Vector2 center, Player target, Vector2 targetPosition) {
-                preferredHorizontalDistance = Math.max(0, 80 - target.damage / 2);
+                preferredHorizontalDistance = Math.max(80, 100 - target.damage / 120 * 20);
 
                 boolean vented = false;
                 for (Attack attack : player.battle.getAttacks()) {
@@ -117,7 +119,7 @@ public class Gus extends FighterType {
                     }
                 }
                 if (vented) {
-                    if (targetPosition.y > center.y) {
+                    if (targetPosition.y > center.y + player.hitbox.height && target.touchingStage) {
                         pressKey(Keys.UP);
                     } else {
                         pressKey(Keys.ATTACK);
@@ -140,8 +142,13 @@ public class Gus extends FighterType {
                         }
                     }
                 } else if (isDirectlyBelow(target.hitbox)) {
-                    pressKey(Keys.UP);
-                    pressKey(Keys.ATTACK);
+                    for (GameObject platform : player.battle.getPassablePlatforms()) {
+                        if (isDirectlyBelow(platform.hitbox)) {
+                            pressKey(Keys.UP);
+                            pressKey(Keys.ATTACK);
+                            break;
+                        }
+                    }
                 }
             }
         };
