@@ -8,7 +8,6 @@ import sab.game.attack.AttackType;
 import sab.game.fighter.Chain;
 
 public class BoomerangKnife extends AttackType {
-    private Player originalOwner;
     private boolean returning;
 
     @Override
@@ -23,8 +22,6 @@ public class BoomerangKnife extends AttackType {
         attack.damage = 20;
         attack.direction = attack.owner.direction;
         attack.hitCooldown = 60;
-
-        originalOwner = attack.owner;
     }
 
     @Override
@@ -66,10 +63,5 @@ public class BoomerangKnife extends AttackType {
     @Override
     public void successfulHit(Attack attack, GameObject hit) {
 
-    }
-
-    @Override
-    public void onKill(Attack attack) {
-        ((Chain) originalOwner.fighter.type).hasBoomerang = true;
     }
 }

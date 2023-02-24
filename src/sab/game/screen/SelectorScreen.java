@@ -1,6 +1,9 @@
 package sab.game.screen;
 
 import com.badlogic.gdx.controllers.Controller;
+import sab.game.Game;
+import sab.game.Player;
+import sab.game.PlayerController;
 import sab.net.Keys;
 import sab.screen.ScreenAdapter;
 import sab.util.Utils;
@@ -45,19 +48,12 @@ public class SelectorScreen extends ScreenAdapter {
         selectorId = Utils.loop(selectorId, -1, options.length, 0);
     }
 
-    @Override
-    public Screen controllerAxisMoved(Controller controller, int axis, float value, float deltaValue) {
-        if (axis == 1) {
-            if (deltaValue < -0.25f) {
-                decrementSelection();
-            } else if (deltaValue > 0.25f) {
-                incrementSelection();
-            }
-        }
+    protected Screen onSelect(int selection) {
+        SABSounds.playSound(SABSounds.SELECT);
         return this;
     }
 
-    protected Screen onSelect(int selection) {
+    protected Screen onBack() {
         return this;
     }
 }

@@ -45,7 +45,7 @@ public class OurSports extends StageType {
             @Override
             public void update(StageObject stageObject, Battle battle) {
                 if (stormy) {
-                    stageObject.velocity.y = -0.25f;
+                    stageObject.velocity.y = -1f;
                 }
             }
         }));
@@ -80,8 +80,9 @@ public class OurSports extends StageType {
                 battle.addParticle(new Particle(0, new Vector2(MathUtils.random(stage.getUnsafeBlastZone().x, stage.getUnsafeBlastZone().x + stage.getUnsafeBlastZone().width + Game.game.window.resolutionX/2), stage.getSafeBlastZone().height), new Vector2(-15, -15), 25, 25, 0, "rain.png"));
             }
             if (stormTime % 600 == 0) {
-                lightning = 30;
+                lightning = 60;
             }
+            if (lightning == 50) SABSounds.playSound("thunder.mp3");
             stormTime++;
         }
     }
@@ -89,13 +90,15 @@ public class OurSports extends StageType {
     @Override
     public void renderOverlay(Stage stage, Seagraphics g) {
         if (lightning > 0) {
-            if (lightning == 30) SABSounds.playSound("thunder.mp3");
-            g.usefulTintDraw(g.imageProvider.getImage("pixel.png"), -Game.game.window.resolutionX/2, -Game.game.window.resolutionY/2, Game.game.window.resolutionX, Game.game.window.resolutionY, 0, 1, 0, false, false, new Color(1, 1, 1, lightning / 30f));
+            g.usefulTintDraw(g.imageProvider.getImage("pixel.png"), -Game.game.window.resolutionX / 2, -Game.game.window.resolutionY / 2, Game.game.window.resolutionX, Game.game.window.resolutionY, 0, 1, 0, false, false, new Color(1, 1, 1, Math.min(1, lightning / 50f)));
         }
     }
 
     @Override
     public void onPlayerHit(Stage stage, Player player, DamageSource damageSource, boolean finalBlow) {
-        // if (finalBlow) lightning = 30;
+        if (stormy && finalBlow) {
+            lightning = 30;
+            SABSounds.playSound("thunder.mp3");
+        }
     }
 }

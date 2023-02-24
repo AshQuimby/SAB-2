@@ -1,6 +1,7 @@
 package sab.game.screen;
 
 import com.badlogic.gdx.Input;
+import sab.game.Game;
 import sab.net.client.Client;
 import sab.net.client.ClientListener;
 import sab.net.packet.CharacterSelectPacket;
@@ -14,6 +15,7 @@ public class JoinedCharacterSelectScreen extends CharacterSelectScreen {
 
     public JoinedCharacterSelectScreen(Client client) {
         this.client = client;
+        Game.controllerManager.setInGameState(true);
 
         listener = new ClientListener() {
             @Override
