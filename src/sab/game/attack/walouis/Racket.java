@@ -39,20 +39,22 @@ public class Racket extends AttackType {
         attack.hitbox.setCenter(attack.owner.hitbox.getCenter(new Vector2()).add(0, 24));
         attack.drawRect.setCenter(attack.hitbox.getCenter(new Vector2()));
 
-        if (!attack.owner.keys.isPressed(Keys.ATTACK) && attack.owner.getCharge() > 0 && !swung) {
+        if (attack.owner.charging()) {
+            attack.life = 24;
             attack.damage = attack.owner.getCharge() / 3 + 12;
             attack.knockback = new Vector2(1 * attack.owner.direction, 0.5f).scl(attack.owner.getCharge() / 12f + 7f);
-            attack.owner.resetAction();
+            attack.owner.frame = 9;
+        } else if (!swung) {
+            attack.damage = attack.owner.getUsedCharge() / 3 + 12;
+            attack.knockback = new Vector2(1 * attack.owner.direction, 0.5f).scl(attack.owner.getCharge() / 12f + 7f);
             attack.owner.startAnimation(24, new Animation(new int[]{9, 5, 4, 0}, 4, false), 8, false);
             swung = true;
         }
 
+        attack.direction = attack.owner.direction;
+
         if (swung) {
             if (attack.life % 4 == 0) attack.frame++;
-        } else {
-            if (!attack.owner.charging()) attack.alive = false;
-            attack.owner.frame = 9;
-            attack.life = 24;
         }
 
         if (attack.frame > 5) attack.alive = false;
@@ -70,11 +72,13 @@ public class Racket extends AttackType {
         if (attack.frame == 2 || attack.frame == 3) {
             for (Attack other : attack.owner.battle.getAttacks()) {
                 if (other.reflectable) {
-                    if (other == attack) continue;
-    
-                        attack.velocity.x *= -1;
-                        attack.knockback.x *= -1;
-                        attack.owner = attack.owner;
+                    if (other.owner == attack.owner) continue;
+                    if (other.hitbox.overlaps(attack.hitbox)) {
+                        other.velocity.x *= -1;
+                        other.knockback.x *= -1;
+                        other.owner = attack.owner;
+                        other.damage *= 1.5f;
+                    }
                 }
             }
             attack.canHit = true;

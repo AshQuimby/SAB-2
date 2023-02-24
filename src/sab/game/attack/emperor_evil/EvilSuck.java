@@ -41,9 +41,11 @@ public class EvilSuck extends MeleeAttackType {
 
     @Override
     public void onKill(Attack attack) {
-        trappedPlayer.invulnerable = false;
-        trappedPlayer.reveal();
-        trappedPlayer = null;
+        if (trappedPlayer != null) {
+            trappedPlayer.invulnerable = false;
+            trappedPlayer.reveal();
+            trappedPlayer = null;
+        }
     }
 
     @Override

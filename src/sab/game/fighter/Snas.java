@@ -29,7 +29,7 @@ public class Snas extends FighterType {
         fighter.imageOffsetX = 0;
         fighter.imageOffsetY = 4;
         fighter.frames = 9;
-        fighter.acceleration = .28f;
+        fighter.acceleration = .34f;
         fighter.jumpHeight = 130;
         fighter.friction = .225f;
         fighter.mass = 5.4f;

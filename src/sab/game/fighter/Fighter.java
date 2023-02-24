@@ -148,6 +148,7 @@ public class Fighter implements Cloneable {
     }
 
     public void useItem(Player player) {
+        player.useItem();
         type.useItem(this, player);
     }
 

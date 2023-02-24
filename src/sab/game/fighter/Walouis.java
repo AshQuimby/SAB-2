@@ -50,8 +50,10 @@ public class Walouis extends FighterType {
 
     @Override
     public void neutralAttack(sab.game.fighter.Fighter fighter, Player player) {
-        if (!player.usedRecovery) player.startRepeatingAttack(new Attack(new TinyNote(), player), new Animation(new int[]{10}, 100, true), 1, 1, false, new int[]{0});
-        if (!player.usedRecovery) player.frame = 10;
+        if (!player.usedRecovery) {
+            player.startRepeatingAttack(new Attack(new TinyNote(), player), new Animation(new int[]{11}, 100, true), 1, 1, false, new int[]{0});
+            player.frame = 11;
+        }
     }
 
     @Override

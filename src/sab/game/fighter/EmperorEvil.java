@@ -35,7 +35,6 @@ public class EmperorEvil extends FighterType {
         fighter.doubleJumpMultiplier = 0.8f;
         fighter.speed = 9.2f;
         fighter.acceleration = .32f;
-        fighter.jumpHeight = 160;
         fighter.friction = .22f;
         fighter.mass = 7.5f;
         fighter.jumps = 1;

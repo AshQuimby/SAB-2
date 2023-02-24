@@ -5,6 +5,7 @@ import com.badlogic.gdx.controllers.Controller;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 import com.seagull_engine.Seagraphics;
 
 import sab.game.Game;
@@ -21,7 +22,12 @@ public class TitleScreen extends SelectorScreen {
 
     @Override
     public void render(Seagraphics g) {
+        g.useDynamicCamera();
+        g.getDynamicCamera().targetPosition = new Vector2(0, -(selectorId - 3) * 10);
+        g.getDynamicCamera().targetZoom = 0.9f;
+        g.getDynamicCamera().updateSeagullCamera(16);
         g.scalableDraw(g.imageProvider.getImage(Game.titleBackground), -Game.game.window.resolutionX / 2, -Game.game.window.resolutionY / 2, Game.game.window.resolutionX, Game.game.window.resolutionY);
+        g.useStaticCamera();
         if (Utils.christmas()) {
             g.scalableDraw(g.imageProvider.getImage("title_pagan.png"), -488 / 2, 92 + MathUtils.sin(Game.game.window.getTick() / 64f) * 4, 488, 248);
         } else {
@@ -49,18 +55,23 @@ public class TitleScreen extends SelectorScreen {
         
         switch(selection) {
             case 0 : {
+                Game.game.window.camera.reset();
                 return Game.game.globalCharacterSelectScreen;
             }
             case 1 : {
+                Game.game.window.camera.reset();
                 return new HostGameScreen();
             }
             case 2 : {
+                Game.game.window.camera.reset();
                 return new JoinGameScreen();
             }
             case 3 : {
+                Game.game.window.camera.reset();
                 return new CampaignScreen();
             }
             case 4 : {
+                Game.game.window.camera.reset();
                 return new SettingsScreen();
             }
             case 5 : {
