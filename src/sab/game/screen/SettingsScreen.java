@@ -130,30 +130,19 @@ public class SettingsScreen extends SelectorScreen {
     @Override
     public Screen onSelect(int selection) {
         switch(selection) {
-            case 0 -> {
-                
-            }
-            case 1 -> {
-
-            }
-            case 2 -> {
-                
-            }
-            case 3 -> {
-
-            }
-            case 4 -> {
-                Settings.fromHashMap(settings);
-                SABSounds.soundEngine.setCurrentMusicVolume(Settings.getMusicVolume() * Settings.getMasterVolume());
-                Settings.writeFile();
-                SABSounds.playSound(SABSounds.SELECT);
-                return new TitleScreen(false);
-            }
-            default -> {
-
-            }
+            case 4 :
+                return onBack();
+            default :
         }
 
         return this;
+    }
+
+    @Override
+    protected Screen onBack() {
+        Settings.fromHashMap(settings);
+        SABSounds.soundEngine.setCurrentMusicVolume(Settings.getMusicVolume() * Settings.getMasterVolume());
+        Settings.writeFile();
+        return new TitleScreen(false);
     }
 }

@@ -1,6 +1,7 @@
 package sab.game.screen;
 
 import com.badlogic.gdx.Input;
+import sab.game.Game;
 import sab.net.packet.CharacterSelectPacket;
 import sab.net.packet.Packet;
 import sab.net.server.Server;
@@ -15,6 +16,7 @@ public class HostedCharacterSelectScreen extends CharacterSelectScreen {
     public HostedCharacterSelectScreen(Server server, int remoteClient) {
         this.server = server;
         this.remoteClient = remoteClient;
+        Game.controllerManager.setInGameState(true);
 
         serverListener = new ServerListener() {
             @Override

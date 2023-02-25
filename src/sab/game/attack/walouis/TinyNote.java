@@ -50,7 +50,7 @@ public class TinyNote extends AttackType {
 
     @Override
     public void onSpawn(Attack attack, int[] data) {
-        attack.owner.frame = 10;
+        attack.owner.frame = 11;
         attack.hitbox.setCenter(attack.owner.hitbox.getCenter(new Vector2()).add(8 * attack.owner.direction, -8));
         attack.velocity = new Vector2(8 * attack.owner.direction, 0).rotateDeg((MathUtils.random() -0.5f) * 12);
         attack.knockback = new Vector2(0, 0);

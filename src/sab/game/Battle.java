@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
@@ -71,6 +72,7 @@ public class Battle {
     private VoidFunction<Particle> spawnParticleCallback;
 
     public Battle(Fighter fighter1, Fighter fighter2, int[] costumes, Stage stage, int player1Type, int player2Type, int lives) {
+        Game.controllerManager.setInGameState(true);
         this.stage = stage;
 
         players = new ArrayList<>();
@@ -268,6 +270,10 @@ public class Battle {
         }
 
         if (paused) return;
+
+        for (PlayerController playerController : Game.controllerManager.getControllers()) {
+            playerController.checkMacros(Gdx.input.getInputProcessor(), getPlayer(playerController.playerId));
+        }
 
         if (freezeFrames > 0) {
             freezeFrames--;

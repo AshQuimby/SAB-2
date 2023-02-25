@@ -25,6 +25,8 @@ public class Marvin extends FighterType {
     private Animation chargeAnimation;
     private Animation throwAnimation;
 
+    private Attack toilet;
+
     @Override
     public void setDefaults(sab.game.fighter.Fighter fighter) {
         fighter.id = "marvin";
@@ -112,10 +114,12 @@ public class Marvin extends FighterType {
     @Override
     public void upAttack(sab.game.fighter.Fighter fighter, Player player) {
         if (!player.usedRecovery) {
-            squatAnimation.reset();
-            player.startAttack(new Attack(new Toilet(), player), squatAnimation, 4, 30, false);
-            player.removeJumps();
-            player.usedRecovery = true;
+            if (toilet == null || toilet.alive) {
+                squatAnimation.reset();
+                player.startAttack(new Attack(new Toilet(), player), squatAnimation, 4, 30, false);
+                player.removeJumps();
+                player.usedRecovery = true;
+            }
         }
     }
 

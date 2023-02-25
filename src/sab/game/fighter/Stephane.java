@@ -78,6 +78,28 @@ public class Stephane extends FighterType {
         return true;
     }
 
+    public Rectangle createBlockRectangle(Player player) {
+        Vector2 point = player.getCenter();
+        point.y -= player.hitbox.height / 2 + 17;
+        boolean moveUp = false;
+        for (GameObject gameObject : player.battle.getSolidStageObjects()) {
+            if (gameObject.hitbox.contains(point)) {
+                moveUp = true;
+                player.move(new Vector2(0, 32));
+                break;
+            }
+        }
+        player.velocity.y = 0;
+        Rectangle virtualBlock = new Rectangle(0, 0, 32, 32);
+        virtualBlock.setCenter(player.getCenter());
+        virtualBlock.y -= player.hitbox.height / 2f + 16;
+        virtualBlock.x = Math.round((virtualBlock.x) / 32) * 32;
+        virtualBlock.y = Math.round((virtualBlock.y) / 32) * 32;
+        if (player.hitbox.overlaps(virtualBlock) || moveUp) player.hitbox.y = virtualBlock.y + virtualBlock.height;
+
+        return virtualBlock;
+    }
+
     @Override
     public void update(Fighter fighter, Player player) {
         if (player.usingAnimation(bowAnimation) && player.touchingStage) {
@@ -112,31 +134,15 @@ public class Stephane extends FighterType {
 
     @Override
     public void upAttack(Fighter fighter, Player player) {
+        createBlock(player.battle.getStage(), createBlockRectangle(player).getPosition(new Vector2()));
+        createBlock(player.battle.getStage(), createBlockRectangle(player).getPosition(new Vector2()));
+        createBlock(player.battle.getStage(), createBlockRectangle(player).getPosition(new Vector2()));
+        createBlock(player.battle.getStage(), createBlockRectangle(player).getPosition(new Vector2()));
     }
 
     @Override
     public void downAttack(Fighter fighter, Player player) {
-
-        Vector2 point = new Vector2(0, 0);
-        point = player.getCenter();
-        point.y -= player.hitbox.height / 2 + 17;
-        boolean moveUp = false;
-        for (GameObject gameObject : player.battle.getSolidStageObjects()) {
-            if (gameObject.hitbox.contains(point)) {
-                moveUp = true;
-                player.move(new Vector2(0, 32));
-                break;
-            }
-        }
-        player.velocity.y = 0;
-        Rectangle virtualBlock = new Rectangle(0, 0, 32, 32);
-        virtualBlock.setCenter(player.getCenter());
-        virtualBlock.y -= player.hitbox.height / 2 + 16;
-        virtualBlock.x = (int) ((virtualBlock.x + 16) / 32) * 32;
-        virtualBlock.y = (int) ((virtualBlock.y) / 32) * 32;
-        if (moveUp) player.hitbox.y = virtualBlock.y + virtualBlock.height;
-
-        createBlock(player.battle.getStage(), virtualBlock.getPosition(new Vector2()));
+        createBlock(player.battle.getStage(), createBlockRectangle(player).getPosition(new Vector2()));
     }
 
     @Override

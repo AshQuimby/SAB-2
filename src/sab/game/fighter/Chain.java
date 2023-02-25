@@ -13,11 +13,10 @@ import sab.game.attack.chain.FallingKnife;
 import sab.net.Keys;
 
 public class Chain extends FighterType {
-    public boolean hasBoomerang;
-
     private Animation swingAnimation;
     private Animation flyingAnimation;
 
+    private Attack boomerangKnife;
     private Attack fallingKnife;
 
     @Override
@@ -41,8 +40,8 @@ public class Chain extends FighterType {
         fighter.costumes = 3;
         fighter.description = "Raised in the lands of Mydrule, Chain was trained by the royal guard from a young age to be a murder machine. With his trusty knives and a passion for violence Chain proves that children are still dangerous!";
         fighter.debut = "The Legend of the Tri-Knife";
-
-        hasBoomerang = true;
+        boomerangKnife = null;
+        fallingKnife = null;
         swingAnimation = new Animation(new int[] {4, 5, 3}, 5, true);
         flyingAnimation = new Animation(new int[] {6}, 5, true);
         fighter.freefallAnimation = new Animation(new int[]{3}, 1, false);
@@ -90,10 +89,10 @@ public class Chain extends FighterType {
     @Override
     public void sideAttack(sab.game.fighter.Fighter fighter, Player player) {
         if (!player.usedRecovery) {
-            if (hasBoomerang) {
+            if (boomerangKnife == null || !boomerangKnife.alive) {
                 swingAnimation.reset();
-                player.startAttack(new Attack(new BoomerangKnife(), player), swingAnimation, 6, 12, false);
-                hasBoomerang = false;
+                boomerangKnife = new Attack(new BoomerangKnife(), player);
+                player.startAttack(boomerangKnife, swingAnimation, 6, 12, false);
             } else {
                 neutralAttack(fighter, player);
             }

@@ -35,14 +35,13 @@ import java.util.*;
 public class Game extends Messenger {
     public static final Game game = new Game();
 
-    public static PlayerController playerController = new PlayerController();
-    
+    public static ControllerManager controllerManager;
+    public static Map<Integer, Boolean> controllerKeysPressed;
     public final List<Class<? extends FighterType>> fighters;
     public final List<Class<? extends StageType>> stages;
     public final HashMap<String, Class<? extends AttackType>> attacks;
     public final CharacterSelectScreen globalCharacterSelectScreen;
     public static String titleBackground;
-    protected SeagullManager manager;
     private List<String> modErrors;
     private Screen screen;
 
@@ -54,7 +53,9 @@ public class Game extends Messenger {
         fighters = new ArrayList<>();
         stages = new ArrayList<>();
         attacks = new HashMap<>();
+        controllerManager = new ControllerManager();
         globalCharacterSelectScreen = new CharacterSelectScreen();
+        controllerKeysPressed = new HashMap<>();
         modErrors = new ArrayList<>();
         JukeboxScreen.loadVanillaSongs();
     }
@@ -62,11 +63,15 @@ public class Game extends Messenger {
     // Initial load tasks (like from Among Us)
     @Override
     public void load() {
-        Controllers.addListener(playerController);
+        Controllers.addListener(controllerManager);
         Settings.loadSettings();
-        Mod baseGame = new Mod("Super Ass Brothers", "sab", "1.0", "Base game content");
-        baseGame.addFighters((Class<? extends FighterType>[]) new Class<?>[] {Marvin.class, Chain.class, Walouis.class, Gus.class, EmperorEvil.class, Snas.class, Stephane.class, UnnamedDuck.class, BigSeagull.class});
-        baseGame.addStages((Class<? extends StageType>[]) new Class<?>[] {LastLocation.class, Warzone.class, DesertBridge.class, ThumbabasLair.class, OurSports.class, COBS.class, Boxtopia.class});
+        Mod baseGame = new Mod("Super Ass Brothers: Remasstered", "sab", "1.0", "Base game content");
+        try {
+            baseGame.addFighters((Class<? extends FighterType>[]) new Class<?>[]{Marvin.class, Chain.class, Walouis.class, Gus.class, EmperorEvil.class, Snas.class, Stephane.class, UnnamedDuck.class, BigSeagull.class});
+            baseGame.addStages((Class<? extends StageType>[]) new Class<?>[]{LastLocation.class, Warzone.class, DesertBridge.class, ThumbabasLair.class, OurSports.class, COBS.class, Boxtopia.class});
+        } catch (Exception e) {
+            throw new RuntimeException("Like actually what the hell, how did you break this. You should not be able to break this unless your brain cell count reached the long limit.");
+        }
         addMod(baseGame);
         loadMods();
         
@@ -87,7 +92,7 @@ public class Game extends Messenger {
 
     // Randomly selects a title screen background
     public static void selectNewTitleScreen() {
-        switch (MathUtils.random.nextInt(2)) {
+        switch (MathUtils.random.nextInt(3)) {
             case 0 -> {
                 titleBackground = "title_screen_background.png";
             }
@@ -95,16 +100,9 @@ public class Game extends Messenger {
                 titleBackground = "title_screen_background_alt_1.png";
             }
             case 2 -> {
-                titleBackground = "title_screen_background_alt_1.png";
-            }
-            default -> {
-                titleBackground = "title_screen_background.png";
+                titleBackground = "title_screen_background_alt_2.png";
             }
         }
-    }
-
-    public void controllerAxisMoved(Controller controller, int axis, float value, float deltaValue) {
-        screen = screen.controllerAxisMoved(controller, axis, value, deltaValue);
     }
 
     // Get an AttackType from a String ID, identical to the ModLoader.getAttackType method
@@ -140,7 +138,83 @@ public class Game extends Messenger {
     // Updates every tick
     @Override
     public void update() {
+        checkControllerKeys();
         screen = screen.update();
+        controllerManager.update();
+    }
+
+    public void checkControllerKeys() {
+        for (PlayerController controller : controllerManager.getControllers()) {
+            Set<Integer> testedInputs = new HashSet<>();
+            for (int i = 0; i < controller.getButtonCount(); i++) {
+                int key = controller.getKeyFromButton(i);
+                if (key != -1) {
+                    boolean alreadyChecked = false;
+                    for (int input : testedInputs) {
+                        if (input == key) {
+                            alreadyChecked = true;
+                            break;
+                        }
+                    }
+                    if (!alreadyChecked) {
+                        if (controller.getButton(i)) {
+                            testedInputs.add(key);
+                            if (controllerKeysPressed.get(key) == null || !controllerKeysPressed.get(key)) {
+                                if (controllerKeysPressed.containsKey(key)) {
+                                    controllerKeysPressed.replace(key, true);
+                                } else {
+                                    controllerKeysPressed.put(key, true);
+                                }
+                                Gdx.input.getInputProcessor().keyDown(key);
+                            }
+                        }
+                    }
+                }
+            }
+            for (int i = 0; i < controller.getAxisCount(); i++) {
+                int key = controller.getKeyFromAxis(i);
+                if (key != -1) {
+                    boolean alreadyChecked = false;
+                    for (int input : testedInputs) {
+                        if (input == key) {
+                            alreadyChecked = true;
+                            break;
+                        }
+                    }
+                    if (!alreadyChecked) {
+                        if (Math.abs(controller.getAxis(i)) > 0.35f) {
+                            testedInputs.add(key);
+                            if (controllerKeysPressed.get(key) == null || !controllerKeysPressed.get(key)) {
+                                if (controllerKeysPressed.containsKey(key)) {
+                                    controllerKeysPressed.replace(key, true);
+                                } else {
+                                    controllerKeysPressed.put(key, true);
+                                }
+                                Gdx.input.getInputProcessor().keyDown(key);
+                            }
+                        }
+                    }
+                }
+            }
+            for (int i = 0; i < controller.getButtonCount(); i++) {
+                int key = controller.getKeyFromButton(i);
+                boolean checked = false;
+                for (int input : testedInputs) {
+                    if (input == key) {
+                        checked = true;
+                    }
+                }
+                if (!checked) {
+                    Gdx.input.getInputProcessor().keyUp(key);
+                    controllerKeysPressed.replace(key, false);
+                }
+            }
+        }
+    }
+
+    public void releaseControllerKey(int key) {
+        Gdx.input.getInputProcessor().keyUp(key);
+        controllerKeysPressed.replace(key, false);
     }
 
     // Renders every tick

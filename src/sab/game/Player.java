@@ -637,7 +637,7 @@ public class Player extends GameObject implements Hittable {
                 postRender(g);
 
                 if (frozen > 0) {
-                    g.usefulDraw(g.imageProvider.getImage("ice.png"), drawRect.x, drawRect.y, (int) drawRect.width, (int) drawRect.height, 0, 1, rotation, false, false);
+                    g.usefulDraw(g.imageProvider.getImage("ice.png"), drawRect.x - 4, drawRect.y - 4, (int) drawRect.width + 8, (int) drawRect.height + 8, 0, 1, rotation, false, false);
                 }
                 if (respawnTime > 0) {
                     g.usefulDraw(g.imageProvider.getImage("p" + (id + 1) + "_spawn_platform.png"), drawRect.getCenter(new Vector2()).x - 40, drawRect.y - 32, 80, 32, 0, 1, rotation, false, false);

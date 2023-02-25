@@ -34,7 +34,7 @@ public class Bomb extends AttackType {
         attack.velocity.y -= 0.15f;
         attack.velocity.x *= 0.99f;
 
-        attack.rotation -= 8 * attack.direction;
+        attack.rotation += 2 * attack.direction;
         
         if (exploded) {
             attack.alive = false;
