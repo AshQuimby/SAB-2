@@ -4,6 +4,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.seagull_engine.GameObject;
 
+import com.seagull_engine.Seagraphics;
 import sab.game.attack.Attack;
 import sab.game.attack.AttackType;
 
@@ -13,7 +14,7 @@ public class Baguette extends AttackType {
     @Override
     public void setDefaults(Attack attack) {
         attack.imageName = "baguette.png";
-        attack.life = 10;
+        attack.life = 18;
         attack.frameCount = 1;
         attack.velocity = new Vector2();
         attack.hitbox.width = 48;
@@ -25,17 +26,22 @@ public class Baguette extends AttackType {
         attack.hitCooldown = 10;
         attack.reflectable = false;
 
-        swing = 0;
+        swing = 90;
+    }
+
+    private void setRootPosition(Attack attack, Vector2 rootPosition) {
+        Vector2 position = rootPosition.cpy();
+        Vector2 corner = new Vector2(attack.hitbox.width / 2 * attack.direction, -attack.hitbox.height / 2);
+        position.sub(corner.rotateDeg(attack.rotation - 90 * attack.direction));
+        attack.hitbox.setCenter(position);
     }
 
     @Override
     public void update(Attack attack) {
-        attack.rotation = -90 - (swing - 45) * attack.direction;
-        attack.hitbox.setCenter(attack.owner.hitbox.getCenter(new Vector2()).add(12 * attack.direction, 0));
-        swing += 16;
+        attack.rotation = swing * attack.direction;
+        setRootPosition(attack, new Vector2(attack.owner.hitbox.x + attack.owner.hitbox.width / 2 + MathUtils.cosDeg(swing) * 20 * attack.direction - attack.direction * 12, attack.owner.hitbox.y + MathUtils.sinDeg(swing) * 20 + 24));
 
-        attack.hitbox.x += MathUtils.cos((attack.rotation + 45) * MathUtils.degreesToRadians) * 12;
-        attack.hitbox.y += MathUtils.sin((attack.rotation + 45) * MathUtils.degreesToRadians) * 12;
+        swing -= 10;
     }
 
     @Override
