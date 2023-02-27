@@ -44,7 +44,7 @@ public class HellTwoBoogaloo extends StageType {
         }
 
         for (i = 0; i < 24; i++) {
-            platform = new Platform(-512 + 64 *, -32 + i * 32, 64 * + 64 * (i / 8), 32 + i, "fight_button.png", stage);
+            platform = new Platform(-512 + 64 * i, -32 + i * 32, 64 * + 64 * (i / 8), 32 + i, "fight_button.png", stage);
             stage.addStageObject(platform);
         }
 
