@@ -38,7 +38,7 @@ public class Walouis extends FighterType {
         fighter.mass = 5.8f;
         fighter.walkAnimation = new Animation(0, 3, 5, true);
         throwAnimation = new Animation(new int[]{2, 4, 5}, 10, false);
-        fighter.description = "Walouis, the world famous jazz musician and singer is known for his smash hit albums such as: 'Waaht is Love', 'A Wah's Life', and 'Waaghing in the shadows.' He also sees sucess in his professional badminton career.";
+        fighter.description = "Walouis, the world famous jazz musician and singer is known for his smash hit albums such as: 'Waaht is Love', 'A Wah's Life', and 'Waaghing in the shadows.' He also sees success in his professional badminton career.";
         fighter.debut = "Marvin Badminton";
         fighter.costumes = 3;
     }

@@ -41,7 +41,7 @@ public class John extends FighterType {
         fighter.mass = 5f;
         fighter.jumps = 1;
         fighter.walkAnimation = new Animation(0, 3, 8, true);
-        fighter.description = "American attorney John Joseph has a spotless legal record. Despite this, he has been finding it tough to get work after being cursed to be a pink sphere for all eternity. In this state he worked exclusively his arms so much that his legs withered away to the point of being vistigial.";
+        fighter.description = "American attorney John Joseph has a spotless legal record. Despite this, he has been finding it tough to get work after being cursed to be a pink sphere for all eternity. In this state he worked exclusively his arms so much that his legs withered away to the point of being vestigial.";
         fighter.debut = "John Joseph's Nightmare World";
 
         swingAnimation = new Animation(new int[] {4, 5, 0}, 7, true);

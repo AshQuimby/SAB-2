@@ -49,7 +49,7 @@ public class Stephane extends FighterType {
         fighter.freefallAnimation = new Animation(new int[]{7}, 1, true);
         fighter.costumes = 3;
 
-        swingAnimation = new Animation(new int[] { 5, 6, 0 }, 3, true);
+        swingAnimation = new Animation(new int[] {4, 5, 6}, 6, true);
         bowAnimation = new Animation(new int[] {9, 10, 11, 14}, 8, true);
         bowFastAnimation = new Animation(new int[] {9, 10, 11, 14}, 4, true);
         bowFireworkAnimation = new Animation(new int[] {12, 13, 14}, 12, true);
@@ -115,7 +115,7 @@ public class Stephane extends FighterType {
     public void neutralAttack(Fighter fighter, Player player) {
         if (!player.usedRecovery) {
             swingAnimation.reset();
-            player.startAttack(new Attack(new Baguette(), player), swingAnimation, 4, 9, false);
+            player.startAttack(new Attack(new Baguette(), player), swingAnimation, 4, 18, false);
         }
     }
 

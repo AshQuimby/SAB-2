@@ -14,7 +14,6 @@ import sab.screen.Screen;
 import sab.util.Utils;
 
 public class TitleScreen extends SelectorScreen {
-    
     public TitleScreen(boolean playMusic) {
         super(new String[] {"Play", "Host", "Join", "Campaign", "Settings", "Extras", "Quit"});
         if (playMusic) SABSounds.playMusic("lobby_music.mp3", true);
@@ -23,7 +22,7 @@ public class TitleScreen extends SelectorScreen {
     @Override
     public void render(Seagraphics g) {
         g.useDynamicCamera();
-        g.getDynamicCamera().targetPosition = new Vector2(0, -(selectorId - 3) * 10);
+        g.getDynamicCamera().targetPosition = new Vector2(0, -(selectorId - 3) * 10).add(64 * MathUtils.sin(.004f * Game.game.window.getTick()), 0);
         g.getDynamicCamera().targetZoom = 0.9f;
         g.getDynamicCamera().updateSeagullCamera(16);
         g.scalableDraw(g.imageProvider.getImage(Game.titleBackground), -Game.game.window.resolutionX / 2, -Game.game.window.resolutionY / 2, Game.game.window.resolutionX, Game.game.window.resolutionY);
