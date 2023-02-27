@@ -7,6 +7,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.seagull_engine.Seagraphics;
 
+import sab.game.Battle;
 import sab.game.Game;
 import sab.game.SABSounds;
 import sab.game.fighter.Fighter;
@@ -36,7 +37,10 @@ public class StageSelectScreen extends ScreenAdapter {
         this.player2Type = player2Type;
 
         for (Class<? extends StageType> stage : Game.game.stages) {
-            stages.add(new Stage(ModLoader.getStageType(stage)));
+            Stage drawnStage = new Stage(ModLoader.getStageType(stage));
+            drawnStage.setBattle(new Battle());
+            drawnStage.init();
+            stages.add(drawnStage);
         }
     }
 

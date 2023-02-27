@@ -7,9 +7,20 @@ public class DamageSource extends GameObject {
     public int damage;
     public Vector2 knockback;
     public boolean reflectable;
+    public boolean parryable;
     public Player owner;
 
-    @Override
-    public void update() {
+    public DamageSource() {
+    }
+
+    private DamageSource(int damage, Vector2 knockback, boolean reflectable, boolean parryable) {
+        this.damage = damage;
+        this.knockback = knockback;
+        this.reflectable = reflectable;
+        this.parryable = parryable;
+    }
+
+    public static DamageSource genericDamageSource(int damage, Vector2 knockback, boolean reflectable, boolean parryable) {
+        return new DamageSource(damage, knockback, reflectable, parryable);
     }
 }

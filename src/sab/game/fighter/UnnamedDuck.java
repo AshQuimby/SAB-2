@@ -8,6 +8,7 @@ import sab.game.Player;
 import sab.game.PlayerAction;
 import sab.game.animation.Animation;
 import sab.game.attack.Attack;
+import sab.game.attack.unnamed_duck.DuckSign;
 import sab.game.items.BigGun;
 import sab.game.items.Item;
 import sab.game.items.Knife;
@@ -75,7 +76,9 @@ public class UnnamedDuck extends FighterType {
     @Override
     public void upAttack(Fighter fighter, Player player) {
         if (!player.usedRecovery) {
-            
+            player.velocity.y = 96;
+            player.startAttack(new Attack(new DuckSign(), player), new Animation(new int[]{ 7 }, 1, true), 1, 4, true);
+            player.usedRecovery = true;
         }
     }
 

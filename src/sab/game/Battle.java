@@ -74,6 +74,8 @@ public class Battle {
     public Battle(Fighter fighter1, Fighter fighter2, int[] costumes, Stage stage, int player1Type, int player2Type, int lives) {
         Game.controllerManager.setInGameState(true);
         this.stage = stage;
+        stage.setBattle(this);
+        stage.init();
 
         players = new ArrayList<>();
         player1 = new Player(fighter1, costumes[0], 0, lives, this);
@@ -155,6 +157,9 @@ public class Battle {
     }
 
     public void freezeFrame(int duration, int slowdown, int slowdownDuration, boolean zoomIn) {
+        if (duration < 60 && players.size() > 2) {
+            return;
+        }
         freezeFrames = duration;
         slowdown(slowdown, slowdownDuration);
         zoomOnFreeze = zoomIn;
@@ -335,6 +340,11 @@ public class Battle {
                 misc = false;
             }
 
+            if (newGameObject instanceof Player) {
+                players.add((Player) newGameObject);
+                misc = false;
+            }
+
             if (newGameObject instanceof Attack) {
                 attacks.add((Attack) newGameObject);
                 misc = false;
@@ -393,7 +403,7 @@ public class Battle {
             gameObject.preUpdate();
         }
 
-        stage.update(this);
+        stage.update();
 
         for (Player player : players) {
             player.keys.update();

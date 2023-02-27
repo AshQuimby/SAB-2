@@ -14,14 +14,7 @@ import sab.game.screen.CharacterSelectScreen;
 import sab.game.screen.JukeboxScreen;
 import sab.game.screen.ModErrorScreen;
 import sab.game.screen.TitleScreen;
-import sab.game.stage.Boxtopia;
-import sab.game.stage.COBS;
-import sab.game.stage.DesertBridge;
-import sab.game.stage.LastLocation;
-import sab.game.stage.OurSports;
-import sab.game.stage.StageType;
-import sab.game.stage.ThumbabasLair;
-import sab.game.stage.Warzone;
+import sab.game.stage.*;
 import sab.modloader.Mod;
 import sab.modloader.ModLoader;
 import sab.screen.Screen;
@@ -67,8 +60,8 @@ public class Game extends Messenger {
         Settings.loadSettings();
         Mod baseGame = new Mod("Super Ass Brothers: Remasstered", "sab", "1.0", "Base game content");
         try {
-            baseGame.addFighters((Class<? extends FighterType>[]) new Class<?>[]{Marvin.class, Chain.class, Walouis.class, Gus.class, EmperorEvil.class, Snas.class, Stephane.class, UnnamedDuck.class, BigSeagull.class});
-            baseGame.addStages((Class<? extends StageType>[]) new Class<?>[]{LastLocation.class, Warzone.class, DesertBridge.class, ThumbabasLair.class, OurSports.class, COBS.class, Boxtopia.class});
+            baseGame.addFighters((Class<? extends FighterType>[]) new Class<?>[]{Marvin.class, Chain.class, Walouis.class, Gus.class, EmperorEvil.class, Snas.class, Stephane.class, UnnamedDuck.class, BigSeagull.class });
+            baseGame.addStages((Class<? extends StageType>[]) new Class<?>[]{LastLocation.class, Warzone.class, DesertBridge.class, ThumbabasLair.class, OurSports.class, COBS.class, Boxtopia.class, HellTwoBoogaloo.class });
         } catch (Exception e) {
             throw new RuntimeException("Like actually what the hell, how did you break this. You should not be able to break this unless your brain cell count reached the long limit.");
         }
@@ -88,6 +81,10 @@ public class Game extends Messenger {
         if (modErrors.size() > 0) {
             screen = new ModErrorScreen(modErrors);
         }
+    }
+
+    public static int getTick() {
+        return game.window.getTick();
     }
 
     // Randomly selects a title screen background

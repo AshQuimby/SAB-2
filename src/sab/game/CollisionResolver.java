@@ -28,7 +28,9 @@ public class CollisionResolver {
         a.y += velocity.y;
         for (GameObject collider : colliders) {
             Direction tryDirection = resolveY(gameObject, velocity.y, collider.hitbox);
-            if (tryDirection != Direction.NONE) collisionDirection = tryDirection;
+            if (tryDirection != Direction.NONE) {
+                collisionDirection = tryDirection;
+            }
         }
 
         return collisionDirection;

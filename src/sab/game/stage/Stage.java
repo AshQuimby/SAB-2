@@ -26,7 +26,8 @@ public class Stage {
 
     // Players cannot be below or to the right/left of this blast zone even when not taking knockback
     protected Rectangle unsafeBlastZone;
-    
+
+    protected Battle battle;
     private StageType type;
 
     public Stage(StageType type) {
@@ -38,15 +39,13 @@ public class Stage {
         ledges = new ArrayList<>();
         maxZoomOut = 1;
 
-
         safeBlastZone = new Rectangle(-Game.game.window.resolutionX / 2 - 64, -Game.game.window.resolutionY / 2 - 64, Game.game.window.resolutionX + 128, Game.game.window.resolutionY + 128);
         unsafeBlastZone = new Rectangle(-Game.game.window.resolutionX / 2 - 128, -Game.game.window.resolutionY / 2 - 128, Game.game.window.resolutionX + 256, Game.game.window.resolutionY + 256);
         
         this.type = type;
-        this.type.init(this);
     }
 
-    public void update(Battle battle) {
+    public void update() {
         type.update(battle, this);
         List<StageObject> deadStageObjects = new ArrayList<>();
         for (StageObject stageObject : stageObjects) {
@@ -64,6 +63,10 @@ public class Stage {
             }
         }
         ledges.removeAll(deadLedges);
+    }
+
+    public void init() {
+        type.init(this);
     }
 
     public Ledge grabLedge(Player player) {
@@ -118,6 +121,14 @@ public class Stage {
         for (StageObject platform : stageObjects) {
             if (!platform.inBackground()) platform.render(g);
         }
+    }
+
+    public Battle getBattle() {
+        return battle;
+    }
+
+    public void setBattle(Battle battle) {
+        this.battle = battle;
     }
 
     public void renderBackground(Seagraphics g) {

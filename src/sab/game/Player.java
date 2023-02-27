@@ -37,6 +37,7 @@ public class Player extends GameObject implements Hittable {
     private PlayerAction currentAction;
     private Direction collisionDirection;
     private Item heldItem;
+    private int iFrames;
     private int knockbackDuration;
     private int lives;
     private int frozen;
@@ -104,6 +105,7 @@ public class Player extends GameObject implements Hittable {
         knockbackDuration = 0;
         smokeGenerator = 0;
         this.id = id;
+        iFrames = 0;
 
         heldItem = null;
 
@@ -129,8 +131,9 @@ public class Player extends GameObject implements Hittable {
                 for (GameObject platform : passablePlatforms) {
                     if (velocity.y <= 0 && hitbox.y > platform.hitbox.y + platform.hitbox.height - 12) {
                         Direction tryDirection = CollisionResolver.resolveY(this, step.y, platform.hitbox);
-                        if (tryDirection != Direction.NONE)
+                        if (tryDirection != Direction.NONE) {
                             collisionDirection = tryDirection;
+                        }
                     }
                 }
             }
@@ -205,6 +208,7 @@ public class Player extends GameObject implements Hittable {
         knockbackDuration = 0;
         respawnTime = 180;
         gameStats.died();
+        iFrames = 60;
         battle.getPlayer(1 - id).gameStats.gotKill();
         SABSounds.playSound("death.mp3");
         lives -= livesCost;
@@ -269,6 +273,11 @@ public class Player extends GameObject implements Hittable {
         usedCharge = 0;
 
         if (lives == 0) return;
+
+        if (iFrames > 0) {
+            iFrames--;
+            invulnerable = true;
+        }
 
         if (respawnTime > 0) {
             respawnTime--;

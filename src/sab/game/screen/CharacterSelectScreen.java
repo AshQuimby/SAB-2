@@ -181,12 +181,14 @@ public class CharacterSelectScreen extends ScreenAdapter {
         } else if (keyCode == Input.Keys.LEFT && !player2.ready) {
             player2Fighters.get(player2.index).walkAnimation.reset();
             player2.setSelection(Utils.loop(player2.index, -1, fighterCount, 0), player2.costume, player2Fighters);
+            player2.costume = 0;
             if (player2.costume >= player2Fighters.get(player2.index).costumes) player2.costume = player2Fighters.get(player2.index).costumes - 1;
             if (player1.costume == player2.costume && player1.index == player2.index) player2.costume = Utils.loop(player1.costume, 1, player1Fighters.get(player1.index).costumes, 0);
             SABSounds.playSound(SABSounds.BLIP);
         } else if (keyCode == Input.Keys.RIGHT && !player2.ready) {
             player2Fighters.get(player2.index).walkAnimation.reset();
             player2.setSelection(Utils.loop(player2.index, 1, fighterCount, 0), player2.costume, player2Fighters);
+            player2.costume = 0;
             if (player2.costume >= player2Fighters.get(player2.index).costumes) player2.costume = player2Fighters.get(player2.index).costumes - 1;
             if (player1.costume == player2.costume && player1.index == player2.index) player2.costume = Utils.loop(player1.costume, 1, player1Fighters.get(player1.index).costumes, 0);
             SABSounds.playSound(SABSounds.BLIP);

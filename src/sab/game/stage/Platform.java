@@ -47,6 +47,15 @@ public class Platform extends StageObject {
         this.stage = stage;
     }
 
+    public void createLedges(float yOffset, float width, float height, Stage stage) {
+        stage.addLedge(new Ledge(this, new Vector2(-hitbox.width / 2 - width, -yOffset), width, height, 1));
+        stage.addLedge(new Ledge(this, new Vector2(hitbox.width / 2, -yOffset), width, height, -1));
+    }
+
+    public void createLedges(Stage stage) {
+        createLedges(8, 16, hitbox.height, stage);
+    }
+
     @Override
     public void preUpdate() {
         update();
@@ -60,24 +69,22 @@ public class Platform extends StageObject {
             hitbox.x += velocity.x;
             for (Player player : battle.getPlayers()) {
                 if (CollisionResolver.resolveX(player, -velocity.x, this.hitbox) != Direction.NONE) {
-                    player.hitbox.x += velocity.x;
+                    player.move(new Vector2(velocity.x, 0));
                 }
             }
             for (Attack attack : battle.getAttacks()) {
                 if (attack.collideWithStage && CollisionResolver.resolveX(attack, -velocity.x, this.hitbox) != Direction.NONE) {
-                    attack.hitbox.x += velocity.x;
                 }
             }
 
             hitbox.y += velocity.y;
             for (Player player : battle.getPlayers()) {
                 if (CollisionResolver.resolveY(player, -velocity.y, this.hitbox) != Direction.NONE) {
-                    player.hitbox.y += velocity.y;
+                    player.move(new Vector2(0, velocity.y));
                 }
             }
             for (Attack attack : battle.getAttacks()) {
                 if (attack.collideWithStage && CollisionResolver.resolveY(attack, -velocity.y, this.hitbox) != Direction.NONE) {
-                    attack.hitbox.y += velocity.y;
                 }
             }
         }

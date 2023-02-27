@@ -17,8 +17,8 @@ public class AirSlash extends MeleeAttackType {
         attack.life = 40;
         attack.frameCount = 5;
         attack.velocity = new Vector2();
-        attack.hitbox.width = 120;
-        attack.hitbox.height = 64;
+        attack.hitbox.width = 96;
+        attack.hitbox.height = 48;
         attack.drawRect.width = 120;
         attack.drawRect.height = 64;
         attack.damage = 4;
