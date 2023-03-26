@@ -3,6 +3,7 @@ package sab.game.fighter;
 import com.badlogic.gdx.math.Vector2;
 import com.seagull_engine.Seagraphics;
 
+import sab.game.Direction;
 import sab.game.Player;
 import sab.game.ai.AI;
 import sab.game.ai.BaseAI;
@@ -145,6 +146,9 @@ public class Fighter implements Cloneable {
 
     public void onKill(Player player) {
         type.onKill(this, player);
+    }
+    public void onEndAttack(Player player, Direction direction) {
+        type.onEndAttack(this, player, direction);
     }
 
     public void useItem(Player player) {

@@ -26,7 +26,9 @@ import sab.game.stage.PassablePlatform;
 import sab.game.stage.Platform;
 import sab.game.stage.Stage;
 import sab.game.stage.StageObject;
+import sab.net.Keys;
 import sab.net.VoidFunction;
+import sab.util.Utils;
 
 public class Battle {
     private List<Player> players;
@@ -274,7 +276,20 @@ public class Battle {
             }
         }
 
-        if (paused) return;
+        if (paused) {
+            if (player1.keys.isJustPressed(Keys.DOWN) || player2.keys.isJustPressed(Keys.DOWN)) {
+                pauseMenuIndex = Utils.loop(pauseMenuIndex, 1, 3, 0);
+            } else if (player1.keys.isJustPressed(Keys.UP) || player2.keys.isJustPressed(Keys.UP)) {
+                pauseMenuIndex = Utils.loop(pauseMenuIndex, -1, 3, 0);
+            }
+            if (player1.keys.isJustPressed(Keys.ATTACK) || player2.keys.isJustPressed(Keys.ATTACK)) {
+                triggerPauseMenu();
+            }
+            for (Player player : players) {
+                player.keys.update();
+            }
+            return;
+        }
 
         for (PlayerController playerController : Game.controllerManager.getControllers()) {
             playerController.checkMacros(Gdx.input.getInputProcessor(), getPlayer(playerController.playerId));
@@ -294,32 +309,11 @@ public class Battle {
             }
         }
 
-        if (winner == null) {
-            if (player1.getLives() == 0 && player2.getLives() == 0) {
-                winner = player1;
-                winner.fighter.name = "Tie";
-                winner.fighter.id = "tie";
-                winner.costume = 0;
-                loser = player2;
-                SABSounds.playSound("final_death.mp3");
-                SABSounds.stopMusic();
-                endGameTimer = 1;
-            }else if (player1.getLives() <= 0) {
-                winner = player2;
-                loser = player1;
-                SABSounds.playSound("final_death.mp3");
-                SABSounds.stopMusic();
-                endGameTimer = 1;
-            } else if (player2.getLives() <= 0){
-                winner = player1;
-                loser = player2;
-                SABSounds.playSound("final_death.mp3");
-                SABSounds.stopMusic();
-                endGameTimer = 1;
-            }
-        }
-
         if (endGameTimer > 0 && Game.game.window.getTick() % 4 != 0) return;
+
+        if (winner == null && (player1.getLives() == 0 || player2.getLives() == 0)) {
+            endGame(player1.getLives() > 0 ? player1 : (player2.getLives() == 0 ? null : player2), player1.getLives() > 0 ? player2 : (player2.getLives() == 0 ? null : player1));
+        }
 
         // if (paused) {
         //     if (player1.keys.isJustPressed(Keys.UP) || player2.keys.isJustPressed(Keys.UP)) pauseMenuIndex++;
@@ -369,6 +363,7 @@ public class Battle {
         particles.removeAll(deadParticles);
         
         updateCameraEffects();
+        updateCameraPosition();
 
         for (GameObject deadGameObject : deadGameObjects) {
             gameObjects.remove(deadGameObject);
@@ -418,18 +413,43 @@ public class Battle {
 
     }
 
-    public void endGame() {
-        Game.game.window.camera.viewportWidth = 1152;
-        Game.game.window.camera.viewportHeight = 704;
+    public void endGame(Player winner, Player loser) {
+        Game.game.window.camera.viewportWidth = Game.game.window.resolutionX;
+        Game.game.window.camera.viewportHeight = Game.game.window.resolutionY;
         Game.game.window.camera.position.x = 0;
         Game.game.window.camera.position.y = 0;
         gameEnded = true;
+        if (winner == null) {
+            winner = player1;
+            winner.fighter.name = "Tie";
+            winner.fighter.id = "tie";
+            winner.costume = 0;
+            loser = player2;
+        }
+        SABSounds.playSound("final_death.mp3");
+        SABSounds.stopMusic();
+        this.winner = winner;
+        this.loser = loser;
+        endGameTimer = 1;
     }
 
     public void smashScreen() {
         freezeFrame(15, 8, 60, true);
         screenShatter = 75;
         SABSounds.playSound("shatter.mp3");
+    }
+
+    public void triggerPauseMenu() {
+        switch (pauseMenuIndex) {
+            case 1 :
+                pauseOverlayHidden = !pauseOverlayHidden;
+                break;
+            case 2 :
+                endGame(null, null);
+            case 0 :
+                unpause();
+                break;
+        }
     }
 
     public void pause() {
@@ -480,11 +500,10 @@ public class Battle {
         g.scalableDraw(g.imageProvider.getImage(stage.background), -1280 / 2, -720 / 2, 1280, 720);
         g.useDynamicCamera();
 
-        updateCameraPosition();
         g.getDynamicCamera().position.add(cameraShakeVector.x, cameraShakeVector.y, 0);
 
         stage.renderBackground(g);
-        
+
         for (GameObject misc : miscGameObjects) {
             misc.render(g);
             if (drawHitboxes) drawHitbox(misc, g);
@@ -537,10 +556,10 @@ public class Battle {
         }
 
         if (paused && !pauseOverlayHidden) {
-            g.usefulDraw(g.imageProvider.getImage("pause_overlay.png"), -1152 / 2, -704 / 2, 1152, 704, pauseMenuIndex, 3, 0, false, false);
+            g.usefulDraw(g.imageProvider.getImage("pause_overlay.png"), -Game.game.window.resolutionX / 2, -Game.game.window.resolutionY / 2, Game.game.window.resolutionX, Game.game.window.resolutionY, pauseMenuIndex, 3, 0, false, false);
         }
         if (screenShatter > 0) {
-            g.scalableDraw(g.imageProvider.getImage("screen_shatter.png"), -1152 / 2, -704 / 2, 1152, 704);
+            g.scalableDraw(g.imageProvider.getImage("screen_shatter.png"), -Game.game.window.resolutionX / 2, -Game.game.window.resolutionY / 2, Game.game.window.resolutionX, Game.game.window.resolutionY);
             screenShatter--;
         }
     }

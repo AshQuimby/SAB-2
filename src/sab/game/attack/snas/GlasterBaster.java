@@ -44,12 +44,6 @@ public class GlasterBaster extends MeleeAttackType {
     public void update(Attack attack) {
         super.update(attack);
 
-        if (attack.owner.stuckCondition() || attack.owner.knockback.len() > 0.1f) {
-            attack.life = 0;
-            attack.kill();
-            return;
-        }
-
         if (!fired) {
             if (!attack.owner.charging()) {
                 attack.kill();

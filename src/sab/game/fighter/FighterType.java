@@ -1,6 +1,7 @@
 package sab.game.fighter;
 
 import com.seagull_engine.Seagraphics;
+import sab.game.Direction;
 import sab.game.Player;
 import sab.game.ai.AI;
 import sab.game.ai.BaseAI;
@@ -52,6 +53,10 @@ public abstract class FighterType {
     }
 
     public void upSpecial(Fighter fighter, Player player) {
+
+    }
+
+    public void onEndAttack(Fighter fighter, Player player, Direction direction) {
 
     }
 
