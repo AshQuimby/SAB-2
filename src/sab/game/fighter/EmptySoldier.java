@@ -4,9 +4,11 @@ import sab.game.Player;
 import sab.game.animation.Animation;
 import sab.game.attack.Attack;
 import sab.game.attack.chain.ChainSlash;
+import sab.game.attack.empty_soldier.ShadowPlunge;
 
 public class EmptySoldier extends FighterType {
     private int spirit;
+    private Animation swingAnimation;
 
     @Override
     public void setDefaults(Fighter fighter) {
@@ -24,20 +26,29 @@ public class EmptySoldier extends FighterType {
         fighter.jumpHeight = 176;
         fighter.frames = 13;
         fighter.friction = .3f;
-        fighter.mass = 2.41f;
+        fighter.mass = 4.13f;
         fighter.walkAnimation = new Animation(0, 3, 5, true);
         fighter.costumes = 3;
         fighter.description = "";
         fighter.debut = "Container";
-        fighter.freefallAnimation = new Animation(new int[] { 3 }, 1, false);
+        fighter.freefallAnimation = new Animation(new int[] { 7 }, 1, false);
 
         spirit = 0;
+        swingAnimation = new Animation(new int[] {5, 4}, 10, true);
+    }
+
+    @Override
+    public void update(Fighter fighter, Player player) {
+        if (!player.hasAction() && !player.touchingStage) {
+            player.frame = player.velocity.y > 0 ? 6 : 7;
+        }
     }
 
     @Override
     public void neutralAttack(Fighter fighter, Player player) {
         if (!player.usedRecovery) {
-            player.startAttack(new Attack(new ChainSlash(), player), null, 6, 8, false);
+            swingAnimation.reset();
+            player.startAttack(new Attack(new ChainSlash(), player), swingAnimation, 6, 8, false);
         }
     }
 
@@ -47,5 +58,10 @@ public class EmptySoldier extends FighterType {
             player.velocity.y = 50;
             spirit -= 50;
         }
+    }
+
+    @Override
+    public void downAttack(Fighter fighter, Player player) {
+        if (!player.touchingStage) player.startIndefiniteAttack(new Attack(new ShadowPlunge(), player), null, 10, false);
     }
 }
