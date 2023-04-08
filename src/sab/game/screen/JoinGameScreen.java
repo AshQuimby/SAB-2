@@ -27,6 +27,7 @@ public class JoinGameScreen extends ScreenAdapter {
                     try {
                         client = new Client("localhost", Settings.getHostingPort(), new SabPacketManager());
                     } catch (IOException ignored) {
+                        error = new SabError("Connection Failed", "Failed to connect");
                     }
                 }
         );
@@ -37,7 +38,11 @@ public class JoinGameScreen extends ScreenAdapter {
 
         long timestamp = System.currentTimeMillis();
         while (System.currentTimeMillis() - timestamp < 3000) {
-            if (client != null) break;
+            if (client != null || error != null) break;
+        }
+
+        if (client == null && error == null) {
+            error = new SabError("Connection Failed", "Timed out");
         }
 
 //        if (client != null) {
