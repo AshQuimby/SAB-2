@@ -16,7 +16,7 @@ public class ErrorScreen extends ScreenAdapter {
 
     @Override
     public void render(Seagraphics g) {
-        g.scalableDraw(g.imageProvider.getImage("cobs_background.png"), -1152 / 2, -704 / 2, 1152, 704);
+        g.scalableDraw(g.imageProvider.getImage("cobs_background.png"), -1280 / 2, -720 / 2, 1280, 720);
         g.drawText(error.type(), g.imageProvider.getFont("SAB_font"), 0, 64, 2f, Color.WHITE, 0);
         g.drawText(error.message(), g.imageProvider.getFont("SAB_font"), 0, 0, 1.5f, Color.WHITE, 0);
     }
