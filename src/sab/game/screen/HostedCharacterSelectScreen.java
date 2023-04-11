@@ -2,7 +2,9 @@ package sab.game.screen;
 
 import com.badlogic.gdx.Input;
 import sab.game.Game;
+import sab.net.Keys;
 import sab.net.packet.CharacterSelectPacket;
+import sab.net.packet.KeyEventPacket;
 import sab.net.packet.Packet;
 import sab.net.server.Server;
 import sab.net.server.ServerListener;
@@ -31,11 +33,11 @@ public class HostedCharacterSelectScreen extends CharacterSelectScreen {
 
             @Override
             public void received(int connection, Packet packet) {
-                if (packet instanceof CharacterSelectPacket) {
-                    CharacterSelectPacket characterSelectPacket = (CharacterSelectPacket) packet;
+                if (packet instanceof CharacterSelectPacket characterSelectPacket) {
 
                     if (!(characterSelectPacket.character < 0 || characterSelectPacket.costume < 0 || characterSelectPacket.character >= player2Fighters.size() || characterSelectPacket.costume >= player2Fighters.get(player2.index).costumes)) {
                         player2.setSelection(characterSelectPacket.character, characterSelectPacket.costume, player2Fighters);
+                        player2.ready = characterSelectPacket.ready;
                     }
                 }
             }
@@ -64,7 +66,7 @@ public class HostedCharacterSelectScreen extends CharacterSelectScreen {
         }
 
         Screen result = super.keyPressed(keyCode);
-        server.send(remoteClient, new CharacterSelectPacket(player1.index, player1.costume));
+        server.send(remoteClient, new CharacterSelectPacket(player1.index, player1.costume, player1.ready));
 
         return result;
     }

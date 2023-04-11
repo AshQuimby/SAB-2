@@ -20,9 +20,9 @@ public class JoinedCharacterSelectScreen extends CharacterSelectScreen {
         listener = new ClientListener() {
             @Override
             public void received(Packet packet) {
-                if (packet instanceof CharacterSelectPacket) {
-                    CharacterSelectPacket csp = (CharacterSelectPacket) packet;
+                if (packet instanceof CharacterSelectPacket csp) {
                     player1.setSelection(csp.character, csp.costume, player1Fighters);
+                    player1.ready = csp.ready;
                 }
             }
 
@@ -59,7 +59,7 @@ public class JoinedCharacterSelectScreen extends CharacterSelectScreen {
         }
 
         super.keyPressed(keyCode);
-        client.send(new CharacterSelectPacket(player2.index, player2.costume));
+        client.send(new CharacterSelectPacket(player2.index, player2.costume, player2.ready));
 
         return this;
     }

@@ -9,9 +9,10 @@ public class PlayerAction {
     private int delay;
     private int[] data;
     private int endLag;
-    private Attack attack;
+    protected Attack attack;
     private Animation animation;
     private boolean important;
+    private boolean usedAttack;
     
     public PlayerAction(int delay, boolean important, int endLag) {
         this.delay = delay;
@@ -55,11 +56,11 @@ public class PlayerAction {
         }
 
         if (--delay == 0) {
-            if (attack != null) {
+            if (!usedAttack && attack != null) {
                 attack.onSpawn(data);
                 attack.drawRect.setCenter(attack.hitbox.getCenter(new Vector2()));
                 player.battle.addGameObject(attack);
-                attack = null;
+                usedAttack = true;
             }
         }
     }

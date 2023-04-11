@@ -171,6 +171,18 @@ public class Player extends GameObject implements Hittable {
         currentAction = new PlayerAction(delay, animation, important, endLag);
     }
 
+    public void startIndefiniteAttack(Attack attack, int delay, boolean important) {
+        currentAction = new IndefinitePlayerAction(delay, attack, important, 0, null);
+    }
+
+    public void startIndefiniteAttack(Attack attack, Animation animation, int delay, boolean important) {
+        currentAction = new IndefinitePlayerAction(delay, attack, animation, important, 0, null);
+    }
+
+    public void startIndefiniteAttack(Attack attack, Animation animation, int delay, boolean important, int[] data) {
+        currentAction = new IndefinitePlayerAction(delay, attack, animation, important, 0, data);
+    }
+
     public void startAttack(Attack attack, int delay, int endLag, boolean important) {
         currentAction = new PlayerAction(delay, attack, important, endLag, null);
     }
