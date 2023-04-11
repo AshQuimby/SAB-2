@@ -62,6 +62,7 @@ public class Stephane extends FighterType {
         if (blocks <= 0) {
             return false;
         }
+        blocks--;
         Vector2 position = createBlockRectangle(player).getPosition(new Vector2());
         Platform block = new Platform(position.x, position.y, 32, 32, "block.png", stage, new StageObjectBehaviour() {
             private int life = 240;
@@ -175,7 +176,7 @@ public class Stephane extends FighterType {
     @Override
     public void onEndAction(PlayerAction action, Fighter fighter, Player player) {
         if (action.usingAnimation(swingAnimation)) {
-            blocks++;
+            if (blocks < 64) blocks++;
         }
     }
 
