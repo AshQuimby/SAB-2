@@ -3,6 +3,7 @@ package sab.game.fighter;
 import com.seagull_engine.Seagraphics;
 import sab.game.Direction;
 import sab.game.Player;
+import sab.game.PlayerAction;
 import sab.game.ai.AI;
 import sab.game.ai.BaseAI;
 import sab.game.screen.VictoryScreen;
@@ -56,7 +57,7 @@ public abstract class FighterType {
 
     }
 
-    public void onEndAttack(Fighter fighter, Player player, Direction direction) {
+    public void onEndAction(PlayerAction action, Fighter fighter, Player player) {
 
     }
 

@@ -14,7 +14,6 @@ public class DuckItem extends AttackType {
     public void setDefaults(Attack attack) {
         attack.hitbox = new Rectangle();
         attack.imageName = "none.png";
-
     }
 
     @Override

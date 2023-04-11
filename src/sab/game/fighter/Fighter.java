@@ -5,6 +5,7 @@ import com.seagull_engine.Seagraphics;
 
 import sab.game.Direction;
 import sab.game.Player;
+import sab.game.PlayerAction;
 import sab.game.ai.AI;
 import sab.game.ai.BaseAI;
 import sab.game.animation.Animation;
@@ -147,8 +148,8 @@ public class Fighter implements Cloneable {
     public void onKill(Player player) {
         type.onKill(this, player);
     }
-    public void onEndAttack(Player player, Direction direction) {
-        type.onEndAttack(this, player, direction);
+    public void onEndAction(PlayerAction action, Player player) {
+        type.onEndAction(action, this, player);
     }
 
     public void useItem(Player player) {

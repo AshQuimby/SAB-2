@@ -52,7 +52,7 @@ public class Snas extends FighterType {
 
     @Override
     public void update(Fighter fighter, Player player) {
-        if (player.usedRecovery && !player.stuckCondition() && beheaded) {
+        if (player.usedRecovery && !player.isStuck() && beheaded) {
             player.frame = 6;
             player.resize(52, 32);
             fighter.imageOffsetY = 0;

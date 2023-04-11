@@ -393,6 +393,7 @@ public class Player extends GameObject implements Hittable {
         if (currentAction != null) {
             currentAction.update(this);
             if (currentAction.finished()) {
+                fighter.onEndAction(currentAction, this);
                 currentAction = null;
                 if (charging) fighter.chargeAttack(this, charge);
                 usedCharge = charge;
@@ -456,8 +457,13 @@ public class Player extends GameObject implements Hittable {
     }
 
     // Returns true if the player has a condition that would lock them out of normal control, like knockback, ledge grabing, being frozen, etc
-    public boolean stuckCondition() {
+    public boolean isStuck() {
         return frozen() || takingKnockback() || grabbingLedge() || stunned() || charging();
+    }
+
+    // Returns true if the player is not stuck and is not performing an action
+    public boolean isReady() {
+        return !isStuck() && !hasAction();
     }
 
     public boolean charging() {

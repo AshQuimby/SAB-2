@@ -54,7 +54,7 @@ public class EvilSuck extends MeleeAttackType {
         if (attack.life % 8 == 0) attack.frame++;
         if (attack.frame >= 4) attack.frame = 0;
 
-        if (attack.owner.stuckCondition()) attack.alive = false;
+        if (attack.owner.isStuck()) attack.alive = false;
 
         if (trappedPlayer != null) {
             attack.life = 2;

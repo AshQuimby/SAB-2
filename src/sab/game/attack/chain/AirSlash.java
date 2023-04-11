@@ -37,7 +37,7 @@ public class AirSlash extends MeleeAttackType {
         attack.owner.velocity.x *= 0.95f;
         attack.owner.velocity.y *= 0.93f;
 
-        if (attack.owner.touchingStage || attack.owner.stuckCondition()) {
+        if (attack.owner.touchingStage || attack.owner.isStuck()) {
             attack.alive = false;
             attack.owner.resetAction();
         }

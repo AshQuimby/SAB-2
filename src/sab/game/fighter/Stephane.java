@@ -1,4 +1,5 @@
 package sab.game.fighter;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
@@ -6,13 +7,12 @@ import com.seagull_engine.GameObject;
 import com.seagull_engine.Seagraphics;
 
 import org.w3c.dom.css.Rect;
-import sab.game.Battle;
-import sab.game.Game;
-import sab.game.Player;
+import sab.game.*;
 import sab.game.animation.Animation;
 import sab.game.attack.Attack;
 import sab.game.attack.stephane.Baguette;
 import sab.game.attack.stephane.Arrow;
+import sab.game.attack.stephane.BlockSmash;
 import sab.game.attack.stephane.Firework;
 import sab.game.stage.Platform;
 import sab.game.stage.Stage;
@@ -22,9 +22,11 @@ import sab.net.Keys;
 
 public class Stephane extends FighterType {
     private Animation swingAnimation;
+    private Animation blockPlaceAnimation;
     private Animation bowAnimation;
     private Animation bowFastAnimation;
     private Animation bowFireworkAnimation;
+    private float blocks;
 
     @Override
     public void setDefaults(Fighter fighter) {
@@ -45,17 +47,22 @@ public class Stephane extends FighterType {
         fighter.walkAnimation = new Animation(0, 3, 5, true);
         fighter.description = "Nobody knows where Stephane came from as nobody knows what he is saying. All that comes from his mouth are ancient tongues and utterances like \"oui\" and \"tu comprends?\"";
         fighter.debut = "Blockbreak";
-        
         fighter.freefallAnimation = new Animation(new int[]{7}, 1, true);
         fighter.costumes = 3;
 
-        swingAnimation = new Animation(new int[] {4, 5, 6}, 6, true);
+        swingAnimation = new Animation(new int[] {4, 5}, 9, true);
+        blockPlaceAnimation = new Animation(new int[] {4, 5, 0}, 6, true);
         bowAnimation = new Animation(new int[] {9, 10, 11, 14}, 8, true);
         bowFastAnimation = new Animation(new int[] {9, 10, 11, 14}, 4, true);
         bowFireworkAnimation = new Animation(new int[] {12, 13, 14}, 12, true);
+        blocks = 16;
     }
 
-    public boolean createBlock(Stage stage, Vector2 position) {
+    public boolean createBlock(Player player, Stage stage) {
+        if (blocks <= 0) {
+            return false;
+        }
+        Vector2 position = createBlockRectangle(player).getPosition(new Vector2());
         Platform block = new Platform(position.x, position.y, 32, 32, "block.png", stage, new StageObjectBehaviour() {
             private int life = 240;
             
@@ -79,25 +86,34 @@ public class Stephane extends FighterType {
     }
 
     public Rectangle createBlockRectangle(Player player) {
-        Vector2 point = player.getCenter();
-        point.y -= player.hitbox.height / 2 + 17;
         boolean moveUp = false;
-        for (GameObject gameObject : player.battle.getSolidStageObjects()) {
-            if (gameObject.hitbox.contains(point)) {
-                moveUp = true;
-                player.move(new Vector2(0, 32));
-                break;
-            }
+        if (!canPlaceBelow(player)) {
+            moveUp = true;
+            player.move(new Vector2(0, 32));
         }
         player.velocity.y = 0;
-        Rectangle virtualBlock = new Rectangle(0, 0, 32, 32);
+        Rectangle virtualBlock = new Rectangle(0, 0 , 32, 32);
         virtualBlock.setCenter(player.getCenter());
         virtualBlock.y -= player.hitbox.height / 2f + 16;
         virtualBlock.x = Math.round((virtualBlock.x) / 32) * 32;
         virtualBlock.y = Math.round((virtualBlock.y) / 32) * 32;
         if (player.hitbox.overlaps(virtualBlock) || moveUp) player.hitbox.y = virtualBlock.y + virtualBlock.height;
 
+        blockPlaceAnimation.reset();
+        player.startAnimation(1, blockPlaceAnimation, 16, false);
+
         return virtualBlock;
+    }
+
+    private boolean canPlaceBelow(Player player) {
+        Vector2 point = player.getCenter();
+        point.y -= player.hitbox.height / 2 + 17;
+        for (GameObject gameObject : player.battle.getSolidStageObjects()) {
+            if (gameObject.hitbox.contains(point)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     @Override
@@ -109,13 +125,17 @@ public class Stephane extends FighterType {
                 player.startAttack(new Attack(new Firework(), player), bowFireworkAnimation, 24, 16, false);
             }
         }
+
+        if (player.isReady() && player.keys.isPressed(Keys.ATTACK) && player.keys.isPressed(Keys.DOWN) && canPlaceBelow(player)) {
+            createBlock(player, player.battle.getStage());
+        }
     }
 
     @Override
     public void neutralAttack(Fighter fighter, Player player) {
         if (!player.usedRecovery) {
             swingAnimation.reset();
-            player.startAttack(new Attack(new Baguette(), player), swingAnimation, 4, 18, false);
+            player.startRepeatingAttack(new Attack(new Baguette(), player), swingAnimation, 4, 18, false, new int[0]);
         }
     }
 
@@ -134,23 +154,17 @@ public class Stephane extends FighterType {
 
     @Override
     public void upAttack(Fighter fighter, Player player) {
-        createBlock(player.battle.getStage(), createBlockRectangle(player).getPosition(new Vector2()));
-        createBlock(player.battle.getStage(), createBlockRectangle(player).getPosition(new Vector2()));
-        createBlock(player.battle.getStage(), createBlockRectangle(player).getPosition(new Vector2()));
-        createBlock(player.battle.getStage(), createBlockRectangle(player).getPosition(new Vector2()));
+        createBlock(player, player.battle.getStage());
+        createBlock(player, player.battle.getStage());
+        createBlock(player, player.battle.getStage());
+        createBlock(player, player.battle.getStage());
+        blockPlaceAnimation.reset();
+        player.startAttack(new Attack(new BlockSmash(), player), blockPlaceAnimation, 1, 12, false, null);
     }
 
     @Override
     public void downAttack(Fighter fighter, Player player) {
-        createBlock(player.battle.getStage(), createBlockRectangle(player).getPosition(new Vector2()));
-    }
-
-    @Override
-    public void chargeAttack(Fighter fighter, Player player, int charge) {
-    }
-
-    @Override
-    public void charging(Fighter fighter, Player player, int charge) {
+        createBlock(player, player.battle.getStage());
     }
 
     @Override
@@ -159,9 +173,15 @@ public class Stephane extends FighterType {
     }
 
     @Override
+    public void onEndAction(PlayerAction action, Fighter fighter, Player player) {
+        if (action.usingAnimation(swingAnimation)) {
+            blocks++;
+        }
+    }
+
+    @Override
     public void renderUI(Fighter fighter, Player player, Seagraphics g) {
-        //g.shapeRenderer.setColor(new Color(0, 0, 0, 0.5f));
-        //g.shapeRenderer.rect(0, Game.game.window.resolutionY / 8 * 7, 128, 64);
-        //g.drawText("Stephane fell from a high place.", g.imageProvider.getFont("SAB_font"), 0, Game.game.window.resolutionY / 8 * 7, 1, Color.WHITE, 0);
+        g.scalableDraw(g.imageProvider.getImage("stephane_ui.png"), player.getId() == 0 ? -256 - 48 : 256, -256, 48, 48);
+        g.drawText("" + (int) blocks, g.imageProvider.getFont("SAB_font"), player.getId() == 0 ? -256 - 48 + 38 : 256 + 38, -256 + 24, 1, Color.WHITE, 1 );
     }
 }

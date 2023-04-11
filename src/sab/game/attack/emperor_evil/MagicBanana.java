@@ -61,7 +61,7 @@ public class MagicBanana extends AttackType {
                 attack.velocity.y -= 0.6f;
             }
 
-            if (attack.owner.keys.isJustPressed(Keys.ATTACK) || attack.owner.stuckCondition()) {
+            if (attack.owner.keys.isJustPressed(Keys.ATTACK) || attack.owner.isStuck()) {
                 attack.velocity.scl(2);
                 attack.damage += 8;
                 controlled = false;
