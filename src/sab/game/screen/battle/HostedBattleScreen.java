@@ -1,4 +1,4 @@
-package sab.game.screen;
+package sab.game.screen.battle;
 
 import java.io.IOException;
 
@@ -8,7 +8,7 @@ import com.seagull_engine.Seagraphics;
 import sab.error.SabError;
 import sab.game.Battle;
 import sab.game.Player;
-import sab.game.particle.Particle;
+import sab.game.screen.error.ErrorScreen;
 import sab.net.*;
 import sab.net.packet.*;
 import sab.net.server.Server;

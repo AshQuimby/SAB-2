@@ -1,23 +1,24 @@
-package sab.game.screen;
+package sab.game.screen.character_select;
 
 import com.badlogic.gdx.Input;
 import sab.game.Game;
+import sab.game.screen.character_select.CharacterSelectScreen;
 import sab.net.client.Client;
 import sab.net.client.ClientListener;
 import sab.net.packet.CharacterSelectPacket;
-import sab.net.packet.KeyEventPacket;
 import sab.net.packet.Packet;
 import sab.screen.Screen;
 
+import java.io.IOException;
+
 public class JoinedCharacterSelectScreen extends CharacterSelectScreen {
-    private Client client;
-    private ClientListener listener;
+    private final Client client;
 
     public JoinedCharacterSelectScreen(Client client) {
         this.client = client;
         Game.controllerManager.setInGameState(true);
 
-        listener = new ClientListener() {
+        ClientListener listener = new ClientListener() {
             @Override
             public void received(Packet packet) {
                 if (packet instanceof CharacterSelectPacket csp) {
@@ -62,5 +63,14 @@ public class JoinedCharacterSelectScreen extends CharacterSelectScreen {
         client.send(new CharacterSelectPacket(player2.index, player2.costume, player2.ready));
 
         return this;
+    }
+
+    @Override
+    public void close() {
+        try {
+            client.close();
+        } catch (IOException ignored) {
+
+        }
     }
 }

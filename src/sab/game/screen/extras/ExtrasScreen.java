@@ -1,4 +1,4 @@
-package sab.game.screen;
+package sab.game.screen.extras;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.MathUtils;
@@ -8,6 +8,7 @@ import com.seagull_engine.Seagraphics;
 
 import sab.game.Game;
 import sab.game.SABSounds;
+import sab.game.screen.*;
 import sab.screen.Screen;
 
 public class ExtrasScreen extends SelectorScreen {

@@ -6,12 +6,11 @@ import com.badlogic.gdx.controllers.*;
 import com.badlogic.gdx.math.MathUtils;
 import com.seagull_engine.Messenger;
 import com.seagull_engine.Seagraphics;
-import com.seagull_engine.SeagullManager;
 
 import sab.game.attack.AttackType;
 import sab.game.fighter.*;
-import sab.game.screen.CharacterSelectScreen;
-import sab.game.screen.JukeboxScreen;
+import sab.game.screen.character_select.CharacterSelectScreen;
+import sab.game.screen.extras.JukeboxScreen;
 import sab.game.screen.ModErrorScreen;
 import sab.game.screen.TitleScreen;
 import sab.game.stage.*;

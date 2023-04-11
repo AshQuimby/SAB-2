@@ -1,4 +1,4 @@
-package sab.game.screen;
+package sab.game.screen.extras;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -14,6 +14,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.seagull_engine.Seagraphics;
 
 import sab.game.Game;
+import sab.game.screen.extras.ExtrasScreen;
 import sab.screen.Screen;
 import sab.screen.ScreenAdapter;
 

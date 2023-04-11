@@ -8,6 +8,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.seagull_engine.Seagraphics;
 
 import sab.game.Game;
+import sab.game.screen.extras.ExtrasScreen;
 import sab.screen.ScreenAdapter;
 import sab.screen.Screen;
 

@@ -11,6 +11,7 @@ import sab.game.Battle;
 import sab.game.Game;
 import sab.game.SABSounds;
 import sab.game.fighter.Fighter;
+import sab.game.screen.battle.LocalBattleScreen;
 import sab.game.stage.Stage;
 import sab.game.stage.StageType;
 import sab.modloader.ModLoader;

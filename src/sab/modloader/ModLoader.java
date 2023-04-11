@@ -17,7 +17,7 @@ import java.util.jar.JarInputStream;
 import sab.game.Game;
 import sab.game.attack.AttackType;
 import sab.game.fighter.FighterType;
-import sab.game.screen.JukeboxScreen;
+import sab.game.screen.extras.JukeboxScreen;
 import sab.game.stage.StageType;
 import sab.util.SabReader;
 

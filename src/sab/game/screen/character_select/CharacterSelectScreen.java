@@ -1,4 +1,4 @@
-package sab.game.screen;
+package sab.game.screen.character_select;
 
 import java.io.File;
 import java.io.IOException;
@@ -18,6 +18,8 @@ import sab.game.Game;
 import sab.game.SABSounds;
 import sab.game.fighter.Fighter;
 import sab.game.fighter.FighterType;
+import sab.game.screen.StageSelectScreen;
+import sab.game.screen.TitleScreen;
 import sab.modloader.ModLoader;
 import sab.screen.Screen;
 import sab.screen.ScreenAdapter;

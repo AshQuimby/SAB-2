@@ -1,24 +1,23 @@
-package sab.game.screen;
+package sab.game.screen.error;
 
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.seagull_engine.Seagraphics;
-
-import sab.game.Game;
-import sab.screen.ScreenAdapter;
 import sab.error.SabError;
+import sab.game.screen.TitleScreen;
 import sab.screen.Screen;
+import sab.screen.ScreenAdapter;
 
-public class NetErrorScreen extends ScreenAdapter {
+public class ErrorScreen extends ScreenAdapter {
     private final SabError error;
 
-    public NetErrorScreen(SabError error) {
+    public ErrorScreen(SabError error) {
         this.error = error;
     }
 
     @Override
     public void render(Seagraphics g) {
-        g.scalableDraw(g.imageProvider.getImage("error_background.png"), -Game.game.window.resolutionX / 2, -Game.game.window.resolutionY / 2, Game.game.window.resolutionX, Game.game.window.resolutionY);
+        g.scalableDraw(g.imageProvider.getImage("cobs_background.png"), -1280 / 2, -720 / 2, 1280, 720);
         g.drawText(error.type(), g.imageProvider.getFont("SAB_font"), 0, 64, 2f, Color.WHITE, 0);
         g.drawText(error.message(), g.imageProvider.getFont("SAB_font"), 0, 0, 1.5f, Color.WHITE, 0);
     }

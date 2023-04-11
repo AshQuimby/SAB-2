@@ -1,26 +1,26 @@
-package sab.game.screen;
+package sab.game.screen.character_select;
 
 import com.badlogic.gdx.Input;
 import sab.game.Game;
-import sab.net.Keys;
+import sab.game.screen.character_select.CharacterSelectScreen;
 import sab.net.packet.CharacterSelectPacket;
-import sab.net.packet.KeyEventPacket;
 import sab.net.packet.Packet;
 import sab.net.server.Server;
 import sab.net.server.ServerListener;
 import sab.screen.Screen;
 
+import java.io.IOException;
+
 public class HostedCharacterSelectScreen extends CharacterSelectScreen {
-    private Server server;
-    private int remoteClient;
-    private ServerListener serverListener;
+    private final Server server;
+    private final int remoteClient;
 
     public HostedCharacterSelectScreen(Server server, int remoteClient) {
         this.server = server;
         this.remoteClient = remoteClient;
         Game.controllerManager.setInGameState(true);
 
-        serverListener = new ServerListener() {
+        ServerListener serverListener = new ServerListener() {
             @Override
             public void connected(int connection) {
 
@@ -69,5 +69,13 @@ public class HostedCharacterSelectScreen extends CharacterSelectScreen {
         server.send(remoteClient, new CharacterSelectPacket(player1.index, player1.costume, player1.ready));
 
         return result;
+    }
+
+    @Override
+    public void close() {
+        try {
+            server.close();
+        } catch (IOException ignored) {
+        }
     }
 }

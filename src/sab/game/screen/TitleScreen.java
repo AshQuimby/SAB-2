@@ -1,7 +1,6 @@
 package sab.game.screen;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.controllers.Controller;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
@@ -10,6 +9,7 @@ import com.seagull_engine.Seagraphics;
 
 import sab.game.Game;
 import sab.game.SABSounds;
+import sab.game.screen.extras.ExtrasScreen;
 import sab.screen.Screen;
 import sab.util.Utils;
 

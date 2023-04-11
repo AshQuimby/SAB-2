@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.seagull_engine.Seagraphics;
 import sab.game.SABSounds;
 import sab.game.fighter.*;
+import sab.game.screen.battle.LocalBattleScreen;
 import sab.game.stage.*;
 import sab.screen.Screen;
 import sab.screen.ScreenAdapter;

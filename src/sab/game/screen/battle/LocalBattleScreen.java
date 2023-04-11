@@ -1,4 +1,4 @@
-package sab.game.screen;
+package sab.game.screen.battle;
 
 import com.badlogic.gdx.Input;
 import com.seagull_engine.Seagraphics;
@@ -7,6 +7,7 @@ import sab.game.Battle;
 import sab.game.Game;
 import sab.game.SABSounds;
 import sab.game.fighter.Fighter;
+import sab.game.screen.VictoryScreen;
 import sab.game.stage.Stage;
 import sab.net.Keys;
 import sab.screen.*;
