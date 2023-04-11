@@ -32,7 +32,7 @@ public class JoinedCharacterSelectScreen extends CharacterSelectScreen {
             }
         };
 
-        client.addClientListener(listener);
+        client.setClientListener(listener);
 
         update();
     }

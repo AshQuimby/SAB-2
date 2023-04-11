@@ -5,22 +5,17 @@ import sab.net.packet.Packet;
 import sab.net.packet.PacketManager;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 public class Client {
     private final int id;
     private final Connection connection;
     private final PacketManager packetManager;
-
-    private final List<ClientListener> listeners;
+    private ClientListener listener;
 
     public Client(String host, int port, PacketManager packetManager) throws IOException {
         connection = new Connection(host, port);
         id = connection.readInt();
         this.packetManager = packetManager;
-
-        listeners = new ArrayList<>();
 
         Thread receiver = new Thread(
                 () -> {
@@ -67,22 +62,18 @@ public class Client {
         return id;
     }
 
-    public void addClientListener(ClientListener listener) {
-        listeners.add(listener);
-    }
-
-    public void removeClientListener(ClientListener listener) {
-        listeners.remove(listener);
+    public void setClientListener(ClientListener listener) {
+        this.listener = listener;
     }
 
     private void receive(Packet packet) {
-        for (ClientListener listener : listeners) {
+        if (listener != null) {
             listener.received(packet);
         }
     }
 
     private void disconnect() {
-        for (ClientListener listener : listeners) {
+        if (listener != null) {
             listener.disconnected();
         }
     }

@@ -15,7 +15,7 @@ public class Server {
     private final ServerSocket serverSocket;
     private final PacketManager packetManager;
     private final List<Connection> connections;
-    private final List<ServerListener> listeners;
+    private ServerListener listener;
 
     private final Map<Connection, Integer> idsByConnection;
     private final Map<Integer, Connection> connectionsById;
@@ -26,7 +26,6 @@ public class Server {
         serverSocket = new ServerSocket(port);
         this.packetManager = packetManager;
         connections = new ArrayList<>();
-        listeners = new ArrayList<>();
 
         idsByConnection = new HashMap<>();
         connectionsById = new HashMap<>();
@@ -42,12 +41,8 @@ public class Server {
         return idsByConnection.get(connection);
     }
 
-    public void addServerListener(ServerListener listener) {
-        listeners.add(listener);
-    }
-
-    public void removeServerListener(ServerListener listener) {
-        listeners.remove(listener);
+    public void setServerListener(ServerListener listener) {
+        this.listener = listener;
     }
 
     public void send(int id, Packet packet) {
@@ -82,7 +77,7 @@ public class Server {
     private void connected(Connection connection) {
         int id = getId(connection);
 
-        for (ServerListener listener : listeners) {
+        if (listener != null) {
             listener.connected(id);
         }
     }
@@ -90,7 +85,7 @@ public class Server {
     private void disconnected(Connection connection) {
         int id = getId(connection);
 
-        for (ServerListener listener : listeners) {
+        if (listener != null) {
             listener.disconnected(id);
         }
     }
@@ -98,7 +93,7 @@ public class Server {
     private void receive(Connection connection, Packet packet) {
         int id = getId(connection);
 
-        for (ServerListener listener : listeners) {
+        if (listener != null) {
             listener.received(id, packet);
         }
     }

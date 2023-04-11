@@ -1,8 +1,5 @@
 package sab.net;
 
-import sab.net.packet.Packet;
-import sab.net.packet.PacketManager;
-
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;

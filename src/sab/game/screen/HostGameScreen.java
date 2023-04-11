@@ -3,12 +3,9 @@ package sab.game.screen;
 import com.badlogic.gdx.graphics.Color;
 import com.seagull_engine.Seagraphics;
 import sab.error.SabError;
-import sab.game.Game;
 import sab.game.Settings;
-import sab.net.packet.Packet;
 import sab.net.packet.SabPacketManager;
 import sab.net.server.Server;
-import sab.net.server.ServerListener;
 import sab.screen.Screen;
 import sab.screen.ScreenAdapter;
 
@@ -72,7 +69,6 @@ public class HostGameScreen extends ScreenAdapter {
 
         if (hasRemoteConnection) {
             return new HostedCharacterSelectScreen(server, remoteClient);
-            //return new HostedBattleScreen(server, remoteClient);
         }
 
         return this;
@@ -80,7 +76,7 @@ public class HostGameScreen extends ScreenAdapter {
 
     @Override
     public void render(Seagraphics g) {
-        g.drawText("Waiting for players...", g.imageProvider.getFont("SAB_font"), 0, 0, 1, Color.WHITE, 0);
+        g.drawText("Waiting for player 2", g.imageProvider.getFont("SAB_font"), 0, 0, 1, Color.WHITE, 0);
     }
 
     @Override

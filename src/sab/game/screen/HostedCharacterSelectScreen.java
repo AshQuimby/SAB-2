@@ -42,7 +42,7 @@ public class HostedCharacterSelectScreen extends CharacterSelectScreen {
                 }
             }
         };
-        server.addServerListener(serverListener);
+        server.setServerListener(serverListener);
 
         update();
     }

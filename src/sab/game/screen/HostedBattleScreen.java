@@ -28,7 +28,7 @@ public class HostedBattleScreen extends ScreenAdapter {
         this.server = server;
         this.remoteClient = remoteClient;
 
-        server.addServerListener(new ServerListener() {
+        server.setServerListener(new ServerListener() {
             @Override
             public void connected(int connection) {
                 server.send(connection, new JoinedGamePacket((byte) 0xff));
