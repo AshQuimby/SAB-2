@@ -16,6 +16,10 @@ To report bugs, seeing as there aren't enough beta testers for a formal system, 
 To request balance changes follow the same procedure as bug reporting.
 
 ---
+
+Campaign is not currently complete, net code is not currently complete, and not all characters have programmed AIs, but that can't stop you from doing it anyways :D.
+
+---
 <i>
 Hope you have fun <br>
 -AshQuimby
