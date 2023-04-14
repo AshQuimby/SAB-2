@@ -4,6 +4,7 @@ import com.badlogic.gdx.math.Vector2;
 
 import sab.game.CollisionResolver;
 import sab.game.Direction;
+import sab.game.SABSounds;
 import sab.game.attack.Attack;
 import sab.game.attack.AttackType;
 
@@ -29,11 +30,7 @@ public class BoneSpike extends AttackType {
     public void update(Attack attack) {
         if (attack.life % 15 == 0) {
             if (head) {
-                attack.owner.battle.addAttack(
-                    new Attack(new BoneSpike(), attack.owner),
-                    new int[] {1, Float.floatToIntBits(attack.hitbox.x), Float.floatToIntBits(attack.hitbox.y),
-                            attack.direction});
-
+                attack.owner.battle.addAttack(new Attack(new BoneSpike(), attack.owner), new int[] {1, Float.floatToIntBits(attack.hitbox.x), Float.floatToIntBits(attack.hitbox.y), attack.direction});
                 attack.hitbox.x += attack.direction * attack.hitbox.width * 1.5f;
             } else {
                 attack.hitbox.y -= attack.hitbox.height / 2;
@@ -63,5 +60,6 @@ public class BoneSpike extends AttackType {
             attack.life = 30;
             attack.knockback.set(0, 4);
         }
+        SABSounds.playSound("snas.mp3");
     }
 }

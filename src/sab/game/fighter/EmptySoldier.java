@@ -13,7 +13,7 @@ public class EmptySoldier extends FighterType {
     @Override
     public void setDefaults(Fighter fighter) {
         fighter.id = "empty_soldier";
-        fighter.name = "Empty Soldier";
+        fighter.name = "The Soldier";
         fighter.hitboxWidth = 32;
         fighter.hitboxHeight = 64;
         fighter.renderWidth = 64;
@@ -27,10 +27,10 @@ public class EmptySoldier extends FighterType {
         fighter.frames = 13;
         fighter.friction = .3f;
         fighter.mass = 4.13f;
-        fighter.walkAnimation = new Animation(0, 3, 5, true);
+        fighter.walkAnimation = new Animation(1, 3, 5, true);
         fighter.costumes = 3;
         fighter.description = "";
-        fighter.debut = "Container";
+        fighter.debut = "Empty Soldier";
         fighter.freefallAnimation = new Animation(new int[] { 7 }, 1, false);
 
         spirit = 0;
@@ -48,7 +48,7 @@ public class EmptySoldier extends FighterType {
     public void neutralAttack(Fighter fighter, Player player) {
         if (!player.usedRecovery) {
             swingAnimation.reset();
-            player.startAttack(new Attack(new ChainSlash(), player), swingAnimation, 6, 8, false);
+            player.startAttack(new ChainSlash(), swingAnimation, 6, 8, false);
         }
     }
 
@@ -62,6 +62,6 @@ public class EmptySoldier extends FighterType {
 
     @Override
     public void downAttack(Fighter fighter, Player player) {
-        if (!player.touchingStage) player.startIndefiniteAttack(new Attack(new ShadowPlunge(), player), null, 10, false);
+        if (!player.touchingStage) player.startIndefiniteAttack(new ShadowPlunge(), null, 10, false);
     }
 }

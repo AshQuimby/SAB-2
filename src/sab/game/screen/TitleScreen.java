@@ -26,12 +26,8 @@ public class TitleScreen extends SelectorScreen {
         g.getDynamicCamera().targetZoom = 0.9f;
         g.getDynamicCamera().updateSeagullCamera(16);
         g.scalableDraw(g.imageProvider.getImage(Game.titleBackground), -Game.game.window.resolutionX / 2, -Game.game.window.resolutionY / 2, Game.game.window.resolutionX, Game.game.window.resolutionY);
+        drawTitle(g);
         g.useStaticCamera();
-        if (Utils.christmas()) {
-            g.scalableDraw(g.imageProvider.getImage("title_pagan.png"), -488 / 2, 92 + MathUtils.sin(Game.game.window.getTick() / 64f) * 4, 488, 248);
-        } else {
-            g.scalableDraw(g.imageProvider.getImage("title.png"), -488 / 2, 100 + MathUtils.sin(Game.game.window.getTick() / 64f) * 4, 488, 232);
-        }
 
         g.usefulTintDraw(g.imageProvider.getImage("pixel.png"), -400 / 2, -Game.game.window.resolutionY / 2, 400, 350, 0, 1, 0, false, false, new Color(0, 0, 0, 0.5f));
 
@@ -46,6 +42,14 @@ public class TitleScreen extends SelectorScreen {
             g.drawText(options[i], g.imageProvider.getFont("SAB_font"), 0,  i * -52 - 16, 1.5f, Color.WHITE, 0);
         }
         
+    }
+
+    public static void drawTitle(Seagraphics g) {
+        if (Utils.christmas()) {
+            g.scalableDraw(g.imageProvider.getImage("title_pagan.png"), -488 / 2, 52 + MathUtils.sin(Game.game.window.getTick() / 64f) * 4, 488, 248);
+        } else {
+            g.scalableDraw(g.imageProvider.getImage("title.png"), -488 / 2, 60 + MathUtils.sin(Game.game.window.getTick() / 64f) * 4, 488, 232);
+        }
     }
 
     @Override

@@ -3,6 +3,7 @@ package sab.game.attack.chain;
 import com.badlogic.gdx.math.Vector2;
 import com.seagull_engine.GameObject;
 import sab.game.Player;
+import sab.game.SABSounds;
 import sab.game.attack.Attack;
 import sab.game.attack.AttackType;
 import sab.game.fighter.Chain;
@@ -29,6 +30,7 @@ public class BoomerangKnife extends AttackType {
         if (attack.life % 5 == 0) {
             if (++attack.frame >= attack.frameCount) {
                 attack.frame = 0;
+                SABSounds.playSound("swish.mp3");
             }
         }
 
@@ -58,6 +60,7 @@ public class BoomerangKnife extends AttackType {
         attack.hitbox.setCenter(attack.owner.hitbox.getCenter(new Vector2()));
         attack.velocity = new Vector2(10 * attack.owner.direction, 0);
         attack.knockback.set(attack.velocity);
+        SABSounds.playSound("throw.mp3");
     }
 
     @Override

@@ -59,7 +59,7 @@ public class EmperorEvil extends FighterType {
     public void neutralAttack(sab.game.fighter.Fighter fighter, Player player) {
         if (!player.usedRecovery) {
             shootAnimation.reset();
-            player.startAttack(new Attack(new Cannonball(), player), shootAnimation, 18, 18, false);
+            player.startAttack(new Cannonball(), shootAnimation, 18, 18, false);
             player.velocity.x *= 0.2f;
         }
     }
@@ -68,7 +68,7 @@ public class EmperorEvil extends FighterType {
     public void sideAttack(sab.game.fighter.Fighter fighter, Player player) {
         if (!player.usedRecovery) {
             chompAnimation.reset();
-            player.startAttack(new Attack(new Chomp(), player), chompAnimation, 4, 40, false);
+            player.startAttack(new Chomp(), chompAnimation, 4, 40, false);
         }
     }
 
@@ -76,7 +76,7 @@ public class EmperorEvil extends FighterType {
     public void upAttack(sab.game.fighter.Fighter fighter, Player player) {
         if (!player.usedRecovery) {
             barrel.reset();
-            player.startAttack(new Attack(new ExplosiveBarrel(), player), barrel, 1, 30, false);
+            player.startAttack(new ExplosiveBarrel(), barrel, 1, 30, false);
             player.removeJumps();
             player.usedRecovery = true;
         }
@@ -93,7 +93,7 @@ public class EmperorEvil extends FighterType {
     public void chargeAttack(sab.game.fighter.Fighter fighter, Player player, int charge) {
         if (!player.usedRecovery) {
             chargeAnimation.reset();
-            player.startAttack(new Attack(new MagicBanana(), player), chargeAnimation, 7, 10, false, new int[]{charge});
+            player.startAttack(new MagicBanana(), chargeAnimation, 7, 10, false, new int[]{charge});
             player.velocity.y /= 3;
             player.velocity.x *= 0.9f;
             for (int i = 0; i < 8; i++) {

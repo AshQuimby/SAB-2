@@ -19,6 +19,7 @@ public class BigGun extends Item {
         hitbox.height = 28;
         offset = new Vector2(12, 8);
         drawRect = new Rectangle(hitbox);
+        uses = 6;
     }
 
     @Override
@@ -33,7 +34,7 @@ public class BigGun extends Item {
     @Override
     public void onUse(Player holder) {
         holder.fighter.idleAnimation.reset();
-        holder.startAttack(new Attack(new BigBullet(), holder), holder.fighter.idleAnimation, 1, 15, false);
+        holder.startAttack(new BigBullet(), holder.fighter.idleAnimation, 1, 15, false);
         spinny = 15;
     }
 }

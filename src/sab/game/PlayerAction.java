@@ -55,7 +55,8 @@ public class PlayerAction {
             }
         }
 
-        if (--delay == 0) {
+        delay--;
+        if (delay == 0) {
             if (!usedAttack && attack != null) {
                 attack.onSpawn(data);
                 attack.drawRect.setCenter(attack.hitbox.getCenter(new Vector2()));

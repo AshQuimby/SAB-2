@@ -100,12 +100,12 @@ public class Attack extends DamageSource {
         type.update(this);
 
         for (GameObject key : hitObjects.keySet()) {
-            hitObjects.replace(key, hitObjects.get(key) - 1);
+            if (hitObjects.get(key) > 0) hitObjects.replace(key, hitObjects.get(key) - 1);
         }
 
         if (canHit) {
             for (GameObject target : owner.battle.getHittableGameObjects()) {
-                if (hitbox.overlaps(target.hitbox) && target != owner && (hitObjects.get(target) == null || hitObjects.get(target) <= 0)) {
+                if (hitbox.overlaps(target.hitbox) && target != owner && (hitObjects.get(target) == null || hitObjects.get(target) == 0)) {
                     if (((Hittable) target).canBeHit(this)) successfulHit(target);
                     hit(target);
                     if (((Hittable) target).canBeHit(this)) ((Hittable) target).onHit(this);

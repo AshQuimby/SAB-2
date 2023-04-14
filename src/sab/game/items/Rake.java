@@ -22,6 +22,7 @@ public class Rake extends Item {
         drawRect = new Rectangle(hitbox);
         swing = new Animation(new int[]{1, 2, 3, 4}, 4, true);
         animation = new Animation(new int[]{0}, 1, true);
+        uses = 12;
     }
 
     @Override
@@ -37,7 +38,7 @@ public class Rake extends Item {
         animation = swing;
         holder.fighter.idleAnimation.reset();
         Vector2 totalOffset = getTotalOffset(holder);
-        holder.startAttack(new Attack(new DuckItem(), holder), holder.fighter.idleAnimation, 4, 12, false, new int[] {
+        holder.startAttack(new DuckItem(), holder.fighter.idleAnimation, 4, 12, false, new int[] {
                 (int) totalOffset.x,
                 (int) totalOffset.y,
                 (int) hitbox.width,

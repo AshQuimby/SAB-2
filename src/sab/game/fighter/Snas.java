@@ -68,7 +68,7 @@ public class Snas extends FighterType {
     public void neutralAttack(Fighter fighter, Player player) {
         if (!player.usedRecovery || beheaded) {
             attackAnimation.reset();
-            player.startAttack(new Attack(new BoneSpike(), player), attackAnimation, 12, 18, false, new int[] {0});
+            player.startAttack(new BoneSpike(), attackAnimation, 12, 18, false, new int[] {0});
             player.velocity.y /= 3;
             player.velocity.x *= 0.9f;
         }
@@ -78,7 +78,7 @@ public class Snas extends FighterType {
     public void sideAttack(Fighter fighter, Player player) {
         if (!player.usedRecovery || beheaded) {
             attackAnimation.reset();
-            player.startAttack(new Attack(new SpinnyBone(), player), attackAnimation, 4, 24, false);
+            player.startAttack(new SpinnyBone(), attackAnimation, 4, 24, false);
         }
     }
 
@@ -93,6 +93,7 @@ public class Snas extends FighterType {
             player.velocity.y = 28;
             player.removeJumps();
             beheaded = true;
+            SABSounds.playSound("snas.mp3");
         }
     }
 

@@ -104,21 +104,21 @@ public class BigSeagull extends FighterType {
     @Override
     public void neutralAttack(sab.game.fighter.Fighter fighter, Player player) {
         gustAnimation.reset();
-        player.startAttack(new Attack(new Gust(), player), gustAnimation, 1, 24, true);
+        player.startAttack(new Gust(), gustAnimation, 1, 24, true);
         SABSounds.playSound("gust.mp3");
     }
 
     @Override
     public void sideAttack(sab.game.fighter.Fighter fighter, Player player) {
         peckAnimation.reset();
-        player.startAttack(new Attack(new Peck(), player), peckAnimation, 1, 12, true);
+        player.startAttack(new Peck(), peckAnimation, 1, 12, true);
     }
 
     @Override
     public void upAttack(sab.game.fighter.Fighter fighter, Player player) {
         if (!player.usedRecovery) {
             hoverAnimation.reset();
-            player.startAttack(new Attack(new Glide(), player), hoverAnimation, 4, 180, true);
+            player.startAttack(new Glide(), hoverAnimation, 4, 180, true);
             player.velocity.y = 12;
             SABSounds.playSound("gust.mp3");
             player.usedRecovery = true;
@@ -128,6 +128,6 @@ public class BigSeagull extends FighterType {
     @Override
     public void downAttack(Fighter fighter, Player player) {
         gustAnimation.reset();
-        player.startAttack(new Attack(new FeatherDart(), player), gustAnimation, 1, 24, true, new int[] {0});
+        player.startAttack(new FeatherDart(), gustAnimation, 1, 24, true, new int[] {0});
     }
 }

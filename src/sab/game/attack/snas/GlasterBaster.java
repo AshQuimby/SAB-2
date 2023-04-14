@@ -54,7 +54,7 @@ public class GlasterBaster extends MeleeAttackType {
             }
             if (attack.owner.getUsedCharge() > 0) {
                 fired = true;
-                attack.owner.battle.addAttack(new Attack(new BasterBeam(), attack.owner), new int[]{basterDirection == Direction.UP ? 1 : basterDirection == Direction.DOWN ? -1 : 0, basterDirection == Direction.RIGHT ? 1 : basterDirection == Direction.LEFT ? -1 : 0, attack.owner.getUsedCharge()});
+                attack.owner.battle.addAttack(new Attack(new BasterBeam(), attack.owner), new int[]{ basterDirection == Direction.UP ? 1 : basterDirection == Direction.DOWN ? -1 : 0, basterDirection == Direction.RIGHT ? 1 : basterDirection == Direction.LEFT ? -1 : 0, attack.owner.getUsedCharge()});
                 SABSounds.playSound("glaster_baster.mp3");
                 attack.life = 15;
             }
@@ -94,6 +94,9 @@ public class GlasterBaster extends MeleeAttackType {
                 }
             }
         } else {
+            if (attack.owner.isStuck()) {
+                attack.kill();
+            }
             attack.frame = 1;
         }
     }

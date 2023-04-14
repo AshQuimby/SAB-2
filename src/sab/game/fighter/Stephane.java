@@ -123,7 +123,7 @@ public class Stephane extends FighterType {
             if (bowAnimation.getFrame() == 11 && player.keys.isPressed(Keys.ATTACK)) {
                 player.resetAction();
                 bowFireworkAnimation.reset();
-                player.startAttack(new Attack(new Firework(), player), bowFireworkAnimation, 24, 16, false);
+                player.startAttack(new Firework(), bowFireworkAnimation, 24, 16, false);
             }
         }
 
@@ -136,7 +136,7 @@ public class Stephane extends FighterType {
     public void neutralAttack(Fighter fighter, Player player) {
         if (!player.usedRecovery) {
             swingAnimation.reset();
-            player.startRepeatingAttack(new Attack(new Baguette(), player), swingAnimation, 4, 18, false, new int[0]);
+            player.startRepeatingAttack(new Baguette(), swingAnimation, 4, 18, false, new int[0]);
         }
     }
 
@@ -145,10 +145,10 @@ public class Stephane extends FighterType {
         if (!player.usedRecovery) {
             if (player.touchingStage) {
                 bowAnimation.reset();
-                player.startAttack(new Attack(new Arrow(), player), bowAnimation, 24, 12, false, null);
+                player.startAttack(new Arrow(), bowAnimation, 24, 12, false, null);
             } else {
                 bowFastAnimation.reset();
-                player.startAttack(new Attack(new Arrow(), player), bowFastAnimation, 12, 4, false, null);
+                player.startAttack(new Arrow(), bowFastAnimation, 12, 4, false, null);
             }
         }
     }
@@ -160,7 +160,7 @@ public class Stephane extends FighterType {
         createBlock(player, player.battle.getStage());
         createBlock(player, player.battle.getStage());
         blockPlaceAnimation.reset();
-        player.startAttack(new Attack(new BlockSmash(), player), blockPlaceAnimation, 1, 12, false, null);
+        player.startAttack(new BlockSmash(), blockPlaceAnimation, 1, 12, false, null);
     }
 
     @Override

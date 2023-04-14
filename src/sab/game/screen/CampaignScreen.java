@@ -4,6 +4,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.MathUtils;
 import com.seagull_engine.Seagraphics;
+import sab.dialogue.Dialogues;
 import sab.game.SABSounds;
 import sab.game.fighter.*;
 import sab.game.screen.battle.LocalBattleScreen;
@@ -33,8 +34,8 @@ public class CampaignScreen extends ScreenAdapter {
     private final Level[] levels = new Level[] {
             new Level(new Warzone(), new Chain(), 1),
             new Level(new LastLocation(), new Walouis(), 1),
-            new Level(new LastLocation(), new Gus(), 2),
             new Level(new Warzone(), new EmperorEvil(), 2),
+            new Level(new LastLocation(), new Gus(), 2),
             new Level(new COBS(), new BigSeagull(), 5),
     };
 
@@ -55,7 +56,9 @@ public class CampaignScreen extends ScreenAdapter {
         }
         if (keyCode == Input.Keys.ENTER) {
             SABSounds.playSound(SABSounds.SELECT);
-            return new LocalBattleScreen(new Fighter(new Marvin()), levels[selection].opponent, new int[] {0, 0}, levels[selection].stage, 0, levels[selection].difficulty, 3);
+            LocalBattleScreen battleScreen = new LocalBattleScreen(new Fighter(new Marvin()), levels[selection].opponent, new int[] {0, 0}, levels[selection].stage, 0, levels[selection].difficulty, 3);
+            battleScreen.battle.setDialogue(Dialogues.getDialogue("chain_greeting.dlg"));
+            return battleScreen;
         }
         return this;
     }

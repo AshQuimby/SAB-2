@@ -13,7 +13,7 @@ import sab.net.Keys;
 import sab.screen.*;
 
 public class LocalBattleScreen extends ScreenAdapter {
-    private Battle battle;
+    public Battle battle;
 
     public LocalBattleScreen(Fighter player1, Fighter player2, int[] costumes, Stage stage, int player1Type, int player2Type, int lives) {
         battle = new Battle(player1, player2, costumes, stage, player1Type, player2Type, lives);
@@ -110,6 +110,7 @@ public class LocalBattleScreen extends ScreenAdapter {
             return new VictoryScreen(battle.winner, battle.loser, battle.getStage().background);
         }
         battle.update();
+        battle.postUpdate();
         return this;
     }
 
