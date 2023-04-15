@@ -16,6 +16,10 @@ public abstract class FighterType {
 
     }
 
+    public void start(Fighter fighter, Player player) {
+
+    }
+
     public AI getAI(Player player, int difficulty) {
         return new BaseAI(player, difficulty);
     }

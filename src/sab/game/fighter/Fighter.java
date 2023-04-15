@@ -109,6 +109,10 @@ public class Fighter implements Cloneable {
         type.setDefaults(this);
     }
 
+    public void start(Player player) {
+        type.start(this, player);
+    }
+
     public AI getAI(Player player, int difficulty) {
         return type.getAI(player, difficulty);
     }

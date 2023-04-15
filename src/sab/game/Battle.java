@@ -181,6 +181,7 @@ public class Battle {
     }
 
     public void shakeCamera(int intensity) {
+        System.out.println(intensity);
         if (intensity > cameraShake) cameraShake = intensity;
     }
 
@@ -266,8 +267,9 @@ public class Battle {
     }
 
     public void updateCameraEffects() {
-        float shakeX = MathUtils.random(-cameraShake * cameraShake / 2f, cameraShake * cameraShake / 2f);
-        float shakeY = MathUtils.random(-cameraShake * cameraShake / 2f, cameraShake * cameraShake / 2f);
+        float effectiveCameraShake = Math.min(cameraShake / 2f, 6);
+        float shakeX = MathUtils.random(-effectiveCameraShake * effectiveCameraShake / 2f, effectiveCameraShake * effectiveCameraShake / 2f);
+        float shakeY = MathUtils.random(-effectiveCameraShake * effectiveCameraShake / 2f, effectiveCameraShake * effectiveCameraShake / 2f);
 
         cameraShakeVector = new Vector2(shakeX, shakeY);
 
@@ -364,6 +366,9 @@ public class Battle {
 
         if (freezeFrames > 0) {
             freezeFrames--;
+            if (slowdownDuration > 0) {
+                if (Game.game.window.getTick() % slowdown == 0) updateCameraEffects();
+            }
             return;
         } else {
             if (slowdownDuration > 0) {
@@ -373,6 +378,7 @@ public class Battle {
                 zoomOnFreeze = false;
             }
         }
+        updateCameraEffects();
 
         if (winner == null && (player1.getLives() == 0 || player2.getLives() == 0)) {
             endGame(player1.getLives() > 0 ? player1 : (player2.getLives() == 0 ? null : player2), player1.getLives() > 0 ? player2 : (player2.getLives() == 0 ? null : player1));
@@ -392,9 +398,6 @@ public class Battle {
             if (!particle.alive) deadParticles.add(particle);
         }
         particles.removeAll(deadParticles);
-        
-        updateCameraEffects();
-        updateCameraPosition();
 
         for (GameObject deadGameObject : deadGameObjects) {
             gameObjects.remove(deadGameObject);
@@ -475,6 +478,7 @@ public class Battle {
     public void smashScreen() {
         freezeFrame(15, 4, 60, true);
         screenShatter = 90;
+        shakeCamera(8);
         SABSounds.playSound("shatter.mp3");
     }
 
@@ -534,7 +538,10 @@ public class Battle {
     }
 
     public void render(Seagraphics g) {
-        g.getDynamicCamera().position.sub(cameraShakeVector.x, cameraShakeVector.y, 0);
+        updateCameraPosition();
+
+        g.getDynamicCamera().position.x += cameraShakeVector.x;
+        g.getDynamicCamera().position.y += cameraShakeVector.y;
         g.useStaticCamera();
         g.scalableDraw(g.imageProvider.getImage(stage.background), -1280 / 2, -720 / 2, 1280, 720);
         g.useDynamicCamera();

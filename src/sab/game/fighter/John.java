@@ -23,6 +23,7 @@ public class John extends FighterType {
     private Animation squatAnimation;
     private Animation chargeAnimation;
     private Animation throwAnimation;
+    private Animation johnWalkAnimation;
     private boolean justWon;
 
     @Override
@@ -38,24 +39,51 @@ public class John extends FighterType {
         fighter.frames = 14;
         fighter.jumpHeight = 160;
         fighter.friction = .2f;
-        fighter.mass = 5f;
-        fighter.jumps = 1;
-        fighter.walkAnimation = new Animation(0, 3, 8, true);
-        fighter.description = "American attorney John Joseph has a spotless legal record. Despite this, he has been finding it tough to get work after being cursed to be a pink sphere for all eternity. In this state he worked exclusively his arms so much that his legs withered away to the point of being vestigial.";
-        fighter.debut = "John Joseph's Nightmare World";
+        fighter.acceleration = 0.2f;
+        fighter.mass = 8.5f;
+        fighter.jumps = 5;
+        fighter.doubleJumpMultiplier = 0.8f;
 
+        fighter.description = "American attorney John Joseph has a spotless legal record. Despite this, he finds it tough to get work after he was cursed and turned into a pink sphere for all eternity. In this state he worked exclusively his upper body so much that his legs atrophied to the point of being vestigial.";
+        fighter.debut = "John Joseph's Nightmare World";
+        fighter.walkAnimation = new Animation(0, 3, 12, true);
         swingAnimation = new Animation(new int[] {4, 5, 0}, 7, true);
         squatAnimation = new Animation(new int[] {6}, 4, true);
         chargeAnimation = new Animation(new int[] {9}, 4, true);
         throwAnimation = new Animation(new int[] {10, 11}, 6, true);
-        fighter.freefallAnimation = new Animation(new int[]{7}, 1, true);
+        fighter.freefallAnimation = new Animation(new int[]{8}, 1, true);
+        fighter.ledgeAnimation = new Animation(new int[] {10}, 1, true);
+        fighter.knockbackAnimation = new Animation(new int[] {9}, 1, true);
         fighter.costumes = 4;
         justWon = true;
     }
 
     @Override
-    public void update(Fighter fighter, Player player) {
+    public void start(Fighter fighter, Player player) {
+        // Declare the special method body here so that way the sound doesn't play in the character select screen
+        johnWalkAnimation = new Animation(0, 3, 12, true) {
+            @Override
+            public void onFrameChange(int newFrame) {
+                if (newFrame % 2 == 0) {
+                    player.battle.shakeCamera(3);
+                    SABSounds.playSound("john_step.mp3");
+                }
+            }
+        };
+    }
 
+    @Override
+    public void update(Fighter fighter, Player player) {
+        if (!player.isStuck() && !player.touchingStage) {
+            if (player.velocity.y > 0) {
+                player.frame = 7;
+            } else {
+                player.frame = 8;
+            }
+            fighter.walkAnimation = fighter.freefallAnimation;
+        } else {
+            fighter.walkAnimation = johnWalkAnimation;
+        }
     }
 
     @Override

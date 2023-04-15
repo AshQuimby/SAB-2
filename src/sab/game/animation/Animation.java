@@ -3,11 +3,11 @@ package sab.game.animation;
 public class Animation {
     public final boolean interruptable;
 
-    private final int[] frames;
-    private final int frameLength;
+    public final int[] frames;
+    public final int frameLength;
 
-    private int frame;
-    private int ticksUntilNextFrame;
+    public int frame;
+    public int ticksUntilNextFrame;
 
     public Animation(int firstFrame, int lastFrame, int frameLength, boolean interruptable) {
         if (firstFrame >= lastFrame) {
@@ -48,6 +48,7 @@ public class Animation {
         if (ticksUntilNextFrame <= 0) {
             ticksUntilNextFrame = frameLength;
             frame++;
+            onFrameChange(frame);
         }
 
         ticksUntilNextFrame--;
@@ -57,17 +58,20 @@ public class Animation {
     public int stepLooping() {
         if (isDone()) {
             reset();
+            onFrameChange(frame);
         }
 
         if (ticksUntilNextFrame <= 0) {
             ticksUntilNextFrame = frameLength;
             frame++;
+            onFrameChange(frame);
         }
 
         ticksUntilNextFrame--;
 
         if (isDone()) {
             reset();
+            onFrameChange(frame);
             return frames[frames.length - 1];
         }
 
@@ -85,5 +89,10 @@ public class Animation {
 
     public boolean isDone() {
         return frame == frames.length - 1 && ticksUntilNextFrame <= 0;
+    }
+
+    // Methods for overriding
+    public void onFrameChange(int newFrame) {
+
     }
 }

@@ -115,6 +115,7 @@ public class Player extends GameObject implements Hittable {
         heldItem = null;
 
         gameStats = new GameStats("Human " + fighter.name, id);
+        fighter.start(this);
     }
 
     public void setAI(AI ai) {
@@ -239,7 +240,7 @@ public class Player extends GameObject implements Hittable {
         for (int i = 0; i < 16; i++) {
             battle.addParticle(new Particle(hitbox.getCenter(new Vector2()), hitbox.getCenter(new Vector2()).scl(-0.025f * MathUtils.random(0.125f, 1f)).rotateDeg(MathUtils.random(-2.5f, 2.5f)), 128, 128, "twinkle.png"));
         }
-        battle.shakeCamera(5);
+        battle.shakeCamera(6);
         rotation = 0;
         velocity.scl(0);
         knockback.scl(0);
@@ -646,7 +647,7 @@ public class Player extends GameObject implements Hittable {
         int damageBefore = damage;
         damage += source.damage;
 
-        battle.shakeCamera(2);
+        battle.shakeCamera(3);
         battle.freezeFrame((source.damage / 50), 2, 1, false);
 
         SABSounds.playSound("hit.mp3");
@@ -679,7 +680,6 @@ public class Player extends GameObject implements Hittable {
 
             if (shouldDie) {
                 battle.smashScreen();
-                battle.shakeCamera(10);
             }
         }
 
