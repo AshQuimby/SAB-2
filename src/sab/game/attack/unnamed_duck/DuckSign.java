@@ -33,10 +33,10 @@ public class DuckSign extends AttackType {
     public void update(Attack attack) {
         attack.velocity.y -= 0.1f;
         if (attack.collisionDirection == Direction.NONE) {
-            attack.knockback = new Vector2(0, -16);
-            attack.hitCooldown = 30;
+            attack.knockback = new Vector2(0, -6);
+            attack.hitCooldown = 12;
         } else {
-            attack.knockback = new Vector2(0, 2);
+            attack.knockback = new Vector2(0, 3);
             attack.hitCooldown = 8;
         }
     }

@@ -73,15 +73,15 @@ public class PlayerController implements Controller {
     public int getKeyFromAxis(int axis) {
         switch (axis) {
             case 0 :
-                if (getAxis(axis) > 0) {
+                if (getAxis(axis) > 0.2f) {
                     return inGame ? playerId == 0 ? Input.Keys.D : Input.Keys.RIGHT : Input.Keys.RIGHT;
-                } else if (getAxis(axis) < 0) {
+                } else if (getAxis(axis) < 0.2f) {
                     return inGame ? playerId == 0 ? Input.Keys.A : Input.Keys.LEFT : Input.Keys.LEFT;
                 }
             case 1 :
-                if (getAxis(axis) < 0) {
+                if (getAxis(axis) < 0.2f) {
                     return inGame ? playerId == 0 ? Input.Keys.W : Input.Keys.UP : Input.Keys.UP;
-                } else if (getAxis(axis) > 0) {
+                } else if (getAxis(axis) > 0.2f) {
                     return inGame ? playerId == 0 ? Input.Keys.S : Input.Keys.DOWN : Input.Keys.DOWN;
                 }
             default :

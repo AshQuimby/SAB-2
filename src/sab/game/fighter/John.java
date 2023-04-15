@@ -62,7 +62,7 @@ public class John extends FighterType {
     public void neutralAttack(Fighter fighter, Player player) {
         if (!player.usedRecovery) {
             swingAnimation.reset();
-            player.startAttack(new Attack(new Fireball(), player), swingAnimation, 6, 10, false);
+            player.startAttack(new Fireball(), swingAnimation, 6, 10, false);
             player.velocity.y /= 3;
             player.velocity.x *= 0.9f;
         }
@@ -72,7 +72,7 @@ public class John extends FighterType {
     public void sideAttack(Fighter fighter, Player player) {
         if (!player.usedRecovery) {
             swingAnimation.reset();
-            player.startAttack(new Attack(new Wrench(), player), swingAnimation, 4, 18, false);
+            player.startAttack(new Wrench(), swingAnimation, 4, 18, false);
         }
     }
 
@@ -80,7 +80,7 @@ public class John extends FighterType {
     public void upAttack(Fighter fighter, Player player) {
         if (!player.usedRecovery) {
             squatAnimation.reset();
-            player.startAttack(new Attack(new Toilet(), player), squatAnimation, 4, 30, false);
+            player.startAttack(new Toilet(), squatAnimation, 4, 30, false);
             player.removeJumps();
             player.usedRecovery = true;
         }
@@ -96,19 +96,9 @@ public class John extends FighterType {
     @Override
     public void chargeAttack(Fighter fighter, Player player, int charge) {
         throwAnimation.reset();
-        player.startAttack(new Attack(new Frostball(), player), throwAnimation, 7, 10, false, new int[]{charge});
+        player.startAttack(new Frostball(), throwAnimation, 7, 10, false, new int[]{charge});
         player.velocity.y /= 3;
         player.velocity.x *= 0.9f;
-    }
-
-    @Override
-    public void charging(Fighter fighter, Player player, int charge) {
-        if (Game.game.window.getTick() % 5 == 0) {
-            for (int i = 0; i < 4; i++)
-            player.battle.addParticle(new Particle(player.hitbox.getCenter(new Vector2()).add(new Vector2(charge / 4f + 36 + MathUtils.sin(Game.game.window.getTick() / 8f) * 8f, 0).rotateDeg(i * 90 + Game.game.window.getTick() * 4)).add(0, 48), new Vector2(-1, 0).rotateDeg(i * 90 + Game.game.window.getTick() * 2), 32, 32, "frostfire.png"));
-        }
-        player.velocity.y *= 0.9f;
-        player.frame = chargeAnimation.stepLooping();
     }
 
     @Override

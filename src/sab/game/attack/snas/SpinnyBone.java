@@ -5,6 +5,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.seagull_engine.GameObject;
 
 import sab.game.Direction;
+import sab.game.SABSounds;
 import sab.game.attack.Attack;
 import sab.game.attack.AttackType;
 import sab.game.particle.Particle;
@@ -69,5 +70,6 @@ public class SpinnyBone extends AttackType {
         attack.velocity = new Vector2(4 * attack.owner.direction, 8);
         attack.knockback = new Vector2(0, 8);
         attack.direction = attack.owner.direction;
+        SABSounds.playSound("snas.mp3");
     }
 }

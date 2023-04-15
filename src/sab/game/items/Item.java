@@ -9,12 +9,20 @@ import sab.game.Player;
 
 // NOTE: There are *currently* no plans for these to be extended to other characters and as such will be left out of the mod loader
 
-public class Item extends GameObject {
+public abstract class Item extends GameObject {
     protected Vector2 offset;
+    protected int uses;
     public void setDefaults() {
         hitbox = new Rectangle(0, 0, 64, 64);
         drawRect = new Rectangle(hitbox);
         offset = new Vector2();
+    }
+
+    public final void use(Player holder) {
+        if (--uses == 0) {
+            toss(holder);
+        }
+        onUse(holder);
     }
 
     public void onUse(Player holder) {
@@ -46,6 +54,7 @@ public class Item extends GameObject {
     }
 
     public void renderHeld(Player holder, Seagraphics g) {
+        snapToPlayer(holder);
         drawRect.setCenter(hitbox.getCenter(new Vector2()));
         render(g);
     }

@@ -148,6 +148,7 @@ public class HostedBattleScreen extends ScreenAdapter {
         }
 
         battle.update();
+        battle.postUpdate();
 
         if (System.currentTimeMillis() - lastStateBroadcast > 50) {
             for (byte i = 0; i < 2; i++) {

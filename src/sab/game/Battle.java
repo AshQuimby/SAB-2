@@ -1,5 +1,6 @@
 package sab.game;
 
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -14,6 +15,7 @@ import com.seagull_engine.GameObject;
 import com.seagull_engine.Seagraphics;
 import com.seagull_engine.graphics.SeagullCamera;
 
+import sab.dialogue.Dialogue;
 import sab.game.ai.BaseAI;
 import sab.game.attack.Attack;
 import sab.game.fighter.Chain;
@@ -34,6 +36,7 @@ public class Battle {
     private List<Player> players;
     private Player player1;
     private Player player2;
+    private Dialogue currentDialogue;
 
     public Player winner;
     public Player loser;
@@ -84,8 +87,7 @@ public class Battle {
         player1.setAI(player1Type == 0 ? null : player1.fighter.getAI(player1, player1Type));
         player2 = new Player(fighter2, costumes[1], 1, lives, this);
         player2.setAI(player2Type == 0 ? null : player2.fighter.getAI(player2, player2Type));
-        players.add(player1);
-        players.add(player2);
+        player2.direction = -1;
         paused = false;
         pauseOverlayHidden = false;
         pauseMenuIndex = 0;
@@ -117,10 +119,15 @@ public class Battle {
         }
 
         spawnParticleCallback = (Particle p) -> {};
+        addNewGameObjects();
     }
 
     public Battle() {
         this(new Fighter(new Marvin()), new Fighter(new Chain()), new int[] {0, 0}, new Stage(new LastLocation()), 0, 0, 3);
+    }
+
+    public void setDialogue(Dialogue dialogue) {
+        this.currentDialogue = dialogue;
     }
 
     public void onSpawnParticle(VoidFunction<Particle> callback) {
@@ -219,17 +226,16 @@ public class Battle {
         }
 
 
-        if (freezeFrames > 0 && zoomOnFreeze) {
+        if (zoomOnFreeze) {
             camera.targetZoom = 0.5f;
             camera.targetPosition = (player1.takingKnockback()) ? player1.hitbox.getCenter(new Vector2()) : player2.hitbox.getCenter(new Vector2());
-            camera.updateSeagullCamera(1);
+        } else {
+            camera.targetPosition = player1.hitbox.getCenter(new Vector2()).cpy().add(player2.hitbox.getCenter(new Vector2())).scl(0.5f);
+            float playerDist = player1.hitbox.getCenter(new Vector2()).dst(player2.hitbox.getCenter(new Vector2()));
+            camera.targetZoom = playerDist / 256;
+
+            camera.targetZoom = Math.max(Math.min(stage.maxZoomOut, camera.targetZoom), slowdownDuration > 0 ? 0.5f : 0.75f);
         }
-
-        camera.targetPosition = player1.hitbox.getCenter(new Vector2()).cpy().add(player2.hitbox.getCenter(new Vector2())).scl(0.5f);
-        float playerDist = player1.hitbox.getCenter(new Vector2()).dst(player2.hitbox.getCenter(new Vector2()));
-        camera.targetZoom = playerDist / 256;
-
-        camera.targetZoom = Math.max(Math.min(stage.maxZoomOut, camera.targetZoom), slowdownDuration > 0 ? 0.5f : 0.75f);
 
         boolean badX = false;
         boolean badY = false;
@@ -256,7 +262,7 @@ public class Battle {
         if (badX && badX2) camera.targetPosition.x = stage.getSafeBlastZone().x + stage.getSafeBlastZone().width / 2;
         if (badY && badY2) camera.targetPosition.y = stage.getSafeBlastZone().y + stage.getSafeBlastZone().height / 2;
 
-        if (slowdownDuration > 0) camera.updateSeagullCamera(32 + slowdown * 4); else camera.updateSeagullCamera(8);
+        if (slowdownDuration > 0) camera.updateSeagullCamera(24 + slowdown * 4); else camera.updateSeagullCamera(8);
     }
 
     public void updateCameraEffects() {
@@ -267,60 +273,14 @@ public class Battle {
 
         if (cameraShake > 0) cameraShake--;
     }
-
-    public void update() {
-        if (endGameTimer > 0) {
-            endGameTimer++;
-            if (endGameTimer >= 120) {
-                gameEnded = true;
-            }
+    
+    public void updatePlayerKeys() {
+        for (Player player : players) {
+            player.keys.update();
         }
+    }
 
-        if (paused) {
-            if (player1.keys.isJustPressed(Keys.DOWN) || player2.keys.isJustPressed(Keys.DOWN)) {
-                pauseMenuIndex = Utils.loop(pauseMenuIndex, 1, 3, 0);
-            } else if (player1.keys.isJustPressed(Keys.UP) || player2.keys.isJustPressed(Keys.UP)) {
-                pauseMenuIndex = Utils.loop(pauseMenuIndex, -1, 3, 0);
-            }
-            if (player1.keys.isJustPressed(Keys.ATTACK) || player2.keys.isJustPressed(Keys.ATTACK)) {
-                triggerPauseMenu();
-            }
-            for (Player player : players) {
-                player.keys.update();
-            }
-            return;
-        }
-
-        for (PlayerController playerController : Game.controllerManager.getControllers()) {
-            playerController.checkMacros(Gdx.input.getInputProcessor(), getPlayer(playerController.playerId));
-        }
-
-        if (freezeFrames > 0) {
-            freezeFrames--;
-            if (!freezeUpdate) {
-                return;
-            } else {
-                freezeUpdate = false;
-            }
-        } else {
-            if (slowdownDuration > 0) {
-                slowdownDuration--;
-                if (Game.game.window.getTick() % slowdown != 0) return;
-            }
-        }
-
-        if (endGameTimer > 0 && Game.game.window.getTick() % 4 != 0) return;
-
-        if (winner == null && (player1.getLives() == 0 || player2.getLives() == 0)) {
-            endGame(player1.getLives() > 0 ? player1 : (player2.getLives() == 0 ? null : player2), player1.getLives() > 0 ? player2 : (player2.getLives() == 0 ? null : player1));
-        }
-
-        // if (paused) {
-        //     if (player1.keys.isJustPressed(Keys.UP) || player2.keys.isJustPressed(Keys.UP)) pauseMenuIndex++;
-        //     if (player1.keys.isJustPressed(Keys.DOWN) || player2.keys.isJustPressed(Keys.DOWN)) pauseMenuIndex++;
-        //     return;
-        // }
-
+    public void addNewGameObjects() {
         for (GameObject newGameObject : newGameObjects) {
             gameObjects.add(newGameObject);
             int id = ++nextId;
@@ -352,8 +312,79 @@ public class Battle {
                 miscGameObjects.add(newGameObject);
             }
         }
+        newGameObjects.clear();
+    }
 
-        newGameObjects.removeAll(newGameObjects);
+    public void update() {
+        if (currentDialogue != null) {
+            currentDialogue.next();
+            if (player1.keys.isJustPressed(Keys.ATTACK) || player2.keys.isJustPressed(Keys.ATTACK)) {
+                if (currentDialogue.finished()) {
+                    currentDialogue = null;
+                } else if (currentDialogue.finishedBlock()) {
+                    currentDialogue.nextBlock();
+                } else {
+                    currentDialogue.toEnd();
+                }
+            }
+            updatePlayerKeys();
+            return;
+        }
+
+        if (screenShatter > 0) {
+            screenShatter--;
+        }
+
+        if (gameOver()) {
+            paused = false;
+            endGameTimer++;
+            if (endGameTimer >= 120) {
+                gameEnded = true;
+            }
+        }
+
+        if (paused) {
+            if (player1.keys.isJustPressed(Keys.DOWN) || player2.keys.isJustPressed(Keys.DOWN)) {
+                pauseMenuIndex = Utils.loop(pauseMenuIndex, 1, 3, 0);
+            } else if (player1.keys.isJustPressed(Keys.UP) || player2.keys.isJustPressed(Keys.UP)) {
+                pauseMenuIndex = Utils.loop(pauseMenuIndex, -1, 3, 0);
+            }
+            if (player1.keys.isJustPressed(Keys.ATTACK) || player2.keys.isJustPressed(Keys.ATTACK)) {
+                triggerPauseMenu();
+            }
+            for (Player player : players) {
+                player.keys.update();
+            }
+            return;
+        }
+
+        for (PlayerController playerController : Game.controllerManager.getControllers()) {
+            playerController.checkMacros(Gdx.input.getInputProcessor(), getPlayer(playerController.playerId));
+        }
+
+        if (freezeFrames > 0) {
+            freezeFrames--;
+            return;
+        } else {
+            if (slowdownDuration > 0) {
+                slowdownDuration--;
+                if (Game.game.window.getTick() % slowdown != 0) return;
+            } else {
+                zoomOnFreeze = false;
+            }
+        }
+
+        if (winner == null && (player1.getLives() == 0 || player2.getLives() == 0)) {
+            endGame(player1.getLives() > 0 ? player1 : (player2.getLives() == 0 ? null : player2), player1.getLives() > 0 ? player2 : (player2.getLives() == 0 ? null : player1));
+        }
+
+        // if (paused) {
+        //     if (player1.keys.isJustPressed(Keys.UP) || player2.keys.isJustPressed(Keys.UP)) pauseMenuIndex++;
+        //     if (player1.keys.isJustPressed(Keys.DOWN) || player2.keys.isJustPressed(Keys.DOWN)) pauseMenuIndex++;
+        //     return;
+        // }
+
+        addNewGameObjects();
 
         List<Particle> deadParticles = new ArrayList<>();
         for (Particle particle : particles) {
@@ -405,6 +436,14 @@ public class Battle {
         }
     }
 
+    public void postUpdate() {
+        if (!paused && currentDialogue == null) {
+            for (Player player : players) {
+                player.physicsUpdate(freezeFrames > 0 ? 0 : slowdownDuration > 0 ? 1f / slowdown : 1f);
+            }
+        }
+    }
+
     public boolean gameOver() {
         return endGameTimer > 0;
     }
@@ -418,7 +457,6 @@ public class Battle {
         Game.game.window.camera.viewportHeight = Game.game.window.resolutionY;
         Game.game.window.camera.position.x = 0;
         Game.game.window.camera.position.y = 0;
-        gameEnded = true;
         if (winner == null) {
             winner = player1;
             winner.fighter.name = "Tie";
@@ -431,11 +469,12 @@ public class Battle {
         this.winner = winner;
         this.loser = loser;
         endGameTimer = 1;
+        slowdown(8, 600);
     }
 
     public void smashScreen() {
-        freezeFrame(15, 8, 60, true);
-        screenShatter = 75;
+        freezeFrame(15, 4, 60, true);
+        screenShatter = 90;
         SABSounds.playSound("shatter.mp3");
     }
 
@@ -511,14 +550,18 @@ public class Battle {
 
         stage.renderDetails(g);
 
-        for (GameObject attack : attacks) {
-            attack.render(g);
+        for (Attack attack : attacks) {
+            if (!attack.drawAbovePlayers && attack.alive) attack.render(g);
             if (drawHitboxes) drawHitbox(attack, g);
         }
 
-        for (GameObject player : players) {
+        for (Player player : players) {
             player.render(g);
             if (drawHitboxes) drawHitbox(player, g);
+        }
+
+        for (Attack attack : attacks) {
+            if (attack.alive && attack.drawAbovePlayers) attack.render(g);
         }
 
         stage.renderPlatforms(g);
@@ -554,7 +597,7 @@ public class Battle {
             player.fighter.renderUI(player, g);
         }
 
-        if (endGameTimer > 0) {
+        if (gameOver()) {
             g.usefulTintDraw(g.imageProvider.getImage("pixel.png"), -1280 / 2, -720 / 2, 1280, 720, 0, 1, 0, false, false, new Color(0, 0, 0, 1 - ((121f - endGameTimer) / 120)));
             g.drawText("GAME END", g.imageProvider.getFont("SAB_font"), 0, 0, 2.5f - ((121f - endGameTimer) / 120) / 2, Color.WHITE, 0);
         }
@@ -564,7 +607,10 @@ public class Battle {
         }
         if (screenShatter > 0) {
             g.scalableDraw(g.imageProvider.getImage("screen_shatter.png"), -Game.game.window.resolutionX / 2, -Game.game.window.resolutionY / 2, Game.game.window.resolutionX, Game.game.window.resolutionY);
-            screenShatter--;
+        }
+
+        if (currentDialogue != null) {
+            currentDialogue.render(g);
         }
     }
 }

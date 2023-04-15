@@ -46,7 +46,14 @@ public class Particle extends GameObject {
         this(position, velocity, width, height, image);
         this.frameCount = frameCount;
         this.frameLength = frameLength;
-        rotation += 90 * MathUtils.random(0, 4);
+        type = 1;
+    }
+
+    public Particle(Vector2 position, Vector2 velocity, float width, float height, int frameCount, int frameLength, int direction, String image) {
+        this(position, velocity, width, height, image);
+        this.frameCount = frameCount;
+        this.frameLength = frameLength;
+        this.direction = direction;
         type = 1;
     }
 

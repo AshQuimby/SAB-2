@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/Standalone Executable Bundling/Standalone Executable Bundling.iml" filepath="$PROJECT_DIR$/Standalone Executable Bundling/Standalone Executable Bundling.iml" />
       <module fileurl="file://$PROJECT_DIR$/sab_2.iml" filepath="$PROJECT_DIR$/sab_2.iml" />
     </modules>
   </component>

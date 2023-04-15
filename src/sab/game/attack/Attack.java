@@ -16,6 +16,7 @@ import sab.game.CollisionResolver;
 
 public class Attack extends DamageSource {
     public sab.game.attack.AttackType type;
+    public boolean drawAbovePlayers;
     public boolean alive;
     public boolean canHit;
     public int life;
@@ -40,13 +41,15 @@ public class Attack extends DamageSource {
         owner = player;
         knockback = new Vector2();
         reflectable = true;
+        parryable = true;
         updatesPerTick = 1;
         canHit = true;
         this.type = type;
+        drawAbovePlayers = false;
         type.setDefaults(this);
     }
 
-    private void move(Vector2 v) {
+    public void move(Vector2 v) {
         Vector2 movement = v.cpy();
 
         while (movement.len() > 0) {
@@ -72,7 +75,7 @@ public class Attack extends DamageSource {
         }
         type.onSpawn(this, data);
     }
-    
+
     @Override
     public void preUpdate() {
         previousPosition = new Vector2(hitbox.x, hitbox.y);
@@ -100,15 +103,17 @@ public class Attack extends DamageSource {
         type.update(this);
 
         for (GameObject key : hitObjects.keySet()) {
-            hitObjects.replace(key, hitObjects.get(key) - 1);
+            if (hitObjects.get(key) > 0) hitObjects.replace(key, hitObjects.get(key) - 1);
         }
 
         if (canHit) {
             for (GameObject target : owner.battle.getHittableGameObjects()) {
-                if (hitbox.overlaps(target.hitbox) && target != owner && (hitObjects.get(target) == null || hitObjects.get(target) <= 0)) {
-                    if (((Hittable) target).canBeHit(this)) successfulHit(target);
+                if (hitbox.overlaps(target.hitbox) && target != owner && (hitObjects.get(target) == null || hitObjects.get(target) == 0)) {
+                    Hittable hit = ((Hittable) target);
+                    boolean canBeHit = hit.canBeHit(this);
+                    if (canBeHit) successfulHit(target);
                     hit(target);
-                    if (((Hittable) target).canBeHit(this)) ((Hittable) target).onHit(this);
+                    if (canBeHit) hit.onHit(this);
                 }
             }
         }
@@ -145,7 +150,8 @@ public class Attack extends DamageSource {
             hitObjects.replace(hit, hitCooldown);
         else 
            hitObjects.put(hit, hitCooldown);
-        
+
+        owner.hitObject(this, hit);
         owner.gameStats.dealtDamage(damage);
 
         type.successfulHit(this, hit);
@@ -154,6 +160,7 @@ public class Attack extends DamageSource {
     public void kill() {
         type.onKill(this);
         if (!alive) owner.battle.removeGameObject(this);
+        alive = false;
     }
 
     @Override

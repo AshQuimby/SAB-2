@@ -26,8 +26,8 @@ public class AirSlash extends MeleeAttackType {
         attack.hitCooldown = 4;
         attack.reflectable = false;
 
-        offset = new Vector2(0, 4);
-        usePlayerDirection = false;
+        offset = new Vector2(0, 8);
+        usePlayerDirection = true;
     }
 
     @Override
@@ -47,10 +47,9 @@ public class AirSlash extends MeleeAttackType {
         if (attack.life % 3 == 0) attack.owner.direction *= -1;
         if (attack.frame >= 6) attack.frame = 0;
 
-        if (attack.owner.keys.isJustPressed(Keys.ATTACK)) attack.owner.velocity.y += 1f;
+        if (attack.owner.keys.isJustPressed(Keys.ATTACK)) attack.owner.velocity.y += 1.5f;
         if (attack.owner.keys.isPressed(Keys.RIGHT)) attack.owner.velocity.x += 0.5f;
         if (attack.owner.keys.isPressed(Keys.LEFT)) attack.owner.velocity.x -= 0.5f;
-
     }
 
     @Override

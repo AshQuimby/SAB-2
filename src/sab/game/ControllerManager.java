@@ -49,7 +49,6 @@ public class ControllerManager implements ControllerListener {
 
     @Override
     public boolean buttonDown(Controller controller, int i) {
-        System.out.println(i);
         checkController(controller);
         return true;
     }

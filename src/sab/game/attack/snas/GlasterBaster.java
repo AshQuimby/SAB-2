@@ -20,24 +20,20 @@ public class GlasterBaster extends MeleeAttackType {
         attack.drawRect.set(attack.hitbox);
         attack.reflectable = false;
         attack.life = 60;
-        attack.frameCount = 5;
         attack.hitCooldown = 8;
         attack.damage = 0;
         attack.canHit = false;
         attack.frameCount = 2;
         fired = false;
-
-        basterDirection = attack.owner.direction == 1 ? Direction.RIGHT : Direction.LEFT;
-        offset = new Vector2();
+        offset = new Vector2(86, 8);
         usePlayerDirection = false;
     }
 
     @Override
     public void onSpawn(Attack attack, int[] data) {
         super.onSpawn(attack, data);
-        offset = new Vector2(86 * attack.owner.direction, 8);
-
         attack.direction = 1;
+        basterDirection = attack.owner.direction == 1 ? Direction.RIGHT : Direction.LEFT;
     }
 
     @Override
@@ -54,7 +50,7 @@ public class GlasterBaster extends MeleeAttackType {
             }
             if (attack.owner.getUsedCharge() > 0) {
                 fired = true;
-                attack.owner.battle.addAttack(new Attack(new BasterBeam(), attack.owner), new int[]{basterDirection == Direction.UP ? 1 : basterDirection == Direction.DOWN ? -1 : 0, basterDirection == Direction.RIGHT ? 1 : basterDirection == Direction.LEFT ? -1 : 0, attack.owner.getUsedCharge()});
+                attack.owner.battle.addAttack(new Attack(new BasterBeam(), attack.owner), new int[]{ basterDirection == Direction.UP ? 1 : basterDirection == Direction.DOWN ? -1 : 0, basterDirection == Direction.RIGHT ? 1 : basterDirection == Direction.LEFT ? -1 : 0, attack.owner.getUsedCharge()});
                 SABSounds.playSound("glaster_baster.mp3");
                 attack.life = 15;
             }
@@ -94,6 +90,9 @@ public class GlasterBaster extends MeleeAttackType {
                 }
             }
         } else {
+            if (attack.owner.isStuck()) {
+                attack.kill();
+            }
             attack.frame = 1;
         }
     }

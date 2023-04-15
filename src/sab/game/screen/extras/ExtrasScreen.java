@@ -20,12 +20,12 @@ public class ExtrasScreen extends SelectorScreen {
     @Override
     public void render(Seagraphics g) {
         g.useDynamicCamera();
-        g.getDynamicCamera().targetPosition = new Vector2(0, -(selectorId - 3) * 10);
+        g.getDynamicCamera().targetPosition = new Vector2(0, -(selectorId - 3) * 10).add(64 * MathUtils.sin(.004f * Game.game.window.getTick()), 0);
         g.getDynamicCamera().targetZoom = 0.9f;
         g.getDynamicCamera().updateSeagullCamera(16);
         g.scalableDraw(g.imageProvider.getImage(Game.titleBackground), -Game.game.window.resolutionX / 2, -Game.game.window.resolutionY / 2, Game.game.window.resolutionX, Game.game.window.resolutionY);
+        TitleScreen.drawTitle(g);
         g.useStaticCamera();
-        g.scalableDraw(g.imageProvider.getImage("title.png"), -488 / 2, 100 + MathUtils.sin(Game.game.window.getTick() / 64f) * 4, 488, 232);
 
         g.usefulTintDraw(g.imageProvider.getImage("pixel.png"), -400 / 2, -Game.game.window.resolutionY / 2, 400, 350, 0, 1, 0, false, false, new Color(0, 0, 0, 0.5f));
 

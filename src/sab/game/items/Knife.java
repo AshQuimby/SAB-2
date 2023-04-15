@@ -12,7 +12,6 @@ public class Knife extends Item {
 
     private Animation swing;
     private Animation animation;
-    private int uses;
 
     public void setDefaults() {
         super.setDefaults();
@@ -23,7 +22,7 @@ public class Knife extends Item {
         drawRect = new Rectangle(hitbox);
         swing = new Animation(1, 6, 2, true);
         animation = new Animation(new int[]{0}, 1, true);
-        uses = 10;
+        uses = 16;
     }
 
     @Override
@@ -40,7 +39,7 @@ public class Knife extends Item {
         animation = swing;
         Vector2 totalOffset = getTotalOffset(holder);
         holder.fighter.idleAnimation.reset();
-        holder.startAttack(new Attack(new DuckItem(), holder), holder.fighter.idleAnimation, 4, 0, false, new int[] {
+        holder.startAttack(new DuckItem(), holder.fighter.idleAnimation, 4, 0, false, new int[] {
                 (int) totalOffset.x,
                 (int) totalOffset.y,
                 (int) hitbox.width,

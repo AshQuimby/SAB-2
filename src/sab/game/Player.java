@@ -3,6 +3,7 @@ package sab.game;
 import java.util.List;
 
 import com.badlogic.gdx.controllers.Controller;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
@@ -12,6 +13,7 @@ import com.seagull_engine.Seagraphics;
 import sab.game.ai.AI;
 import sab.game.animation.Animation;
 import sab.game.attack.Attack;
+import sab.game.attack.AttackType;
 import sab.game.fighter.Fighter;
 import sab.game.items.Item;
 import sab.game.particle.Particle;
@@ -52,6 +54,7 @@ public class Player extends GameObject implements Hittable {
     private int usedCharge;
     private int smokeGenerator;
     private int id;
+    private int occupied;
     private int freezeFrame;
     private boolean repeatAttack;
     private boolean charging;
@@ -72,7 +75,8 @@ public class Player extends GameObject implements Hittable {
         this.fighter = fighter;
 
         hitbox = new Rectangle(0, 0, fighter.hitboxWidth, fighter.hitboxHeight);
-        hitbox.setCenter(new Vector2(128 * (id == 0 ? -1 : 1), battle.getStage().getSafeBlastZone().height / 2 + Math.max(respawnTime, 120) - 512 - hitbox.height));
+        hitbox.setCenter(new Vector2(id == 0 ? battle.getStage().player1SpawnX : battle.getStage().player2SpawnX, battle.getStage().getSafeBlastZone().height / 2 + Math.max(respawnTime, 120) - 512 - hitbox.height));
+        move(new Vector2(0, -800));
         drawRect = new Rectangle(0, 0, fighter.renderWidth, fighter.renderHeight);
 
         direction = 1;
@@ -106,6 +110,7 @@ public class Player extends GameObject implements Hittable {
         smokeGenerator = 0;
         this.id = id;
         iFrames = 0;
+        occupied = 0;
 
         heldItem = null;
 
@@ -118,7 +123,11 @@ public class Player extends GameObject implements Hittable {
     }
 
     public void move(Vector2 v) {
-        Vector2 movement = v.cpy();
+        move(v, 1f);
+    }
+
+    public void move(Vector2 v, float physicsScalar) {
+        Vector2 movement = v.cpy().scl(physicsScalar);
 
         while (movement.len() > 0) {
             Vector2 step = movement.cpy().limit(1);
@@ -143,9 +152,17 @@ public class Player extends GameObject implements Hittable {
             }
 
             if (knockbackDuration > 0) {
+                if (keys.isPressed(Keys.DOWN)) {
+                    v.y -= 0.5f * physicsScalar;
+                } else if (keys.isPressed(Keys.UP)) {
+                    v.y += 0.5f * physicsScalar;
+                } else if (keys.isPressed(Keys.LEFT)) {
+                    v.x -= 0.5f * physicsScalar;
+                } else if (keys.isPressed(Keys.RIGHT)) {
+                    v.x += 0.5f * physicsScalar;
+                }
                 if (smokeGenerator-- <= 0) {
-                    battle.addParticle(new Particle(hitbox.getCenter(new Vector2()), new Vector2(), 32, 32, 6, 4,
-                            "p" + (id + 1) + "_smoke.png"));
+                    battle.addParticle(new Particle(hitbox.getCenter(new Vector2()), new Vector2(), 32, 32, 6, 4, "p" + (id + 1) + "_smoke.png"));
                     smokeGenerator = 60;
                 }
                 if (collisionDirection == Direction.UP || collisionDirection == Direction.DOWN) {
@@ -171,33 +188,47 @@ public class Player extends GameObject implements Hittable {
         currentAction = new PlayerAction(delay, animation, important, endLag);
     }
 
-    public void startIndefiniteAttack(Attack attack, int delay, boolean important) {
+    public Attack startIndefiniteAttack(AttackType type, int delay, boolean important) {
+        Attack attack = new Attack(type, this);
         currentAction = new IndefinitePlayerAction(delay, attack, important, 0, null);
+        return attack;
     }
 
-    public void startIndefiniteAttack(Attack attack, Animation animation, int delay, boolean important) {
+    public Attack startIndefiniteAttack(AttackType type, Animation animation, int delay, boolean important) {
+        Attack attack = new Attack(type, this);
         currentAction = new IndefinitePlayerAction(delay, attack, animation, important, 0, null);
+        return attack;
     }
 
-    public void startIndefiniteAttack(Attack attack, Animation animation, int delay, boolean important, int[] data) {
+    public Attack startIndefiniteAttack(AttackType type, Animation animation, int delay, boolean important, int[] data) {
+        Attack attack = new Attack(type, this);
         currentAction = new IndefinitePlayerAction(delay, attack, animation, important, 0, data);
+        return attack;
     }
 
-    public void startAttack(Attack attack, int delay, int endLag, boolean important) {
+    public Attack startAttack(AttackType type, int delay, int endLag, boolean important) {
+        Attack attack = new Attack(type, this);
         currentAction = new PlayerAction(delay, attack, important, endLag, null);
+        return attack;
     }
 
-    public void startAttack(Attack attack, Animation animation, int delay, int endLag, boolean important) {
+    public Attack startAttack(AttackType type, Animation animation, int delay, int endLag, boolean important) {
+        Attack attack = new Attack(type, this);
         currentAction = new PlayerAction(delay, attack, animation, important, endLag, null);
+        return attack;
     }
 
-    public void startAttack(Attack attack, Animation animation, int delay, int endLag, boolean important, int[] data) {
+    public Attack startAttack(AttackType type, Animation animation, int delay, int endLag, boolean important, int[] data) {
+        Attack attack = new Attack(type, this);
         currentAction = new PlayerAction(delay, attack, animation, important, endLag, data);
+        return attack;
     }
 
-    public void startRepeatingAttack(Attack attack, Animation animation, int delay, int endLag, boolean important, int[] data) {
+    public Attack startRepeatingAttack(AttackType type, Animation animation, int delay, int endLag, boolean important, int[] data) {
+        Attack attack = new Attack(type, this);
         currentAction = new PlayerAction(delay, attack, animation, important, endLag, data);
         repeatAttack = true;
+        return attack;
     }
 
     public int getLives() {
@@ -270,8 +301,10 @@ public class Player extends GameObject implements Hittable {
 
         update();
         postUpdate();
+    }
 
-        if (hasItem()) heldItem.updateHeld(this);
+    public void physicsUpdate(float physicsScalar) {
+        if (stunned <= 0) move(velocity, physicsScalar);
     }
 
     public void applyForce(Vector2 force) {
@@ -289,6 +322,9 @@ public class Player extends GameObject implements Hittable {
         if (iFrames > 0) {
             iFrames--;
             invulnerable = true;
+            if (iFrames == 0) {
+                invulnerable = false;
+            }
         }
 
         if (respawnTime > 0) {
@@ -297,8 +333,8 @@ public class Player extends GameObject implements Hittable {
             hitbox.setCenter(new Vector2(128 * (id == 0 ? -1 : 1), battle.getStage().getSafeBlastZone().height / 2 + Math.max(respawnTime * 2, 120) - 280 + hitbox.height / 2));
             frame = 0;
             if ((keys.isPressed(Keys.RIGHT) || keys.isPressed(Keys.LEFT) || keys.isPressed(Keys.DOWN) || keys.isPressed(Keys.UP)) && respawnTime < 100 || respawnTime == 0) {
-                invulnerable = false;
                 respawnTime = 0;
+                iFrames = 120;
             } else {
                 return;
             }
@@ -443,20 +479,24 @@ public class Player extends GameObject implements Hittable {
         }
 
         // Attacks
-        if (keys.isJustPressed(Keys.ATTACK) || (repeatAttack && keys.isPressed(Keys.ATTACK))) {
+        if (occupied <= 0 && keys.isJustPressed(Keys.ATTACK) || (repeatAttack && keys.isPressed(Keys.ATTACK))) {
             if (keys.isPressed(Keys.DOWN)) {
                 fighter.downAttack(this);
             } else if (keys.isPressed(Keys.UP)) {
                 fighter.upAttack(this);
             } else if (keys.isPressed(Keys.LEFT) || keys.isPressed(Keys.RIGHT)) {
-                if (heldItem != null) fighter.useItem(this);
-                fighter.sideAttack(this);
+                if (hasItem()) fighter.useItem(this);
+                else fighter.sideAttack(this);
             } else {
-                if (heldItem != null) fighter.useItem(this);
-                fighter.neutralAttack(this);
+                if (hasItem()) fighter.useItem(this);
+                else fighter.neutralAttack(this);
             }
         } else {
             repeatAttack = false;
+        }
+
+        if (occupied > 0) {
+            occupied--;
         }
 
         if (usedRecovery) frame = fighter.freefallAnimation.stepLooping();
@@ -572,21 +612,20 @@ public class Player extends GameObject implements Hittable {
 
     @Override
     public void postUpdate() {
-        touchingStage = false;
-
-        if (stunned <= 0) move(velocity);
-        
         if (knockbackDuration > 0) frame = fighter.knockbackAnimation.stepLooping();
         
         if (lives > 0 && ((knockbackDuration > 0 && !hitbox.overlaps(battle.getStage().getSafeBlastZone())) || (hitbox.x + hitbox.width < battle.getStage().getUnsafeBlastZone().x || hitbox.x > battle.getStage().getUnsafeBlastZone().x + battle.getStage().getUnsafeBlastZone().width || hitbox.y + hitbox.height < battle.getStage().getUnsafeBlastZone().y))) {
             kill(1);
         }
-        
+
+        if (hasItem()) heldItem.updateHeld(this);
         fighter.update(this);
+
+        touchingStage = false;
     }
 
     public void useItem() {
-        heldItem.onUse(this);
+        heldItem.use(this);
     }
 
     public boolean hasItem() {
@@ -599,7 +638,7 @@ public class Player extends GameObject implements Hittable {
 
     @Override
     public boolean canBeHit(DamageSource source) {
-        return !invulnerable;
+        return fighter.onHit(this, source) && !invulnerable;
     }
 
     @Override
@@ -608,10 +647,10 @@ public class Player extends GameObject implements Hittable {
         damage += source.damage;
 
         battle.shakeCamera(2);
-        battle.freezeFrame(3 + (source.damage / 25), 0, 0, false);
+        battle.freezeFrame((source.damage / 50), 2, 1, false);
 
         SABSounds.playSound("hit.mp3");
-        Vector2 newKnockback = source.knockback.cpy().scl(3f).scl(damage / 100f + 1f);
+        Vector2 newKnockback = source.knockback.cpy().scl(3.25f).scl(damage / 100f + 1f);
         if (newKnockback.len() > knockback.len()) {
             smokeGenerator = 0;
             knockback.set(newKnockback);
@@ -650,6 +689,11 @@ public class Player extends GameObject implements Hittable {
         return true;
     }
 
+    // Called when one of this player's attacks hits a gameObject
+    public void hitObject(Attack attack, GameObject hit) {
+        fighter.hitObject(this, attack, hit);
+    }
+
     @Override
     public void render(Seagraphics g) {
         if (!hide) {
@@ -660,7 +704,7 @@ public class Player extends GameObject implements Hittable {
                     frame = freezeFrame;
                 }
                 preRender(g);
-                g.usefulDraw(g.imageProvider.getImage(costumeString), drawRect.x, drawRect.y, (int) drawRect.width, (int) drawRect.height, frame, frameCount, rotation, direction == 1, false);
+                g.usefulTintDraw(g.imageProvider.getImage(costumeString), drawRect.x, drawRect.y, (int) drawRect.width, (int) drawRect.height, frame, frameCount, rotation, direction == 1, false, iFrames / 10 % 2 == 0 ? Color.WHITE : new Color(1, 1, 1, 0.5f));
                 postRender(g);
 
                 if (frozen > 0) {
@@ -671,8 +715,19 @@ public class Player extends GameObject implements Hittable {
                 }
             }
             fighter.render(this, g);
-            if (hasItem()) heldItem.renderHeld(this, g);
+            if (hasItem()) {
+                heldItem.renderHeld(this, g);
+            }
         }
+    }
+
+    public int getOccupiedTicks() {
+        return occupied;
+    }
+
+    // Sets the number of ticks the player will be "occupied," meaning they are able to move but unable to attack.
+    public void occupy(int ticks) {
+        this.occupied = ticks;
     }
 
     public int getId() {

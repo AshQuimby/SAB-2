@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.Vector2;
 
 import sab.game.Game;
 import sab.game.Player;
+import sab.game.SABSounds;
 import sab.game.animation.Animation;
 import sab.game.attack.Attack;
 import sab.game.attack.walouis.Racket;
@@ -51,23 +52,24 @@ public class Walouis extends FighterType {
     @Override
     public void neutralAttack(sab.game.fighter.Fighter fighter, Player player) {
         if (!player.usedRecovery) {
-            player.startRepeatingAttack(new Attack(new TinyNote(), player), new Animation(new int[]{11}, 100, true), 1, 1, false, new int[]{0});
+            player.startRepeatingAttack(new TinyNote(), new Animation(new int[]{11}, 100, true), 1, 1, false, new int[]{0});
             player.frame = 11;
         }
     }
 
     @Override
     public void sideAttack(sab.game.fighter.Fighter fighter, Player player) {
-        if (!player.usedRecovery) player.startAttack(new Attack(new Racket(), player), fighter.walkAnimation, 1, 0, false);
+        if (!player.usedRecovery) player.startAttack(new Racket(), fighter.walkAnimation, 1, 0, false);
     }
 
     @Override
     public void upAttack(sab.game.fighter.Fighter fighter, Player player) {
         if (!player.usedRecovery) {
             player.velocity.y = 26;
-            player.startAttack(new Attack(new Note(), player), fighter.freefallAnimation, 1, 1, false, new int[]{0});
+            player.startAttack(new Note(), fighter.freefallAnimation, 1, 1, false, new int[]{0});
             player.usedRecovery = true;
             player.removeJumps();
+            SABSounds.playSound("wagh.mp3");
         }
     }
 
@@ -76,7 +78,7 @@ public class Walouis extends FighterType {
         if (!player.usedRecovery) {
             throwAnimation.reset();
             player.velocity.x *= 0.1f;
-            player.startAttack(new Attack(new Bomb(), player), throwAnimation, 24, 12, false, new int[]{0});
+            player.startAttack(new Bomb(), throwAnimation, 24, 12, false, new int[]{0});
         }
     }
 

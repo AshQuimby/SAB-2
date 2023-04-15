@@ -29,13 +29,13 @@ public class BigBullet extends AttackType {
 
     @Override
     public void update(Attack attack) {
-        attack.owner.battle.addParticle(new Particle(attack.hitbox.getCenter(new Vector2()), new Vector2(0, MathUtils.random(-.2f, .2f)), 16, 16, 20, "smoke.png"));
+        attack.owner.battle.addParticle(new Particle(attack.getCenter(), new Vector2(0, MathUtils.random(-.2f, .2f)), 16, 16, 20, "smoke.png"));
     }
 
     @Override
     public void onSpawn(Attack attack, int[] data) {
         attack.direction = attack.owner.direction;
-        attack.knockback.set(attack.direction * 1, 1);
+        attack.knockback.set(attack.direction * 5, 4);
         CollisionResolver.moveWithCollisions(attack.owner, new Vector2(attack.owner.direction * -4, 0), attack.owner.battle.getSolidStageObjects());
         attack.hitbox.setCenter(attack.owner.hitbox.getCenter(new Vector2()));
         attack.direction = attack.owner.direction;

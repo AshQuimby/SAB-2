@@ -36,6 +36,7 @@ public class Game extends Messenger {
     public static String titleBackground;
     private List<String> modErrors;
     private Screen screen;
+    private boolean fullscreen;
 
     public final Map<String, Mod> mods;
 
@@ -49,6 +50,7 @@ public class Game extends Messenger {
         globalCharacterSelectScreen = new CharacterSelectScreen();
         controllerKeysPressed = new HashMap<>();
         modErrors = new ArrayList<>();
+        fullscreen = false;
         JukeboxScreen.loadVanillaSongs();
     }
     
@@ -59,8 +61,8 @@ public class Game extends Messenger {
         Settings.loadSettings();
         Mod baseGame = new Mod("Super Ass Brothers: Remasstered", "sab", "1.0", "Base game content");
         try {
-            baseGame.addFighters((Class<? extends FighterType>[]) new Class<?>[]{Marvin.class, Chain.class, Walouis.class, Gus.class, EmperorEvil.class, Snas.class, Stephane.class, UnnamedDuck.class, BigSeagull.class, EmptySoldier.class });
-            baseGame.addStages((Class<? extends StageType>[]) new Class<?>[]{LastLocation.class, Warzone.class, DesertBridge.class, ThumbabasLair.class, OurSports.class, COBS.class, Boxtopia.class, HellTwoBoogaloo.class });
+            baseGame.addFighters((Class<? extends FighterType>[]) new Class<?>[]{Marvin.class, Chain.class, Walouis.class, Gus.class, EmperorEvil.class, Snas.class, Stephane.class, UnnamedDuck.class, Matthew.class, BigSeagull.class });
+            baseGame.addStages((Class<? extends StageType>[]) new Class<?>[]{LastLocation.class, Warzone.class, DesertBridge.class, ThumbabasLair.class, OurSports.class, COBS.class, Boxtopia.class });
         } catch (Exception e) {
             throw new RuntimeException("Like actually what the hell, how did you break this. You should not be able to break this unless your brain cell count reached the long limit.");
         }
@@ -126,7 +128,12 @@ public class Game extends Messenger {
     @Override
     public void keyDown(int keyCode) {
         if (keyCode == Input.Keys.F11) {
-            Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
+            if (fullscreen) {
+                Gdx.graphics.setWindowedMode(window.resolutionX, window.resolutionY);
+            } else {
+                Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
+            }
+            fullscreen = !fullscreen;
         }
         screen = screen.keyPressed(keyCode);
     }

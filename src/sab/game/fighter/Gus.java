@@ -158,7 +158,7 @@ public class Gus extends FighterType {
     public void neutralAttack(sab.game.fighter.Fighter fighter, Player player) {
         if (!player.usedRecovery) {
             shootAnimation.reset();
-            player.startAttack(new Attack(new Bullet(), player), shootAnimation, 5, 5, false);
+            player.startAttack(new Bullet(), shootAnimation, 5, 5, false);
         }
     }
 
@@ -166,7 +166,7 @@ public class Gus extends FighterType {
     public void sideAttack(sab.game.fighter.Fighter fighter, Player player) {
         if (!player.usedRecovery) {
             tongueAnimation.reset();
-            player.startAttack(new Attack(new Tongue(), player), tongueAnimation, 1, 15, false);
+            player.startAttack(new Tongue(), tongueAnimation, 1, 15, false);
         }
     }
 
@@ -175,8 +175,7 @@ public class Gus extends FighterType {
         if (!player.usedRecovery) {
             if (miniGus == null || !miniGus.alive) {
                 placeMiniGusAnimation.reset();
-                miniGus = new Attack(new MiniGus(), player);
-                player.startAttack(miniGus, placeMiniGusAnimation, 8, 12, false);
+                miniGus = player.startAttack(new MiniGus(), placeMiniGusAnimation, 8, 12, false);
             }
         }
     }
@@ -184,7 +183,7 @@ public class Gus extends FighterType {
     @Override
     public void upAttack(Fighter fighter, Player player) {
         if (!player.usedRecovery) {
-            player.startAttack(new Attack(new SussyVent(), player), 8, 12, false);
+            player.startAttack(new SussyVent(), 8, 12, false);
             player.removeJumps();
         }
     }

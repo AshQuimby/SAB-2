@@ -3,6 +3,7 @@ package sab.game.attack.chain;
 import com.badlogic.gdx.math.Vector2;
 import com.seagull_engine.GameObject;
 
+import sab.game.SABSounds;
 import sab.game.attack.MeleeAttackType;
 import sab.game.attack.Attack;
 
@@ -40,5 +41,6 @@ public class ChainSlash extends MeleeAttackType {
     public void onSpawn(Attack attack, int[] data) {
         super.onSpawn(attack, data);
         attack.knockback = new Vector2(8 * attack.owner.direction, 4);
+        SABSounds.playSound("swish.mp3");
     }
 }

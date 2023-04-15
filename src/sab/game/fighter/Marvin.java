@@ -97,7 +97,7 @@ public class Marvin extends FighterType {
     public void neutralAttack(sab.game.fighter.Fighter fighter, Player player) {
         if (!player.usedRecovery) {
             swingAnimation.reset();
-            player.startAttack(new Attack(new Fireball(), player), swingAnimation, 6, 10, false);
+            player.startAttack(new Fireball(), swingAnimation, 6, 10, false);
             player.velocity.y /= 3;
             player.velocity.x *= 0.9f;
         }
@@ -107,7 +107,7 @@ public class Marvin extends FighterType {
     public void sideAttack(sab.game.fighter.Fighter fighter, Player player) {
         if (!player.usedRecovery) {
             swingAnimation.reset();
-            player.startAttack(new Attack(new Wrench(), player), swingAnimation, 4, 18, false);
+            player.startAttack(new Wrench(), swingAnimation, 4, 18, false);
         }
     }
 
@@ -116,7 +116,7 @@ public class Marvin extends FighterType {
         if (!player.usedRecovery) {
             if (toilet == null || toilet.alive) {
                 squatAnimation.reset();
-                player.startAttack(new Attack(new Toilet(), player), squatAnimation, 4, 30, false);
+                player.startAttack(new Toilet(), squatAnimation, 4, 30, false);
                 player.removeJumps();
                 player.usedRecovery = true;
             }
@@ -133,7 +133,7 @@ public class Marvin extends FighterType {
     @Override
     public void chargeAttack(sab.game.fighter.Fighter fighter, Player player, int charge) {
         throwAnimation.reset();
-        player.startAttack(new Attack(new Frostball(), player), throwAnimation, 7, 10, false, new int[]{charge});
+        player.startAttack(new Frostball(), throwAnimation, 7, 10, false, new int[]{charge});
         player.velocity.y /= 3;
         player.velocity.x *= 0.9f;
     }

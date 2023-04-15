@@ -37,7 +37,7 @@ public class Firework extends AttackType {
     public void onSpawn(Attack attack, int[] data) {
         attack.hitbox.setCenter(attack.owner.hitbox.getCenter(new Vector2()).add(attack.direction * (attack.hitbox.width / 2), 0));
         attack.velocity = new Vector2(20 * attack.owner.direction, 0);
-        attack.knockback = new Vector2(3 * attack.owner.direction, 1);
+        attack.knockback = new Vector2(4 * attack.owner.direction, 1.5f);
     }
 
     @Override

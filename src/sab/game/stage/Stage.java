@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 import com.seagull_engine.Seagraphics;
 
 import sab.game.Battle;
@@ -17,6 +18,8 @@ public class Stage {
     public String background;
     public String music;
     public float maxZoomOut;
+    public int player1SpawnX;
+    public int player2SpawnX;
 
     protected List<StageObject> stageObjects;
     protected List<Ledge> ledges;
@@ -41,7 +44,8 @@ public class Stage {
 
         safeBlastZone = new Rectangle(-Game.game.window.resolutionX / 2 - 64, -Game.game.window.resolutionY / 2 - 64, Game.game.window.resolutionX + 128, Game.game.window.resolutionY + 128);
         unsafeBlastZone = new Rectangle(-Game.game.window.resolutionX / 2 - 128, -Game.game.window.resolutionY / 2 - 128, Game.game.window.resolutionX + 256, Game.game.window.resolutionY + 256);
-        
+        player1SpawnX = -128;
+        player2SpawnX = 128;
         this.type = type;
     }
 

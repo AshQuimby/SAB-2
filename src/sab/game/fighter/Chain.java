@@ -82,7 +82,7 @@ public class Chain extends FighterType {
     public void neutralAttack(sab.game.fighter.Fighter fighter, Player player) {
         if (!player.usedRecovery) {
             swingAnimation.reset();
-            player.startAttack(new Attack(new ChainSlash(), player), swingAnimation, 6, 8, false);
+            player.startAttack(new ChainSlash(), swingAnimation, 6, 8, false);
         }
     }
 
@@ -91,8 +91,7 @@ public class Chain extends FighterType {
         if (!player.usedRecovery) {
             if (boomerangKnife == null || !boomerangKnife.alive) {
                 swingAnimation.reset();
-                boomerangKnife = new Attack(new BoomerangKnife(), player);
-                player.startAttack(boomerangKnife, swingAnimation, 6, 12, false);
+                boomerangKnife = player.startAttack(new BoomerangKnife(), swingAnimation, 6, 12, false);
             } else {
                 neutralAttack(fighter, player);
             }
@@ -102,7 +101,7 @@ public class Chain extends FighterType {
     @Override
     public void upAttack(sab.game.fighter.Fighter fighter, Player player) {
         if (!player.usedRecovery) {
-            player.startAttack(new Attack(new AirSlash(), player), flyingAnimation, 1, 40, false);
+            player.startAttack(new AirSlash(), flyingAnimation, 1, 40, false);
             player.removeJumps();
             player.velocity.y = 12;
             player.usedRecovery = true;
@@ -117,9 +116,8 @@ public class Chain extends FighterType {
                 fallingKnife = null;
             }
 
-            fallingKnife = new Attack(new FallingKnife(), player);
             swingAnimation.reset();
-            player.startAttack(fallingKnife, swingAnimation, 6, 16, false);
+            fallingKnife = player.startAttack(new FallingKnife(), swingAnimation, 6, 16, false);
         }
     }
 }

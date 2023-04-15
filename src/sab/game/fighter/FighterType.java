@@ -1,11 +1,14 @@
 package sab.game.fighter;
 
+import com.seagull_engine.GameObject;
 import com.seagull_engine.Seagraphics;
+import sab.game.DamageSource;
 import sab.game.Direction;
 import sab.game.Player;
 import sab.game.PlayerAction;
 import sab.game.ai.AI;
 import sab.game.ai.BaseAI;
+import sab.game.attack.Attack;
 import sab.game.screen.VictoryScreen;
 
 public abstract class FighterType {
@@ -65,8 +68,9 @@ public abstract class FighterType {
 
     }
 
-    public void onHit(Fighter fighter, Player player) {
-
+    // Return true if the hit should be successful (deal damage)
+    public boolean onHit(Fighter fighter, Player player, DamageSource source) {
+        return true;
     }
 
     public void useItem(Fighter fighter, Player player) {
@@ -75,6 +79,9 @@ public abstract class FighterType {
 
     public void onKill(Fighter fighter, Player player) {
 
+    }
+
+    public void hitObject(Fighter fighter, Player player, Attack attack, GameObject hit) {
     }
 
     public boolean preRender(Fighter fighter, Player player, Seagraphics g) {

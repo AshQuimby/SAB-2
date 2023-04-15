@@ -7,10 +7,10 @@ public class MeleeAttackType extends AttackType {
     protected boolean usePlayerDirection;
 
     private void moveToPlayer(sab.game.attack.Attack attack) {
-        if (usePlayerDirection)
-            attack.direction = attack.owner.direction;
-        attack.hitbox.x = attack.owner.hitbox.x + attack.owner.hitbox.width / 2 + attack.direction * offset.x - attack.hitbox.width / 2;
-        attack.hitbox.y = attack.owner.hitbox.y + attack.owner.hitbox.height / 2 + offset.y - attack.hitbox.height / 2;
+        if (usePlayerDirection) attack.direction = attack.owner.direction;
+        attack.hitbox.setCenter(attack.owner.getCenter());
+        attack.hitbox.x += offset.x * attack.owner.direction;
+        attack.hitbox.y += offset.y;
     }
 
     @Override

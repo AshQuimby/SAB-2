@@ -1,14 +1,14 @@
 package sab.game.fighter;
 
 import com.badlogic.gdx.math.Vector2;
+import com.seagull_engine.GameObject;
 import com.seagull_engine.Seagraphics;
 
-import sab.game.Direction;
-import sab.game.Player;
-import sab.game.PlayerAction;
+import sab.game.*;
 import sab.game.ai.AI;
 import sab.game.ai.BaseAI;
 import sab.game.animation.Animation;
+import sab.game.attack.Attack;
 
 public class Fighter implements Cloneable {
     public final FighterType type;
@@ -141,8 +141,8 @@ public class Fighter implements Cloneable {
         type.charging(this, player, charge);
     }
 
-    public void onHit(Player player) {
-        type.onHit(this, player);
+    public boolean onHit(Player player, DamageSource source) {
+        return type.onHit(this, player, source);
     }
 
     public void onKill(Player player) {
@@ -155,6 +155,10 @@ public class Fighter implements Cloneable {
     public void useItem(Player player) {
         player.useItem();
         type.useItem(this, player);
+    }
+
+    public void hitObject(Player player, Attack attack, GameObject hit) {
+        type.hitObject(this, player, attack, hit);
     }
 
     // Return false to override player's default render code
