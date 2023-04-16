@@ -20,6 +20,9 @@ public class MeleeAttackType extends AttackType {
 
     @Override
     public void update(Attack attack) {
+        if (attack.owner.isStuck()) {
+            attack.alive = false;
+        }
         moveToPlayer(attack);
     }
 }

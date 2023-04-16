@@ -11,6 +11,7 @@ public class MegaCounterSlash extends MeleeAttackType {
     @Override
     public void setDefaults(Attack attack) {
         attack.imageName = "mega_slash.png";
+        attack.basedOffCostume = true;
         attack.life = 20;
         attack.frameCount = 5;
         attack.velocity = new Vector2();
@@ -38,9 +39,9 @@ public class MegaCounterSlash extends MeleeAttackType {
 
     @Override
     public void onSpawn(Attack attack, int[] data) {
-        attack.damage = data[0];
+        attack.damage = (int) (data[0] * 1.2f);
         super.onSpawn(attack, data);
-        attack.knockback = new Vector2(6 * attack.owner.direction, 4).scl(data[0] / 20f + 1);
+        attack.knockback = new Vector2(8 * attack.owner.direction, 5).scl(data[0] / 20f + 1);
         SABSounds.playSound("swish.mp3");
     }
 }

@@ -39,6 +39,10 @@ public class Glide extends AttackType {
         if (attack.life % 3 == 0) {
             attack.owner.battle.addParticle(new Particle(Utils.randomPointInRect(attack.owner.hitbox), new Vector2(MathUtils.random(-0.5f, 0.5f), MathUtils.random(-0.5f, 0.5f)), 40, 56, 3, "feather.png"));
         }
+        if (attack.owner.keys.isJustPressed(Keys.ATTACK)) {
+            attack.alive = false;
+            attack.owner.startAnimation(1, attack.owner.fighter.freefallAnimation, 6, false);
+        }
         attack.owner.direction = (int) Math.signum(attack.owner.velocity.x);
         if (attack.owner.direction == 0) attack.owner.direction = 1;
         if (attack.owner.touchingStage || attack.owner.grabbingLedge()) {

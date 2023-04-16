@@ -1,6 +1,5 @@
 package sab.game.attack;
 
-import java.awt.*;
 import java.util.HashMap;
 
 import com.badlogic.gdx.math.Rectangle;
@@ -13,6 +12,7 @@ import sab.game.Direction;
 import sab.game.Hittable;
 import sab.game.Player;
 import sab.game.CollisionResolver;
+import sab.util.Utils;
 
 public class Attack extends DamageSource {
     public sab.game.attack.AttackType type;
@@ -24,8 +24,23 @@ public class Attack extends DamageSource {
     public boolean directional;
     public boolean collideWithStage;
     public Direction collisionDirection;
+    public boolean basedOffCostume;
     public int updatesPerTick;
     private final HashMap<GameObject, Integer> hitObjects;
+    private Attack(Rectangle hitbox, Rectangle drawRect, String imageName, Vector2 velocity, AttackType type, boolean canHit, int life, int hitCooldown, boolean collideWithStage, int updatesPerTick, Player owner) {
+        hitObjects = new HashMap<>();
+        this.hitbox = new Rectangle(hitbox);
+        this.drawRect = new Rectangle(drawRect);
+        this.imageName = imageName;
+        this.velocity = velocity.cpy();
+        this.type = type;
+        this.canHit = canHit;
+        this.life = life;
+        this.hitCooldown = hitCooldown;
+        this.collideWithStage = collideWithStage;
+        this.updatesPerTick = updatesPerTick;
+        this.owner = owner;
+    }
 
     public Attack(AttackType type, Player player) {
         alive = true;
@@ -47,6 +62,11 @@ public class Attack extends DamageSource {
         this.type = type;
         drawAbovePlayers = false;
         type.setDefaults(this);
+        if (basedOffCostume) {
+            if (owner.costume > 0) {
+                imageName = Utils.applyCostumeToFilename(imageName, owner.costume, "png");
+            }
+        }
     }
 
     public void move(Vector2 v) {
@@ -159,7 +179,7 @@ public class Attack extends DamageSource {
 
     public void kill() {
         type.onKill(this);
-        if (!alive) owner.battle.removeGameObject(this);
+        if (!alive && owner.battle.getGameObjects().contains(this)) owner.battle.removeGameObject(this);
         alive = false;
     }
 
@@ -182,5 +202,9 @@ public class Attack extends DamageSource {
             }
         }
         return bestTarget;
+    }
+
+    public Attack copy() {
+        return new Attack(hitbox, drawRect, imageName, velocity, type, canHit, life, hitCooldown, collideWithStage, updatesPerTick, owner);
     }
 }

@@ -146,6 +146,6 @@ public class UnnamedDuck extends FighterType {
     public void renderUI(Fighter fighter, Player player, Seagraphics g) {
         g.scalableDraw(g.imageProvider.getImage("duck_ui_back.png"), player.getId() == 0 ? -256 - 56 - 4 : 256 + 4, -256, 56, 56);
         int drawAmount = (int) (56 * (((float) defaultItemCoolDown - itemCoolDown) / defaultItemCoolDown));
-        Game.game.window.batch.draw(g.imageProvider.getImage(itemCoolDown == 0 ? "duck_ui_front_full.png" : "duck_ui_front.png"), player.getId() == 0 ? -256 - 56 - 4 : 256 + 4, -256, 56, drawAmount / 4 * 4, 0, 14, 14, -drawAmount / 4, false, true);
+        Game.game.window.batch.draw(g.imageProvider.getImage(itemCoolDown == 0 ? "duck_ui_front_full.png" : "duck_ui_front.png"), player.getId() == 0 ? -256 - 56 - 8 : 256 + 4, -256, 56, drawAmount / 4 * 4, 0, 14, 14, -drawAmount / 4, false, true);
     }
 }

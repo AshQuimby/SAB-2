@@ -87,7 +87,7 @@ public class Snas extends FighterType {
         if (!player.usedRecovery && !beheaded) {
             player.usedRecovery = true;
             SABSounds.playSound("crunch.mp3");
-            Particle particle = new Particle(0.25f, player.hitbox.getCenter(new Vector2()), player.velocity.cpy(), 60, 44, 2, Utils.appendCostumeToFilename("snas_body", player.costume, "png"));
+            Particle particle = new Particle(0.25f, player.hitbox.getCenter(new Vector2()), player.velocity.cpy(), 60, 44, 2, Utils.appendCostumeToIdentifier("snas_body", player.costume, "png"));
             particle.direction = player.direction;
             player.battle.addParticle(particle);
             player.velocity.y = 28;

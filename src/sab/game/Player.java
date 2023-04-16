@@ -257,6 +257,7 @@ public class Player extends GameObject implements Hittable {
         SABSounds.playSound("death.mp3");
         lives -= livesCost;
         damage = 0;
+        if (heldItem != null) heldItem.toss(this);
 
         for (GameObject gameObject : battle.getGameObjects()) {
             if (gameObject instanceof Attack) {
@@ -466,7 +467,7 @@ public class Player extends GameObject implements Hittable {
         if (keys.isJustPressed(Keys.UP)) {
             if (touchingStage) {
                 velocity.y = getJumpVelocity();
-            } else if (extraJumpsUsed < fighter.jumps) {
+            } else if (extraJumpsUsed < fighter.jumps && velocity.y < getJumpVelocity() * fighter.doubleJumpMultiplier) {
                 velocity.y = getJumpVelocity() * fighter.doubleJumpMultiplier;
                 extraJumpsUsed++;
             }
@@ -512,6 +513,9 @@ public class Player extends GameObject implements Hittable {
     // Returns true if the player has a condition that would lock them out of normal control, like knockback, ledge grabing, being frozen, etc
     public boolean isStuck() {
         return frozen() || takingKnockback() || grabbingLedge() || stunned() || charging();
+    }
+    public boolean inFreeFall() {
+        return usedRecovery;
     }
 
     // Returns true if the player is not stuck and is not performing an action

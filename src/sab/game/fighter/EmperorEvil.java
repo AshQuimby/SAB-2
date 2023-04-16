@@ -76,6 +76,8 @@ public class EmperorEvil extends FighterType {
     public void upAttack(sab.game.fighter.Fighter fighter, Player player) {
         if (!player.usedRecovery) {
             barrel.reset();
+            player.velocity.x = 0;
+            player.velocity.y = 0;
             player.startAttack(new ExplosiveBarrel(), barrel, 1, 30, false);
             player.removeJumps();
             player.usedRecovery = true;

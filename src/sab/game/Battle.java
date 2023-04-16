@@ -181,7 +181,6 @@ public class Battle {
     }
 
     public void shakeCamera(int intensity) {
-        System.out.println(intensity);
         if (intensity > cameraShake) cameraShake = intensity;
     }
 

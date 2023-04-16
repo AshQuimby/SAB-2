@@ -35,14 +35,17 @@ public class ExplosiveBarrel extends MeleeAttackType {
     }
 
     @Override
-    public void update(Attack attack) {       
+    public void update(Attack attack) {
+        attack.owner.rotation = Math.max(0, attack.life * 13 - 30);
         super.update(attack); 
         attack.owner.frame = 10;
-        attack.owner.velocity.y *= 0.2f;
+        attack.owner.velocity.x = 0;
+        attack.owner.velocity.y = 0;
     }
 
     @Override
     public void onKill(Attack attack) {
+        attack.owner.rotation = 0;
         for (int i = 0; i < 6 ; i++) {
             attack.owner.battle.addParticle(new Particle(attack.hitbox.getCenter(new Vector2()), new Vector2(4 * MathUtils.random(), 0).rotateDeg(MathUtils.random() * 360), 64, 64, 0, "fire.png"));
             attack.owner.battle.addParticle(new Particle(attack.hitbox.getCenter(new Vector2()), new Vector2(4 * MathUtils.random(), 0).rotateDeg(MathUtils.random() * 360), 96, 96, 0, "smoke.png"));
@@ -53,7 +56,7 @@ public class ExplosiveBarrel extends MeleeAttackType {
         attack.owner.velocity.y = 32;
         attack.owner.usedRecovery = true;
         attack.owner.removeJumps();
-        attack.owner.battle.addParticle(new Particle(1, attack.owner.hitbox.getCenter(new Vector2()), new Vector2(MathUtils.random(2f, 2f), 5), 64, 80, 1, "barrel.png"));
+        attack.owner.battle.addParticle(new Particle(1, attack.owner.hitbox.getCenter(new Vector2()), new Vector2(MathUtils.random(-2f, 2f), 5), 64, 80, 1, "barrel.png"));
         SABSounds.playSound("explosion.mp3");
     }
     

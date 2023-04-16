@@ -14,6 +14,7 @@ public class BaseAI extends AI {
     private int mashCooldown;
     protected float preferredHorizontalDistance;
     private boolean movingToCenter;
+    private boolean dontChase;
     private int moveToCenterTime;
     private Platform platformToCenterOn;
 
@@ -28,7 +29,9 @@ public class BaseAI extends AI {
 
     // Run when the player is in danger of falling into the void
     protected void recover(Platform targetPlatform, Ledge targetLedge) {
+        dontChase = true;
         Vector2 center = player.hitbox.getCenter(new Vector2());
+
 
         if (targetPlatform != null && player.hitbox.y > targetPlatform.hitbox.y + targetPlatform.hitbox.height) {
             if (center.x < targetPlatform.hitbox.x + targetPlatform.hitbox.width / 2) {
@@ -37,7 +40,13 @@ public class BaseAI extends AI {
                 pressKey(Keys.LEFT);
             }
 
-            if (player.hitbox.y - (targetPlatform.hitbox.y + targetPlatform.hitbox.height) < player.hitbox.height) {
+            if (player.hitbox.y - (targetPlatform.hitbox.y + targetPlatform.hitbox.height) < player.hitbox.height && player.velocity.y <= -difficulty / 10f) {
+                if (player.getRemainingJumps() > 0) {
+                    releaseKey(Keys.ATTACK);
+                    lockKey(Keys.ATTACK);
+                } else {
+                    pressKey(Keys.ATTACK);
+                }
                 pressKey(Keys.UP);
             }
 
@@ -51,19 +60,20 @@ public class BaseAI extends AI {
                 pressKey(Keys.LEFT);
             }
         }
-
-        if (player.getRemainingJumps() == 0 && mashCooldown == 0) {
-            pressKey(Keys.UP);
-            pressKey(Keys.ATTACK);
-            mashCooldown = 30 - difficulty * 3;
-        } else {
-            if (player.velocity.y <= 0) {
+        if (player.velocity.y <= -difficulty / 10f) {
+            if (player.getRemainingJumps() == 0) {
                 pressKey(Keys.UP);
+                pressKey(Keys.ATTACK);
+                mashCooldown = 20 - difficulty * 3;
+            } else {
+                    releaseKey(Keys.ATTACK);
+                    lockKey(Keys.ATTACK);
+                    pressKey(Keys.UP);
             }
         }
     }
 
-    private Vector2 getFutureCollision(Attack attack, int maxFramesAhead) {
+    protected Vector2 getFutureCollision(Attack attack, int maxFramesAhead) {
         Rectangle futureHitbox = new Rectangle(player.hitbox);
         Vector2 futureVelocity = player.velocity.cpy();
 
@@ -89,9 +99,16 @@ public class BaseAI extends AI {
 
     }
 
+    protected void moveToCenter() {
+        movingToCenter = true;
+        moveToCenterTime = 0;
+    }
+    
     @Override
     public void update() {
+        dontChase = false;
         releaseAllKeys();
+        unlockAllKeys();
 
         if (player.frozen() && mashCooldown == 0) {
             pressKey(Keys.ATTACK);
@@ -100,6 +117,7 @@ public class BaseAI extends AI {
         }
 
         if (player.grabbingLedge()) {
+            releaseKey(Keys.DOWN);
             pressKey(Keys.UP);
             return;
         }
@@ -110,11 +128,16 @@ public class BaseAI extends AI {
         Platform targetPlatform = getNearestPlatform();
         if (target == null) return;
 
+        if (getPlatformBelow(target) == null && target.inFreeFall() && target.getRemainingJumps() > 0) {
+            moveToCenter();
+        }
+
         Vector2 targetPosition = target.hitbox.getCenter(new Vector2());
         Vector2 center = player.hitbox.getCenter(new Vector2());
 
         Platform platformBelow = getPlatformBelow();
-        if (platformBelow == null) {
+        Ledge nearestLedge = getNearestLedge();
+        if (platformBelow == null && (player.getRemainingJumps() == 0 || target.getCenter().dst(center) > 360f || (nearestLedge != null && nearestLedge.grabBox.getCenter(new Vector2()).y < center.y && nearestLedge.grabBox.getCenter(new Vector2()).dst(player.getCenter()) > 256f))) {
             recover(targetPlatform, getNearestLedge());
             return;
         }
@@ -142,32 +165,38 @@ public class BaseAI extends AI {
 
             return;
         }
+        if (platformBelow != null) {
+            // The minimum distance to the edge of the platform the player can get before it tries to get to the center.
+            float minDistanceToEdge = Math.min(player.hitbox.width * 2, Math.max(platformBelow.hitbox.width - preferredHorizontalDistance, 0));
+            if (Math.abs(center.x - targetPosition.x) < preferredHorizontalDistance && isDirectlyHorizontal(target.hitbox)) {
+                if (center.x < targetPosition.x) pressKey(Keys.LEFT);
+                if (center.x > targetPosition.x) pressKey(Keys.RIGHT);
 
-        // The minimum distance to the edge of the platform the player can get before it tries to get to the center.
-        float minDistanceToEdge = Math.min(player.hitbox.width * 2, Math.max(platformBelow.hitbox.width - preferredHorizontalDistance, 0));
-        if (Math.abs(center.x - targetPosition.x) < preferredHorizontalDistance && isDirectlyHorizontal(target.hitbox)) {
-            if (center.x < targetPosition.x) pressKey(Keys.LEFT);
-            if (center.x > targetPosition.x) pressKey(Keys.RIGHT);
-
-            if (Math.abs(center.x - platformBelow.hitbox.x) < minDistanceToEdge) {
-                releaseKey(Keys.LEFT);
-                pressKey(Keys.RIGHT);
-                pressKey(Keys.UP);
-                platformToCenterOn = platformBelow;
-                movingToCenter = true;
+                if (Math.abs(center.x - platformBelow.hitbox.x) < minDistanceToEdge && player.getRemainingJumps() == 0) {
+                    releaseKey(Keys.LEFT);
+                    pressKey(Keys.RIGHT);
+                    pressKey(Keys.UP);
+                    platformToCenterOn = platformBelow;
+                    moveToCenter();
+                }
+                if (Math.abs(center.x - (platformBelow.hitbox.x + platformBelow.hitbox.width)) < minDistanceToEdge && player.getRemainingJumps() == 0) {
+                    releaseKey(Keys.RIGHT);
+                    pressKey(Keys.LEFT);
+                    pressKey(Keys.UP);
+                    platformToCenterOn = platformBelow;
+                    moveToCenter();
+                }
             }
-            if (Math.abs(center.x - (platformBelow.hitbox.x + platformBelow.hitbox.width)) < minDistanceToEdge) {
-                releaseKey(Keys.RIGHT);
-                pressKey(Keys.LEFT);
-                pressKey(Keys.UP);
-                platformToCenterOn = platformBelow;
-                movingToCenter = true;
-            }
-        } else {
+        }
+        if (!dontChase) {
             if (player.hitbox.x + player.hitbox.width + preferredHorizontalDistance < target.hitbox.x || (center.x < targetPosition.x && player.direction == -1)) {
                 pressKey(Keys.RIGHT);
             } else if (player.hitbox.x - preferredHorizontalDistance > target.hitbox.x + target.hitbox.width || (center.x > targetPosition.x && player.direction == 1)) {
                 pressKey(Keys.LEFT);
+            }
+
+            if (getPlatformBelow(target) != null && targetPosition.y > center.y) {
+                pressKey(Keys.UP);
             }
         }
 

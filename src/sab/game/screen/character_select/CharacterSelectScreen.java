@@ -122,8 +122,8 @@ public class CharacterSelectScreen extends ScreenAdapter {
 
         // 92 x 64
 
-        g.usefulDraw(g.imageProvider.getImage("player_type_indicators.png"), 260 - 132, Game.game.window.resolutionY / 2 - 256, 132, 52, player2.type + 1, 7, 0, false, false);
-        g.usefulDraw(g.imageProvider.getImage("player_type_indicators.png"), -260, Game.game.window.resolutionY / 2 - 256, 132, 52, player1.type == 0 ? 0 : player1.type + 1, 7, 0, false, false);
+        g.usefulDraw(g.imageProvider.getImage("player_type_indicators.png"), 260 - 132, Game.game.window.resolutionY / 2 - 256, 132, 52, player2.type + 1, 8, 0, false, false);
+        g.usefulDraw(g.imageProvider.getImage("player_type_indicators.png"), -260, Game.game.window.resolutionY / 2 - 256, 132, 52, player1.type == 0 ? 0 : player1.type + 1, 8, 0, false, false);
 
         g.usefulDraw(g.imageProvider.getImage("fighter_selectors.png"), -Game.game.window.resolutionX / 2 + 8, -Game.game.window.resolutionY / 2 + 12, 512, 512, player1.ready ? 1 : 0, 4, 0, false, false);
         g.usefulDraw(g.imageProvider.getImage("fighter_selectors.png"), Game.game.window.resolutionX / 2 - 520, -Game.game.window.resolutionY / 2 + 12, 512, 512, player2.ready ? 3 : 2, 4, 0, false, false);

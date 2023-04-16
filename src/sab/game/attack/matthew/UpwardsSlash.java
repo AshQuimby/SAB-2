@@ -10,6 +10,7 @@ public class UpwardsSlash extends MeleeAttackType {
     @Override
     public void setDefaults(Attack attack) {
         attack.imageName = "upwards_matthew_slash.png";
+        attack.basedOffCostume = true;
         attack.life = 14;
         attack.frameCount = 5;
         attack.velocity = new Vector2();

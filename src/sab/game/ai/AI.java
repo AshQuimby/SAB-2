@@ -13,13 +13,19 @@ import sab.game.stage.Platform;
 import sab.net.Keys;
 import sab.util.Utils;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
+
 public class AI {
     protected final Player player;
     protected int difficulty;
+    private Set<Integer> lockedKeys;
 
     public AI(Player player, int difficulty) {
         this.player = player;
         this.difficulty = difficulty;
+        lockedKeys = new HashSet<>();
     }
 
     public void update() {
@@ -27,23 +33,42 @@ public class AI {
 
     // Presses the key in the player object attached to this class
     public final void pressKey(int keyCode) {
-        player.keys.press(keyCode);
+        if (!isKeyLocked(keyCode)) player.keys.press(keyCode);
     }
 
     // Releases the key in the player object attached to this class
     public final void releaseKey(int keyCode) {
-        player.keys.release(keyCode);
+        if (!isKeyLocked(keyCode)) player.keys.release(keyCode);
     }
 
     // Presses the key in the player object attached to this class only if it isn't pressed
     public final void tapKey(int keyCode) {
-        if (!player.keys.isPressed(keyCode)) player.keys.press(keyCode);
+        if (!isKeyLocked(keyCode)) if (!player.keys.isPressed(keyCode)) player.keys.press(keyCode);
     }
 
     // Toggles between the states of the key in the player object attached to this class
     public final void toggleKey(int keyCode) {
-        if (player.keys.isPressed(keyCode)) player.keys.release(keyCode);
-        else player.keys.release(keyCode);
+        if (!isKeyLocked(keyCode))
+            if (player.keys.isPressed(keyCode)) player.keys.release(keyCode);
+            else player.keys.release(keyCode);
+    }
+
+    // Locks the status of the key, causing the press, release, tap, and toggle key methods to do nothing
+    public final void lockKey(int keyCode) {
+        if (!isKeyLocked(keyCode)) lockedKeys.add(keyCode);
+    }
+
+    // Unlocks the status of the key
+    public final void unlockKey(int keyCode) {
+        if (isKeyLocked(keyCode)) lockedKeys.remove(keyCode);
+    }
+
+    public final boolean isKeyLocked(int keyCode) {
+        return lockedKeys.contains(keyCode);
+    }
+
+    public final void unlockAllKeys() {
+        lockedKeys.clear();
     }
 
     public final void releaseAllKeys() {
@@ -140,6 +165,22 @@ public class AI {
     }
 
     public final Platform getPlatformBelow() {
+        float bestVerticalDistance = -1;
+        GameObject bestTarget = null;
+        for (GameObject target : player.battle.getPlatforms()) {
+            if (target.hitbox.x < player.hitbox.x + player.hitbox.width && target.hitbox.x + target.hitbox.width > player.hitbox.x) {
+                float verticalDistance = player.hitbox.y - (target.hitbox.y + target.hitbox.height);
+                if (verticalDistance < 0) continue;
+                if (verticalDistance <= bestVerticalDistance || bestVerticalDistance < 0) {
+                    bestTarget = target;
+                    bestVerticalDistance = verticalDistance;
+                }
+            }
+        }
+        return (Platform) bestTarget;
+    }
+
+    public final Platform getPlatformBelow(Player player) {
         float bestVerticalDistance = -1;
         GameObject bestTarget = null;
         for (GameObject target : player.battle.getPlatforms()) {

@@ -6,11 +6,13 @@ import sab.game.Direction;
 import sab.game.SABSounds;
 import sab.game.attack.Attack;
 import sab.game.attack.MeleeAttackType;
+import sab.net.Keys;
 
 public class PogoSword extends MeleeAttackType {
     @Override
     public void setDefaults(Attack attack) {
         attack.imageName = "pogo_sword.png";
+        attack.basedOffCostume = true;
         attack.life = 40;
         attack.frameCount = 1;
         attack.velocity = new Vector2();
@@ -33,6 +35,16 @@ public class PogoSword extends MeleeAttackType {
         super.update(attack);
         attack.move(new Vector2(0, -52));
         if (attack.collisionDirection == Direction.DOWN) {
+            attack.alive = false;
+            attack.owner.startAnimation(1, attack.owner.fighter.freefallAnimation, 6, false);
+        }
+        if (attack.owner.keys.isPressed(Keys.LEFT)) {
+            attack.owner.velocity.x -= 0.1f;
+        }
+        if (attack.owner.keys.isPressed(Keys.RIGHT)) {
+            attack.owner.velocity.x += 0.1f;
+        }
+        if (attack.life < 20 && attack.owner.keys.isJustPressed(Keys.UP)) {
             attack.alive = false;
             attack.owner.startAnimation(1, attack.owner.fighter.freefallAnimation, 6, false);
         }

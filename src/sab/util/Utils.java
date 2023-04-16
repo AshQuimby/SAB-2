@@ -72,7 +72,11 @@ public class Utils {
         return new Vector2(MathUtils.random(rect.x, rect.x + rect.width), MathUtils.random(rect.y, rect.y + rect.height));
     }
 
-    public static String appendCostumeToFilename(String base, int costume, String fileFormat) {
+    public static String appendCostumeToIdentifier(String base, int costume, String fileFormat) {
         return base + (costume == 0 ? "" : "_alt_" + costume) + "." + fileFormat;
-        }
+    }
+
+    public static String applyCostumeToFilename(String base, int costume, String fileFormat) {
+        return base.replace("." + fileFormat, "_alt_" + costume + "." + fileFormat);
+    }
 }
