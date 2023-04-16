@@ -12,7 +12,6 @@ import sab.game.attack.gus.Tongue;
 import sab.game.attack.gus.Bullet;
 import sab.game.attack.gus.MiniGus;
 import sab.game.stage.Ledge;
-import sab.game.stage.PassablePlatform;
 import sab.game.stage.Platform;
 import sab.net.Keys;
 
@@ -39,7 +38,7 @@ public class Gus extends FighterType {
         fighter.jumpHeight = 128;
         fighter.friction = .175f;
         fighter.mass = 2.8f;
-        fighter.jumps = 1;
+        fighter.airJumps = 1;
         fighter.walkAnimation = new Animation(0, 3, 7, true);
         fighter.description = "First name Amon, This hazmat suit wearing astronaut is always getting into trouble no matter where they go. Sometimes they're the alien, sometimes they're chased by the alien, but they can never seem to catch a break.";
         fighter.debut = "Around Ourselves";

@@ -42,7 +42,7 @@ public class Matthew extends FighterType {
         fighter.jumpHeight = 160;
         fighter.friction = .2f;
         fighter.mass = 5f;
-        fighter.jumps = 1;
+        fighter.airJumps = 1;
         fighter.walkAnimation = new Animation(0, 3, 6, true);
         fighter.description = "God is dead.\nMatthew killed him.";
         fighter.debut = "Our Sports Resort";

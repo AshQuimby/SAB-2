@@ -2,7 +2,6 @@ package sab.game.fighter;
 
 import sab.game.Player;
 import sab.game.animation.Animation;
-import sab.game.attack.Attack;
 import sab.game.attack.chain.ChainSlash;
 import sab.game.attack.empty_soldier.ShadowPlunge;
 
@@ -20,7 +19,7 @@ public class EmptySoldier extends FighterType {
         fighter.renderHeight = 68;
         fighter.imageOffsetX = 0;
         fighter.imageOffsetY = 2;
-        fighter.jumps = 1;
+        fighter.airJumps = 1;
         fighter.speed = 12.2f;
         fighter.acceleration = 1f;
         fighter.jumpHeight = 176;

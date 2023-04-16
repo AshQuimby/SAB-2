@@ -1,37 +1,39 @@
-package sab.game.attack.emperor_evil;
+package sab.game.attack.john;
 
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.seagull_engine.GameObject;
 import com.seagull_engine.Seagraphics;
-
 import sab.game.Player;
 import sab.game.SABSounds;
 import sab.game.animation.Animation;
-import sab.game.attack.MeleeAttackType;
 import sab.game.attack.Attack;
+import sab.game.attack.MeleeAttackType;
 import sab.game.particle.Particle;
 import sab.net.Keys;
 
-public class EvilSuck extends MeleeAttackType {
+public class JohnSuck extends MeleeAttackType {
     private Player trappedPlayer;
-    private int chompTime;
+    private boolean spit;
 
     @Override
     public void setDefaults(Attack attack) {
-        attack.imageName = "evil_suck.png";
-        attack.hitbox.width = 116;
-        attack.hitbox.height = 108;
-        attack.drawRect.set(attack.hitbox);
+        attack.imageName = "john_suck.png";
+        attack.hitbox.width = 70;
+        attack.hitbox.height = 60;
+        attack.drawRect.width = 80;
+        attack.drawRect.height = 80;
         attack.reflectable = false;
         attack.parryable = false;
-        attack.frameCount = 4;
-        attack.life = 360;
+        attack.frameCount = 6;
+        attack.life = -1;
+        attack.drawAbovePlayers = true;
         trappedPlayer = null;
         attack.hitCooldown = 1;
-        chompTime = 0;
+        spit = false;
 
-        offset = new Vector2(84, 0);
+        offset = new Vector2(48, 16);
         usePlayerDirection = true;
     }
 
@@ -42,9 +44,14 @@ public class EvilSuck extends MeleeAttackType {
 
     @Override
     public void onKill(Attack attack) {
-        if (trappedPlayer != null) {
+        if (!spit && trappedPlayer != null) {
             trappedPlayer.invulnerable = false;
             trappedPlayer.reveal();
+            trappedPlayer.velocity.scl(0);
+            attack.owner.drawRectOffset = new Vector2();
+            for (int i = 0; i < 8 ; i++) {
+                attack.owner.battle.addParticle(new Particle(attack.hitbox.getCenter(new Vector2()), new Vector2(4 * MathUtils.random(), 0).rotateDeg(MathUtils.random() * 360), 32, 32, 0, "smoke.png"));
+            }
             trappedPlayer = null;
         }
     }
@@ -53,57 +60,50 @@ public class EvilSuck extends MeleeAttackType {
     public void update(Attack attack) {  
         super.update(attack);     
         if (attack.life % 8 == 0) attack.frame++;
-        if (attack.frame >= 4) attack.frame = 0;
+        if (attack.frame >= attack.frameCount) attack.frame = 0;
 
         if (attack.owner.isStuck()) attack.alive = false;
 
         if (trappedPlayer != null) {
-            attack.life = 2;
-            trappedPlayer.hide();
-            trappedPlayer.velocity.scl(0);
-            trappedPlayer.knockback.scl(0);
+            if (!attack.owner.keys.isPressed(Keys.ATTACK)) {
+                spit = true;
+            }
+            trappedPlayer.hitbox.setCenter(attack.getCenter());
             trappedPlayer.stun(2);
-            trappedPlayer.invulnerable = true;
-            chompTime--;
-            if (chompTime % 15 == 0) {
-                SABSounds.playSound("chomp.mp3");
-                trappedPlayer.onHit(attack);
-            }
-            if (!attack.owner.keys.isPressed(Keys.ATTACK) && chompTime > 5) {
-                chompTime = 5;
-            }
-            if (chompTime == 0) {
-                attack.damage = 12;
-                attack.knockback = new Vector2(10 * attack.owner.direction, 6);
-                trappedPlayer.onHit(attack);
-                trappedPlayer.reveal();
-                trappedPlayer.hitbox.setCenter(attack.owner.hitbox.getCenter(new Vector2()));
+            attack.owner.occupy(1);
+            attack.owner.drawRectOffset = new Vector2(MathUtils.random(-2f, 2f), MathUtils.random(-2f, 2f));
+            if (spit) {
                 trappedPlayer.invulnerable = false;
-                trappedPlayer = null;   
+                trappedPlayer.reveal();
+                trappedPlayer = null;
+                attack.knockback = new Vector2(6 * attack.direction, 4);
+                attack.clearHitObjects();
+                attack.canHit = true;
+                attack.life = 1;
             }
-            if (!attack.owner.hasAction()) attack.owner.startAnimation(0, new Animation(new int[]{4, 5}, 8, true), 14, false);
         } else {
             if (!attack.owner.keys.isPressed(Keys.ATTACK)) {
                 attack.alive = false;
             }
-            if (!attack.owner.hasAction()) attack.owner.startAnimation(0, new Animation(new int[]{4, 5}, 8, true), 12, false);
+            if (attack.owner.frame == 0) attack.owner.frame = 12;
+            if (!attack.owner.hasAction()) attack.owner.startAnimation(0, new Animation(new int[]{13, 12}, 6, true), 10, false);
         }
     }
 
     @Override
     public void render(Attack attack, Seagraphics g) {
-        if (trappedPlayer == null || attack.life > 6) super.render(attack, g);
+        if (trappedPlayer == null && attack.life < 0) super.render(attack, g);
     }
 
     @Override
     public void successfulHit(Attack attack, GameObject hit) {
-        if (trappedPlayer == null && hit instanceof Player && hit != null) {
+        if (attack.life < 0 && trappedPlayer == null && hit instanceof Player && hit != null) {
             trappedPlayer = (Player) hit;
             trappedPlayer.stun(2);
             trappedPlayer.hide();
-            chompTime = 60;
             attack.canHit = false;
             attack.damage = 4;
+            attack.life = trappedPlayer.damage / 2 + 30;
             attack.knockback = new Vector2();
             attack.hitCooldown = 1000;
             for (int i = 0; i < 8 ; i++) {

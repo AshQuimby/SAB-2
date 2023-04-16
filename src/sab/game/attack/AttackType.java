@@ -43,5 +43,4 @@ public abstract class AttackType implements Cloneable {
             attack.direction == 1,
             false);
     }
-    
 }

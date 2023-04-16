@@ -7,7 +7,6 @@ import sab.game.Game;
 import sab.game.Player;
 import sab.game.PlayerAction;
 import sab.game.animation.Animation;
-import sab.game.attack.Attack;
 import sab.game.attack.emperor_evil.Chomp;
 import sab.game.attack.emperor_evil.ExplosiveBarrel;
 import sab.game.attack.emperor_evil.Cannonball;
@@ -37,7 +36,7 @@ public class EmperorEvil extends FighterType {
         fighter.acceleration = .32f;
         fighter.friction = .22f;
         fighter.mass = 7.5f;
-        fighter.jumps = 1;
+        fighter.airJumps = 1;
         fighter.walkAnimation = new Animation(0, 3, 7, true);
         fighter.description = "Emperor E. Vile is a big mean alligator who steals all of the bananas from the monkeys. He doesn't even eat bananas, nobody knows why he takes them in the first place.";
         fighter.debut = "King Kong City";

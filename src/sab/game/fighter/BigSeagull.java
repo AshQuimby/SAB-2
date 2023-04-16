@@ -6,7 +6,6 @@ import sab.game.SABSounds;
 import sab.game.ai.AI;
 import sab.game.ai.BaseAI;
 import sab.game.animation.Animation;
-import sab.game.attack.Attack;
 import sab.game.attack.big_seagull.Glide;
 import sab.game.attack.big_seagull.Peck;
 import sab.game.attack.big_seagull.FeatherDart;
@@ -36,7 +35,7 @@ public class BigSeagull extends FighterType {
         fighter.doubleJumpMultiplier = .5f;
         fighter.friction = .1f;
         fighter.mass = 6.66f;
-        fighter.jumps = 5;
+        fighter.airJumps = 5;
         fighter.walkAnimation = new Animation(1, 6, 6, true);
         fighter.ledgeAnimation = new Animation(new int[] {14}, 1, true);
         fighter.description = "Big Seagull is a True God so powerful that even other deities cannot survive its presence. Although Big Seagull has followers from the Church of Big Seagull, it does not need to be worshipped to sustain itself, unlike many other gods.";

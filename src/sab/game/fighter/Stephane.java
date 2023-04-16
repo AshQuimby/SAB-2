@@ -1,15 +1,12 @@
 package sab.game.fighter;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.seagull_engine.GameObject;
 import com.seagull_engine.Seagraphics;
 
-import org.w3c.dom.css.Rect;
 import sab.game.*;
 import sab.game.animation.Animation;
-import sab.game.attack.Attack;
 import sab.game.attack.stephane.Baguette;
 import sab.game.attack.stephane.Arrow;
 import sab.game.attack.stephane.BlockSmash;
@@ -43,7 +40,7 @@ public class Stephane extends FighterType {
         fighter.jumpHeight = 130;
         fighter.friction = .2f;
         fighter.mass = 5.4f;
-        fighter.jumps = 1;
+        fighter.airJumps = 1;
         fighter.walkAnimation = new Animation(0, 3, 5, true);
         fighter.description = "Nobody knows where Stephane came from as nobody knows what he is saying. All that comes from his mouth are ancient tongues and utterances like \"oui\" and \"tu comprends?\"";
         fighter.debut = "Blockbreak";

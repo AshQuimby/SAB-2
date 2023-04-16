@@ -17,6 +17,7 @@ import sab.game.stage.*;
 import sab.modloader.Mod;
 import sab.modloader.ModLoader;
 import sab.screen.Screen;
+import sab.util.Utils;
 
 import java.io.File;
 import java.io.IOException;
@@ -90,15 +91,19 @@ public class Game extends Messenger {
 
     // Randomly selects a title screen background
     public static void selectNewTitleScreen() {
-        switch (MathUtils.random.nextInt(3)) {
-            case 0 -> {
-                titleBackground = "title_screen_background.png";
-            }
-            case 1 -> {
-                titleBackground = "title_screen_background_alt_1.png";
-            }
-            case 2 -> {
-                titleBackground = "title_screen_background_alt_2.png";
+        if (Utils.christmas()) {
+            titleBackground = "title_screen_background_christmas.png";
+        } else {
+            switch (MathUtils.random.nextInt(3)) {
+                case 0 -> {
+                    titleBackground = "title_screen_background.png";
+                }
+                case 1 -> {
+                    titleBackground = "title_screen_background_alt_1.png";
+                }
+                case 2 -> {
+                    titleBackground = "title_screen_background_alt_2.png";
+                }
             }
         }
     }

@@ -1,29 +1,24 @@
 package sab.game.fighter;
 
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Vector2;
 import com.seagull_engine.Seagraphics;
 
 import sab.game.Game;
 import sab.game.Player;
-import sab.game.PlayerAction;
 import sab.game.SABSounds;
 import sab.game.animation.Animation;
-import sab.game.attack.Attack;
-import sab.game.attack.marvin.Wrench;
-import sab.game.attack.marvin.Fireball;
-import sab.game.attack.marvin.Frostball;
-import sab.game.attack.marvin.Toilet;
-import sab.game.particle.Particle;
+import sab.game.attack.john.DownPunch;
+import sab.game.attack.john.JohnPunch;
+import sab.game.attack.john.JohnSlam;
+import sab.game.attack.john.JohnSuck;
 import sab.game.screen.VictoryScreen;
 
 public class John extends FighterType {
-    private Animation swingAnimation;
-    private Animation squatAnimation;
-    private Animation chargeAnimation;
-    private Animation throwAnimation;
+    private Animation suckAnimation;
+    private Animation punchAnimation;
+    private Animation slamAnimation;
     private Animation johnWalkAnimation;
+    private Animation downPunchAnimation;
     private boolean justWon;
 
     @Override
@@ -36,31 +31,31 @@ public class John extends FighterType {
         fighter.renderHeight = 76;
         fighter.imageOffsetX = 0;
         fighter.imageOffsetY = 4;
-        fighter.frames = 14;
+        fighter.frames = 15;
         fighter.jumpHeight = 160;
         fighter.friction = .2f;
         fighter.acceleration = 0.2f;
         fighter.mass = 8.5f;
-        fighter.jumps = 5;
-        fighter.doubleJumpMultiplier = 0.8f;
+        fighter.airJumps = 3;
+        fighter.doubleJumpMultiplier = 0.6f;
 
         fighter.description = "American attorney John Joseph has a spotless legal record. Despite this, he finds it tough to get work after he was cursed and turned into a pink sphere for all eternity. In this state he worked exclusively his upper body so much that his legs atrophied to the point of being vestigial.";
         fighter.debut = "John Joseph's Nightmare World";
         fighter.walkAnimation = new Animation(0, 3, 12, true);
-        swingAnimation = new Animation(new int[] {4, 5, 0}, 7, true);
-        squatAnimation = new Animation(new int[] {6}, 4, true);
-        chargeAnimation = new Animation(new int[] {9}, 4, true);
-        throwAnimation = new Animation(new int[] {10, 11}, 6, true);
-        fighter.freefallAnimation = new Animation(new int[]{8}, 1, true);
-        fighter.ledgeAnimation = new Animation(new int[] {10}, 1, true);
-        fighter.knockbackAnimation = new Animation(new int[] {9}, 1, true);
+        suckAnimation = new Animation(new int[] {0, 0, 12}, 7, true);
+        punchAnimation = new Animation(new int[] {4, 4, 5, 5, 6, 7, 7}, 4, true);
+        slamAnimation = new Animation(new int[] {8}, 4, true);
+        downPunchAnimation = new Animation(new int[] {14}, 12, true);
+        fighter.freefallAnimation = new Animation(new int[] {9}, 1, true);
+        fighter.ledgeAnimation = new Animation(new int[] {11}, 1, true);
+        fighter.knockbackAnimation = new Animation(new int[] {10}, 1, true);
         fighter.costumes = 4;
         justWon = true;
     }
 
     @Override
     public void start(Fighter fighter, Player player) {
-        // Declare the special method body here so that way the sound doesn't play in the character select screen
+        // Declare the special method body here so that way the sound doesn't play in the character select screen or crash from a null reference to a battle
         johnWalkAnimation = new Animation(0, 3, 12, true) {
             @Override
             public void onFrameChange(int newFrame) {
@@ -74,11 +69,11 @@ public class John extends FighterType {
 
     @Override
     public void update(Fighter fighter, Player player) {
-        if (!player.isStuck() && !player.touchingStage) {
+        if (!player.isStuck() && !player.hasAction() && !player.touchingStage) {
             if (player.velocity.y > 0) {
-                player.frame = 7;
-            } else {
                 player.frame = 8;
+            } else {
+                player.frame = 9;
             }
             fighter.walkAnimation = fighter.freefallAnimation;
         } else {
@@ -89,44 +84,41 @@ public class John extends FighterType {
     @Override
     public void neutralAttack(Fighter fighter, Player player) {
         if (!player.usedRecovery) {
-            swingAnimation.reset();
-            player.startAttack(new Fireball(), swingAnimation, 6, 10, false);
-            player.velocity.y /= 3;
-            player.velocity.x *= 0.9f;
+            suckAnimation.reset();
+            player.startAttack(new JohnSuck(), suckAnimation, 14, 10, false);
         }
     }
 
     @Override
     public void sideAttack(Fighter fighter, Player player) {
         if (!player.usedRecovery) {
-            swingAnimation.reset();
-            player.startAttack(new Wrench(), swingAnimation, 4, 18, false);
+            punchAnimation.reset();
+            player.startAttack(new JohnPunch(), punchAnimation, 16, 12, false);
         }
     }
 
     @Override
     public void upAttack(Fighter fighter, Player player) {
         if (!player.usedRecovery) {
-            squatAnimation.reset();
-            player.startAttack(new Toilet(), squatAnimation, 4, 30, false);
+            slamAnimation.reset();
+            player.startIndefiniteAttack(new JohnSlam(), slamAnimation, 4, false);
             player.removeJumps();
             player.usedRecovery = true;
+            player.velocity.y = 0;
+            player.velocity.x *= 0.3f;
         }
     }
 
     @Override
     public void downAttack(Fighter fighter, Player player) {
         if (!player.usedRecovery) {
-            player.startChargeAttack(new PlayerAction(5, true, 0), 5, 60);
+            if (player.touchingStage) {
+                sideAttack(fighter, player);
+            } else {
+                downPunchAnimation.reset();
+                player.startAttack(new DownPunch(), downPunchAnimation, 6, 6, false);
+            }
         }
-    }
-
-    @Override
-    public void chargeAttack(Fighter fighter, Player player, int charge) {
-        throwAnimation.reset();
-        player.startAttack(new Frostball(), throwAnimation, 7, 10, false, new int[]{charge});
-        player.velocity.y /= 3;
-        player.velocity.x *= 0.9f;
     }
 
     @Override

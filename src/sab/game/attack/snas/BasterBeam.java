@@ -25,6 +25,8 @@ public class BasterBeam extends AttackType {
         attack.damage = 1;
         attack.directional = true;
         attack.collideWithStage = true;
+        attack.reflectable = false;
+        attack.parryable = false;
     }
     
     @Override

@@ -46,7 +46,7 @@ public class PogoSword extends MeleeAttackType {
         }
         if (attack.life < 20 && attack.owner.keys.isJustPressed(Keys.UP)) {
             attack.alive = false;
-            attack.owner.startAnimation(1, attack.owner.fighter.freefallAnimation, 6, false);
+            attack.owner.startAnimation(1, attack.owner.fighter.freefallAnimation, 6, false);   
         }
     }
 

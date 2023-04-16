@@ -6,7 +6,6 @@ import com.seagull_engine.Seagraphics;
 
 import sab.game.*;
 import sab.game.ai.AI;
-import sab.game.ai.BaseAI;
 import sab.game.animation.Animation;
 import sab.game.attack.Attack;
 
@@ -49,7 +48,7 @@ public class Fighter implements Cloneable {
     public Vector2 itemOffset;
 
     // The number of midair jumps this character can use
-    public int jumps;
+    public int airJumps;
 
     // The description of the character to display in the "Fighters" screen
     public String description;
@@ -92,7 +91,7 @@ public class Fighter implements Cloneable {
         imageOffsetY = 0;
         speed = 12;
         acceleration = 0.45f;
-        jumps = 1;
+        airJumps = 1;
         doubleJumpMultiplier = 0.75f;
         jumpHeight = 50;
         friction = .05f;

@@ -8,6 +8,7 @@ public class DamageSource extends GameObject {
     public Vector2 knockback;
     public boolean reflectable;
     public boolean parryable;
+    public boolean staticKnockback;
     public Player owner;
 
     public DamageSource() {

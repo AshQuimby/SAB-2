@@ -8,7 +8,6 @@ import sab.game.Game;
 import sab.game.Player;
 import sab.game.SABSounds;
 import sab.game.animation.Animation;
-import sab.game.attack.Attack;
 import sab.game.attack.walouis.Racket;
 import sab.game.attack.walouis.Bomb;
 import sab.game.attack.walouis.Note;
@@ -30,7 +29,7 @@ public class Walouis extends FighterType {
         fighter.imageOffsetX = 8;
         fighter.imageOffsetY = 4;
         fighter.frames = 12;
-        fighter.jumps = 1;
+        fighter.airJumps = 1;
         fighter.speed = 7.5f;
         fighter.acceleration = .46f;
         fighter.doubleJumpMultiplier = 0.85f;

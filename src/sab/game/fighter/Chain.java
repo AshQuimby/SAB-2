@@ -10,7 +10,6 @@ import sab.game.attack.chain.AirSlash;
 import sab.game.attack.chain.ChainSlash;
 import sab.game.attack.chain.BoomerangKnife;
 import sab.game.attack.chain.FallingKnife;
-import sab.net.Keys;
 
 public class Chain extends FighterType {
     private Animation swingAnimation;
@@ -29,7 +28,7 @@ public class Chain extends FighterType {
         fighter.renderHeight = 64;
         fighter.imageOffsetX = 0;
         fighter.imageOffsetY = 6;
-        fighter.jumps = 1;
+        fighter.airJumps = 1;
         fighter.speed = 10f;
         fighter.acceleration = .4f;
         fighter.jumpHeight = 128;

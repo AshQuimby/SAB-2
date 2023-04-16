@@ -2,7 +2,6 @@ package sab.game;
 
 import java.util.List;
 
-import com.badlogic.gdx.controllers.Controller;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
@@ -30,6 +29,7 @@ public class Player extends GameObject implements Hittable {
     public boolean usedRecovery;
     public int costume;
     public Vector2 knockback;
+    public Vector2 drawRectOffset;
     public boolean invulnerable;
 
     public GameStats gameStats;
@@ -114,6 +114,7 @@ public class Player extends GameObject implements Hittable {
 
         heldItem = null;
 
+        drawRectOffset = new Vector2();
         gameStats = new GameStats("Human " + fighter.name, id);
         fighter.start(this);
     }
@@ -182,7 +183,7 @@ public class Player extends GameObject implements Hittable {
     }
 
     public void removeJumps() {
-        extraJumpsUsed = fighter.jumps;
+        extraJumpsUsed = fighter.airJumps;
     }
 
     public void startAnimation(int delay, Animation animation, int endLag, boolean important) {
@@ -467,9 +468,11 @@ public class Player extends GameObject implements Hittable {
         if (keys.isJustPressed(Keys.UP)) {
             if (touchingStage) {
                 velocity.y = getJumpVelocity();
-            } else if (extraJumpsUsed < fighter.jumps && velocity.y < getJumpVelocity() * fighter.doubleJumpMultiplier) {
+                SABSounds.playSound("jump.mp3");
+            } else if (extraJumpsUsed < fighter.airJumps && velocity.y < getJumpVelocity() * fighter.doubleJumpMultiplier) {
                 velocity.y = getJumpVelocity() * fighter.doubleJumpMultiplier;
                 extraJumpsUsed++;
+                battle.addParticle(new Particle(getCenter().sub(0, hitbox.height / 2), new Vector2(), 56, 16, 3, 3, direction, "double_jump.png"));
             }
         }
 
@@ -507,12 +510,12 @@ public class Player extends GameObject implements Hittable {
     }
 
     public int getRemainingJumps() {
-        return fighter.jumps - extraJumpsUsed;
+        return fighter.airJumps - extraJumpsUsed;
     }
 
     // Returns true if the player has a condition that would lock them out of normal control, like knockback, ledge grabing, being frozen, etc
     public boolean isStuck() {
-        return frozen() || takingKnockback() || grabbingLedge() || stunned() || charging();
+        return frozen() || takingKnockback() || grabbingLedge() || stunned();
     }
     public boolean inFreeFall() {
         return usedRecovery;
@@ -655,7 +658,10 @@ public class Player extends GameObject implements Hittable {
         battle.freezeFrame((source.damage / 50), 2, 1, false);
 
         SABSounds.playSound("hit.mp3");
-        Vector2 newKnockback = source.knockback.cpy().scl(3.25f).scl(damage / 100f + 1f);
+        Vector2 newKnockback = source.knockback.cpy();
+        if (!source.staticKnockback) {
+            newKnockback.scl(3.25f).scl(damage / 100f + 1f);
+        }
         if (newKnockback.len() > knockback.len()) {
             smokeGenerator = 0;
             knockback.set(newKnockback);
@@ -702,7 +708,7 @@ public class Player extends GameObject implements Hittable {
     public void render(Seagraphics g) {
         if (!hide) {
             if (fighter.preRender(this, g)) {
-                drawRect.setCenter(hitbox.getCenter(new Vector2()).add(fighter.imageOffsetX * direction, fighter.imageOffsetY));
+                drawRect.setCenter(getCenter().add(fighter.imageOffsetX * direction, fighter.imageOffsetY).add(drawRectOffset));
                 String costumeString = fighter.id + (costume == 0 ? "" : "_alt_" + costume) + ".png";
                 if (frozen > 0) {
                     frame = freezeFrame;

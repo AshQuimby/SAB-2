@@ -1,16 +1,13 @@
 package sab.game.fighter;
 
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 
 import com.seagull_engine.Seagraphics;
 import sab.game.Game;
 import sab.game.Player;
-import sab.game.PlayerAction;
 import sab.game.SABSounds;
 import sab.game.animation.Animation;
-import sab.game.attack.Attack;
 import sab.game.attack.unnamed_duck.DuckGrab;
 import sab.game.attack.unnamed_duck.DuckSign;
 import sab.game.attack.unnamed_duck.Quack;
@@ -42,7 +39,7 @@ public class UnnamedDuck extends FighterType {
         fighter.friction = .2f;
         fighter.mass = 5f;
         fighter.acceleration = .4f;
-        fighter.jumps = 2;
+        fighter.airJumps = 2;
         fighter.walkAnimation = new Animation(1, 4, 6, true);
         fighter.description = "This unruly duck is constantly causing mischief. Whether it's stealing somebody's gardening tools or committing a political assassination, this duck could be behind it. The strange thing is, nobody knows its name. Researchers have concluded that it does have one. One paper came to the conclusion of [REDACTED], but it is impossible to verify the claim.";
         fighter.debut = "No Name Duck Game";
@@ -146,6 +143,6 @@ public class UnnamedDuck extends FighterType {
     public void renderUI(Fighter fighter, Player player, Seagraphics g) {
         g.scalableDraw(g.imageProvider.getImage("duck_ui_back.png"), player.getId() == 0 ? -256 - 56 - 4 : 256 + 4, -256, 56, 56);
         int drawAmount = (int) (56 * (((float) defaultItemCoolDown - itemCoolDown) / defaultItemCoolDown));
-        Game.game.window.batch.draw(g.imageProvider.getImage(itemCoolDown == 0 ? "duck_ui_front_full.png" : "duck_ui_front.png"), player.getId() == 0 ? -256 - 56 - 8 : 256 + 4, -256, 56, drawAmount / 4 * 4, 0, 14, 14, -drawAmount / 4, false, true);
+        Game.game.window.batch.draw(g.imageProvider.getImage(itemCoolDown == 0 ? "duck_ui_front_full.png" : "duck_ui_front.png"), player.getId() == 0 ? -256 - 56 - 4 : 256 + 4, -256, 56, drawAmount / 4 * 4, 0, 14, 14, -drawAmount / 4, false, true);
     }
 }

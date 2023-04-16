@@ -1,6 +1,5 @@
 package sab.game.fighter;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 
@@ -17,7 +16,6 @@ import sab.game.attack.marvin.Frostball;
 import sab.game.attack.marvin.Toilet;
 import sab.game.particle.Particle;
 import sab.net.Keys;
-import sab.util.Utils;
 
 public class Marvin extends FighterType {
     private Animation swingAnimation;
@@ -41,7 +39,7 @@ public class Marvin extends FighterType {
         fighter.jumpHeight = 160;
         fighter.friction = .2f;
         fighter.mass = 5f;
-        fighter.jumps = 1;
+        fighter.airJumps = 1;
         fighter.walkAnimation = new Animation(0, 3, 5, true);
         fighter.description = "Retired Albany plumber now princess saving daydreamer, Marvin is a troubled man who is always distracted by his dreams about the things he could be. He can't seem to escape from his brother's sucess as a musician.";
         fighter.debut = "Super Marvin Plumber";
