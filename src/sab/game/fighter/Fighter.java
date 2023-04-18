@@ -181,6 +181,14 @@ public class Fighter implements Cloneable {
         return type.getVictorySongId(this, player);
     }
 
+    public void onParry(Player player) {
+        type.onParry(this, player);
+    }
+
+    public void onSuccessfulParry(Player player, DamageSource parried) {
+        type.onSuccessfulParry(this, player, parried);
+    }
+
     public Fighter copy() {
         try {
            return (Fighter) this.clone();

@@ -41,9 +41,6 @@ public class GlasterBaster extends MeleeAttackType {
         super.update(attack);
 
         if (!fired) {
-            if (!attack.owner.charging()) {
-                attack.kill();
-            }
             attack.life++;
             if (attack.owner.getCharge() >= 60) {
                 attack.frame = 1;
@@ -88,6 +85,9 @@ public class GlasterBaster extends MeleeAttackType {
                 case NONE -> {
                     attack.rotation = attack.direction * 90 + 90;
                 }
+            }
+            if (!attack.owner.charging()) {
+                attack.kill();
             }
         } else {
             if (attack.owner.isStuck()) {

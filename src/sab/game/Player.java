@@ -40,6 +40,7 @@ public class Player extends GameObject implements Hittable {
     private Direction collisionDirection;
     private Item heldItem;
     private int iFrames;
+    private int parryTime;
     private int knockbackDuration;
     private int lives;
     private int frozen;
@@ -111,6 +112,7 @@ public class Player extends GameObject implements Hittable {
         this.id = id;
         iFrames = 0;
         occupied = 0;
+        parryTime = 0;
 
         heldItem = null;
 
@@ -193,36 +195,42 @@ public class Player extends GameObject implements Hittable {
     public Attack startIndefiniteAttack(AttackType type, int delay, boolean important) {
         Attack attack = new Attack(type, this);
         currentAction = new IndefinitePlayerAction(delay, attack, important, 0, null);
+        repeatAttack = false;
         return attack;
     }
 
     public Attack startIndefiniteAttack(AttackType type, Animation animation, int delay, boolean important) {
         Attack attack = new Attack(type, this);
         currentAction = new IndefinitePlayerAction(delay, attack, animation, important, 0, null);
+        repeatAttack = false;
         return attack;
     }
 
     public Attack startIndefiniteAttack(AttackType type, Animation animation, int delay, boolean important, int[] data) {
         Attack attack = new Attack(type, this);
         currentAction = new IndefinitePlayerAction(delay, attack, animation, important, 0, data);
+        repeatAttack = false;
         return attack;
     }
 
     public Attack startAttack(AttackType type, int delay, int endLag, boolean important) {
         Attack attack = new Attack(type, this);
         currentAction = new PlayerAction(delay, attack, important, endLag, null);
+        repeatAttack = false;
         return attack;
     }
 
     public Attack startAttack(AttackType type, Animation animation, int delay, int endLag, boolean important) {
         Attack attack = new Attack(type, this);
         currentAction = new PlayerAction(delay, attack, animation, important, endLag, null);
+        repeatAttack = false;
         return attack;
     }
 
     public Attack startAttack(AttackType type, Animation animation, int delay, int endLag, boolean important, int[] data) {
         Attack attack = new Attack(type, this);
         currentAction = new PlayerAction(delay, attack, animation, important, endLag, data);
+        repeatAttack = false;
         return attack;
     }
 
@@ -482,22 +490,29 @@ public class Player extends GameObject implements Hittable {
             frame = 0;
             fighter.walkAnimation.reset();
         }
-
-        // Attacks
-        if (occupied <= 0 && keys.isJustPressed(Keys.ATTACK) || (repeatAttack && keys.isPressed(Keys.ATTACK))) {
-            if (keys.isPressed(Keys.DOWN)) {
-                fighter.downAttack(this);
-            } else if (keys.isPressed(Keys.UP)) {
-                fighter.upAttack(this);
-            } else if (keys.isPressed(Keys.LEFT) || keys.isPressed(Keys.RIGHT)) {
-                if (hasItem()) fighter.useItem(this);
-                else fighter.sideAttack(this);
+        // Player actions
+        if (occupied <= 0) {
+            // Attacks
+            if (keys.isJustPressed(Keys.ATTACK) || (repeatAttack && keys.isPressed(Keys.ATTACK))) {
+                if (keys.isPressed(Keys.DOWN)) {
+                    fighter.downAttack(this);
+                } else if (keys.isPressed(Keys.UP)) {
+                    fighter.upAttack(this);
+                } else if (keys.isPressed(Keys.LEFT) || keys.isPressed(Keys.RIGHT)) {
+                    if (hasItem()) fighter.useItem(this);
+                    else fighter.sideAttack(this);
+                } else {
+                    if (hasItem()) fighter.useItem(this);
+                    else fighter.neutralAttack(this);
+                }
             } else {
-                if (hasItem()) fighter.useItem(this);
-                else fighter.neutralAttack(this);
+                repeatAttack = false;
             }
-        } else {
-            repeatAttack = false;
+
+            // Parrying
+            if (keys.isJustPressed(Keys.PARRY)) {
+                fighter.onParry(this);
+            }
         }
 
         if (occupied > 0) {

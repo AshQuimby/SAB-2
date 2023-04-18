@@ -104,6 +104,14 @@ public abstract class FighterType {
 
     }
 
+    public void onParry(Fighter fighter, Player player) {
+
+    }
+
+    public void onSuccessfulParry(Fighter fighter, Player player, DamageSource parried) {
+
+    }
+
     public String getVictorySongId(Fighter fighter, Player player) {
         return fighter.id + "_victory.mp3";
     }
