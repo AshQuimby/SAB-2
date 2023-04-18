@@ -1,10 +1,10 @@
-Super Ass Brothers: Remasstered is here (kinda)!
--
+## <i>Super Ass Brothers: Remasstered</i> is here! (kinda)
+
 ---
 
-Glad you could make it, friend. If you're seeing this you are one of Super Ass Brothers: Remasstered's (codenamed SAB 2) beta testers.
+### Glad you could make it, friend. If you're seeing this you are one of Super Ass Brothers: Remasstered's (codenamed SAB 2) beta testers.
 
-To play the game, 
+#### To play the game:
 - Go to https://github.com/AshQuimby/SAB-2/releases.
 - Download the most recent version.
 - Open the folder and double-click the file sharing the name of the operating system you use (currently only tested for Windows).
@@ -17,9 +17,47 @@ To request balance changes follow the same procedure as bug reporting.
 
 ---
 
-Campaign is not currently complete, net code is not currently complete, and not all characters have programmed AIs, but that can't stop you from playing it anyways :D.
+### Improvements over the original SAB
+#### Super Ass Brothers: Remasstererd has several improvements over its predecessor, including but not limited to:
+- Better.
+- More awesome.
+- More polished.
+- Fully implemented start-lag.
+- Better performance.
+- Better menus.
+- 16:9 aspect ratio.
+- Fullscreen (F11).
+- Campaign (eventually)
+- New character renders.
+- Not being made on a school-issued laptop.
+- 10x more ass-brothering potential.
 
 ---
-<i>
-Hope you have fun <br>
--AshQuimby
+
+### Notes
+Campaign is not currently complete. <br>
+Net code is not currently complete. <br>
+Not all characters have programmed AIs. <br>
+This is a passion project, do not expect us to treat it like a job.
+
+---
+
+### The SAB Team
+#### The game was made by these three:
+- #### AshQuimby
+  - Creator
+  - Lead programmer
+  - Lead artist
+  - Sound designer
+- #### a_viper
+  - Programmer
+  - Artist
+  - Net code
+  - Music
+- #### Birdthorn
+  - Music
+  - Game balance
+
+---
+<i> Hope you have fun <br>
+-AshQuimby </i>
