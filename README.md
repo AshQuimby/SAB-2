@@ -17,7 +17,7 @@ To request balance changes follow the same procedure as bug reporting.
 
 ---
 
-Campaign is not currently complete, net code is not currently complete, and not all characters have programmed AIs, but that can't stop you from doing it anyways :D.
+Campaign is not currently complete, net code is not currently complete, and not all characters have programmed AIs, but that can't stop you from playing it anyways :D.
 
 ---
 <i>
