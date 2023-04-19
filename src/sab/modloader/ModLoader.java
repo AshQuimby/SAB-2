@@ -134,8 +134,8 @@ public final class ModLoader {
 
     // Adds sound file to jukebox screen as a song
     // Tempo in beats per minute
-    public void addSongToJukebox(String fileName, String songName, String artist, int tempo) {
-        JukeboxScreen.addSong(fileName, songName, artist, tempo);
+    public void addSongToJukebox(String fileName, String songName, String artist, int tempo, String background) {
+        JukeboxScreen.addSong(fileName, songName, artist, tempo, background);
     }
 
     // Returns a fighter type from its respective Class

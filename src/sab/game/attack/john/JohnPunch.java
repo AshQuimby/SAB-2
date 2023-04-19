@@ -10,7 +10,6 @@ public class JohnPunch extends MeleeAttackType {
     @Override
     public void setDefaults(Attack attack) {
         attack.imageName = "john_punch.png";
-        attack.basedOffCostume = true;
         attack.life = 11;
         attack.frameCount = 3;
         attack.velocity = new Vector2();

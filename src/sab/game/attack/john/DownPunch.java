@@ -10,8 +10,7 @@ public class DownPunch extends MeleeAttackType {
     @Override
     public void setDefaults(Attack attack) {
         attack.imageName = "down_punch.png";
-        attack.basedOffCostume = true;
-        attack.life = 7;
+        attack.life = 13;
         attack.frameCount = 2;
         attack.velocity = new Vector2();
         attack.hitbox.width = 32;
