@@ -124,17 +124,18 @@ public class JukeboxScreen extends ScreenAdapter {
     }
 
     private void createRaveLights() {
-        if (Math.random() > 0.95) {
-            int numLights = MathUtils.random(4, 8);
-            for (int i = 0; i < numLights; i++) {
-                raveLights.add(new RaveLight());
-            }
+        int numLights = MathUtils.random(4, 6);
+        for (int i = 0; i < numLights; i++) {
+            raveLights.add(new RaveLight());
         }
     }
 
     @Override
     public Screen keyPressed(int keyCode) {
         switch (keyCode) {
+            case Input.Keys.J -> {
+                createRaveLights();
+            }
             case Input.Keys.RIGHT -> {
                 SABSounds.playSound(SABSounds.BLIP);
                 songIndex = Utils.loop(songIndex, 1, songNames.size(), 0);
@@ -160,7 +161,6 @@ public class JukeboxScreen extends ScreenAdapter {
                             playing = songIndex;
                             currentDanceRate = (60/7f) / songTempos.get(playing) * 60f;
                             raveLights.clear();
-                            createRaveLights();
                             paused = false;
                         } else if (!paused) {
                             SABSounds.pauseMusic();
@@ -173,7 +173,6 @@ public class JukeboxScreen extends ScreenAdapter {
                             SABSounds.unpauseMusic();
                             paused = false;
                             raveLights.clear();
-                            createRaveLights();
                         }
                     }
                     case 1 -> {
