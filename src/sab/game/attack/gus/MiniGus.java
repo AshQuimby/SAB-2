@@ -16,12 +16,9 @@ public class MiniGus extends AttackType {
 
     @Override
     public void setDefaults(sab.game.attack.Attack attack) {
-        attack.imageName = "mini_gus";
-        if (attack.owner.costume != 0) {
-            attack.imageName += "_alt_" + attack.owner.costume;
-        }
-        attack.imageName += ".png";
-        
+        attack.imageName = "mini_gus.png";
+        attack.basedOffCostume = true;
+
         attack.life = 200;
         attack.frameCount = 13;
         attack.hitbox.width = 32;
