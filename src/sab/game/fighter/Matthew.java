@@ -31,7 +31,7 @@ public class Matthew extends FighterType {
     @Override
     public void setDefaults(Fighter fighter) {
         fighter.id = "matthew";
-        fighter.name = "Matthew)";
+        fighter.name = "Matthew";
         fighter.hitboxWidth = 40;
         fighter.hitboxHeight = 60;
         fighter.renderWidth = 64;
