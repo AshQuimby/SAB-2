@@ -12,6 +12,7 @@ import sab.game.attack.AttackType;
 public class BasterBeam extends AttackType {
 
     private boolean horizontal;
+    private boolean charge;
 
     @Override
     public void setDefaults(Attack attack) {
@@ -37,12 +38,14 @@ public class BasterBeam extends AttackType {
         attack.hitbox.y += (attack.hitbox.height / 2 - 20) * data[0];
         attack.damage += Math.round(data[2] / 30f) + 1;
         attack.knockback = new Vector2(5 * data[1], 5 * data[0] + 2).scl(data[2] / 30f + 1);
+        attack.staticKnockback = true;
 
         horizontal = data[0] != 0;
     }
 
     @Override
     public void update(Attack attack) {
+        if (attack.life <= 1) attack.staticKnockback = false;
         attack.resize(attack.hitbox.width - (horizontal ? 2.6f : 0), attack.hitbox.height - (!horizontal ? 2.6f : 0));
     }
 

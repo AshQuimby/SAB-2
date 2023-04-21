@@ -60,6 +60,5 @@ public class BoneSpike extends AttackType {
             attack.life = 30;
             attack.knockback.set(0, 4);
         }
-        SABSounds.playSound("snas.mp3");
     }
 }

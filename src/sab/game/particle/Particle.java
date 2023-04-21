@@ -16,6 +16,7 @@ public class Particle extends GameObject {
 
     public int age;
     public float rotationSpeed;
+    public float sizeMultiplier;
     public int frameLength;
     public float gravity;
 
@@ -27,6 +28,7 @@ public class Particle extends GameObject {
 
         alive = true;
         tint = Color.WHITE;
+        sizeMultiplier = 0.95f;
 
         frameCount = 1;
     }
@@ -70,6 +72,14 @@ public class Particle extends GameObject {
         type = 2;
     }
 
+    public Particle(float gravity, Vector2 position, Vector2 velocity, float width, float height, float sizeMultiplier, int maxRotationSpeed, String image) {
+        this(position, velocity, width, height, image);
+        rotationSpeed = MathUtils.random(-maxRotationSpeed, maxRotationSpeed);
+        this.gravity = gravity;
+        this.sizeMultiplier = sizeMultiplier;
+        type = 3;
+    }
+
     @Override
     public void preUpdate() {
         hitbox.x += velocity.x;
@@ -91,6 +101,11 @@ public class Particle extends GameObject {
 
             case 2 -> {
                 if (hitbox.y < -400) alive = false;
+            }
+
+            case 3 -> {
+                resize(hitbox.width * sizeMultiplier, hitbox.height * sizeMultiplier);
+                if (hitbox.width < 2f || hitbox.height < 2f || frame == frameCount || hitbox.y < -400) alive = false;
             }
         }
 

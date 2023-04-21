@@ -268,12 +268,9 @@ public class Player extends GameObject implements Hittable {
         damage = 0;
         if (heldItem != null) heldItem.toss(this);
 
-        for (GameObject gameObject : battle.getGameObjects()) {
-            if (gameObject instanceof Attack) {
-                if (((Attack) gameObject).owner == this) {
-                    battle.removeGameObject(gameObject);
-                    ((Attack) gameObject).alive = false;
-                }
+        for (Attack attack : battle.getAttacks()) {
+            if (attack.owner == this) {
+                attack.alive = false;
             }
         }
 

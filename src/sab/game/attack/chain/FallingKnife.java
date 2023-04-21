@@ -32,7 +32,6 @@ public class FallingKnife extends AttackType {
     @Override
     public void update(Attack attack) {
         if (attack.collisionDirection == Direction.DOWN) {
-            attack.velocity.y = 0;
             attack.hitbox.y -= 10;
             onGround = true;
         } else {
@@ -41,7 +40,7 @@ public class FallingKnife extends AttackType {
 
         if (onGround) {
             attack.knockback.set(0, 10);
-            attack.velocity.y = 0;
+            attack.velocity.y = -1;
         } else {
             attack.knockback.set(0, -10);
             attack.velocity.y -= 1.2f;

@@ -14,6 +14,7 @@ public class SpinnyBone extends AttackType {
     @Override
     public void setDefaults(sab.game.attack.Attack attack) {
         attack.imageName = "spinny_bone.png";
+        attack.basedOffCostume = true;
         attack.life = 60;
         attack.frameCount = 1;
         attack.hitbox.width = 36;
@@ -60,7 +61,7 @@ public class SpinnyBone extends AttackType {
     @Override
     public void onKill(sab.game.attack.Attack attack) {
         for (int i = 0; i < 4 ; i++) {
-            attack.owner.battle.addParticle(new Particle(1, attack.hitbox.getCenter(new Vector2()), new Vector2(4 * MathUtils.random(), MathUtils.random(0.5f, 0.5f)).rotateDeg(MathUtils.random() * 360), 24, 24, 2, "bone_particle.png"));
+            attack.owner.battle.addParticle(new Particle(1, attack.hitbox.getCenter(new Vector2()), new Vector2(4 * MathUtils.random(), MathUtils.random(0.5f, 0.5f)).rotateDeg(MathUtils.random() * 360), 24, 24, 2, "spinny_bone.png"));
         }
     }
 

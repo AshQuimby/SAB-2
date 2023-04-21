@@ -8,7 +8,9 @@ import sab.game.CollisionResolver;
 import sab.game.Player;
 import sab.game.attack.Attack;
 import sab.game.attack.MeleeAttackType;
+import sab.game.particle.Particle;
 import sab.net.Keys;
+import sab.util.Utils;
 
 public class AirSlash extends MeleeAttackType {
     @Override
@@ -25,6 +27,8 @@ public class AirSlash extends MeleeAttackType {
         attack.direction = attack.owner.direction;
         attack.hitCooldown = 4;
         attack.reflectable = false;
+        attack.parryable = false;
+        attack.staticKnockback = true;
 
         offset = new Vector2(0, 8);
         usePlayerDirection = true;
@@ -55,9 +59,13 @@ public class AirSlash extends MeleeAttackType {
     @Override
     public void successfulHit(Attack attack, GameObject hit) {
         CollisionResolver.moveWithCollisions(hit, attack.owner.hitbox.getCenter(new Vector2()).sub(hit.hitbox.getCenter(new Vector2())).scl(0.75f), attack.owner.battle.getSolidStageObjects());
-        if (hit instanceof Player) ((Player) hit).stun(4);
+        if (hit instanceof Player) ((Player) hit).stun(2);
         if (attack.life <= 4) {
+            attack.staticKnockback = false;
             attack.knockback = new Vector2(0, 8).rotateDeg(MathUtils.random(-1f, 1f) * 16);
+        }
+        for (int i = 0; i < 4; i++) {
+            attack.owner.battle.addParticle(new Particle(0.1f, hit.getCenter(), Utils.randomParticleVelocity(8), 32, 32, 0.9f, 0, "blood.png"));
         }
     }
 

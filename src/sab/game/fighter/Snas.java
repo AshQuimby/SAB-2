@@ -71,6 +71,7 @@ public class Snas extends FighterType {
             player.startAttack(new BoneSpike(), attackAnimation, 12, 18, false, new int[] {0});
             player.velocity.y /= 3;
             player.velocity.x *= 0.9f;
+            SABSounds.playSound("snas.mp3");
         }
     }
 

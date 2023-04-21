@@ -15,6 +15,7 @@ public class GlasterBaster extends MeleeAttackType {
     @Override
     public void setDefaults(Attack attack) {
         attack.imageName = "glaster_baster.png";
+        attack.drawAbovePlayers = true;
         attack.hitbox.width = 76;
         attack.hitbox.height = 76;
         attack.drawRect.set(attack.hitbox);
@@ -27,6 +28,7 @@ public class GlasterBaster extends MeleeAttackType {
         fired = false;
         offset = new Vector2(86, 8);
         usePlayerDirection = false;
+        attack.parryable = false;
     }
 
     @Override
@@ -86,7 +88,7 @@ public class GlasterBaster extends MeleeAttackType {
                     attack.rotation = attack.direction * 90 + 90;
                 }
             }
-            if (!attack.owner.charging()) {
+            if (!attack.owner.charging() && !fired) {
                 attack.kill();
             }
         } else {

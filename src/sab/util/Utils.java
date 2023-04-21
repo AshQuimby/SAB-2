@@ -72,6 +72,10 @@ public class Utils {
         return new Vector2(MathUtils.random(rect.x, rect.x + rect.width), MathUtils.random(rect.y, rect.y + rect.height));
     }
 
+    public static Vector2 randomParticleVelocity(float magnitude) {
+        return new Vector2(magnitude, 0).rotateDeg(MathUtils.random(0, 360));
+    }
+
     public static String appendCostumeToIdentifier(String base, int costume, String fileFormat) {
         return base + (costume == 0 ? "" : "_alt_" + costume) + "." + fileFormat;
     }
