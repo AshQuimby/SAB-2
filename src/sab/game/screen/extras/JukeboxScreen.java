@@ -134,7 +134,7 @@ public class JukeboxScreen extends ScreenAdapter {
     public Screen keyPressed(int keyCode) {
         switch (keyCode) {
             case Input.Keys.J -> {
-                createRaveLights();
+                if (!paused) createRaveLights();
             }
             case Input.Keys.RIGHT -> {
                 SABSounds.playSound(SABSounds.BLIP);

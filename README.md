@@ -25,8 +25,9 @@ To request balance changes follow the same procedure as bug reporting.
 - Fully implemented start-lag.
 - Better performance.
 - Better menus.
+- Jukebox screen that lets you play your favorite original songs with a little dancing John Joseph (Press 'J' while he's dancing to jam harder).
 - 16:9 aspect ratio.
-- Fullscreen (F11).
+- Fullscreen (F11 or in settings).
 - Campaign (eventually)
 - New character renders.
 - Not being made on a school-issued laptop.
