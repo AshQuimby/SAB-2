@@ -4,6 +4,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.seagull_engine.GameObject;
 import sab.game.CollisionResolver;
+import sab.game.Direction;
 import sab.game.SABSounds;
 import sab.game.attack.Attack;
 import sab.game.attack.AttackType;
@@ -31,7 +32,11 @@ public class Peashot extends AttackType {
         attack.knockback.set(attack.direction * 0.5f, 0.25f);
         attack.hitbox.setCenter(attack.owner.getCenter().add(data[0], data[1]));
         attack.velocity = new Vector2(16 * attack.owner.direction, 0);
-//        SABSounds.playSound("gunshot.mp3");
+    }
+
+    @Override
+    public void update(Attack attack) {
+        if (attack.collisionDirection != Direction.NONE) attack.alive = false;
     }
 
     @Override

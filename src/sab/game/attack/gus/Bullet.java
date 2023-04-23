@@ -5,6 +5,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.seagull_engine.GameObject;
 
 import sab.game.CollisionResolver;
+import sab.game.Direction;
 import sab.game.SABSounds;
 import sab.game.attack.Attack;
 import sab.game.attack.AttackType;
@@ -30,6 +31,7 @@ public class Bullet extends AttackType {
     @Override
     public void update(Attack attack) {
         attack.owner.battle.addParticle(new Particle(attack.getCenter(), new Vector2(0, MathUtils.random(-.2f, .2f)), 16, 16, 20, "smoke.png"));
+        if (attack.collisionDirection != Direction.NONE) attack.alive = false;
     }
 
     @Override
