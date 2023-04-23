@@ -109,6 +109,8 @@ public class Battle {
         idsByGameObject = new HashMap<>();
         nextId = 0;
 
+        drawHitboxes = Settings.getDebugMode();
+
         addGameObject(player1);
         addGameObject(player2);
 

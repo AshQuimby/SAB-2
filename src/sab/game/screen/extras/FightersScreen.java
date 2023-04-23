@@ -32,7 +32,7 @@ public class FightersScreen extends ScreenAdapter {
     public void render(Seagraphics g) {
         g.scalableDraw(g.imageProvider.getImage("character_description_background_layer_1.png"), -Game.game.window.resolutionX / 2, -Game.game.window.resolutionY / 2, Game.game.window.resolutionX, Game.game.window.resolutionY);
 
-        g.scalableDraw(g.imageProvider.getImage(fighters.get(characterIndex).id + "_render.png"), Game.game.window.resolutionX / 2 - 512 - 8, -Game.game.window.resolutionY / 2 - 8, 512, 512);
+        g.scalableDraw(g.imageProvider.getImage(fighters.get(characterIndex).id + "_render.png"), Game.game.window.resolutionX / 2 - 512 - 8, -Game.game.window.resolutionY / 2 + 12, 512, 512);
 
         g.scalableDraw(g.imageProvider.getImage("character_description_background_layer_2.png"), -Game.game.window.resolutionX / 2, -Game.game.window.resolutionY / 2, Game.game.window.resolutionX, Game.game.window.resolutionY);
 

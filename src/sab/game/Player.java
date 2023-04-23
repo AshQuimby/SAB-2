@@ -16,6 +16,7 @@ import sab.game.animation.Animation;
 import sab.game.attack.Attack;
 import sab.game.attack.AttackType;
 import sab.game.fighter.Fighter;
+import sab.game.fighter.FighterType;
 import sab.game.items.Item;
 import sab.game.particle.Particle;
 import sab.game.stage.Ledge;
@@ -63,6 +64,12 @@ public class Player extends GameObject implements Hittable {
     private boolean charging;
     private boolean hide;
     private boolean ledgeGrabbing;
+
+    public Player(Fighter fighter) {
+        this.fighter = fighter;
+        this.drawRect = new Rectangle(0, 0, fighter.renderWidth, fighter.renderHeight);
+        this.battle = null;
+    }
 
     public Player(Fighter fighter, int costume, int id, int lives, Battle battle) {
         this.battle = battle;
@@ -492,7 +499,7 @@ public class Player extends GameObject implements Hittable {
         if (keys.isPressed(Keys.LEFT) ^ keys.isPressed(Keys.RIGHT)) {
             frame = fighter.walkAnimation.stepLooping();
         } else {
-            frame = 0;
+            frame = fighter.idleAnimation.stepLooping();
             fighter.walkAnimation.reset();
         }
         // Player actions
@@ -729,12 +736,11 @@ public class Player extends GameObject implements Hittable {
         if (!hide) {
             if (fighter.preRender(this, g)) {
                 drawRect.setCenter(getCenter().add(fighter.imageOffsetX * direction, fighter.imageOffsetY).add(drawRectOffset));
-                String costumeString = fighter.id + (costume == 0 ? "" : "_alt_" + costume) + ".png";
                 if (frozen > 0) {
                     frame = freezeFrame;
                 }
                 preRender(g);
-                g.usefulTintDraw(g.imageProvider.getImage(costumeString), drawRect.x, drawRect.y, (int) drawRect.width, (int) drawRect.height, frame, frameCount, rotation, direction == 1, false, iFrames / 10 % 2 == 0 ? Color.WHITE : new Color(1, 1, 1, 0.5f));
+                fighter.render(this, g);
                 postRender(g);
 
                 if (frozen > 0) {
@@ -753,6 +759,10 @@ public class Player extends GameObject implements Hittable {
 
     public int getOccupiedTicks() {
         return occupied;
+    }
+
+    public int getIFrames() {
+        return iFrames;
     }
 
     // Sets the number of ticks the player will be "occupied," meaning they are able to move but unable to attack.

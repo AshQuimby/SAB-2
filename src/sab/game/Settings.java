@@ -17,6 +17,7 @@ public class Settings {
     private static boolean stageHazards;
     private static boolean assBalls;
     private static boolean anticipation;
+    private static boolean debugMode;
     private static int hostingPort;
 
     public static void loadSettings() {
@@ -52,6 +53,7 @@ public class Settings {
         fullscreen = false;
         anticipation = true;
         stageHazards = true;
+        debugMode = false;
         hostingPort = 19128;
     }
 
@@ -79,6 +81,7 @@ public class Settings {
         settings.put("ass_balls", Boolean.toString(assBalls));
         settings.put("stage_hazards", Boolean.toString(stageHazards));
         settings.put("anticipation", Boolean.toString(anticipation));
+        settings.put("debug_mode", Boolean.toString(debugMode));
         settings.put("master_volume", Float.toString(masterVolume));
         settings.put("sfx_volume", Float.toString(sfxVolume));
         settings.put("music_volume", Float.toString(musicVolume));
@@ -94,6 +97,7 @@ public class Settings {
             assBalls = Boolean.parseBoolean(settings.get("ass_balls"));
             stageHazards = Boolean.parseBoolean(settings.get("stage_hazards"));
             anticipation = Boolean.parseBoolean(settings.get("anticipation"));
+            debugMode = Boolean.parseBoolean(settings.get("debug_mode"));
             masterVolume = Float.parseFloat(settings.get("master_volume"));
             sfxVolume = Float.parseFloat(settings.get("sfx_volume"));
             musicVolume = Float.parseFloat(settings.get("music_volume"));
@@ -151,5 +155,9 @@ public class Settings {
 
     public static boolean getAnticipation() {
         return anticipation;
+    }
+
+    public static boolean getDebugMode() {
+        return debugMode;
     }
 }

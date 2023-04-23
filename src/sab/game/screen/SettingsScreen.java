@@ -25,12 +25,12 @@ public class SettingsScreen extends SelectorScreen {
         super(new String[] { "Game Settings", "Audio Settings", "Video Settings", "Back" });
         exitSubSelection();
         subSelection = new String[][] {
-                new String[] { "Stage Hazards", "Spawn Ass Balls", "Victory Anticipation", "Back" },
+                new String[] { "Stage Hazards", "Spawn Ass Balls", "Victory Anticipation", "Debug Mode", "Back" },
                 new String[] { "Master Volume", "Music Volume", "SFX Volume", "Back" },
                 new String[] { "Default Fullscreened", "Static Camera", "Screen Shake", "Back" }
         };
         subSelectionSettingIds = new String[][] {
-                new String[] { "stage_hazards", "ass_balls", "anticipation" },
+                new String[] { "stage_hazards", "ass_balls", "anticipation", "debug_mode" },
                 new String[] { "master_volume", "music_volume", "sfx_volume" },
                 new String[] { "fullscreen", "static_camera", "screen_shake" },
         };
@@ -58,7 +58,7 @@ public class SettingsScreen extends SelectorScreen {
         else if (keyCode == Input.Keys.LEFT) decrease();
 
         else if (keyCode == Input.Keys.ENTER) {
-            if (selectorIndex == 3 || subSelectionIndex == 3) {
+            if (selectorIndex == 3 || subSelectionIndex == subSelectionSettingIds[selectorIndex].length) {
                 SABSounds.playSound(SABSounds.SELECT);
                 return onBack();
             } else {
