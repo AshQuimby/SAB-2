@@ -439,6 +439,10 @@ public class Battle {
 
         stage.update();
 
+        for (GameObject gameObject : gameObjects) {
+            gameObject.lateUpdate();
+        }
+
         for (Player player : players) {
             player.keys.update();
         }
@@ -587,10 +591,6 @@ public class Battle {
                 g.shapeRenderer.setColor(new Color(0, 1, 1, 1));
                 g.shapeRenderer.rect(ledge.grabBox.x, ledge.grabBox.y, ledge.grabBox.width, ledge.grabBox.height);
             }
-        }
-
-        for (GameObject gameObject : gameObjects) {
-            gameObject.lateUpdate();
         }
 
         g.useStaticCamera();
