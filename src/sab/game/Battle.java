@@ -589,6 +589,10 @@ public class Battle {
             }
         }
 
+        for (GameObject gameObject : gameObjects) {
+            gameObject.lateUpdate();
+        }
+
         g.useStaticCamera();
         stage.renderOverlay(g);
         g.scalableDraw(g.imageProvider.getImage("in_battle_hud_p1.png"), -256, -256 - 64, 128, 128);

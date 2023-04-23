@@ -655,7 +655,10 @@ public class Player extends GameObject implements Hittable {
 
         if (hasItem()) heldItem.updateHeld(this);
         fighter.update(this);
+    }
 
+    @Override
+    public void lateUpdate() {
         touchingStage = false;
     }
 
