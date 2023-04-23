@@ -6,6 +6,8 @@ import com.seagull_engine.Seagraphics;
 import sab.game.Player;
 import sab.game.SABSounds;
 import sab.game.animation.Animation;
+import sab.game.attack.Attack;
+import sab.game.attack.bowl_boy.Peashot;
 import sab.net.Keys;
 
 import java.security.Key;
@@ -52,7 +54,7 @@ public class BowlBoy extends FighterType {
     @Override
     public void update(Fighter fighter, Player player) {
         if (player.frame < 13) {
-            gunHandPosition = new Vector2();
+            gunHandPosition = new Vector2(18 * player.direction, 12);
         } else {
 
         }
@@ -68,8 +70,9 @@ public class BowlBoy extends FighterType {
         if (gunMode) {
             if (shootRecoil <= 0) {
                 shootRecoil = 10;
-                SABSounds.playSound("crunch.mp3");
+                SABSounds.playSound("bowl_boy_shooty.mp3");
                 player.occupy(10);
+                shootBullet(fighter, player);
             }
         }
 
@@ -79,7 +82,7 @@ public class BowlBoy extends FighterType {
     }
 
     public void shootBullet(Fighter fighter, Player player) {
-
+        player.battle.addAttack(new Attack(new Peashot(), player), new int[] { (int) gunHandPosition.x, (int) gunHandPosition.y });
     }
 
     // Probably the simplest neutral attack method in the game but also the most complex neutral attack

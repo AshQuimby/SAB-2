@@ -22,14 +22,15 @@ public class Peashot extends AttackType {
         attack.directional = true;
         attack.hitCooldown = 20;
         attack.collideWithStage = true;
+        attack.staticKnockback = true;
     }
 
     @Override
     public void onSpawn(Attack attack, int[] data) {
         attack.direction = attack.owner.direction;
-        attack.knockback.set(attack.direction, 0.5f);
+        attack.knockback.set(attack.direction * 0.5f, 0.25f);
         attack.hitbox.setCenter(attack.owner.getCenter().add(data[0], data[1]));
-        attack.velocity = new Vector2(24 * attack.owner.direction, 0);
+        attack.velocity = new Vector2(16 * attack.owner.direction, 0);
 //        SABSounds.playSound("gunshot.mp3");
     }
 

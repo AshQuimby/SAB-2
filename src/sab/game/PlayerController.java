@@ -79,9 +79,9 @@ public class PlayerController implements Controller {
                     return inGame ? playerId == 0 ? Input.Keys.A : Input.Keys.LEFT : Input.Keys.LEFT;
                 }
             case 1 :
-                if (getAxis(axis) < 0.35f) {
+                if (getAxis(axis) < -0.75f) {
                     return inGame ? playerId == 0 ? Input.Keys.W : Input.Keys.UP : Input.Keys.UP;
-                } else if (getAxis(axis) > 0.35f) {
+                } else if (getAxis(axis) > 0.75f) {
                     return inGame ? playerId == 0 ? Input.Keys.S : Input.Keys.DOWN : Input.Keys.DOWN;
                 }
             default :

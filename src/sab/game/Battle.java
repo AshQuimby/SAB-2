@@ -178,6 +178,7 @@ public class Battle {
     public void slowdown(int slowdown, int slowdownDuration) {
         this.slowdown = slowdown;
         this.slowdownDuration = slowdownDuration;
+        this.zoomOnFreeze = false;
     }
 
     public void shakeCamera(int intensity) {
