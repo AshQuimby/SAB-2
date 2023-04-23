@@ -1,5 +1,6 @@
 package sab.game.screen;
 
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.seagull_engine.Seagraphics;
 
@@ -42,6 +43,16 @@ public class JoinGameScreen extends ScreenAdapter {
 
     @Override
     public Screen keyPressed(int keyCode) {
+        if (keyCode == Input.Keys.ESCAPE) {
+            try {
+                client.close();
+            } catch (IOException ignored) {
+
+            }
+
+            return new TitleScreen(false);
+        }
+
         return this;
     }
 

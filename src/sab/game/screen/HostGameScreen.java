@@ -1,8 +1,10 @@
 package sab.game.screen;
 
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.seagull_engine.Seagraphics;
 import sab.error.SabError;
+import sab.game.Game;
 import sab.game.Settings;
 import sab.game.screen.character_select.HostedCharacterSelectScreen;
 import sab.game.screen.error.ErrorScreen;
@@ -79,6 +81,21 @@ public class HostGameScreen extends ScreenAdapter {
     @Override
     public void render(Seagraphics g) {
         g.drawText("Waiting for player 2", g.imageProvider.getFont("SAB_font"), 0, 0, 1, Color.WHITE, 0);
+    }
+
+    @Override
+    public Screen keyPressed(int keyCode) {
+        if (keyCode == Input.Keys.ESCAPE) {
+            try {
+                server.close();
+            } catch (IOException ignored) {
+
+            }
+
+            return new TitleScreen(false);
+        }
+
+        return this;
     }
 
     @Override
