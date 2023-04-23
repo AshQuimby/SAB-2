@@ -9,6 +9,8 @@ import com.badlogic.gdx.math.Vector2;
 import com.seagull_engine.GameObject;
 import com.seagull_engine.Seagraphics;
 
+import sab.game.action.IndefinitePlayerAction;
+import sab.game.action.PlayerAction;
 import sab.game.ai.AI;
 import sab.game.animation.Animation;
 import sab.game.attack.Attack;
@@ -156,14 +158,16 @@ public class Player extends GameObject implements Hittable {
             }
 
             if (knockbackDuration > 0) {
-                if (keys.isPressed(Keys.DOWN)) {
-                    v.y -= 0.5f * physicsScalar;
-                } else if (keys.isPressed(Keys.UP)) {
-                    v.y += 0.5f * physicsScalar;
-                } else if (keys.isPressed(Keys.LEFT)) {
-                    v.x -= 0.5f * physicsScalar;
-                } else if (keys.isPressed(Keys.RIGHT)) {
-                    v.x += 0.5f * physicsScalar;
+                if (movement.len() > 1) {
+                    if (keys.isPressed(Keys.DOWN)) {
+                        movement.y -= 0.1f * physicsScalar;
+                    } else if (keys.isPressed(Keys.UP)) {
+                        movement.y += 0.1f * physicsScalar;
+                    } else if (keys.isPressed(Keys.LEFT)) {
+                        movement.x -= 0.1f * physicsScalar;
+                    } else if (keys.isPressed(Keys.RIGHT)) {
+                        movement.x += 0.1f * physicsScalar;
+                    }
                 }
                 if (smokeGenerator-- <= 0) {
                     battle.addParticle(new Particle(hitbox.getCenter(new Vector2()), new Vector2(), 32, 32, 6, 4, "p" + (id + 1) + "_smoke.png"));
@@ -171,8 +175,10 @@ public class Player extends GameObject implements Hittable {
                 }
                 if (collisionDirection == Direction.UP || collisionDirection == Direction.DOWN) {
                     knockback.y *= -1;
+                    // movement.y *= -1;
                 } else if (collisionDirection == Direction.RIGHT || collisionDirection == Direction.LEFT) {
                     knockback.x *= -1;
+                    // movement.x *= -1;
                 }
             }
         }
@@ -277,7 +283,8 @@ public class Player extends GameObject implements Hittable {
         if (lives <= 0) {
             stunned = 100000;
             respawnTime = 0;
-            battle.shakeCamera(10);
+            battle.shakeCamera(16);
+            hide();
         }
     }
 

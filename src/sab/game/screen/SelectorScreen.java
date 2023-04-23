@@ -1,10 +1,5 @@
 package sab.game.screen;
 
-import com.badlogic.gdx.controllers.Controller;
-import sab.game.Game;
-import sab.game.Player;
-import sab.game.PlayerController;
-import sab.net.Keys;
 import sab.screen.ScreenAdapter;
 import sab.util.Utils;
 
@@ -14,10 +9,10 @@ import sab.game.SABSounds;
 import sab.screen.Screen;
 
 public class SelectorScreen extends ScreenAdapter {
-    protected int selectorId;
+    protected int selectorIndex;
     protected String[] options;
     protected int incrementKey;
-    protected  int decrementKey;
+    protected int decrementKey;
 
     public SelectorScreen(String[] options) {
         this.options = options;
@@ -32,7 +27,9 @@ public class SelectorScreen extends ScreenAdapter {
         } else if (keyCode == decrementKey) {
             decrementSelection();
         } else if (keyCode == Input.Keys.ENTER) {
-            return onSelect(selectorId);
+            return onSelect(selectorIndex);
+        } else if (keyCode == Input.Keys.ESCAPE) {
+            return onBack();
         }
 
         return this;
@@ -40,12 +37,12 @@ public class SelectorScreen extends ScreenAdapter {
 
     public void incrementSelection() {
         SABSounds.playSound(SABSounds.BLIP);
-        selectorId = Utils.loop(selectorId, 1, options.length, 0);
+        selectorIndex = Utils.loop(selectorIndex, 1, options.length, 0);
     }
 
     public void decrementSelection() {
         SABSounds.playSound(SABSounds.BLIP);
-        selectorId = Utils.loop(selectorId, -1, options.length, 0);
+        selectorIndex = Utils.loop(selectorIndex, -1, options.length, 0);
     }
 
     protected Screen onSelect(int selection) {

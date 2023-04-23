@@ -83,6 +83,10 @@ public class Game extends Messenger {
         if (modErrors.size() > 0) {
             screen = new ModErrorScreen(modErrors);
         }
+
+        if (Settings.getFullscreen()) {
+            goFullscreened();
+        }
     }
 
     public static int getTick() {
@@ -134,13 +138,22 @@ public class Game extends Messenger {
     public void keyDown(int keyCode) {
         if (keyCode == Input.Keys.F11) {
             if (fullscreen) {
-                Gdx.graphics.setWindowedMode(window.resolutionX, window.resolutionY);
+                goWindowed();
             } else {
-                Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
+                goFullscreened();
             }
-            fullscreen = !fullscreen;
         }
         screen = screen.keyPressed(keyCode);
+    }
+
+    public void goFullscreened() {
+        Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
+        fullscreen = true;
+    }
+
+    public void goWindowed() {
+        Gdx.graphics.setWindowedMode(window.resolutionX, window.resolutionY);
+        fullscreen = false;
     }
     
     // Updates every tick

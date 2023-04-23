@@ -8,6 +8,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Map;
 import java.util.jar.JarEntry;
@@ -90,12 +91,12 @@ public final class ModLoader {
 
             InputStream entryReader = modJarFile.getInputStream(entry);
 
+            // Transfer sound/image assets in order to be loaded by the game
             String fileName = entry.getName().split("/")[entry.getName().split("/").length - 1];
-            String path = modFile.getCanonicalPath().substring(0,
-                    modFile.getCanonicalPath().length() - modFile.getName().length())
-                    + "resources/" + fileName;
+            String path = modFile.getCanonicalPath().substring(0, modFile.getCanonicalPath().length() - modFile.getName().length()) + "resources/" + fileName;
 
-            Files.copy(entryReader, Paths.get(path));
+            Path target = Paths.get(path);
+            Files.copy(entryReader, target);
 
             if (entry.getName().endsWith(".png")) {
                 game.window.imageProvider.loadAbsoluteImage(path, mod.namespace
@@ -105,15 +106,15 @@ public final class ModLoader {
                     Class<?> clazz = classLoader
                             .loadClass(entry.getName().replace("/", ".").substring(0, entry.getName().length() - 6));
                     if (FighterType.class.isAssignableFrom(clazz)) {
-                        // This is "unsafe" but we know that it will always be safe as long as mods are up to date
+                        // This is "unsafe" but we know that it will always be safe as long as mods are up-to-date
                         mod.addFighter((Class<? extends FighterType>) clazz);
                     }
                     if (StageType.class.isAssignableFrom(clazz)) {
-                        // This is "unsafe" but we know that it will always be safe as long as mods are up to date
+                        // This is also "unsafe" but we know that it will always be safe as long as mods are up-to-date
                         mod.addStage((Class<? extends StageType>) clazz);
                     }
                     if (AttackType.class.isAssignableFrom(clazz)) {
-                        // This is "unsafe" but we know that it will always be safe as long as mods are up to date
+                        // Again, "unsafe" but we know that it will always be safe as long as mods are up-to-date
                         String id = clazz.getSimpleName().toLowerCase();
                         mod.addAttack(mod.namespace + ":" + id, (Class<? extends AttackType>) clazz);
                     }
@@ -122,7 +123,7 @@ public final class ModLoader {
                 }
             }
 
-            Files.delete(Paths.get(path));
+            Files.delete(target);
         }
 
         jarReader.close();

@@ -43,11 +43,11 @@ public class Wrench extends AttackType {
         
         for (Attack other : attack.owner.battle.getAttacks()) {
             if (other.reflectable) {
-                if (other == attack) continue;
-
-                    attack.velocity.x *= -1;
-                    attack.knockback.x *= -1;
-                    attack.owner = attack.owner;
+                if (other.owner != attack.owner && other.hitbox.overlaps(attack.hitbox)) {
+                    other.velocity.x *= -1;
+                    other.knockback.x *= -1;
+                    other.owner = attack.owner;
+                }
             }
         }
     }

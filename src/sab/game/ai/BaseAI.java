@@ -102,6 +102,7 @@ public class BaseAI extends AI {
     protected void moveToCenter() {
         movingToCenter = true;
         moveToCenterTime = 0;
+        platformToCenterOn = getNearestPlatform();
     }
     
     @Override
@@ -213,7 +214,7 @@ public class BaseAI extends AI {
                         releaseKey(Keys.RIGHT);
                         pressKey(Keys.LEFT);
                     }
-                } else {
+                } else if (player.velocity.y <= 0) {
                     pressKey(Keys.UP);
                 }
             }

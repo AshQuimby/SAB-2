@@ -14,6 +14,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.seagull_engine.Seagraphics;
 
+import sab.game.ControllerManager;
 import sab.game.Game;
 import sab.game.SABSounds;
 import sab.game.fighter.Fighter;
@@ -86,8 +87,12 @@ public class CharacterSelectScreen extends ScreenAdapter {
 
             updateCharacterList = false;
         }
-
         return this;
+    }
+
+    public void start() {
+        player1.ready = false;
+        player2.ready = false;
     }
 
     @Override

@@ -11,7 +11,7 @@ public class DesertBridge extends StageType {
         stage.addStageObject(platform);
         stage.background = "desert_background.png";
         stage.music = "desert_bridge.mp3";
-        stage.maxZoomOut = 1.15f;
+        stage.maxZoomOut = 1.1f;
         stage.safeBlastZone = new Rectangle(-1184 / 2 - 64, -856 / 2 - 64, 1184 + 128, 856 + 128);
         stage.unsafeBlastZone = new Rectangle(-1184 / 2 - 128, -856 / 2 - 128, 1184 + 256, 856 + 256);
     }

@@ -8,7 +8,7 @@ import sab.game.attack.AttackType;
 import sab.game.fighter.FighterType;
 import sab.game.stage.StageType;
 
-// Everything here is handled by the game, unless a mod dev really wants to understand how the game works, reading this file is optional
+// Everything here is handled by the modloader, unless a mod dev really wants to understand how the game works, reading this file is optional
 
 public class Mod {
     public final String displayName;

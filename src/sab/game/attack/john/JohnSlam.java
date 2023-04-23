@@ -69,6 +69,13 @@ public class JohnSlam extends MeleeAttackType {
                 }
                 jumpTime--;
             }
+            if (attack.life > 0) {
+                attack.owner.frame = 0;
+            } else if (attack.owner.velocity.y > 0) {
+                attack.owner.frame = 8;
+            } else if (attack.owner.velocity.y < 0) {
+                attack.owner.frame = 9;
+            }
             slamSpeed = Math.max(-attack.owner.velocity.y, slamSpeed);
         }
     }

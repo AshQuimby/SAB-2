@@ -54,8 +54,8 @@ public class DuckGrab extends MeleeAttackType {
             if (--grabDuration <= 0) {
                 attack.alive = false;
             }
-            grabbedPlayer.velocity = new Vector2();
-            grabbedPlayer.hitbox.setCenter(attack.getCenter());
+            grabbedPlayer.velocity = new Vector2(0, -1f);
+            grabbedPlayer.hitbox.setCenter(attack.getCenter().add(0, 8));
             grabbedPlayer.stun(1);
             grabbedPlayer.frame = grabbedPlayer.fighter.knockbackAnimation.stepLooping();
             grabbedPlayer.direction = attack.owner.direction;

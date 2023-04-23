@@ -43,6 +43,7 @@ public class Firework extends AttackType {
     @Override
     public void hit(Attack attack, GameObject hit) {
         if (!exploded) {
+            attack.knockback.scl(2);
             exploded = true;
             attack.clearHitObjects();
         }

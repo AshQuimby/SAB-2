@@ -5,6 +5,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.seagull_engine.GameObject;
 
 import sab.game.Direction;
+import sab.game.SABSounds;
 import sab.game.attack.Attack;
 import sab.game.attack.AttackType;
 import sab.game.particle.Particle;
@@ -63,6 +64,7 @@ public class Toilet extends AttackType {
         attack.hitbox.setCenter(attack.owner.hitbox.getCenter(new Vector2()));
         attack.velocity = new Vector2(0, -1);
         attack.knockback = new Vector2(0, -6.5f);
+        SABSounds.playSound("toilet.mp3");
     }
 
     @Override

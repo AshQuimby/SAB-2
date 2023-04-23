@@ -5,7 +5,7 @@ import com.badlogic.gdx.math.Vector2;
 
 import sab.game.Game;
 import sab.game.Player;
-import sab.game.PlayerAction;
+import sab.game.action.PlayerAction;
 import sab.game.animation.Animation;
 import sab.game.attack.emperor_evil.Chomp;
 import sab.game.attack.emperor_evil.ExplosiveBarrel;

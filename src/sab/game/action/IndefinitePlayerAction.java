@@ -1,4 +1,4 @@
-package sab.game;
+package sab.game.action;
 
 import sab.game.animation.Animation;
 import sab.game.attack.Attack;

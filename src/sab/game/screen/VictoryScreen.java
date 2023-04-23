@@ -11,6 +11,8 @@ import sab.game.Settings;
 import sab.screen.Screen;
 import sab.screen.ScreenAdapter;
 
+import java.util.Set;
+
 public class VictoryScreen extends ScreenAdapter {
     public int setupTimer;
     private Player winner;
@@ -23,7 +25,7 @@ public class VictoryScreen extends ScreenAdapter {
         this.background = background;
         SABSounds.playMusic("leadup.mp3", false);
         setupTimer = -360;
-        if (Settings.getMusicVolume() == 0 || Settings.getMasterVolume() == 0) setupTimer = -60;
+        if (Boolean.parseBoolean(Settings.toHashMap().get("anticipation")) || Settings.getMusicVolume() == 0 || Settings.getMasterVolume() == 0) setupTimer = -60;
         Game.game.window.camera.viewportWidth = Game.game.window.resolutionX;
         Game.game.window.camera.viewportHeight = Game.game.window.resolutionY;
         Game.game.window.camera.position.x = 0;
@@ -68,6 +70,7 @@ public class VictoryScreen extends ScreenAdapter {
                 SABSounds.playSound(SABSounds.BLIP);
                 SABSounds.playMusic("lobby_music.mp3", true);
                 Game.selectNewTitleScreen();
+                Game.game.globalCharacterSelectScreen.start();
                 return Game.game.globalCharacterSelectScreen;
             } else {
                 setupTimer = -1;

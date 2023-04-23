@@ -10,17 +10,16 @@ public class BlockSmash extends AttackType {
     @Override
     public void setDefaults(Attack attack) {
         attack.imageName = "none.png";
-        attack.damage = 24;
-        attack.knockback = new Vector2(0, 12);
+        attack.damage = 12;
+        attack.knockback = new Vector2(0, 8);
         attack.hitCooldown = 30;
-        attack.life = 30;
+        attack.life = 4;
     }
 
     @Override
     public void onSpawn(Attack attack, int[] data) {
         attack.hitbox = new Rectangle(0, 0, 64, 64);
-        attack.hitbox.setCenter(attack.owner.getCenter());
-        attack.hitbox.height += 192;
+        attack.hitbox.setCenter(attack.owner.getCenter().add(0, -32));
     }
 
     @Override

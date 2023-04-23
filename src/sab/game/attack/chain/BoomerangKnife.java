@@ -7,6 +7,8 @@ import sab.game.SABSounds;
 import sab.game.attack.Attack;
 import sab.game.attack.AttackType;
 import sab.game.fighter.Chain;
+import sab.game.particle.Particle;
+import sab.util.Utils;
 
 public class BoomerangKnife extends AttackType {
     private boolean returning;
@@ -65,6 +67,8 @@ public class BoomerangKnife extends AttackType {
 
     @Override
     public void successfulHit(Attack attack, GameObject hit) {
-
+        for (int i = 0; i < 8; i++) {
+            attack.owner.battle.addParticle(new Particle(0.1f, hit.getCenter(), Utils.randomParticleVelocity(8), 32, 32, 0.9f, 0, "blood.png"));
+        }
     }
 }

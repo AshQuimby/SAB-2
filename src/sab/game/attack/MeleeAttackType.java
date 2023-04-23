@@ -5,6 +5,7 @@ import com.badlogic.gdx.math.Vector2;
 public class MeleeAttackType extends AttackType {
     protected Vector2 offset;
     protected boolean usePlayerDirection;
+    protected boolean killWhenPlayerStuck = true;
 
     protected void moveToPlayer(sab.game.attack.Attack attack) {
         if (usePlayerDirection) attack.direction = attack.owner.direction;
@@ -20,7 +21,7 @@ public class MeleeAttackType extends AttackType {
 
     @Override
     public void update(Attack attack) {
-        if (attack.owner.isStuck()) {
+        if (killWhenPlayerStuck && attack.owner.isStuck()) {
             attack.alive = false;
         }
         moveToPlayer(attack);

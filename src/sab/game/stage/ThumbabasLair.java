@@ -22,9 +22,17 @@ public class ThumbabasLair extends StageType {
         platform3.setCenter(-112, -98 - 64);
         platform4.setCenter(-416, -130 - 64);
 
-        stage.addStageObject(new sab.game.stage.Platform(platform1.x, platform1.y, 136, 20, "finger_platform.png", stage));
-        stage.addStageObject(new sab.game.stage.Platform(platform2.x, platform2.y, 136, 20, "finger_platform.png", stage));
-        stage.addStageObject(new sab.game.stage.Platform(platform3.x, platform3.y, 136, 20, "finger_platform.png", stage));
-        stage.addStageObject(new Platform(platform4.x, platform4.y, 136, 20, "finger_platform.png", stage));
+        Platform platform = new Platform(platform1.x, platform1.y, 136, 20, "finger_platform.png", stage);
+        platform.createLedges(32, 16, 32, stage);
+        stage.addStageObject(platform);
+        platform = new Platform(platform2.x, platform2.y, 136, 20, "finger_platform.png", stage);
+        platform.createLedges(32, 16, 32, stage);
+        stage.addStageObject(platform);
+        platform = new Platform(platform3.x, platform3.y, 136, 20, "finger_platform.png", stage);
+        platform.createLedges(32, 16, 32, stage);
+        stage.addStageObject(platform);
+        platform = new Platform(platform4.x, platform4.y, 136, 20, "finger_platform.png", stage);
+        platform.createLedges(32, 16, 32, stage);
+        stage.addStageObject(platform);
     }
 }

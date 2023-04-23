@@ -6,7 +6,9 @@ import com.seagull_engine.GameObject;
 import com.seagull_engine.Seagraphics;
 
 import sab.game.*;
+import sab.game.action.PlayerAction;
 import sab.game.animation.Animation;
+import sab.game.attack.Attack;
 import sab.game.attack.stephane.Baguette;
 import sab.game.attack.stephane.Arrow;
 import sab.game.attack.stephane.BlockSmash;
@@ -80,6 +82,7 @@ public class Stephane extends FighterType {
                 }
             }
         }
+        player.battle.addAttack(new Attack(new BlockSmash(), player), new int[0]);
         return true;
     }
 
@@ -157,7 +160,7 @@ public class Stephane extends FighterType {
         createBlock(player, player.battle.getStage());
         createBlock(player, player.battle.getStage());
         blockPlaceAnimation.reset();
-        player.startAttack(new BlockSmash(), blockPlaceAnimation, 1, 12, false, null);
+        player.startAnimation(1, blockPlaceAnimation, 12, false);
     }
 
     @Override

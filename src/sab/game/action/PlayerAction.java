@@ -1,7 +1,8 @@
-package sab.game;
+package sab.game.action;
 
 import com.badlogic.gdx.math.Vector2;
 
+import sab.game.Player;
 import sab.game.animation.Animation;
 import sab.game.attack.Attack;
 

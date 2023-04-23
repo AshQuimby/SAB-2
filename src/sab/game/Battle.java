@@ -112,8 +112,6 @@ public class Battle {
         addGameObject(player1);
         addGameObject(player2);
 
-        drawHitboxes = false;
-
         for (GameObject stageObject : stage.getStageObjects()) {
             addGameObject(stageObject);
         }
@@ -181,7 +179,12 @@ public class Battle {
     }
 
     public void shakeCamera(int intensity) {
-        if (intensity > cameraShake) cameraShake = intensity;
+        if (Boolean.parseBoolean(Settings.toHashMap().get("screen_shake"))) {
+            if (intensity > cameraShake) cameraShake = intensity;
+            for (PlayerController playerController : Game.game.controllerManager.getControllers()) {
+                playerController.startVibration(cameraShake, Math.min(10, cameraShake) / 10f);
+            }
+        }
     }
 
     public int getIdByGameObject(GameObject gameObject) {
@@ -262,7 +265,7 @@ public class Battle {
         if (badX && badX2) camera.targetPosition.x = stage.getSafeBlastZone().x + stage.getSafeBlastZone().width / 2;
         if (badY && badY2) camera.targetPosition.y = stage.getSafeBlastZone().y + stage.getSafeBlastZone().height / 2;
 
-        if (slowdownDuration > 0) camera.updateSeagullCamera(24 + slowdown * 4); else camera.updateSeagullCamera(8);
+        if (slowdownDuration > 0) camera.updateSeagullCamera(16 + slowdown * 2); else camera.updateSeagullCamera(8);
     }
 
     public void updateCameraEffects() {
@@ -539,8 +542,8 @@ public class Battle {
     public void render(Seagraphics g) {
         updateCameraPosition();
 
-        g.getDynamicCamera().position.x += cameraShakeVector.x;
-        g.getDynamicCamera().position.y += cameraShakeVector.y;
+        g.getDynamicCamera().position.x += cameraShakeVector.x / (slowdown + 1);
+        g.getDynamicCamera().position.y += cameraShakeVector.y / (slowdown + 1);
         g.useStaticCamera();
         g.scalableDraw(g.imageProvider.getImage(stage.background), -1280 / 2, -720 / 2, 1280, 720);
         g.useDynamicCamera();

@@ -6,6 +6,8 @@ import com.seagull_engine.GameObject;
 import sab.game.SABSounds;
 import sab.game.attack.MeleeAttackType;
 import sab.game.attack.Attack;
+import sab.game.particle.Particle;
+import sab.util.Utils;
 
 public class ChainSlash extends MeleeAttackType {
     @Override
@@ -34,13 +36,16 @@ public class ChainSlash extends MeleeAttackType {
     }
 
     @Override
-    public void hit(Attack attack, GameObject hit) {
-    }
-
-    @Override
     public void onSpawn(Attack attack, int[] data) {
         super.onSpawn(attack, data);
         attack.knockback = new Vector2(8 * attack.owner.direction, 4);
         SABSounds.playSound("swish.mp3");
+    }
+
+    @Override
+    public void successfulHit(Attack attack, GameObject hit) {
+        for (int i = 0; i < 8; i++) {
+            attack.owner.battle.addParticle(new Particle(0.1f, hit.getCenter(), Utils.randomParticleVelocity(8), 32, 32, 0.9f, 0, "blood.png"));
+        }
     }
 }

@@ -4,11 +4,10 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.seagull_engine.GameObject;
 
-import sab.game.PlayerAction;
+import sab.game.action.PlayerAction;
 import sab.game.animation.Animation;
 import sab.game.attack.Attack;
 import sab.game.attack.AttackType;
-import sab.net.Keys;
 
 public class Racket extends AttackType {
 
