@@ -6,6 +6,7 @@ import sab.game.Game;
 import sab.game.Player;
 import sab.game.animation.Animation;
 import sab.game.attack.Attack;
+import sab.game.attack.empty_soldier.AngrySoul;
 import sab.game.attack.empty_soldier.EmptySoldierSlash;
 import sab.game.attack.empty_soldier.ShadowPlunge;
 import sab.game.attack.empty_soldier.ViceroyWings;
@@ -15,6 +16,8 @@ import sab.util.Utils;
 public class EmptySoldier extends FighterType {
     private int spirit;
     private Animation swingAnimation;
+    private Animation castAnimation;
+    private int ticksSinceCast;
 
     @Override
     public void setDefaults(Fighter fighter) {
@@ -43,6 +46,8 @@ public class EmptySoldier extends FighterType {
 
         spirit = 100;
         swingAnimation = new Animation(new int[] {4, 5, 6, 0}, 2, true);
+        castAnimation = new Animation(11, 13, 6, false);
+        ticksSinceCast = 30;
     }
 
     @Override
@@ -50,10 +55,27 @@ public class EmptySoldier extends FighterType {
         if (!player.hasAction() && !player.touchingStage && !player.grabbingLedge()) {
             player.frame = player.velocity.y > -5 ? 7 : 8;
         }
+
+        if (++ticksSinceCast < 30) {
+            player.velocity.y = 0;
+            player.frame = castAnimation.stepLooping();
+        }
     }
 
     @Override
     public void neutralAttack(Fighter fighter, Player player) {
+        if (spirit >= 15) {
+            castAnimation.reset();
+            player.startAttack(new AngrySoul(), null, 10,  20, false);
+            ticksSinceCast = 0;
+            spirit -= 15;
+        } else {
+            sideAttack(fighter, player);
+        }
+    }
+
+    @Override
+    public void sideAttack(Fighter fighter, Player player) {
         swingAnimation.reset();
         player.startAttack(new EmptySoldierSlash(), swingAnimation, 6, 6, false);
     }

@@ -39,13 +39,13 @@ public class ShadowPlunge extends AttackType {
             attack.hitbox.height = 64;
             attack.life = 1;
             attack.clearHitObjects();
-            System.out.println("a");
         }
 
         if (attack.life == 1) {
             for (int i = 0; i < 5; i++) {
-                Vector2 particleVelocity = new Vector2(MathUtils.random(-4, 4), MathUtils.random(0, 2));
-                Particle particle = new Particle(Utils.randomPointInRect(attack.drawRect), particleVelocity, 32, 32, 6, 5, particleVelocity.x > 0 ? 1 : -1, "shadowling.png");
+                Vector2 particlePosition = new Vector2(MathUtils.random(attack.owner.hitbox.x, attack.owner.hitbox.x + attack.owner.hitbox.width), attack.owner.hitbox.y);
+                Vector2 particleVelocity = new Vector2(MathUtils.random(-4, 4), MathUtils.random(0, 5));
+                Particle particle = new Particle(particlePosition, particleVelocity, 32, 32, 6, 5, particleVelocity.x > 0 ? 1 : -1, "shadowling.png");
                 attack.owner.battle.addParticle(particle);
             }
         }
