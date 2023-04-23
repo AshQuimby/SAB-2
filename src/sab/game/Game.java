@@ -3,8 +3,6 @@ package sab.game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.controllers.*;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.math.MathUtils;
 import com.seagull_engine.Messenger;
 import com.seagull_engine.Seagraphics;
@@ -64,7 +62,7 @@ public class Game extends Messenger {
         Settings.loadSettings();
         Mod baseGame = new Mod("Super Ass Brothers: Remasstered", "sab", "1.0", "Base game content");
         try {
-            baseGame.addFighters((Class<? extends FighterType>[]) new Class<?>[]{Marvin.class, Chain.class, Walouis.class, Gus.class, EmperorEvil.class, Snas.class, Stephane.class, UnnamedDuck.class, Matthew.class, EmptySoldier.class, John.class, BowlBoy.class, BigSeagull.class });
+            baseGame.addFighters((Class<? extends FighterType>[]) new Class<?>[]{Marvin.class, Chain.class, Walouis.class, Gus.class, EmperorEvil.class, Snas.class, Stephane.class, UnnamedDuck.class, Matthew.class, EmptySoldier.class, John.class, BigSeagull.class });
             baseGame.addStages((Class<? extends StageType>[]) new Class<?>[]{LastLocation.class, Warzone.class, DesertBridge.class, ThumbabasLair.class, OurSports.class, COBS.class, Boxtopia.class });
         } catch (Exception e) {
             throw new RuntimeException("Like actually what the hell, how did you break this. You should not be able to break this unless your brain cell count reached the long limit.");
@@ -93,22 +91,6 @@ public class Game extends Messenger {
 
     public static int getTick() {
         return game.window.getTick();
-    }
-
-    public static BitmapFont getDefaultFont() {
-        String fontId = Settings.getDefaultFont();
-        BitmapFont font = game.window.imageProvider.getFont(fontId);
-        if (font == null) return game.window.imageProvider.getFont("SAB_font");
-        return font;
-    }
-
-    public static float getDefaultFontScale() {
-        String fontId = Settings.getDefaultFont();
-        if (fontId.equals("SAB_font")) {
-            return 1f;
-        } else {
-            return 1.5f;
-        }
     }
 
     // Randomly selects a title screen background

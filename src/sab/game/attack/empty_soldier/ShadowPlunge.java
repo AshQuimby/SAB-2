@@ -6,6 +6,7 @@ import com.seagull_engine.GameObject;
 import sab.game.attack.Attack;
 import sab.game.attack.AttackType;
 import sab.game.particle.Particle;
+import sab.util.Utils;
 
 public class ShadowPlunge extends AttackType {
     @Override
@@ -30,7 +31,7 @@ public class ShadowPlunge extends AttackType {
         attack.velocity.y -= 1f;
         attack.owner.hitbox.setCenter(attack.hitbox.getCenter(new Vector2()));
         attack.frame = (attack.life / 5) % 5;
-        attack.owner.frame = 7;
+        attack.owner.frame = 8;
         attack.drawRect.y += 28;
 
         if (attack.owner.touchingStage) {
@@ -38,11 +39,14 @@ public class ShadowPlunge extends AttackType {
             attack.hitbox.height = 64;
             attack.life = 1;
             attack.clearHitObjects();
+            System.out.println("a");
         }
 
         if (attack.life == 1) {
-            for (int i = 0; i < 20; i++) {
-                //attack.owner.battle.addParticle(new Particle(attack.hitbox.getCenter(new Vector2()), new Vector2(4 * MathUtils.random(), 0).rotateDeg(MathUtils.random() * 360), 128, 128, 0, "shadowling.png"));
+            for (int i = 0; i < 5; i++) {
+                Vector2 particleVelocity = new Vector2(MathUtils.random(-4, 4), MathUtils.random(0, 2));
+                Particle particle = new Particle(Utils.randomPointInRect(attack.drawRect), particleVelocity, 32, 32, 6, 5, particleVelocity.x > 0 ? 1 : -1, "shadowling.png");
+                attack.owner.battle.addParticle(particle);
             }
         }
     }
