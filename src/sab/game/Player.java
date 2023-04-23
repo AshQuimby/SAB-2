@@ -483,6 +483,7 @@ public class Player extends GameObject implements Hittable {
                 SABSounds.playSound("jump.mp3");
             } else if (extraJumpsUsed < fighter.airJumps && velocity.y < getJumpVelocity() * fighter.doubleJumpMultiplier) {
                 velocity.y = getJumpVelocity() * fighter.doubleJumpMultiplier;
+                SABSounds.playSound("double_jump.mp3");
                 extraJumpsUsed++;
                 battle.addParticle(new Particle(getCenter().sub(0, hitbox.height / 2), new Vector2(), 56, 16, 3, 3, direction, "double_jump.png"));
             }

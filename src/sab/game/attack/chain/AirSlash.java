@@ -74,6 +74,6 @@ public class AirSlash extends MeleeAttackType {
         super.onSpawn(attack, data);
         attack.owner.velocity.y *= 0.05f;
         attack.owner.touchingStage = false;
-        attack.knockback = new Vector2(0, 1);
+        attack.knockback = new Vector2(0, 4f);
     }
 }

@@ -41,7 +41,7 @@ public class Marvin extends FighterType {
         fighter.mass = 5f;
         fighter.airJumps = 1;
         fighter.walkAnimation = new Animation(0, 3, 5, true);
-        fighter.description = "Retired Albany plumber now princess saving daydreamer, Marvin is a troubled man who is always distracted by his dreams about the things he could be. He can't seem to escape from his brother's sucess as a musician.";
+        fighter.description = "Retired Albany plumber now princess saving daydreamer, Marvin is a troubled man who is always distracted by his dreams about the things he could be. He can't seem to escape from his brother's success as a musician.";
         fighter.debut = "Super Marvin Plumber";
 
         swingAnimation = new Animation(new int[] {4, 5, 0}, 7, true);
@@ -112,7 +112,7 @@ public class Marvin extends FighterType {
     @Override
     public void upAttack(sab.game.fighter.Fighter fighter, Player player) {
         if (!player.usedRecovery) {
-            if (toilet == null || toilet.alive) {
+            if (toilet == null || !toilet.alive) {
                 squatAnimation.reset();
                 player.startAttack(new Toilet(), squatAnimation, 4, 30, false);
                 player.removeJumps();

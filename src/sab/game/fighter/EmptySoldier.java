@@ -12,7 +12,7 @@ public class EmptySoldier extends FighterType {
     @Override
     public void setDefaults(Fighter fighter) {
         fighter.id = "empty_soldier";
-        fighter.name = "The Soldier";
+        fighter.name = "Empty Soldier";
         fighter.hitboxWidth = 32;
         fighter.hitboxHeight = 64;
         fighter.renderWidth = 64;
@@ -28,7 +28,7 @@ public class EmptySoldier extends FighterType {
         fighter.mass = 4.13f;
         fighter.walkAnimation = new Animation(1, 3, 5, true);
         fighter.costumes = 3;
-        fighter.description = "";
+        fighter.description = "FOR THE LAST TIME. EMPTY SOLDIER WAS THE NAME OF THE SCIENTIST! THE BUG IS CALLED: \"EMPTY SOLDIER'S MONSTER!\"";
         fighter.debut = "Empty Soldier";
         fighter.freefallAnimation = new Animation(new int[] { 7 }, 1, false);
 
