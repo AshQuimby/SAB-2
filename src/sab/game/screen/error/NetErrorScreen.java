@@ -20,8 +20,8 @@ public class NetErrorScreen extends ScreenAdapter {
     @Override
     public void render(Seagraphics g) {
         g.scalableDraw(g.imageProvider.getImage("error_background.png"), -Game.game.window.resolutionX / 2, -Game.game.window.resolutionY / 2, Game.game.window.resolutionX, Game.game.window.resolutionY);
-        g.drawText(error.type(), g.imageProvider.getFont("SAB_font"), 0, 64, 2f, Color.WHITE, 0);
-        g.drawText(error.message(), g.imageProvider.getFont("SAB_font"), 0, 0, 1.5f, Color.WHITE, 0);
+        g.drawText(error.type(), Game.getDefaultFont(), 0, 64, 2f, Color.WHITE, 0);
+        g.drawText(error.message(), Game.getDefaultFont(), 0, 0, 1.5f, Color.WHITE, 0);
     }
 
     @Override

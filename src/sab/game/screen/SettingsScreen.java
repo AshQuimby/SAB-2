@@ -27,12 +27,12 @@ public class SettingsScreen extends SelectorScreen {
         subSelection = new String[][] {
                 new String[] { "Stage Hazards", "Spawn Ass Balls", "Victory Anticipation", "Debug Mode", "Back" },
                 new String[] { "Master Volume", "Music Volume", "SFX Volume", "Back" },
-                new String[] { "Default Fullscreened", "Static Camera", "Screen Shake", "Back" }
+                new String[] { "Default Fullscreened", "Static Camera", "Screen Shake", "Font", "Back" }
         };
         subSelectionSettingIds = new String[][] {
                 new String[] { "stage_hazards", "ass_balls", "anticipation", "debug_mode" },
                 new String[] { "master_volume", "music_volume", "sfx_volume" },
-                new String[] { "fullscreen", "static_camera", "screen_shake" },
+                new String[] { "fullscreen", "static_camera", "screen_shake", "font" },
         };
         settings = Settings.toHashMap();
 
@@ -100,7 +100,18 @@ public class SettingsScreen extends SelectorScreen {
             if (subSelectionIndex < subSelectionSettingIds[selectorIndex].length) {
                 String key = subSelectionSettingIds[selectorIndex][subSelectionIndex];
                 if (selectorIndex == 0 || selectorIndex == 2) {
-                    settings.replace(key, "true");
+                    if (subSelectionIndex == 3) {
+                        switch (settings.get(key)) {
+                            case "SAB_font" :
+                                settings.replace(key, "comic_snas");
+                                break;
+                            case "comic_snas" :
+                                settings.replace(key, "SAB_font");
+                                break;
+                        }
+                    } else {
+                        settings.replace(key, "true");
+                    }
                 } else {
                     settings.replace(key, "" + Math.min(Float.parseFloat(settings.get(key)) + 0.05f, 1));
                 }
@@ -137,7 +148,18 @@ public class SettingsScreen extends SelectorScreen {
             if (subSelectionIndex < subSelectionSettingIds[selectorIndex].length) {
                 String key = subSelectionSettingIds[selectorIndex][subSelectionIndex];
                 if (selectorIndex == 0 || selectorIndex == 2) {
-                    settings.replace(key, "false");
+                    if (subSelectionIndex == 3) {
+                        switch (settings.get(key)) {
+                            case "SAB_font" :
+                                settings.replace(key, "comic_snas");
+                                break;
+                            case "comic_snas" :
+                                settings.replace(key, "SAB_font");
+                                break;
+                        }
+                    } else {
+                        settings.replace(key, "false");
+                    }
                 } else {
                     settings.replace(key, "" + Math.max(Float.parseFloat(settings.get(key)) - 0.05f, 0));
                 }
@@ -200,21 +222,21 @@ public class SettingsScreen extends SelectorScreen {
         g.scalableDraw(g.imageProvider.getImage("settings_screen_background.png"), -Game.game.window.resolutionX / 2, -Game.game.window.resolutionY / 2, Game.game.window.resolutionX, Game.game.window.resolutionY);
 
         String title = options[selectorIndex];
-        Rectangle bounds = g.getTextBounds(title, g.imageProvider.getFont("SAB_font"), 0, 320, 2, 0);
+        Rectangle bounds = g.getTextBounds(title, Game.getDefaultFont(), 0, 320, 2 * Game.getDefaultFontScale(), 0);
         g.usefulTintDraw(g.imageProvider.getImage("pixel.png"), bounds.x - 4, bounds.y + 4, (int) bounds.width + 9, (int) -bounds.height - 9, 0, 1, 0, false, false, new Color(0, 0, 0, 0.5f));
-        g.drawText(title, g.imageProvider.getFont("SAB_font"), 0, 320, 2, Color.WHITE, 0);
+        g.drawText(title, Game.getDefaultFont(), 0, 320, 2 * Game.getDefaultFontScale(), Color.WHITE, 0);
         if (inSubSelection) {
             g.usefulTintDraw(g.imageProvider.getImage("pixel.png"), bounds.x - 4, bounds.y + 4, (int) bounds.width + 9, (int) -bounds.height - 9, 0, 1, 0, false, false, new Color(0, 0, 0, 0.25f));
         }
 //        for (int i = 0; i < options.length; i++) {
-//            Rectangle bounds = g.drawText(options[i], g.imageProvider.getFont("SAB_font"), Game.game.window.resolutionX / 2 - 8,  i * -52 - 16, 1.5f, Color.WHITE, 1);
+//            Rectangle bounds = g.drawText(options[i], Game.getDefaultFont(), Game.game.window.resolutionX / 2 - 8,  i * -52 - 16, 1.5f, Color.WHITE, 1);
 //
 //            float color = i == selectorIndex ? 1f : 0;
 //
 //            g.usefulTintDraw(g.imageProvider.getImage("pixel.png"), bounds.x - 4, bounds.y + 4, (int) bounds.width + 9, (int) -bounds.height - 9, 1, 0, 0, false, false,
 //                    new Color(color, color, color, 0.5f));
 //
-//            g.drawText(options[i], g.imageProvider.getFont("SAB_font"),  Game.game.window.resolutionX / 2 - 8,  i * -52 - 16, 1.5f, Color.WHITE, 1);
+//            g.drawText(options[i], Game.getDefaultFont(),  Game.game.window.resolutionX / 2 - 8,  i * -52 - 16, 1.5f, Color.WHITE, 1);
 //        }
 
         String setting = "";
@@ -226,7 +248,21 @@ public class SettingsScreen extends SelectorScreen {
         } else {
             setting = settings.get(subSelectionSettingIds[selectorIndex][subSelectionIndex]);
             if (selectorIndex == 1) {
-                setting =  Math.round(Float.parseFloat(setting) * 100) + "%";
+                setting = Math.round(Float.parseFloat(setting) * 100) + "%";
+            } else if (selectorIndex == 2 && subSelectionIndex == 3) {
+                switch (settings.get("font")) {
+                    case "SAB_font" :
+                        setting = "SAB Font";
+                        break;
+                    case "arial" :
+                        setting = "Arial";
+                        break;
+                    case "comic_snas" :
+                        setting = "Comic Snas";
+                        break;
+                }
+            } else {
+                setting = ("" + setting.charAt(0)).toUpperCase() + setting.substring(1);
             }
         }
 
@@ -236,10 +272,10 @@ public class SettingsScreen extends SelectorScreen {
                 String settingName = subSelection[selectorIndex][i];
                 int x = Game.game.window.resolutionX / 2 - 16;
                 int y = -60 - i * 40;
-                bounds = g.getTextBounds(settingName, g.imageProvider.getFont("SAB_font"), x, y, 1.25f, 1);
+                bounds = g.getTextBounds(settingName, Game.getDefaultFont(), x, y, 1.25f * Game.getDefaultFontScale(), 1);
                 Color buttonColor = subSelectionIndex == i ? new Color(1, 1, 1, 0.5f) : new Color(0, 0, 0, 0.5f);
                 g.usefulTintDraw(g.imageProvider.getImage("pixel.png"), bounds.x - 4, bounds.y + 4, (int) bounds.width + 9, (int) -bounds.height - 9, 0, 1, 0, false, false, buttonColor);
-                g.drawText(settingName, g.imageProvider.getFont("SAB_font"), x, y, 1.25f, Color.WHITE, 1);
+                g.drawText(settingName, Game.getDefaultFont(), x, y, 1.25f * Game.getDefaultFontScale(), Color.WHITE, 1);
             }
             if (!inSubSelection) {
                 g.usefulTintDraw(g.imageProvider.getImage("pixel.png"), Game.game.window.resolutionX / 2 - 500, -Game.game.window.resolutionY / 2, 500, 350, 0, 1, 0, false, false, new Color(0, 0, 0, 0.25f));
@@ -247,12 +283,12 @@ public class SettingsScreen extends SelectorScreen {
         }
 
 
-        bounds = g.getTextBounds(setting, g.imageProvider.getFont("SAB_font"), 0, 0, textSize, 0);
+        bounds = g.getTextBounds(setting, Game.getDefaultFont(), 0, 0, textSize * Game.getDefaultFontScale(), 0);
 
         g.usefulTintDraw(g.imageProvider.getImage("pixel.png"), bounds.x - 4, bounds.y + 4, (int) bounds.width + 9, (int) -bounds.height - 9, 1, 0, 0, false, false,
                 new Color(0, 0, 0, 0.5f));
 
-        g.drawText(setting, g.imageProvider.getFont("SAB_font"),  0, 0, textSize, Color.WHITE, 0);
+        g.drawText(setting, Game.getDefaultFont(),  0, 0, textSize * Game.getDefaultFontScale(), Color.WHITE, 0);
 
     }
 }

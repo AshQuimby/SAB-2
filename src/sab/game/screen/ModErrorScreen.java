@@ -32,7 +32,7 @@ public class ModErrorScreen extends ScreenAdapter {
         for (int i = 0; i < errors.size(); i++) {
             float size;
             if (i == 0) size = 2; else size = 0.75f;
-            Rectangle bounds = g.drawText(errors.get(i), g.imageProvider.getFont("SAB_font"), 0, scrollDistance - length + 256, size, Color.WHITE, 0);
+            Rectangle bounds = g.drawText(errors.get(i), Game.getDefaultFont(), 0, scrollDistance - length + 256, size * Game.getDefaultFontScale(), Color.WHITE, 0);
 
             length += bounds.height + 24;
         }

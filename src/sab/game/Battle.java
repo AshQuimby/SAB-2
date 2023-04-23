@@ -602,8 +602,8 @@ public class Battle {
             g.scalableDraw(g.imageProvider.getImage("life_p2.png"), 256 - 128 + 48 + 24 * i, -256 - 12, 20, 20);
         }
 
-        g.drawText(player1.damage + "%", g.imageProvider.getFont("SAB_font"), -256 + 116, -256 + 48, 1, Color.WHITE, 1);
-        g.drawText(player2.damage + "%", g.imageProvider.getFont("SAB_font"), 256 - 128 + 116, -256 + 48, 1, Color.WHITE, 1);
+        g.drawText(player1.damage + "%", Game.getDefaultFont(), -256 + 116, -256 + 48, Game.getDefaultFontScale(), Color.WHITE, 1);
+        g.drawText(player2.damage + "%", Game.getDefaultFont(), 256 - 128 + 116, -256 + 48, Game.getDefaultFontScale(), Color.WHITE, 1);
 
         for (Player player : players) {
             player.fighter.renderUI(player, g);
@@ -611,7 +611,7 @@ public class Battle {
 
         if (gameOver()) {
             g.usefulTintDraw(g.imageProvider.getImage("pixel.png"), -1280 / 2, -720 / 2, 1280, 720, 0, 1, 0, false, false, new Color(0, 0, 0, 1 - ((121f - endGameTimer) / 120)));
-            g.drawText("GAME END", g.imageProvider.getFont("SAB_font"), 0, 0, 2.5f - ((121f - endGameTimer) / 120) / 2, Color.WHITE, 0);
+            g.drawText("GAME END", Game.getDefaultFont(), 0, 0, 2.5f - ((121f - endGameTimer) / 120) / 2 * Game.getDefaultFontScale(), Color.WHITE, 0);
         }
 
         if (paused && !pauseOverlayHidden) {

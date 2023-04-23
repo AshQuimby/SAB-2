@@ -75,8 +75,8 @@ public class Dialogue {
         String dialogue = Utils.textWrap(g, getCurrent(), 1, Game.game.window.resolutionX);
         g.scalableDraw(g.imageProvider.getImage("dialogue_back.png"), -Game.game.window.resolutionX / 2, -Game.game.window.resolutionY / 2, Game.game.window.resolutionX, Game.game.window.resolutionY);
         g.scalableDraw(g.imageProvider.getImage(getPortrait()), -Game.game.window.resolutionX / 2 + 8, -Game.game.window.resolutionY / 2 + 4, 176, 176);
-        g.drawText(dialogue, g.imageProvider.getFont("SAB_font"), -Game.game.window.resolutionX / 2 + 176 + 40, -Game.game.window.resolutionY / 2 + 176 - 12, 1, Color.WHITE, -1);
-        g.drawText(getName(), g.imageProvider.getFont("SAB_font"), -Game.game.window.resolutionX / 2 + 88 + 8, -Game.game.window.resolutionY / 2 + 28, 1, Color.WHITE, 0);
+        g.drawText(dialogue, Game.getDefaultFont(), -Game.game.window.resolutionX / 2 + 176 + 40, -Game.game.window.resolutionY / 2 + 176 - 12, Game.getDefaultFontScale(), Color.WHITE, -1);
+        g.drawText(getName(), Game.getDefaultFont(), -Game.game.window.resolutionX / 2 + 88 + 8, -Game.game.window.resolutionY / 2 + 28, Game.getDefaultFontScale(), Color.WHITE, 0);
         g.scalableDraw(g.imageProvider.getImage("dialogue_overlay.png"), -Game.game.window.resolutionX / 2, -Game.game.window.resolutionY / 2, Game.game.window.resolutionX, Game.game.window.resolutionY);
     }
 }

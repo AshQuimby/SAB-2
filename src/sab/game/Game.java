@@ -3,6 +3,8 @@ package sab.game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.controllers.*;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.math.MathUtils;
 import com.seagull_engine.Messenger;
 import com.seagull_engine.Seagraphics;
@@ -91,6 +93,22 @@ public class Game extends Messenger {
 
     public static int getTick() {
         return game.window.getTick();
+    }
+
+    public static BitmapFont getDefaultFont() {
+        String fontId = Settings.getDefaultFont();
+        BitmapFont font = game.window.imageProvider.getFont(fontId);
+        if (font == null) return game.window.imageProvider.getFont("SAB_font");
+        return font;
+    }
+
+    public static float getDefaultFontScale() {
+        String fontId = Settings.getDefaultFont();
+        if (fontId.equals("SAB_font")) {
+            return 1f;
+        } else {
+            return 1.5f;
+        }
     }
 
     // Randomly selects a title screen background

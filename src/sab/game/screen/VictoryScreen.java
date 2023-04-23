@@ -49,14 +49,14 @@ public class VictoryScreen extends ScreenAdapter {
         g.scalableDraw(g.imageProvider.getImage("victory_background_layer_2.png"), -Game.game.window.resolutionX / 2, -Game.game.window.resolutionY / 2, Game.game.window.resolutionX, Game.game.window.resolutionY);
 
         if (winner.fighter.name.equals("Tie")) {
-            g.drawText("TIE GAME!", g.imageProvider.getFont("SAB_font"), 0, Game.game.window.resolutionY / 2 - 64, 3, Color.WHITE, 0);
+            g.drawText("TIE GAME!", Game.getDefaultFont(), 0, Game.game.window.resolutionY / 2 - 64, 3 * Game.getDefaultFontScale(), Color.WHITE, 0);
         }else {
-            g.drawText(winner.fighter.name.toUpperCase() + " WINS!", g.imageProvider.getFont("SAB_font"), 0, Game.game.window.resolutionY / 2 - 64, 3, Color.WHITE, 0);
+            g.drawText(winner.fighter.name.toUpperCase() + " WINS!", Game.getDefaultFont(), 0, Game.game.window.resolutionY / 2 - 64, 3 * Game.getDefaultFontScale(), Color.WHITE, 0);
         }
 
-        g.drawText(winner.gameStats.toString(), g.imageProvider.getFont("SAB_font"), -Game.game.window.resolutionX / 2 + 32, Game.game.window.resolutionY / 2 - 220, 1, Color.WHITE, -1);
+        g.drawText(winner.gameStats.toString(), Game.getDefaultFont(), -Game.game.window.resolutionX / 2 + 32, Game.game.window.resolutionY / 2 - 220, Game.getDefaultFontScale(), Color.WHITE, -1);
 
-        g.drawText(loser.gameStats.toString(), g.imageProvider.getFont("SAB_font"), -Game.game.window.resolutionX / 2 + 256 + 64, Game.game.window.resolutionY / 2 - 220 - 128, 1, Color.WHITE, -1);
+        g.drawText(loser.gameStats.toString(), Game.getDefaultFont(), -Game.game.window.resolutionX / 2 + 256 + 64, Game.game.window.resolutionY / 2 - 220 - 128, Game.getDefaultFontScale(), Color.WHITE, -1);
     
         g.usefulTintDraw(g.imageProvider.getImage("pixel.png"), -Game.game.window.resolutionX / 2, -Game.game.window.resolutionY / 2, Game.game.window.resolutionX, Game.game.window.resolutionY, 0, 1, 0, false, false, setupTimer < 0 ? new Color(0, 0, 0, 1) : new Color(1, 1, 1, Math.max(Math.min(1f, ((255 - setupTimer * 15f) / 255f)), 0)));
         

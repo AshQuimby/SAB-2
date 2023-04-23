@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.ArrayList;
 
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import sab.game.Game;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
@@ -23,7 +24,11 @@ public class Utils {
     }
 
     public static String textWrap(Seagraphics g, String text, float size, int maxLength) {
-        
+        return textWrap(g, Game.getDefaultFont(), text, size * Game.getDefaultFontScale(), maxLength);
+    }
+
+    public static String textWrap(Seagraphics g, BitmapFont font, String text, float size, int maxLength) {
+
         String reader = "";
 
         List<String> textLines = new ArrayList<>();
@@ -35,7 +40,7 @@ public class Utils {
         } else {
             for (String string : splitText) {
                 reader += string + " ";
-                if (g.getTextBounds(reader, g.imageProvider.getFont("SAB_font"), -Game.game.window.resolutionX / 2 + 32, Game.game.window.resolutionY / 2 - 220, size, -1).width > maxLength || string.equals("\n")) {
+                if (g.getTextBounds(reader, Game.getDefaultFont(), -Game.game.window.resolutionX / 2 + 32, Game.game.window.resolutionY / 2 - 220, size, -1).width > maxLength || string.equals("\n")) {
                     if(!(reader.equals("") || text.equals(" ")) && !string.equals("\n")) textLines.add(reader);
                     if (!string.equals("\n")) reader = "";
                 }

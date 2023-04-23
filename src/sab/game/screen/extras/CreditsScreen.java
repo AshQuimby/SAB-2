@@ -55,13 +55,13 @@ public class CreditsScreen extends ScreenAdapter {
         g.scalableDraw(g.imageProvider.getImage("background.png"), -Game.game.window.resolutionX / 2, -Game.game.window.resolutionY / 2, Game.game.window.resolutionX, Game.game.window.resolutionY);
         float length = 0;
         for (int i = 0; i < text.size(); i++) {
-            Rectangle bounds = g.drawText(text.get(i), g.imageProvider.getFont("SAB_font"), 0, scrollDistance - length, sizes.get(i) / 25, Color.WHITE, 0);
+            Rectangle bounds = g.drawText(text.get(i), Game.getDefaultFont(), 0, scrollDistance - length, sizes.get(i) / 25, Color.WHITE, 0);
 
             if (!text.get(i).equals("")) { 
                 g.usefulTintDraw(g.imageProvider.getImage("pixel.png"), bounds.x - 4, bounds.y + 4, (int) bounds.width + 9, (int) -bounds.height - 9, 1, 0, 0, false, false,
                     new Color(0, 0, 0, 0.5f));
 
-                g.drawText(text.get(i), g.imageProvider.getFont("SAB_font"), 0, scrollDistance - length, sizes.get(i) / 25, Color.WHITE, 0);
+                g.drawText(text.get(i), Game.getDefaultFont(), 0, scrollDistance - length, sizes.get(i) / 25, Color.WHITE, 0);
             }
 
             length += bounds.height + 4;

@@ -51,7 +51,7 @@ public class StageSelectScreen extends ScreenAdapter {
         stages.get(stageIndex).renderDetails(g);
         stages.get(stageIndex).renderPlatforms(g);
         g.usefulTintDraw(g.imageProvider.getImage("pixel.png"), -1280 / 2, -720 / 2, 1280 , 720, 0, 1, 0, false, false, new Color(0, 0, 0, 0.5f));
-        g.drawText(stages.get(stageIndex).name, g.imageProvider.getFont("SAB_font"), 0, 256, 2, Color.WHITE, 0);
+        g.drawText(stages.get(stageIndex).name, Game.getDefaultFont(), 0, 256, 2, Color.WHITE, 0);
     }
 
     @Override

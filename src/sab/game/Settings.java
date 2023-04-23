@@ -19,6 +19,7 @@ public class Settings {
     private static boolean anticipation;
     private static boolean debugMode;
     private static int hostingPort;
+    private static String font;
 
     public static void loadSettings() {
         HashMap<String, String> settings = null;
@@ -55,8 +56,11 @@ public class Settings {
         stageHazards = true;
         debugMode = false;
         hostingPort = 19128;
+        font = "SAB_font";
     }
 
+    // Don't use, leaving here just in case I want to come back to it at some point
+    @Deprecated
     public static void setSettings(boolean staticCameraSetting, float volumeSetting, float musicSetting, float sfxSetting, int hostingPortSetting) {
         staticCamera = staticCameraSetting;
         masterVolume = volumeSetting;
@@ -86,6 +90,7 @@ public class Settings {
         settings.put("sfx_volume", Float.toString(sfxVolume));
         settings.put("music_volume", Float.toString(musicVolume));
         settings.put("hosting_port", Integer.toString(hostingPort));
+        settings.put("font", font);
         return settings;
     }
 
@@ -102,6 +107,11 @@ public class Settings {
             sfxVolume = Float.parseFloat(settings.get("sfx_volume"));
             musicVolume = Float.parseFloat(settings.get("music_volume"));
             hostingPort = Integer.parseInt(settings.get("hosting_port"));
+            font = settings.get("font");
+            if (font == null) {
+                font = "SAB_font";
+                writeFile();
+            }
         } catch (Exception e) {
             defaultSettings();
             writeFile();
@@ -159,5 +169,9 @@ public class Settings {
 
     public static boolean getDebugMode() {
         return debugMode;
+    }
+
+    public static String getDefaultFont() {
+        return font;
     }
 }

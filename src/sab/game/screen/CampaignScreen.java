@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.MathUtils;
 import com.seagull_engine.Seagraphics;
 import sab.dialogue.Dialogues;
+import sab.game.Game;
 import sab.game.SABSounds;
 import sab.game.fighter.*;
 import sab.game.screen.battle.LocalBattleScreen;
@@ -90,7 +91,7 @@ public class CampaignScreen extends ScreenAdapter {
                 -(CARD_HEIGHT - 17 * 8) * cardSize / 2,
                 (int) (512 * cardSize),
                 (int) (512 * cardSize));
-        g.drawText(levels[selection].opponent.name, g.imageProvider.getFont("SAB_font"), xOffset, (CARD_HEIGHT - 48) * cardSize / 2, cardSize, Color.WHITE, 0);
+        g.drawText(levels[selection].opponent.name, Game.getDefaultFont(), xOffset, (CARD_HEIGHT - 48) * cardSize / 2, cardSize, Color.WHITE, 0);
     }
 
     private int getRelativeSelection(int steps) {

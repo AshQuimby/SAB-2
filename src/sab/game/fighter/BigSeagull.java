@@ -38,7 +38,7 @@ public class BigSeagull extends FighterType {
         fighter.airJumps = 5;
         fighter.walkAnimation = new Animation(1, 6, 6, true);
         fighter.ledgeAnimation = new Animation(new int[] {14}, 1, true);
-        fighter.description = "Big Seagull is a True God so powerful that even other deities cannot survive its presence. Although Big Seagull has followers from the Church of Big Seagull, it does not need to be worshipped to sustain itself, unlike many other gods.";
+        fighter.description = "Big Seagull is an Elder God, a being so powerful that some other deities cannot survive its presence and as old as the universe itself. Although Big Seagull has followers from the Church of Big Seagull, it does not care for worship in the same way as earthly gods.";
         fighter.debut = "Real Life";
         fighter.costumes = 4;
 

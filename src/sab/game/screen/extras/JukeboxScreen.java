@@ -98,9 +98,9 @@ public class JukeboxScreen extends ScreenAdapter {
         g.usefulDraw(g.imageProvider.getImage(johnSleeping ? "john_sleeping.png" : "john_dancing.png"), 256 + 80    , -256 - 24, 128, 128, johnFrame, 7, 0, johnFlip, false);
         g.scalableDraw(g.imageProvider.getImage("jukebox_background_layer_2.png"), -Game.game.window.resolutionX / 2, -Game.game.window.resolutionY / 2, Game.game.window.resolutionX, Game.game.window.resolutionY);
 
-        g.drawText(songNames.get(songIndex), g.imageProvider.getFont("SAB_font"), 0, Game.game.window.resolutionY / 2 - 72, 2, Color.WHITE, 0);
+        g.drawText(songNames.get(songIndex), Game.getDefaultFont(), 0, Game.game.window.resolutionY / 2 - 72, 2, Color.WHITE, 0);
 
-        g.drawText("-" + songCredits.get(songIndex), g.imageProvider.getFont("SAB_font"), 0, Game.game.window.resolutionY / 2 - 128, 1.5f, Color.WHITE, 0);
+        g.drawText("-" + songCredits.get(songIndex), Game.getDefaultFont(), 0, Game.game.window.resolutionY / 2 - 128, 1.5f, Color.WHITE, 0);
 
         for (int i = 0; i < 3; i++) {
             g.usefulDraw(g.imageProvider.getImage("widgets.png"), -Game.game.window.resolutionX / 2 + 8, -Game.game.window.resolutionY / 2 + 18 + 90 * i, 72, 72, ((songIndex == playing && i == 0 && !paused) ? 3 : i) + (i == widgetIndex ? 4 : 0), 8, (i == 2 && looping) ? loopAnimationTimer : 0, false, false);

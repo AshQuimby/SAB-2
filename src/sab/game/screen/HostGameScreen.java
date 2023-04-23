@@ -80,7 +80,7 @@ public class HostGameScreen extends ScreenAdapter {
 
     @Override
     public void render(Seagraphics g) {
-        g.drawText("Waiting for player 2", g.imageProvider.getFont("SAB_font"), 0, 0, 1, Color.WHITE, 0);
+        g.drawText("Waiting for player 2", Game.getDefaultFont(), 0, 0, Game.getDefaultFontScale(), Color.WHITE, 0);
     }
 
     @Override

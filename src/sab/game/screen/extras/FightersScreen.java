@@ -36,13 +36,13 @@ public class FightersScreen extends ScreenAdapter {
 
         g.scalableDraw(g.imageProvider.getImage("character_description_background_layer_2.png"), -Game.game.window.resolutionX / 2, -Game.game.window.resolutionY / 2, Game.game.window.resolutionX, Game.game.window.resolutionY);
 
-        g.drawText(fighters.get(characterIndex).name, g.imageProvider.getFont("SAB_font"), 0, Game.game.window.resolutionY / 2 - 64, 3, Color.WHITE, 0);
+        g.drawText(fighters.get(characterIndex).name, Game.getDefaultFont(), 0, Game.game.window.resolutionY / 2 - 64, 3 * Game.getDefaultFontScale(), Color.WHITE, 0);
 
         String description = "     " + fighters.get(characterIndex).description + " \n \nDebut: " + fighters.get(characterIndex).debut;
 
         description = Utils.textWrap(g, description, 1, 400);
 
-        g.drawText(description, g.imageProvider.getFont("SAB_font"), -Game.game.window.resolutionX / 2 + 32, Game.game.window.resolutionY / 2 - 220, 1, Color.WHITE, -1);
+        g.drawText(description, Game.getDefaultFont(), -Game.game.window.resolutionX / 2 + 32, Game.game.window.resolutionY / 2 - 220, Game.getDefaultFontScale(), Color.WHITE, -1);
 
         Rectangle dots = new Rectangle(0, -320, (16 + 8) * fighters.size(), 16);
         

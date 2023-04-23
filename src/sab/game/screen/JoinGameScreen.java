@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.seagull_engine.Seagraphics;
 
 import sab.error.SabError;
+import sab.game.Game;
 import sab.game.Settings;
 import sab.game.screen.character_select.JoinedCharacterSelectScreen;
 import sab.game.screen.error.ErrorScreen;
@@ -63,7 +64,7 @@ public class JoinGameScreen extends ScreenAdapter {
 
     @Override
     public void render(Seagraphics g) {
-        g.drawText("Connecting to server...", g.imageProvider.getFont("SAB_font"), 0, 0, 1, Color.WHITE, 0);
+        g.drawText("Connecting to server...", Game.getDefaultFont(), 0, 0, Game.getDefaultFontScale(), Color.WHITE, 0);
     }
 
     @Override

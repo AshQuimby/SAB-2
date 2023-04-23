@@ -183,6 +183,6 @@ public class Stephane extends FighterType {
     @Override
     public void renderUI(Fighter fighter, Player player, Seagraphics g) {
         g.scalableDraw(g.imageProvider.getImage("stephane_ui.png"), player.getId() == 0 ? -256 - 48 : 256, -256, 48, 48);
-        g.drawText("" + (int) blocks, g.imageProvider.getFont("SAB_font"), player.getId() == 0 ? -256 - 48 + 38 : 256 + 38, -256 + 24, 1, Color.WHITE, 1 );
+        g.drawText("" + (int) blocks, Game.getDefaultFont(), player.getId() == 0 ? -256 - 48 + 38 : 256 + 38, -256 + 24, Game.getDefaultFontScale(), Color.WHITE, 1 );
     }
 }
