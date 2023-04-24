@@ -522,8 +522,11 @@ public class Player extends GameObject implements Hittable {
             }
 
             // Parrying
-            if (keys.isJustPressed(Keys.PARRY)) {
+            if (keys.isJustPressed(Keys.PARRY) && parryTime <= -20) {
                 fighter.onParry(this);
+                parryTime = 10;
+                fighter.parryAnimation.reset();
+                startAnimation(1, fighter.parryAnimation, 30, false);
             }
         }
 
@@ -648,7 +651,11 @@ public class Player extends GameObject implements Hittable {
     @Override
     public void postUpdate() {
         if (knockbackDuration > 0) frame = fighter.knockbackAnimation.stepLooping();
-        
+
+        if (--parryTime > -20) {
+            parryTime--;
+        }
+
         if (lives > 0 && ((knockbackDuration > 0 && !hitbox.overlaps(battle.getStage().getSafeBlastZone())) || (hitbox.x + hitbox.width < battle.getStage().getUnsafeBlastZone().x || hitbox.x > battle.getStage().getUnsafeBlastZone().x + battle.getStage().getUnsafeBlastZone().width || hitbox.y + hitbox.height < battle.getStage().getUnsafeBlastZone().y))) {
             kill(1);
         }
@@ -676,6 +683,16 @@ public class Player extends GameObject implements Hittable {
 
     @Override
     public boolean canBeHit(DamageSource source) {
+        if (parryTime > 0) {
+            source.onParry();
+            battle.onSuccessfulParry();
+            if (source.owner != null) {
+                source.owner.stun(12);
+            }
+            parryTime = -20;
+            battle.addParticle(new Particle(getCenter().add(4 * direction, hitbox.height / 3), new Vector2(1 * MathUtils.random(), 0).rotateDeg(MathUtils.random() * 360), 64, 64, 0, "twinkle.png"));
+            return false;
+        }
         return fighter.onHit(this, source) && !invulnerable;
     }
 

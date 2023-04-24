@@ -28,14 +28,14 @@ public class BowlBoy extends FighterType {
         fighter.renderHeight = 64;
         fighter.imageOffsetX = 2;
         fighter.imageOffsetY = 9;
-        fighter.frames = 20;
+        fighter.frames = 21;
         fighter.jumpHeight = 160;
         fighter.friction = .15f;
         fighter.acceleration = 0.3f;
         fighter.mass = 5f;
         fighter.airJumps = 1;
-        fighter.description = "Bowl Boy and his sister, Pot Head, are useless at just about everything. They entered a pact with a demon that gave them gun hands, but didn't solve their root problem of having strength, intelligence, and constitution not much better than their porcelain counterparts. As it is, they suck and nobody likes them.";
-        fighter.debut = "Bowl Boy & Pot Head";
+        fighter.description = "Bowl Boy and his sister, Pot Head, got a messenger pigeon from a demon about their car's extended warranty. They entered a pact with the demon that gave them gun hands, but didn't solve their root problem of having strength, intelligence, and constitution not much better than their porcelain counterparts. As it is, they suck and nobody likes them.";
+        fighter.debut = "Bowl Boy & Pot Head in: Deal-tastic Demon";
         gunHandPosition = new Vector2();
 
         gunMode = false;
@@ -43,6 +43,8 @@ public class BowlBoy extends FighterType {
         fighter.walkAnimation = new Animation(4, 7, 4, true);
         fighter.idleAnimation = new Animation(0, 1, 16, true);
         fighter.ledgeAnimation = new Animation(14, 15, 16, true);
+        fighter.knockbackAnimation = new Animation(new int[] { 20 }, 60, true);
+        fighter.parryAnimation = new Animation(new int[] { 16, 0, 0 }, 10, true);
 //        swingAnimation = new Animation(new int[] {4, 5, 0}, 7, true);
 //        squatAnimation = new Animation(new int[] {6}, 4, true);
 //        chargeAnimation = new Animation(new int[] {9}, 4, true);
@@ -59,7 +61,7 @@ public class BowlBoy extends FighterType {
 
         }
 
-        if (gunMode && player.keys.isPressed(Keys.ATTACK)) {
+        if (gunMode && player.keys.isPressed(Keys.ATTACK) && !player.isStuck()) {
             gunMode = true;
         } else {
             gunMode = false;

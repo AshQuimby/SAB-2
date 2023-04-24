@@ -24,4 +24,7 @@ public class DamageSource extends GameObject {
     public static DamageSource genericDamageSource(int damage, Vector2 knockback, boolean reflectable, boolean parryable) {
         return new DamageSource(damage, knockback, reflectable, parryable);
     }
+
+    public void onParry() {
+    }
 }

@@ -68,6 +68,7 @@ public class Battle {
     private boolean paused;
     private boolean pauseOverlayHidden;
     private int pauseMenuIndex;
+    private int parryFlash;
 
     // Screen effect variables
     public boolean drawHitboxes;
@@ -324,16 +325,7 @@ public class Battle {
 
     public void update() {
         if (currentDialogue != null) {
-            currentDialogue.next();
-            if (player1.keys.isJustPressed(Keys.ATTACK) || player2.keys.isJustPressed(Keys.ATTACK)) {
-                if (currentDialogue.finished()) {
-                    currentDialogue = null;
-                } else if (currentDialogue.finishedBlock()) {
-                    currentDialogue.nextBlock();
-                } else {
-                    currentDialogue.toEnd();
-                }
-            }
+            continueDialogue();
             updatePlayerKeys();
             return;
         }
@@ -453,6 +445,32 @@ public class Battle {
             for (Player player : players) {
                 player.physicsUpdate(freezeFrames > 0 ? 0 : slowdownDuration > 0 ? 1f / slowdown : 1f);
             }
+        }
+    }
+
+    public void onSuccessfulParry() {
+        SABSounds.playSound("parry.mp3");
+        parryFlash = 15;
+    }
+
+    public void continueDialogue() {
+        currentDialogue.next();
+        if (player1.keys.isJustPressed(Keys.ATTACK) || player2.keys.isJustPressed(Keys.ATTACK)) {
+            if (currentDialogue.finished()) {
+                currentDialogue = null;
+            } else if (currentDialogue.finishedBlock()) {
+                currentDialogue.nextBlock();
+            } else {
+                currentDialogue.toEnd();
+            }
+        }
+    }
+
+    public void onPressEnter() {
+        if (currentDialogue != null) {
+            continueDialogue();
+        } else if (paused) {
+            triggerPauseMenu();
         }
     }
 
@@ -613,6 +631,16 @@ public class Battle {
             player.fighter.renderUI(player, g);
         }
 
+        if (parryFlash > 0) {
+            g.usefulTintDraw(g.imageProvider.getImage("pixel.png"), -1280 / 2, -720 / 2, 1280, 720, 0, 1, 0, false, false, new Color(1, 1, 1,
+                    parryFlash / 30f));
+            parryFlash--;
+        }
+
+        if (screenShatter > 0) {
+            g.scalableDraw(g.imageProvider.getImage("screen_shatter.png"), -Game.game.window.resolutionX / 2, -Game.game.window.resolutionY / 2, Game.game.window.resolutionX, Game.game.window.resolutionY);
+        }
+
         if (gameOver()) {
             g.usefulTintDraw(g.imageProvider.getImage("pixel.png"), -1280 / 2, -720 / 2, 1280, 720, 0, 1, 0, false, false, new Color(0, 0, 0, 1 - ((121f - endGameTimer) / 120)));
             g.drawText("GAME END", Game.getDefaultFont(), 0, 0, 2.5f - ((121f - endGameTimer) / 120) / 2 * Game.getDefaultFontScale(), Color.WHITE, 0);
@@ -620,9 +648,6 @@ public class Battle {
 
         if (paused && !pauseOverlayHidden) {
             g.usefulDraw(g.imageProvider.getImage("pause_overlay.png"), -Game.game.window.resolutionX / 2, -Game.game.window.resolutionY / 2, Game.game.window.resolutionX, Game.game.window.resolutionY, pauseMenuIndex, 3, 0, false, false);
-        }
-        if (screenShatter > 0) {
-            g.scalableDraw(g.imageProvider.getImage("screen_shatter.png"), -Game.game.window.resolutionX / 2, -Game.game.window.resolutionY / 2, Game.game.window.resolutionX, Game.game.window.resolutionY);
         }
 
         if (currentDialogue != null) {
