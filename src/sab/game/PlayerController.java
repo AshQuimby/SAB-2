@@ -94,6 +94,7 @@ public class PlayerController implements Controller {
             case 1 :
                 return inGame ? playerId == 0 ? Input.Keys.F : Input.Keys.M : Input.Keys.ENTER;
             case 3 :
+                return playerId == 0 ? Input.Keys.T : Input.Keys.N;
             case 0 :
                 return inGame ? playerId == 0 ? Input.Keys.W : Input.Keys.UP : Input.Keys.ESCAPE;
             case 2 :

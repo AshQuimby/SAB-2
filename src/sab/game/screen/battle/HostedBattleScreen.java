@@ -103,17 +103,15 @@ public class HostedBattleScreen extends ScreenAdapter {
     public Screen keyPressed(int keyCode) {
         if (keyCode == Input.Keys.W || keyCode == Input.Keys.UP) {
             pressKey(Keys.UP);
-        }
-        if (keyCode == Input.Keys.A || keyCode == Input.Keys.LEFT) {
+        } else if (keyCode == Input.Keys.A || keyCode == Input.Keys.LEFT) {
             pressKey(Keys.LEFT);
-        }
-        if (keyCode == Input.Keys.S || keyCode == Input.Keys.DOWN) {
+        } else if (keyCode == Input.Keys.S || keyCode == Input.Keys.DOWN) {
             pressKey(Keys.DOWN);
-        }
-        if (keyCode == Input.Keys.D || keyCode == Input.Keys.RIGHT) {
+        } else if (keyCode == Input.Keys.D || keyCode == Input.Keys.RIGHT) {
             pressKey(Keys.RIGHT);
-        }
-        if (keyCode == Input.Keys.F || keyCode == Input.Keys.M) {
+        } else if (keyCode == Input.Keys.F || keyCode == Input.Keys.M) {
+            pressKey(Keys.ATTACK);
+        } else if (keyCode == Input.Keys.T || keyCode == Input.Keys.N) {
             pressKey(Keys.ATTACK);
         }
 
@@ -124,18 +122,16 @@ public class HostedBattleScreen extends ScreenAdapter {
     public Screen keyReleased(int keyCode) {
         if (keyCode == Input.Keys.W || keyCode == Input.Keys.UP) {
             releaseKey(Keys.UP);
-        }
-        if (keyCode == Input.Keys.A || keyCode == Input.Keys.LEFT) {
+        } else if (keyCode == Input.Keys.A || keyCode == Input.Keys.LEFT) {
             releaseKey(Keys.LEFT);
-        }
-        if (keyCode == Input.Keys.S || keyCode == Input.Keys.DOWN) {
+        } else if (keyCode == Input.Keys.S || keyCode == Input.Keys.DOWN) {
             releaseKey(Keys.DOWN);
-        }
-        if (keyCode == Input.Keys.D || keyCode == Input.Keys.RIGHT) {
+        } else if (keyCode == Input.Keys.D || keyCode == Input.Keys.RIGHT) {
             releaseKey(Keys.RIGHT);
-        }
-        if (keyCode == Input.Keys.F || keyCode == Input.Keys.M) {
+        } else if (keyCode == Input.Keys.F || keyCode == Input.Keys.M) {
             releaseKey(Keys.ATTACK);
+        } else if (keyCode == Input.Keys.T || keyCode == Input.Keys.N) {
+            releaseKey(Keys.PARRY);
         }
 
         return this;

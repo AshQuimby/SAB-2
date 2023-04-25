@@ -207,4 +207,8 @@ public class Attack extends DamageSource {
     public Attack copy() {
         return new Attack(hitbox, drawRect, imageName, velocity, type, canHit, life, hitCooldown, collideWithStage, updatesPerTick, owner);
     }
+
+    public void onParry() {
+        type.onParry(this);
+    }
 }

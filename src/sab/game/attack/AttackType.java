@@ -43,4 +43,8 @@ public abstract class AttackType implements Cloneable {
             attack.direction == 1,
             false);
     }
+
+    public void onParry(Attack attack) {
+        attack.alive = false;
+    }
 }
