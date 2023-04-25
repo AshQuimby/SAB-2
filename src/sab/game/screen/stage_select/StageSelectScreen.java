@@ -1,4 +1,4 @@
-package sab.game.screen;
+package sab.game.screen.stage_select;
 
 import java.util.ArrayList;
 import java.util.List;
