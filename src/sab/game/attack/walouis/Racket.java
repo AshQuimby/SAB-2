@@ -41,11 +41,11 @@ public class Racket extends AttackType {
         if (attack.owner.charging()) {
             attack.life = 24;
             attack.damage = attack.owner.getCharge() / 3 + 12;
-            attack.knockback = new Vector2(1 * attack.owner.direction, 0.5f).scl(attack.owner.getCharge() / 12f + 7f);
+            attack.knockback = new Vector2(1 * attack.owner.direction, 0.5f).scl(attack.owner.getCharge() / 8f + 12f);
             attack.owner.frame = 9;
         } else if (!swung) {
             attack.damage = attack.owner.getUsedCharge() / 3 + 12;
-            attack.knockback = new Vector2(1 * attack.owner.direction, 0.5f).scl(attack.owner.getCharge() / 12f + 7f);
+            attack.knockback = new Vector2(1 * attack.owner.direction, 0.5f).scl(attack.owner.getCharge() / 8f + 12f);
             attack.owner.startAnimation(24, new Animation(new int[]{9, 5, 4, 0}, 4, false), 8, false);
             swung = true;
         }
@@ -93,7 +93,7 @@ public class Racket extends AttackType {
         attack.hitbox.setCenter(attack.owner.hitbox.getCenter(new Vector2()).add(0, 4));
         attack.owner.touchingStage = false;
         attack.damage = attack.owner.getCharge();
-        attack.knockback = new Vector2(12 * attack.owner.direction, 0);
+        attack.knockback = new Vector2(16 * attack.owner.direction, 4);
         attack.owner.startChargeAttack(new PlayerAction(6, new Animation(new int[]{9, 6, 5}, 4, false), false, 8), 12, 90);
         oldHitbox = new Rectangle();
         oldHitbox.set(attack.hitbox);

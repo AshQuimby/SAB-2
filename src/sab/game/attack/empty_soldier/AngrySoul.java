@@ -26,7 +26,7 @@ public class AngrySoul extends AttackType {
         attack.hitbox.setCenter(attack.owner.hitbox.getCenter(new Vector2()).add(attack.owner.direction * (attack.hitbox.width / 2), 0));
         attack.direction = attack.owner.direction;
         attack.velocity = new Vector2(12 * attack.direction, 0);
-        attack.knockback = new Vector2(12 * attack.direction, 0);
+        attack.knockback = new Vector2(8 * attack.direction, 3);
     }
 
     @Override

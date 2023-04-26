@@ -90,4 +90,6 @@ public class PlayerAction {
     public int[] getData() {
         return data;
     }
+
+    public Animation getAnimation() { return animation; }
 }

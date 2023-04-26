@@ -154,7 +154,7 @@ public class Matthew extends FighterType {
 
     @Override
     public boolean onHit(Fighter fighter, Player player, DamageSource source) {
-        if (source.parryable && counterCharge >= 2 && player.frame == 14) {
+        if (source.parryable && counterCharge >= 2 && player.getAnimation().getFrame() == 14) {
             source.owner.stun(32);
             bigSwingAnimation.reset();
             SABSounds.playSound("mega_counter.mp3");
@@ -166,6 +166,7 @@ public class Matthew extends FighterType {
             player.direction = (int) Math.signum(source.owner.getCenter().x - player.getCenter().x);
             String teleportImage = Utils.appendCostumeToIdentifier("matthew_teleport", player.costume, "png");
             player.battle.addParticle(new Particle(player.getCenter().add(-6 * player.direction, 12), new Vector2(), 100, 80, 12, 2, player.direction, teleportImage));
+            player.setIFrames(10);
             return false;
         }
         return true;

@@ -25,7 +25,7 @@ public class VictoryScreen extends ScreenAdapter {
         this.background = background;
         SABSounds.playMusic("leadup.mp3", false);
         setupTimer = -360;
-        if (Boolean.parseBoolean(Settings.toHashMap().get("anticipation")) || Settings.getMusicVolume() == 0 || Settings.getMasterVolume() == 0) setupTimer = -60;
+        if (!Settings.getAnticipation() || Settings.getMusicVolume() == 0 || Settings.getMasterVolume() == 0) setupTimer = -60;
         Game.game.window.camera.viewportWidth = Game.game.window.resolutionX;
         Game.game.window.camera.viewportHeight = Game.game.window.resolutionY;
         Game.game.window.camera.position.x = 0;

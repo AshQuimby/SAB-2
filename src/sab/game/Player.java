@@ -282,7 +282,7 @@ public class Player extends GameObject implements Hittable {
         if (heldItem != null) heldItem.toss(this);
 
         for (Attack attack : battle.getAttacks()) {
-            if (attack.owner == this) {
+            if (attack.originalOwner == this) {
                 attack.alive = false;
             }
         }
@@ -689,11 +689,18 @@ public class Player extends GameObject implements Hittable {
             if (source.owner != null) {
                 source.owner.stun(12);
             }
+            fighter.onSuccessfulParry(this, source);
             parryTime = -20;
+            resetAction();
+            setIFrames(10);
             battle.addParticle(new Particle(getCenter().add(4 * direction, hitbox.height / 3), new Vector2(1 * MathUtils.random(), 0).rotateDeg(MathUtils.random() * 360), 64, 64, 0, "twinkle.png"));
             return false;
         }
         return fighter.onHit(this, source) && !invulnerable;
+    }
+
+    public void setIFrames(int duration) {
+        iFrames = duration;
     }
 
     @Override
@@ -775,6 +782,10 @@ public class Player extends GameObject implements Hittable {
                 heldItem.renderHeld(this, g);
             }
         }
+    }
+
+    public Animation getAnimation() {
+        return currentAction.getAnimation();
     }
 
     public int getOccupiedTicks() {

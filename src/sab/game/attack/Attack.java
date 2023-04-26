@@ -24,6 +24,7 @@ public class Attack extends DamageSource {
     public boolean directional;
     public boolean collideWithStage;
     public Direction collisionDirection;
+    public final Player originalOwner;
     public boolean basedOffCostume;
     public int updatesPerTick;
     private final HashMap<GameObject, Integer> hitObjects;
@@ -40,6 +41,7 @@ public class Attack extends DamageSource {
         this.collideWithStage = collideWithStage;
         this.updatesPerTick = updatesPerTick;
         this.owner = owner;
+        this.originalOwner = owner;
     }
 
     public Attack(AttackType type, Player player) {
@@ -54,6 +56,7 @@ public class Attack extends DamageSource {
         hitObjects = new HashMap<>();
         velocity = new Vector2();
         owner = player;
+        this.originalOwner = player;
         knockback = new Vector2();
         reflectable = true;
         parryable = true;
