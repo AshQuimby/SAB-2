@@ -3,6 +3,7 @@ package sab.game.attack.stephane;
 import com.badlogic.gdx.math.Vector2;
 import com.seagull_engine.Seagraphics;
 
+import sab.game.Direction;
 import sab.game.attack.Attack;
 import sab.game.attack.AttackType;
 
@@ -19,6 +20,7 @@ public class Arrow extends AttackType {
         attack.damage = 12;
         attack.hitCooldown = 10;
         attack.reflectable = true;
+        attack.collideWithStage = true;
     }
 
     @Override
@@ -32,6 +34,9 @@ public class Arrow extends AttackType {
     public void update(Attack attack) {
         attack.velocity.y -= 0.2f;
         attack.rotation = attack.velocity.angleDeg();
+        if (attack.collisionDirection != Direction.NONE) {
+            attack.alive = false;
+        }
     }
 
     // @Override

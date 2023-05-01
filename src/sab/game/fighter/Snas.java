@@ -66,7 +66,7 @@ public class Snas extends FighterType {
 
     @Override
     public void neutralAttack(Fighter fighter, Player player) {
-        if (!player.usedRecovery || beheaded) {
+        if (!(player.usedRecovery || beheaded)) {
             attackAnimation.reset();
             player.startAttack(new BoneSpike(), attackAnimation, 12, 18, false, new int[] {0});
             player.velocity.y /= 3;
@@ -77,7 +77,7 @@ public class Snas extends FighterType {
 
     @Override
     public void sideAttack(Fighter fighter, Player player) {
-        if (!player.usedRecovery || beheaded) {
+        if (!(player.usedRecovery || beheaded)) {
             attackAnimation.reset();
             player.startAttack(new SpinnyBone(), attackAnimation, 4, 24, false);
         }
@@ -85,7 +85,7 @@ public class Snas extends FighterType {
 
     @Override
     public void upAttack(Fighter fighter, Player player) {
-        if (!player.usedRecovery && !beheaded) {
+        if (!(player.usedRecovery && !beheaded)) {
             player.usedRecovery = true;
             SABSounds.playSound("crunch.mp3");
             Particle particle = new Particle(0.25f, player.hitbox.getCenter(new Vector2()), player.velocity.cpy(), 60, 44, 2, Utils.appendCostumeToIdentifier("snas_body", player.costume, "png"));
@@ -100,7 +100,7 @@ public class Snas extends FighterType {
 
     @Override
     public void downAttack(Fighter fighter, Player player) {
-        if (!player.usedRecovery || beheaded) {
+        if (!(player.usedRecovery || beheaded)) {
             player.startChargeAttack(new PlayerAction(4, true, 0), 30, 60);
             player.battle.addAttack(new Attack(new GlasterBaster(), player), new int[]{0});
         }

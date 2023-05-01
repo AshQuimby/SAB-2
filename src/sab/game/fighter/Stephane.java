@@ -176,7 +176,25 @@ public class Stephane extends FighterType {
     @Override
     public void onEndAction(PlayerAction action, Fighter fighter, Player player) {
         if (action.usingAnimation(swingAnimation)) {
-            if (blocks < 64) blocks++;
+            // Make sure to only give blocks if mining on non-Stephane block
+            if (blocks < 32) {
+                if (player.touchingStage) {
+                    boolean touchingPlatform = false;
+                    for (StageObject platform : player.battle.getStage().getStageObjects()) {
+                        if (platform.isSolid() && !platform.imageName.equals("block.png")) {
+                            Rectangle box = new Rectangle(player.hitbox);
+                            box.x -= 2;
+                            box.y -= 2;
+                            box.width += 4;
+                            box.height += 4;
+                            if (box.overlaps(platform.hitbox)) {
+                                touchingPlatform = true;
+                            }
+                        }
+                    }
+                    if (touchingPlatform) blocks++;
+                }
+            }
         }
     }
 

@@ -182,10 +182,12 @@ public class Player extends GameObject implements Hittable {
                 }
                 if (collisionDirection == Direction.UP || collisionDirection == Direction.DOWN) {
                     knockback.y *= -1;
-                    // movement.y *= -1;
+                    movement.y *= -1;
+                    v.y *= -1;
                 } else if (collisionDirection == Direction.RIGHT || collisionDirection == Direction.LEFT) {
                     knockback.x *= -1;
-                    // movement.x *= -1;
+                    movement.x *= -1;
+                    v.x *= -1;
                 }
             }
         }
@@ -747,6 +749,8 @@ public class Player extends GameObject implements Hittable {
             }
         }
 
+        velocity = new Vector2();
+
         battle.getStage().onPlayerHit(this, source, shouldDie);
 
         gameStats.tookDamage(damage - damageBefore);
@@ -785,7 +789,7 @@ public class Player extends GameObject implements Hittable {
     }
 
     public Animation getAnimation() {
-        return currentAction.getAnimation();
+        return currentAction == null ? null : currentAction .getAnimation();
     }
 
     public int getOccupiedTicks() {

@@ -106,10 +106,11 @@ public class Matthew extends FighterType {
     @Override
     public void neutralAttack(Fighter fighter, Player player) {
         if (counterCharge == 2) {
-            counterCharge = 0;
+            counterCharge = 1;
             parryAnimation.reset();
             player.startAnimation(4, parryAnimation, 24, false);
         } else {
+            counterCharge = 0;
             failedParryAnimation.reset();
             player.startAnimation(4, failedParryAnimation, 24, false);
         }
@@ -154,12 +155,13 @@ public class Matthew extends FighterType {
 
     @Override
     public boolean onHit(Fighter fighter, Player player, DamageSource source) {
-        if (source.parryable && counterCharge >= 2 && player.getAnimation().getFrame() == 14) {
+        if (source.parryable && player.getAnimation() != null && player.getAnimation().getFrame() == 14) {
             source.owner.stun(32);
             bigSwingAnimation.reset();
             SABSounds.playSound("mega_counter.mp3");
             player.battle.freezeFrame(10, 3, 45, true);
             player.frame = 12;
+            counterCharge = 0;
             source.owner.frame = source.owner.fighter.knockbackAnimation.stepLooping();
             player.startAttack(new MegaCounterSlash(), bigSwingAnimation, 20, 20, false, new int[] { source.damage });
             player.hitbox.setCenter(source.owner.getCenter().add(source.owner.direction * -64, 16));
