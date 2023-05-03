@@ -66,7 +66,7 @@ public class Snas extends FighterType {
 
     @Override
     public void neutralAttack(Fighter fighter, Player player) {
-        if (!(player.usedRecovery || beheaded)) {
+        if (!(player.usedRecovery) || beheaded) {
             attackAnimation.reset();
             player.startAttack(new BoneSpike(), attackAnimation, 12, 18, false, new int[] {0});
             player.velocity.y /= 3;

@@ -118,6 +118,9 @@ public class BowlBoy extends FighterType {
         }
         if (gunMode) {
             if (chargingShot) {
+                if (chargeShotCharge == 30) {
+                    SABSounds.playSound("charge_shot_charged.mp3");
+                }
                 chargeShotCharge++;
                 if (Game.game.window.getTick() % (chargeShotCharge > 30 ? 3 : 9) == 0) player.battle.addParticle(new Particle(player.getCenter().add(gunHandPosition), new Vector2(1, 0).rotateDeg(MathUtils.random(360)), 8, 8, "charge_shot_dust.png"));
             }  else if (shootRecoil <= 0) {
@@ -198,7 +201,17 @@ public class BowlBoy extends FighterType {
 
         if (showBulletIcon > 0) {
             float alphaComponent = Math.min(1, showBulletIcon / 30f);
-            g.usefulTintDraw(g.imageProvider.getImage("bowl_boy_bullet_icons_small.png"), player.getCenter().x - 16, player.getCenter().y - 16 + player.drawRect.height * 0.8f, 32, 32, bulletIndex, 6, 0, false, false, new Color(1, 1, 1, alphaComponent));
+            for (int i = 0; i < 6; i++) {
+                Vector2 drawPos = new Vector2(player.getCenter().x - 16, player.getCenter().y - 16 + player.drawRect.height + 24);
+                if (i == 0) drawPos.y += 40;
+                else if (i == 1 || i == 5) drawPos.y += 20;
+                else if (i == 2 || i == 4) drawPos.y -= 20;
+                else if (i == 3) drawPos.y -= 40;
+                if (i == 1 || i == 2) drawPos.x -= 40;
+                else if (i == 4 || i == 5) drawPos.x += 40;
+                g.usefulTintDraw(g.imageProvider.getImage("bowl_boy_bullet_icons_small.png"), drawPos.x, drawPos.y, 32, 32, i, 6, 0, false, false, new Color(1, 1, 1, alphaComponent));
+                if (i == bulletIndex) g.usefulTintDraw(g.imageProvider.getImage("bowl_boy_bullet_selected.png"), drawPos.x - 4, drawPos.y - 4, 40, 40, 0, 1, 0, false, false, new Color(1, 1, 1, alphaComponent));
+            }
             showBulletIcon--;
         }
 

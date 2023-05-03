@@ -31,7 +31,7 @@ public class StrongCharge extends AttackType {
 
     @Override
     public void update(Attack attack) {
-        attack.frame = (attack.life % 5) / 4;
+        attack.frame = attack.life / 8 % 8;
         attack.rotation = attack.velocity.angleDeg();
         if (attack.collisionDirection != Direction.NONE) attack.alive = false;
     }

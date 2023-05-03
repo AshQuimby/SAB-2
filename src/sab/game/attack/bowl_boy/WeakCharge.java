@@ -32,7 +32,7 @@ public class WeakCharge extends AttackType {
 
     @Override
     public void update(Attack attack) {
-        attack.frame = (attack.life % 5) / 4;
+        attack.frame = attack.life / 8 % 4;
         attack.rotation = attack.velocity.angleDeg();
         if (attack.collisionDirection != Direction.NONE) attack.alive = false;
     }
