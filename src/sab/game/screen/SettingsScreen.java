@@ -100,7 +100,7 @@ public class SettingsScreen extends SelectorScreen {
             if (subSelectionIndex < subSelectionSettingIds[selectorIndex].length) {
                 String key = subSelectionSettingIds[selectorIndex][subSelectionIndex];
                 if (selectorIndex == 0 || selectorIndex == 2) {
-                    if (subSelectionIndex == 3) {
+                    if (selectorIndex == 2 && subSelectionIndex == 3) {
                         switch (settings.get(key)) {
                             case "SAB_font" :
                                 settings.replace(key, "comic_snas");
@@ -148,7 +148,7 @@ public class SettingsScreen extends SelectorScreen {
             if (subSelectionIndex < subSelectionSettingIds[selectorIndex].length) {
                 String key = subSelectionSettingIds[selectorIndex][subSelectionIndex];
                 if (selectorIndex == 0 || selectorIndex == 2) {
-                    if (subSelectionIndex == 3) {
+                    if (selectorIndex == 2 && subSelectionIndex == 3) {
                         switch (settings.get(key)) {
                             case "SAB_font" :
                                 settings.replace(key, "comic_snas");

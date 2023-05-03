@@ -1,6 +1,7 @@
 package sab.game.fighter;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.seagull_engine.Seagraphics;
 import sab.game.Game;
@@ -9,7 +10,9 @@ import sab.game.SABSounds;
 import sab.game.animation.Animation;
 import sab.game.attack.Attack;
 import sab.game.attack.bowl_boy.*;
+import sab.game.particle.Particle;
 import sab.net.Keys;
+import sab.util.Utils;
 
 import java.security.Key;
 
@@ -17,9 +20,14 @@ public class BowlBoy extends FighterType {
 
     private Vector2 gunHandPosition;
     private boolean gunMode;
+    private boolean chargingShot;
     private int shootRecoil;
     private int bulletIndex;
     private int showBulletIcon;
+    private int chargeShotCharge;
+    private int spinTime;
+    private Animation freefallSpinAnimation;
+    private Animation freefallNormalAnimation;
 
     @Override
     public void setDefaults(sab.game.fighter.Fighter fighter) {
@@ -40,6 +48,7 @@ public class BowlBoy extends FighterType {
         fighter.description = "Bowl Boy and his sister, Pot Head, got a messenger pigeon from a demon about their car's extended warranty. They entered a pact with the demon that gave them gun hands, but didn't solve their root problem of having strength, intelligence, and constitution not much better than their porcelain counterparts. As it is, they suck and nobody likes them.";
         fighter.debut = "Bowl Boy & Pot Head in: Deal-tastic Demon";
         gunHandPosition = new Vector2();
+        chargingShot = true;
 
         gunMode = false;
 
@@ -52,35 +61,73 @@ public class BowlBoy extends FighterType {
 //        squatAnimation = new Animation(new int[] {6}, 4, true);
 //        chargeAnimation = new Animation(new int[] {9}, 4, true);
 //        throwAnimation = new Animation(new int[] {10, 11}, 6, true);
-        fighter.freefallAnimation = new Animation(new int[]{7}, 1, true);
+        freefallSpinAnimation = new Animation(new int[]{ 17, 18, 19 }, 4, true);
+        freefallNormalAnimation = new Animation(new int[]{ 3 }, 4, true);
+        fighter.freefallAnimation = freefallNormalAnimation;
         fighter.costumes = 3;
     }
 
     @Override
     public void update(Fighter fighter, Player player) {
         if (player.frame < 13) {
-            gunHandPosition = new Vector2(18 * player.direction, 12);
+            gunHandPosition = new Vector2(26 * player.direction, 12);
         } else {
 
         }
 
-        if (gunMode && player.keys.isPressed(Keys.ATTACK) && !player.isStuck()) {
-            gunMode = true;
-        } else {
-            gunMode = false;
+        if (!player.touchingStage && !player.isStuck() && !player.hasAction() && !player.usedRecovery) {
+            player.frame = freefallNormalAnimation.stepLooping();
         }
+
+        if (spinTime > 0) {
+            if (player.keys.isPressed(Keys.UP) && player.keys.isPressed(Keys.ATTACK)) {
+                player.velocity.y += 0.6f;
+            }
+        }
+
+        if (player.usedRecovery) {
+            if (--spinTime >= 0) fighter.freefallAnimation = freefallSpinAnimation;
+            else fighter.freefallAnimation = freefallNormalAnimation;
+        }
+
+        if (gunMode) {
+            if (!player.keys.isPressed(Keys.ATTACK)) {
+                if (chargingShot) {
+                    if (chargeShotCharge > 30) {
+                        player.battle.addAttack(new Attack(new StrongCharge(), player), new int[]{(int) gunHandPosition.x, (int) gunHandPosition.y});
+                        shootRecoil = 20;
+                    } else {
+                        player.battle.addAttack(new Attack(new WeakCharge(), player), new int[]{(int) gunHandPosition.x, (int) gunHandPosition.y});
+                        shootRecoil = 15;
+                    }
+                    SABSounds.playSound("bowl_boy_shooty.mp3");
+                    chargeShotCharge = 0;
+                    chargingShot = false;
+                }
+                gunMode = false;
+            }
+            if (player.isStuck()) {
+                gunMode = false;
+            }
+        } else {
+            chargingShot = false;
+        }
+
         if (shootRecoil > 0) {
             shootRecoil--;
         }
         if (gunMode) {
-            if (shootRecoil <= 0) {
-                SABSounds.playSound("bowl_boy_shooty.mp3");
+            if (chargingShot) {
+                chargeShotCharge++;
+                if (Game.game.window.getTick() % (chargeShotCharge > 30 ? 3 : 9) == 0) player.battle.addParticle(new Particle(player.getCenter().add(gunHandPosition), new Vector2(1, 0).rotateDeg(MathUtils.random(360)), 8, 8, "charge_shot_dust.png"));
+            }  else if (shootRecoil <= 0) {
                 shootRecoil = shootBullet(fighter, player);
+                if (!chargingShot) SABSounds.playSound("bowl_boy_shooty.mp3");
                 player.occupy(shootRecoil);
             }
         }
 
-        if (gunMode && player.frame < 2) {
+        if ((gunMode || shootRecoil > 1) && player.frame < 2) {
             player.frame = 2;
         }
     }
@@ -102,6 +149,7 @@ public class BowlBoy extends FighterType {
                 player.battle.addAttack(new Attack(new Lobber(), player), new int[]{(int) gunHandPosition.x, (int) gunHandPosition.y});
                 return 30;
             case 4 :
+                chargingShot = true;
                 return 0;
             case 5 :
                 player.battle.addAttack(new Attack(new Roundabout(), player), new int[]{(int) gunHandPosition.x, (int) gunHandPosition.y});
@@ -127,9 +175,22 @@ public class BowlBoy extends FighterType {
     }
 
     @Override
+    public void upAttack(Fighter fighter, Player player) {
+        if (!player.usedRecovery) {
+            player.velocity.y = 16;
+            player.velocity.x = 20 * player.direction;
+            player.usedRecovery = true;
+            SABSounds.playSound("parry.mp3");
+            SABSounds.playSound("jump.mp3");
+            spinTime = 45;
+            player.battle.addAttack(new Attack(new RecoverBump(), player), null);
+        }
+    }
+
+    @Override
     public void render(Fighter fighter, Player player, Seagraphics g) {
         // player.battle == null so that it happens in the character select screen
-        if (gunMode || player.battle == null) {
+        if (gunMode || player.battle == null || shootRecoil > 1) {
             g.usefulTintDraw(g.imageProvider.getImage("bowl_boy_gun_hands.png"), player.drawRect.x, player.drawRect.y, (int) player.drawRect.width, (int) player.drawRect.height, player.frame, fighter.frames, (int) (shootRecoil * player.direction * 1.5f), player.direction == 1, false, player.getIFrames() / 10 % 2 == 0 ? Color.WHITE : new Color(1, 1, 1, 0.5f));
         } else {
             g.usefulTintDraw(g.imageProvider.getImage("bowl_boy_hands.png"), player.drawRect.x, player.drawRect.y, (int) player.drawRect.width, (int) player.drawRect.height, player.frame, fighter.frames, 0, player.direction == 1, false, player.getIFrames() / 10 % 2 == 0 ? Color.WHITE : new Color(1, 1, 1, 0.5f));

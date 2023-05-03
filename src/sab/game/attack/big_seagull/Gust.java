@@ -11,8 +11,8 @@ public class Gust extends AttackType {
         attack.imageName = "gust.png";
         attack.life = 24;
         attack.frameCount = 4;
-        attack.hitbox.width = 120;
-        attack.hitbox.height = 116;
+        attack.hitbox.width = 100;
+        attack.hitbox.height = 80;
         attack.drawRect.width = 120;
         attack.drawRect.height = 116;
         attack.damage = 0;

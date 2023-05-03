@@ -547,7 +547,7 @@ public class Player extends GameObject implements Hittable {
 
     // Returns true if the player has a condition that would lock them out of normal control, like knockback, ledge grabing, being frozen, etc
     public boolean isStuck() {
-        return frozen() || takingKnockback() || grabbingLedge() || stunned();
+        return frozen() || takingKnockback() || grabbingLedge() || stunned() || respawning();
     }
     public boolean inFreeFall() {
         return usedRecovery;
@@ -749,7 +749,9 @@ public class Player extends GameObject implements Hittable {
             }
         }
 
-        velocity = new Vector2();
+        if (knockback.len() > 4) {
+            velocity = new Vector2();
+        }
 
         battle.getStage().onPlayerHit(this, source, shouldDie);
 

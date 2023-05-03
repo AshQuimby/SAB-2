@@ -32,12 +32,12 @@ public class EvilSuck extends MeleeAttackType {
         chompTime = 0;
 
         offset = new Vector2(84, 0);
-        usePlayerDirection = true;
     }
 
     @Override
     public void onSpawn(Attack attack, int[] data) {
         super.onSpawn(attack, data);
+        attack.direction = attack.owner.direction;
     }
 
     @Override
@@ -81,6 +81,7 @@ public class EvilSuck extends MeleeAttackType {
                 trappedPlayer.invulnerable = false;
                 trappedPlayer = null;   
             }
+            attack.owner.direction = attack.direction;
             if (!attack.owner.hasAction()) attack.owner.startAnimation(0, new Animation(new int[]{4, 5}, 8, true), 14, false);
         } else {
             if (!attack.owner.keys.isPressed(Keys.ATTACK)) {

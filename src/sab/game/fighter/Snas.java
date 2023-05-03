@@ -85,7 +85,7 @@ public class Snas extends FighterType {
 
     @Override
     public void upAttack(Fighter fighter, Player player) {
-        if (!(player.usedRecovery && !beheaded)) {
+        if (!(player.usedRecovery || beheaded)) {
             player.usedRecovery = true;
             SABSounds.playSound("crunch.mp3");
             Particle particle = new Particle(0.25f, player.hitbox.getCenter(new Vector2()), player.velocity.cpy(), 60, 44, 2, Utils.appendCostumeToIdentifier("snas_body", player.costume, "png"));
