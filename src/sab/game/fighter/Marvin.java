@@ -22,7 +22,6 @@ public class Marvin extends FighterType {
     private Animation squatAnimation;
     private Animation chargeAnimation;
     private Animation throwAnimation;
-
     private Attack toilet;
 
     @Override

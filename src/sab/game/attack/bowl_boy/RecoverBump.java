@@ -2,6 +2,7 @@ package sab.game.attack.bowl_boy;
 
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.seagull_engine.GameObject;
 import com.seagull_engine.Seagraphics;
 import sab.game.attack.Attack;
 import sab.game.attack.AttackType;
@@ -21,6 +22,11 @@ public class RecoverBump extends AttackType {
     public void update(Attack attack) {
         attack.hitbox.setCenter(attack.owner.getCenter());
         attack.knockback = attack.owner.velocity.cpy().scl(3f);
+    }
+
+    @Override
+    public void successfulHit(Attack attack, GameObject hit) {
+        if (attack.life > 25) attack.owner.usedRecovery = false;
     }
 
     @Override
