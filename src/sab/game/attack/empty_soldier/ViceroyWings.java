@@ -33,6 +33,6 @@ public class ViceroyWings extends AttackType {
     @Override
     public void onSpawn(Attack attack, int[] data) {
         attack.hitbox.setCenter(attack.owner.getCenter());
-        attack.owner.velocity.y = 20;
+        attack.owner.velocity.y = 32;
     }
 }
