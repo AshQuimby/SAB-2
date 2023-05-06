@@ -1,13 +1,10 @@
 package sab.game.attack.empty_soldier;
 
 import com.badlogic.gdx.math.Vector2;
-import com.seagull_engine.GameObject;
 
 import sab.game.SABSounds;
 import sab.game.attack.MeleeAttackType;
 import sab.game.attack.Attack;
-import sab.game.particle.Particle;
-import sab.util.Utils;
 
 public class EmptySoldierSlash extends MeleeAttackType {
     @Override
@@ -16,7 +13,7 @@ public class EmptySoldierSlash extends MeleeAttackType {
         attack.life = 6;
         attack.frameCount = 1;
         attack.velocity = new Vector2();
-        attack.hitbox.width = 48;
+        attack.hitbox.width = 72;
         attack.hitbox.height = 48;
         attack.drawRect.width = 0;
         attack.drawRect.height = 0;
@@ -25,7 +22,7 @@ public class EmptySoldierSlash extends MeleeAttackType {
         attack.hitCooldown = 7;
         attack.reflectable = false;
 
-        offset = new Vector2(16, 0);
+        offset = new Vector2(20, 0);
         usePlayerDirection = true;
     }
 

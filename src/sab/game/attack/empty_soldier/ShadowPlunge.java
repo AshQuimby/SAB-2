@@ -35,8 +35,9 @@ public class ShadowPlunge extends AttackType {
         attack.drawRect.y += 28;
 
         if (attack.owner.touchingStage) {
-            attack.hitbox.width = 128;
-            attack.hitbox.height = 64;
+            attack.hitbox.width = 160;
+            attack.hitbox.height = 80;
+            attack.hitbox.setCenter(attack.owner.getCenter());
             attack.life = 1;
             attack.clearHitObjects();
         }
