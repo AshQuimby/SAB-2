@@ -1,6 +1,7 @@
 package sab.game.stage;
 
 import com.badlogic.gdx.math.Rectangle;
+import sab.game.Game;
 
 public class DesertBridge extends StageType {
 
@@ -14,5 +15,17 @@ public class DesertBridge extends StageType {
         stage.maxZoomOut = 1.1f;
         stage.safeBlastZone = new Rectangle(-1400 / 2 - 64, -820 / 2 - 64, 1400 + 128, 820 + 128);
         stage.unsafeBlastZone = new Rectangle(-1600 / 2 - 128, -900 / 2 - 128, 1400 + 256, 900 + 256);
+
+        stage.addStageObject(new StageObject(
+                -1600 / 2f,
+                -40,
+                1600,
+                24,
+                "desert_bridge_top.png", stage) {
+            @Override
+            public boolean inBackground() {
+                return false;
+            }
+        });
     }
 }
