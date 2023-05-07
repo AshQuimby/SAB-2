@@ -427,6 +427,13 @@ public class Battle {
 
         for (GameObject gameObject : gameObjects) {
             gameObject.preUpdate();
+            if (gameObject instanceof Attack) {
+                Attack attack = (Attack) gameObject;
+                if (!attack.alive) {
+                    attack.kill();
+                    deadGameObjects.add(attack);
+                }
+            }
         }
 
         stage.update();

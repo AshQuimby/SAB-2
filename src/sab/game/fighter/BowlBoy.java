@@ -84,7 +84,7 @@ public class BowlBoy extends FighterType {
 
         }
 
-        if (!player.touchingStage && !player.isStuck() && !player.hasAction() && !player.usedRecovery) {
+        if (!player.takingKnockback() && !player.touchingStage && !player.isStuck() && !player.hasAction() && !player.usedRecovery) {
             player.frame = freefallNormalAnimation.stepLooping();
         }
 

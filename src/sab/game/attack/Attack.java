@@ -150,12 +150,6 @@ public class Attack extends DamageSource {
         }
     }
 
-    public void postUpdate() {
-        if (!alive) {
-            kill();
-        }
-    }
-
     public void clearHitObject(GameObject gameObject) {
         hitObjects.remove(gameObject);
     }
@@ -182,7 +176,6 @@ public class Attack extends DamageSource {
 
     public void kill() {
         type.onKill(this);
-        if (!alive && owner.battle.getGameObjects().contains(this)) owner.battle.removeGameObject(this);
         alive = false;
     }
 

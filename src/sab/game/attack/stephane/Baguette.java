@@ -25,6 +25,7 @@ public class Baguette extends AttackType {
         attack.direction = attack.owner.direction;
         attack.hitCooldown = 10;
         attack.reflectable = false;
+        attack.drawAbovePlayers = true;
 
         swing = 90;
     }

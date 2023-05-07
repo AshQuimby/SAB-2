@@ -1,5 +1,6 @@
 package sab.game.fighter;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.seagull_engine.GameObject;
@@ -13,11 +14,13 @@ import sab.game.attack.stephane.Baguette;
 import sab.game.attack.stephane.Arrow;
 import sab.game.attack.stephane.BlockSmash;
 import sab.game.attack.stephane.Firework;
+import sab.game.particle.Particle;
 import sab.game.stage.Platform;
 import sab.game.stage.Stage;
 import sab.game.stage.StageObject;
 import sab.game.stage.StageObjectBehaviour;
 import sab.net.Keys;
+import sab.util.Utils;
 
 public class Stephane extends FighterType {
     private Animation swingAnimation;
@@ -44,10 +47,15 @@ public class Stephane extends FighterType {
         fighter.mass = 5.4f;
         fighter.airJumps = 1;
         fighter.walkAnimation = new Animation(0, 3, 5, true);
-        fighter.description = "Nobody knows where Stephane came from as nobody knows what he is saying. All that comes from his mouth are ancient tongues and utterances like \"oui\" and \"tu comprends?\"";
         fighter.debut = "Blockbreak";
         fighter.freefallAnimation = new Animation(new int[]{7}, 1, true);
-        fighter.costumes = 3;
+        if (Utils.aprilFools()) {
+            fighter.description = "There is a version of Stephane called the pickle with a face, he is very smelly, a dirty cheater, a manipulator of minors (miners).";
+            fighter.costumes = 4;
+        } else {
+            fighter.description = "Nobody knows where Stephane came from as nobody knows what he is saying. All that comes from his mouth are ancient tongues and utterances like \"oui\" and \"tu comprends?\"";
+            fighter.costumes = 3;
+        }
 
         swingAnimation = new Animation(new int[] {4, 5}, 9, true);
         blockPlaceAnimation = new Animation(new int[] {4, 5, 0}, 6, true);
@@ -63,16 +71,23 @@ public class Stephane extends FighterType {
         }
         blocks--;
         Vector2 position = createBlockRectangle(player).getPosition(new Vector2());
-        Platform block = new Platform(position.x, position.y, 32, 32, "block.png", stage, new StageObjectBehaviour() {
+        Platform block = new Platform(position.x, position.y, 32, 32, "block.png", stage) {
             private int life = 240;
-            
+
             @Override
-            public void update(StageObject object, Battle battle) {
+            public void updateStageObject(Battle battle) {
                 if (--life < 0) {
-                    object.kill();
+                    kill();
                 }
             }
-        });
+
+            @Override
+            public void render(Seagraphics g) {
+                super.render(g);
+                g.usefulDraw(g.imageProvider.getImage("block_break.png"), drawRect.x, drawRect.y, (int) drawRect.width, (int) drawRect.height, 4 - life / 48, 5, 0, false, false);
+            }
+        };
+
         for (int i = 0; i < stage.getStageObjects().size(); i++) {
             StageObject object = stage.getStageObjects().get(i);
             if (object.isSolid()) {
@@ -104,6 +119,15 @@ public class Stephane extends FighterType {
         player.startAnimation(1, blockPlaceAnimation, 16, false);
 
         return virtualBlock;
+    }
+
+    @Override
+    public boolean onHit(Fighter fighter, Player player, DamageSource source) {
+        if (player.costume == 3) {
+            player.kill(1);
+            return false;
+        }
+        return true;
     }
 
     private boolean canPlaceBelow(Player player) {
@@ -192,7 +216,11 @@ public class Stephane extends FighterType {
                             }
                         }
                     }
-                    if (touchingPlatform) blocks++;
+                    if (touchingPlatform) {
+                        blocks++;
+                        SABSounds.playSound("crunch.mp3");
+                        player.battle.addParticle(new Particle(1.2f, player.getCenter().add(24 * player.direction, -24), new Vector2(MathUtils.random(-1f, 1f), MathUtils.random(4f, 10f)),32,32,12, "block.png"));
+                    }
                 }
             }
         }
