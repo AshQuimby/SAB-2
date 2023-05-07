@@ -526,7 +526,7 @@ public class Player extends GameObject implements Hittable {
             // Parrying
             if (keys.isJustPressed(Keys.PARRY) && parryTime <= -20) {
                 fighter.onParry(this);
-                parryTime = 10;
+                parryTime = 20;
                 fighter.parryAnimation.reset();
                 startAnimation(1, fighter.parryAnimation, 30, false);
             }

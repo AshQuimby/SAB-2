@@ -26,7 +26,7 @@ public class MegaBlastLarge extends AttackType {
     @Override
     public void onSpawn(Attack attack, int[] data) {
         attack.direction = attack.owner.direction;
-        attack.knockback.set(attack.direction * 12f, 8f);
+        attack.knockback.set(attack.direction * 10f, 6f);
         attack.hitbox.setCenter(attack.owner.getCenter().add(data[0], data[1]));
         attack.velocity = new Vector2(12 * attack.owner.direction, 0);
     }

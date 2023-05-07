@@ -33,7 +33,7 @@ public class Roundabout extends AttackType {
 
     @Override
     public void update(Attack attack) {
-        attack.frame = attack.life / 12 % 6;
+        attack.frame = attack.life / 8 % 6;
         attack.velocity.y += 0.005f;
         attack.velocity.x -= 0.5f * attack.direction;
         attack.knockback.x = Math.abs(attack.knockback.x) * Math.signum(attack.velocity.x + 0.05f);

@@ -5,6 +5,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.seagull_engine.GameObject;
 import com.seagull_engine.Seagraphics;
+import sab.game.DamageSource;
 import sab.game.Game;
 import sab.game.Player;
 import sab.game.SABSounds;
@@ -177,20 +178,19 @@ public class BowlBoy extends FighterType {
                 player.startAttack(new MegaBlastLarge(), exUseAnimation,18, 12, false, new int[]{(int) gunHandPosition.x, (int) gunHandPosition.y});
                 break;
             case 1 :
-                player.battle.addAttack(new Attack(new Spread(), player), new int[]{(int) gunHandPosition.x, (int) gunHandPosition.y, 90 - 10});
-                player.battle.addAttack(new Attack(new Spread(), player), new int[]{(int) gunHandPosition.x, (int) gunHandPosition.y, 90});
-                player.battle.addAttack(new Attack(new Spread(), player), new int[]{(int) gunHandPosition.x, (int) gunHandPosition.y, 90 + 10});
+                player.startAttack(new EightWay(), exUseAnimation,18, 12, false, new int[]{(int) gunHandPosition.x, (int) gunHandPosition.y, 0});
                 break;
             case 2 :
-                player.battle.addAttack(new Attack(new Chaser(), player), new int[]{(int) gunHandPosition.x, (int) gunHandPosition.y});
+                player.startAttack(new ChaosOrbit(), exUseAnimation,18, 12, false, new int[]{(int) gunHandPosition.x, (int) gunHandPosition.y, 0});
                 break;
             case 3 :
                 player.startAttack(new Kablooey(), exUseAnimation,18, 12, false, new int[]{(int) gunHandPosition.x, (int) gunHandPosition.y});
                 break;
             case 4 :
+                player.startAttack(new RadialBarrage(), exUseAnimation,18, 12, false, new int[]{(int) gunHandPosition.x, (int) gunHandPosition.y});
                 break;
             case 5 :
-                player.battle.addAttack(new Attack(new Roundabout(), player), new int[]{(int) gunHandPosition.x, (int) gunHandPosition.y});
+                player.startAttack(new JumboRebound(), exUseAnimation,18, 12, false, new int[]{(int) gunHandPosition.x, (int) gunHandPosition.y});
                 break;
         }
     }
@@ -239,6 +239,11 @@ public class BowlBoy extends FighterType {
                 superMeter -= 10;
             }
         }
+    }
+
+    @Override
+    public void onSuccessfulParry(Fighter fighter, Player player, DamageSource parried) {
+        if (getCardCount() < 5) superMeter = superMeter + 10 - superMeter % 10;
     }
 
     @Override

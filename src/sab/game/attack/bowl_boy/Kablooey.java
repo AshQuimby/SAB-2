@@ -22,7 +22,6 @@ public class Kablooey extends AttackType {
         attack.directional = true;
         attack.hitCooldown = 30;
         attack.collideWithStage = true;
-        attack.staticKnockback = false;
     }
 
     @Override

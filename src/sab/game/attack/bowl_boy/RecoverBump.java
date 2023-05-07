@@ -25,11 +25,6 @@ public class RecoverBump extends AttackType {
     }
 
     @Override
-    public void successfulHit(Attack attack, GameObject hit) {
-        if (attack.life > 25) attack.owner.usedRecovery = false;
-    }
-
-    @Override
     public void render(Attack attack, Seagraphics g) {
     }
 }
