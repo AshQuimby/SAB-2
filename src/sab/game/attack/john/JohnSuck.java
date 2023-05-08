@@ -15,6 +15,7 @@ import sab.net.Keys;
 
 public class JohnSuck extends MeleeAttackType {
     private Player trappedPlayer;
+    private Animation suckAnimation = new Animation(new int[]{13, 12}, 6, true);
     private boolean spit;
 
     @Override
@@ -54,6 +55,7 @@ public class JohnSuck extends MeleeAttackType {
             }
             trappedPlayer = null;
         }
+        attack.owner.resetAction();
     }
 
     @Override
@@ -71,6 +73,8 @@ public class JohnSuck extends MeleeAttackType {
             trappedPlayer.hitbox.setCenter(attack.getCenter());
             trappedPlayer.stun(2);
             attack.owner.occupy(1);
+            attack.owner.velocity.x *= 0.96f;
+            attack.owner.velocity.y *= 0.96f;
             attack.owner.drawRectOffset = new Vector2(MathUtils.random(-2f, 2f), MathUtils.random(-2f, 2f));
             if (spit) {
                 trappedPlayer.invulnerable = false;
@@ -85,8 +89,9 @@ public class JohnSuck extends MeleeAttackType {
             if (!attack.owner.keys.isPressed(Keys.ATTACK)) {
                 attack.alive = false;
             }
-            if (attack.owner.frame == 0) attack.owner.frame = 12;
-            if (!attack.owner.hasAction()) attack.owner.startAnimation(0, new Animation(new int[]{13, 12}, 6, true), 10, false);
+
+            if (attack.owner.getAnimation() != null && attack.owner.getAnimation().isDone()) attack.owner.getAnimation().reset();
+            attack.owner.startAnimation(0, suckAnimation, 360, false);
         }
     }
 
@@ -98,6 +103,7 @@ public class JohnSuck extends MeleeAttackType {
     @Override
     public void successfulHit(Attack attack, GameObject hit) {
         if (attack.life < 0 && trappedPlayer == null && hit instanceof Player && hit != null) {
+            attack.owner.resetAction();
             trappedPlayer = (Player) hit;
             trappedPlayer.stun(2);
             trappedPlayer.hide();

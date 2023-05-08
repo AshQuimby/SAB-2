@@ -2,12 +2,15 @@ package sab.game.stage;
 
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 import sab.game.Battle;
 import sab.game.Game;
 import sab.game.Player;
+import sab.game.Settings;
 import sab.game.attack.Attack;
 import sab.game.attack.marvin.Fireball;
 import sab.game.attack.marvin.Frostball;
+import sab.game.attack.unnamed_duck.DuckItem;
 import sab.game.fighter.Fighter;
 import sab.game.fighter.Marvin;
 
@@ -44,7 +47,7 @@ public class HellTwoBoogaloo extends StageType {
         }
 
         for (i = 0; i < 24; i++) {
-            platform = new Platform(-512 + 64 * i, -32 + i * 32, 64 * + 64 * (i / 8), 32 + i, "fight_button.png", stage);
+            platform = new Platform(-512 + 64 * i, -32 + i * 32, 64 * + 16 * (i / 8f), 32 + i, "fight_button.png", stage);
             stage.addStageObject(platform);
         }
 
@@ -52,19 +55,48 @@ public class HellTwoBoogaloo extends StageType {
         platform.createLedges(16, 24, 16, stage);
         stage.addStageObject(platform);
 
-        StageObject marvinBox = new PassablePlatform(-512, 960, 128, 128, "marvin_box.png", new StageObjectBehaviour() {
-            @Override
-            public void update(StageObject stageObject, Battle battle) {
-                stageObject.velocity.x = MathUtils.sinDeg(Game.getTick() / 256f) * 8f;
-                if (Game.getTick() % 180 == 0) {
-                    Player player = new Player(new Fighter(new Marvin()), 0, 0, 1, battle);
-                    player.setAI(player.fighter.getAI(player, 1));
-                    player.hitbox.setCenter(stageObject.getCenter());
-                    battle.addGameObject(player);
+        if (Settings.getStageHazards()) {
+
+            StageObject marvinBox = new PassablePlatform(-512, 960, 128, 128, "marvin_box.png", new StageObjectBehaviour() {
+                @Override
+                public void update(StageObject stageObject, Battle battle) {
+                    stageObject.velocity.x = MathUtils.sinDeg(Game.getTick() / 256f) * 8f;
+                    if (Game.getTick() % 180 == 0) {
+                        Player player = new Player(new Fighter(new Marvin()), 0, -1, 1, battle);
+                        player.setAI(player.fighter.getAI(player, 1));
+                        player.hitbox.setCenter(stageObject.getCenter());
+                        battle.addGameObject(player);
+                    }
                 }
-            }
-        }, stage);
-        stage.addStageObject(marvinBox);
+            }, stage);
+            stage.addStageObject(marvinBox);
+
+            Platform wobbler = new Platform(-512, 960, 64, 64, "barrel.png", stage, new StageObjectBehaviour() {
+                Player target;
+
+                @Override
+                public void update(StageObject stageObject, Battle battle) {
+                    float bestDist = 1000000000f;
+                    for (Player player : battle.getPlayers()) {
+                        if (player.getLives() <= 0) continue;
+                        float dist = player.getCenter().dst2(stageObject.getCenter());
+                        if (dist < bestDist || target == null) {
+                            target = player;
+                            bestDist = dist;
+                        }
+                    }
+                    stageObject.velocity = target.getCenter().sub(stageObject.getCenter()).nor().scl(3.5f);
+                    player.hitbox.setCenter(stageObject.getCenter());
+                    battle.addAttack(new Attack(new DuckItem(), player), new int[]{ 0, 0, (int) stageObject.hitbox.width + 4, (int) stageObject.hitbox.height + 4, 8, 12, 8, 0, 0 });
+                    Vector2 oldCenter = stageObject.getCenter();
+                    stageObject.hitbox.width += MathUtils.sin(Game.getTick() / 2) * 80;
+                    stageObject.hitbox.height += MathUtils.cos(Game.getTick() / 2) * 80;
+                    stageObject.hitbox.setCenter(oldCenter);
+                    stageObject.drawRect.set(stageObject.hitbox);
+                }
+            });
+            stage.addStageObject(wobbler);
+        }
     }
 
     @Override

@@ -27,7 +27,7 @@ public class OurSports extends StageType {
         platform = new Platform(-256 / 2, -128, 256, 24, "our_sports_platform.png", stage, new StageObjectBehaviour() {
             @Override
             public void update(StageObject stageObject, Battle battle) {
-                if (stormy) {
+                if (Settings.getStageHazards() && stormy) {
                     stageObject.velocity.y = -0.5f;
                 }
             }
@@ -40,7 +40,7 @@ public class OurSports extends StageType {
         stage.addStageObject(new StageObject(-256 / 2, -128 - Game.game.window.resolutionY + 24, 256, Game.game.window.resolutionY, "our_sports_platform_supports.png", stage, new StageObjectBehaviour() {
             @Override
             public void update(StageObject stageObject, Battle battle) {
-                if (stormy) {
+                if (Settings.getStageHazards() && stormy) {
                     stageObject.velocity.y = -1f;
                 }
             }
@@ -50,7 +50,7 @@ public class OurSports extends StageType {
         platform = new Platform(-192 / 2, -128, 192, 24, "our_sports_platform_white_ring.png", stage, new StageObjectBehaviour() {
             @Override
             public void update(StageObject stageObject, Battle battle) {
-                if (stormy) {
+                if (Settings.getStageHazards() && stormy) {
                     stageObject.velocity.y = -0.25f;
                 }
             }

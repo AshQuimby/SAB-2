@@ -427,6 +427,12 @@ public class Battle {
 
         for (GameObject gameObject : gameObjects) {
             gameObject.preUpdate();
+            if (gameObject instanceof Player) {
+                Player player = (Player) gameObject;
+                if (player.getId() == -1 && player.getLives() <= 0) {
+                    deadGameObjects.add(player);
+                }
+            }
             if (gameObject instanceof Attack) {
                 Attack attack = (Attack) gameObject;
                 if (!attack.alive) {

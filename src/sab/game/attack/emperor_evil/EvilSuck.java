@@ -16,6 +16,7 @@ import sab.net.Keys;
 public class EvilSuck extends MeleeAttackType {
     private Player trappedPlayer;
     private int chompTime;
+    private Animation suckAnimation = new Animation(new int[]{4, 5}, 8, true);
 
     @Override
     public void setDefaults(Attack attack) {
@@ -47,6 +48,7 @@ public class EvilSuck extends MeleeAttackType {
             trappedPlayer.reveal();
             trappedPlayer = null;
         }
+        attack.owner.resetAction();
     }
 
     @Override
@@ -82,12 +84,13 @@ public class EvilSuck extends MeleeAttackType {
                 trappedPlayer = null;   
             }
             attack.owner.direction = attack.direction;
-            if (!attack.owner.hasAction()) attack.owner.startAnimation(0, new Animation(new int[]{4, 5}, 8, true), 14, false);
+            attack.owner.startAnimation(0, new Animation(new int[]{4, 5}, 8, true), 12, false);
         } else {
             if (!attack.owner.keys.isPressed(Keys.ATTACK)) {
                 attack.alive = false;
             }
-            if (!attack.owner.hasAction()) attack.owner.startAnimation(0, new Animation(new int[]{4, 5}, 8, true), 12, false);
+            if (attack.owner.getAnimation() != null && attack.owner.getAnimation().isDone()) attack.owner.getAnimation().reset();
+            attack.owner.startAnimation(0, suckAnimation, 1000000, false);
         }
     }
 
