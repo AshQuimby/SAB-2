@@ -18,6 +18,7 @@ public class Settings {
     private static boolean assBalls;
     private static boolean anticipation;
     private static boolean debugMode;
+    private static boolean drawPlayerArrows;
     private static int hostingPort;
     private static String font;
 
@@ -55,6 +56,7 @@ public class Settings {
         anticipation = true;
         stageHazards = true;
         debugMode = false;
+        drawPlayerArrows = false;
         hostingPort = 19128;
         font = "SAB_font";
     }
@@ -86,6 +88,7 @@ public class Settings {
         settings.put("stage_hazards", Boolean.toString(stageHazards));
         settings.put("anticipation", Boolean.toString(anticipation));
         settings.put("debug_mode", Boolean.toString(debugMode));
+        settings.put("draw_player_arrows", Boolean.toString(drawPlayerArrows));
         settings.put("master_volume", Float.toString(masterVolume));
         settings.put("sfx_volume", Float.toString(sfxVolume));
         settings.put("music_volume", Float.toString(musicVolume));
@@ -103,6 +106,7 @@ public class Settings {
             stageHazards = Boolean.parseBoolean(settings.get("stage_hazards"));
             anticipation = Boolean.parseBoolean(settings.get("anticipation"));
             debugMode = Boolean.parseBoolean(settings.get("debug_mode"));
+            drawPlayerArrows = Boolean.parseBoolean(settings.get("draw_player_arrows"));
             masterVolume = Float.parseFloat(settings.get("master_volume"));
             sfxVolume = Float.parseFloat(settings.get("sfx_volume"));
             musicVolume = Float.parseFloat(settings.get("music_volume"));
@@ -117,6 +121,10 @@ public class Settings {
             writeFile();
             loadSettings();
         }
+    }
+
+    public static boolean getDrawPlayerArrows() {
+        return drawPlayerArrows;
     }
 
     public static boolean getStaticCamera() {

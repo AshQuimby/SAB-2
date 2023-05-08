@@ -27,12 +27,12 @@ public class SettingsScreen extends SelectorScreen {
         subSelection = new String[][] {
                 new String[] { "Stage Hazards", "Spawn Ass Balls", "Victory Anticipation", "Debug Mode", "Back" },
                 new String[] { "Master Volume", "Music Volume", "SFX Volume", "Back" },
-                new String[] { "Default Fullscreened", "Static Camera", "Screen Shake", "Font", "Back" }
+                new String[] { "Default Fullscreened", "Static Camera", "Screen Shake", "Player Arrows", "Font", "Back" }
         };
         subSelectionSettingIds = new String[][] {
                 new String[] { "stage_hazards", "ass_balls", "anticipation", "debug_mode" },
                 new String[] { "master_volume", "music_volume", "sfx_volume" },
-                new String[] { "fullscreen", "static_camera", "screen_shake", "font" },
+                new String[] { "fullscreen", "static_camera", "screen_shake", "draw_player_arrows", "font" },
         };
         settings = Settings.toHashMap();
 
@@ -100,7 +100,7 @@ public class SettingsScreen extends SelectorScreen {
             if (subSelectionIndex < subSelectionSettingIds[selectorIndex].length) {
                 String key = subSelectionSettingIds[selectorIndex][subSelectionIndex];
                 if (selectorIndex == 0 || selectorIndex == 2) {
-                    if (selectorIndex == 2 && subSelectionIndex == 3) {
+                    if (selectorIndex == 2 && subSelectionIndex == 4) {
                         switch (settings.get(key)) {
                             case "SAB_font" :
                                 settings.replace(key, "comic_snas");
@@ -148,7 +148,7 @@ public class SettingsScreen extends SelectorScreen {
             if (subSelectionIndex < subSelectionSettingIds[selectorIndex].length) {
                 String key = subSelectionSettingIds[selectorIndex][subSelectionIndex];
                 if (selectorIndex == 0 || selectorIndex == 2) {
-                    if (selectorIndex == 2 && subSelectionIndex == 3) {
+                    if (selectorIndex == 2 && subSelectionIndex == 4) {
                         switch (settings.get(key)) {
                             case "SAB_font" :
                                 settings.replace(key, "comic_snas");
@@ -249,7 +249,7 @@ public class SettingsScreen extends SelectorScreen {
             setting = settings.get(subSelectionSettingIds[selectorIndex][subSelectionIndex]);
             if (selectorIndex == 1) {
                 setting = Math.round(Float.parseFloat(setting) * 100) + "%";
-            } else if (selectorIndex == 2 && subSelectionIndex == 3) {
+            } else if (selectorIndex == 2 && subSelectionIndex == 4) {
                 switch (settings.get("font")) {
                     case "SAB_font" :
                         setting = "SAB Font";

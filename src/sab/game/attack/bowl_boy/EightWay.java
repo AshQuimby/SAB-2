@@ -19,7 +19,6 @@ public class EightWay extends AttackType {
         attack.frameCount = 0;
         attack.directional = true;
         attack.hitCooldown = 30;
-        attack.collideWithStage = true;
     }
 
     @Override
@@ -33,11 +32,6 @@ public class EightWay extends AttackType {
         attack.hitbox.setCenter(attack.owner.getCenter().add(data[0], data[1]));
         attack.velocity = new Vector2(0, 8).rotateDeg(attack.rotation);
         attack.knockback = new Vector2(0, 6).rotateDeg(attack.rotation);
-    }
-
-    @Override
-    public void update(Attack attack) {
-        if (attack.collisionDirection.isNotNone()) attack.alive = false;
     }
 
     @Override

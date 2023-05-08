@@ -37,8 +37,8 @@ public class Kablooey extends AttackType {
         attack.rotation -= attack.velocity.x;
         attack.velocity.y -= 0.5f;
         // Potentially make it squishy
-//        attack.drawRect.width = 60 - (int) (Math.abs(attack.velocity.y) * MathUtils.sinDeg(attack.rotation));
-//        attack.drawRect.height = 60 + (int) (Math.abs(attack.velocity.y) * MathUtils.cosDeg(attack.rotation));
+        attack.drawRect.width = 60 - (int) (Math.abs(attack.velocity.y) * MathUtils.cosDeg(attack.rotation));
+        attack.drawRect.height = 60 - (int) (Math.abs(attack.velocity.y) * MathUtils.sinDeg(attack.rotation));
         if (attack.collisionDirection.isNotNone()) {
             if (bounces < 2 && attack.collisionDirection.isVertical()) {
                 attack.velocity.y *= -0.8f;

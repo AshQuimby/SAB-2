@@ -11,12 +11,11 @@ public class COBS extends StageType {
     public void init(Stage stage) {
         stage.name = "Church of Big Seagull";
         stage.background = "cobs_background.png";
-        stage.id = "cobs";
         stage.music = "seagull_ultima.mp3";
         sab.game.stage.Platform platform = new sab.game.stage.Platform(-280 / 2 - 280 - 100, -128, 280, 72, "ruined_platform_1.png", stage, new StageObjectBehaviour() {
             @Override
             public void update(sab.game.stage.StageObject stageObject, Battle battle) {
-                stageObject.velocity.y = (float) Math.sin(Game.game.window.getTick() / 32f) / 4f;
+                stageObject.velocity.y = (float) Math.sin(Game.game.window.getTick() / 32f) / 8f;
             }
         });
         stage.addStageObject(platform);
@@ -26,7 +25,7 @@ public class COBS extends StageType {
         platform = new sab.game.stage.Platform(-280 / 2, -128, 280, 72, "ruined_platform_2.png", stage, new StageObjectBehaviour() {
             @Override
             public void update(sab.game.stage.StageObject stageObject, Battle battle) {
-                stageObject.velocity.y = (float) Math.sin(Game.game.window.getTick() / 32f + Math.PI / 2f) / 4f;
+                stageObject.velocity.y = (float) Math.sin(Game.game.window.getTick() / 32f + Math.PI / 2f) / 8f;
             }
         });
 
@@ -37,7 +36,7 @@ public class COBS extends StageType {
         platform = new Platform(-280 / 2 + 280 + 100, -128, 280, 72, "ruined_platform_3.png", stage, new StageObjectBehaviour() {
             @Override
             public void update(StageObject stageObject, Battle battle) {
-                stageObject.velocity.y = (float) Math.sin(Game.game.window.getTick() / 32f + Math.PI) / 4f;
+                stageObject.velocity.y = (float) Math.sin(Game.game.window.getTick() / 32f + Math.PI) / 8f;
             }
         });
 

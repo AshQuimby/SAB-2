@@ -86,7 +86,7 @@ public class Player extends GameObject implements Hittable {
 
         hitbox = new Rectangle(0, 0, fighter.hitboxWidth, fighter.hitboxHeight);
         hitbox.setCenter(new Vector2(id == 0 ? battle.getStage().player1SpawnX : battle.getStage().player2SpawnX, battle.getStage().getSafeBlastZone().height / 2 + Math.max(respawnTime, 120) - 512 - hitbox.height));
-        move(new Vector2(0, -800));
+        move(new Vector2(0, -4000));
         drawRect = new Rectangle(0, 0, fighter.renderWidth, fighter.renderHeight);
 
         direction = 1;
@@ -782,6 +782,10 @@ public class Player extends GameObject implements Hittable {
                 if (respawnTime > 0) {
                     g.usefulDraw(g.imageProvider.getImage("p" + (id + 1) + "_spawn_platform.png"), drawRect.getCenter(new Vector2()).x - 40, drawRect.y - 32, 80, 32, 0, 1, rotation, false, false);
                 }
+            }
+            if (Settings.getDrawPlayerArrows()) {
+                Vector2 arrowPosition = getCenter().add(-8, drawRect.height / 2 + 4);
+                g.usefulDraw(g.imageProvider.getImage("player_arrows.png"), arrowPosition.x, arrowPosition.y, 16, 8, id == -1 ? 3 : id,3, 0, false, false);
             }
             fighter.render(this, g);
             if (hasItem()) {

@@ -55,21 +55,18 @@ public class Bomb extends AttackType {
         if (!exploded) {
             exploded = true;
             attack.clearHitObjects();
+        } else {
+            attack.alive = false;
         }
     }
 
     @Override
     public void onKill(Attack attack) {
-        if (!exploded) {
-            attack.alive = true;
-            exploded = true;
-        } else {
-            for (int i = 0; i < 6 ; i++) {
-                attack.owner.battle.addParticle(new Particle(attack.hitbox.getCenter(new Vector2()), new Vector2(4 * MathUtils.random(), 0).rotateDeg(MathUtils.random() * 360), 64, 64, 0, "fire.png"));
-                attack.owner.battle.addParticle(new Particle(attack.hitbox.getCenter(new Vector2()), new Vector2(4 * MathUtils.random(), 0).rotateDeg(MathUtils.random() * 360), 96, 96, 0, "smoke.png"));
-            }
-            SABSounds.playSound("explosion.mp3");
+        for (int i = 0; i < 6 ; i++) {
+            attack.owner.battle.addParticle(new Particle(attack.hitbox.getCenter(new Vector2()), new Vector2(4 * MathUtils.random(), 0).rotateDeg(MathUtils.random() * 360), 64, 64, 0, "fire.png"));
+            attack.owner.battle.addParticle(new Particle(attack.hitbox.getCenter(new Vector2()), new Vector2(4 * MathUtils.random(), 0).rotateDeg(MathUtils.random() * 360), 96, 96, 0, "smoke.png"));
         }
+        SABSounds.playSound("explosion.mp3");
     }
 
     @Override
