@@ -27,6 +27,17 @@ public class BaseAI extends AI {
         super(player, difficulty);
     }
 
+    protected void frozen() {
+        if (mashCooldown == 0) {
+            pressKey(Keys.ATTACK);
+            mashCooldown = 30 - difficulty * 3;
+        }
+    }
+
+    protected void grabbingLedge() {
+        pressKey(Keys.UP);
+    }
+
     // Run when the player is in danger of falling into the void
     protected void recover(Platform targetPlatform, Ledge targetLedge) {
         dontChase = true;
@@ -111,15 +122,13 @@ public class BaseAI extends AI {
         releaseAllKeys();
         unlockAllKeys();
 
-        if (player.frozen() && mashCooldown == 0) {
-            pressKey(Keys.ATTACK);
-            mashCooldown = 30 - difficulty * 3;
+        if (player.frozen()) {
+            frozen();
             return;
         }
 
         if (player.grabbingLedge()) {
-            releaseKey(Keys.DOWN);
-            pressKey(Keys.UP);
+            grabbingLedge();
             return;
         }
 
@@ -146,7 +155,7 @@ public class BaseAI extends AI {
         if (movingToCenter) {
             if (player.velocity.y <= 0) {
                 pressKey(Keys.UP);
-                if (player.getRemainingJumps() == 0 && Math.abs(center.x - platformToCenterOn.hitbox.x + platformToCenterOn.hitbox.width / 2) < preferredHorizontalDistance) {
+                if (player.getRemainingJumps() == 0 && Math.abs(center.x - (platformToCenterOn.hitbox.x + platformToCenterOn.hitbox.width / 2)) < preferredHorizontalDistance) {
                     pressKey(Keys.ATTACK);
                 }
             }
@@ -158,7 +167,7 @@ public class BaseAI extends AI {
                 pressKey(Keys.LEFT);
             }
 
-            if (++moveToCenterTime >= 120 || Math.abs(center.x - platformToCenterOn.hitbox.x + platformToCenterOn.hitbox.width / 2) < player.hitbox.width) {
+            if (++moveToCenterTime >= 120 || Math.abs(center.x - (platformToCenterOn.hitbox.x + platformToCenterOn.hitbox.width / 2)) < player.hitbox.width) {
                 moveToCenterTime = 0;
                 movingToCenter = false;
                 platformToCenterOn = null;
@@ -169,23 +178,23 @@ public class BaseAI extends AI {
         if (platformBelow != null) {
             // The minimum distance to the edge of the platform the player can get before it tries to get to the center.
             float minDistanceToEdge = Math.min(player.hitbox.width * 2, Math.max(platformBelow.hitbox.width - preferredHorizontalDistance, 0));
-            if (Math.abs(center.x - targetPosition.x) < preferredHorizontalDistance && isDirectlyHorizontal(target.hitbox)) {
-                if (center.x < targetPosition.x) pressKey(Keys.LEFT);
-                if (center.x > targetPosition.x) pressKey(Keys.RIGHT);
+            if (Math.abs(center.x - targetPosition.x) < preferredHorizontalDistance) { // && isDirectlyHorizontal(target.hitbox)
+                //if (center.x < targetPosition.x) pressKey(Keys.LEFT);
+                //if (center.x > targetPosition.x) pressKey(Keys.RIGHT);
 
                 if (Math.abs(center.x - platformBelow.hitbox.x) < minDistanceToEdge && player.getRemainingJumps() == 0) {
                     releaseKey(Keys.LEFT);
                     pressKey(Keys.RIGHT);
                     pressKey(Keys.UP);
-                    platformToCenterOn = platformBelow;
                     moveToCenter();
+                    platformToCenterOn = platformBelow;
                 }
                 if (Math.abs(center.x - (platformBelow.hitbox.x + platformBelow.hitbox.width)) < minDistanceToEdge && player.getRemainingJumps() == 0) {
                     releaseKey(Keys.RIGHT);
                     pressKey(Keys.LEFT);
                     pressKey(Keys.UP);
-                    platformToCenterOn = platformBelow;
                     moveToCenter();
+                    platformToCenterOn = platformBelow;
                 }
             }
         }
@@ -196,7 +205,7 @@ public class BaseAI extends AI {
                 pressKey(Keys.LEFT);
             }
 
-            if (getPlatformBelow(target) != null && targetPosition.y > center.y) {
+            if (getPlatformBelow(target) != null && targetPosition.y > center.y && player.velocity.y <= 0) {
                 pressKey(Keys.UP);
             }
         }
@@ -222,7 +231,9 @@ public class BaseAI extends AI {
 
         if (target.hasAction() && difficulty >= 4) {
             if (Math.abs(center.x - targetPosition.x) < (player.hitbox.width / 2 + target.hitbox.width / 2) * 3) {
-                pressKey(Keys.UP);
+                if (player.velocity.y <= 0) {
+                    pressKey(Keys.UP);
+                }
             }
         }
 

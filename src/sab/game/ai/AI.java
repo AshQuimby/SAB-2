@@ -20,7 +20,7 @@ import java.util.Set;
 public class AI {
     protected final Player player;
     protected int difficulty;
-    private Set<Integer> lockedKeys;
+    private final Set<Integer> lockedKeys;
 
     public AI(Player player, int difficulty) {
         this.player = player;
@@ -85,6 +85,29 @@ public class AI {
 
     public boolean isDirectlyBelow(Rectangle rect) {
         return (player.hitbox.x < rect.x + rect.width && player.hitbox.x + player.hitbox.width > rect.x) && player.hitbox.y < rect.y;
+    }
+
+    public float distanceToLeftSide(Rectangle rect) {
+        return player.hitbox.x - rect.x;
+    }
+
+    public float distanceToRightSide(Rectangle rect) {
+        return rect.x + rect.width - player.hitbox.x + player.hitbox.width;
+    }
+
+    public void faceTarget(Rectangle target) {
+        float x = player.hitbox.x + player.hitbox.width / 2;
+        float targetX = target.x + target.width / 2;
+
+        if (x < targetX) pressKey(Keys.RIGHT);
+        if (x > targetX) pressKey(Keys.LEFT);
+    }
+
+    public int getDirectionTo(Rectangle target) {
+        float x = player.hitbox.x + player.hitbox.width / 2;
+        float targetX = target.x + target.width / 2;
+
+        return x < targetX ? 1 : -1;
     }
 
     public boolean isFacing(float x) {
