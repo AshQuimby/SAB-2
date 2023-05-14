@@ -205,7 +205,7 @@ public class BaseAI extends AI {
                 pressKey(Keys.LEFT);
             }
 
-            if (getPlatformBelow(target) != null && targetPosition.y > center.y && player.velocity.y <= 0) {
+            if (getPlatformBelow(target) != null && target.hitbox.y > player.hitbox.y && player.velocity.y <= 0) {
                 pressKey(Keys.UP);
             }
         }

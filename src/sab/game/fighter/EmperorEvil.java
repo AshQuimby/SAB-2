@@ -1,17 +1,21 @@
 package sab.game.fighter;
 
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
 import sab.game.Game;
 import sab.game.Player;
 import sab.game.action.PlayerAction;
+import sab.game.ai.AI;
+import sab.game.ai.BaseAI;
 import sab.game.animation.Animation;
 import sab.game.attack.emperor_evil.Chomp;
 import sab.game.attack.emperor_evil.ExplosiveBarrel;
 import sab.game.attack.emperor_evil.Cannonball;
 import sab.game.attack.emperor_evil.MagicBanana;
 import sab.game.particle.Particle;
+import sab.net.Keys;
 
 public class EmperorEvil extends FighterType {
     private Animation shootAnimation;
@@ -47,6 +51,56 @@ public class EmperorEvil extends FighterType {
         chargeAnimation = new Animation(new int[] {11, 12, 13}, 8, true);
         fighter.freefallAnimation = new Animation(new int[]{7}, 1, true);
         fighter.costumes = 3;
+    }
+
+    @Override
+    public AI getAI(Player player, int difficulty) {
+        return new BaseAI(player, difficulty, 100) {
+            boolean suck;
+            Rectangle suckBounds = new Rectangle(0, 0, 116, 108);
+
+            @Override
+            public void attack(Vector2 center, Player target, Vector2 targetPosition) {
+                if (player.hasAction() && suck) {
+                    pressKey(Keys.ATTACK);
+                }
+
+                if (player.touchingStage) {
+                    suckBounds.setCenter(center);
+                    suckBounds.x += 84 * player.direction;
+
+                    Rectangle futureTargetHitbox = new Rectangle(target.hitbox);
+                    Vector2 futureTargetVelocity = target.velocity.cpy();
+                    int ticksUntilCollision = 0;
+                    for (int i = 0; i < 20 + difficulty * 10; i++) {
+                        futureTargetHitbox.x += futureTargetVelocity.x;
+                        futureTargetHitbox.y += futureTargetVelocity.y;
+                        if (!target.touchingStage) futureTargetVelocity.y -= .96f;
+
+                        if (suckBounds.overlaps(futureTargetHitbox)) {
+                            ticksUntilCollision = i;
+                            break;
+                        }
+                    }
+
+                    if (ticksUntilCollision >= 18 && ticksUntilCollision <= 36) {
+                        useNeutralAttack();
+                        suck = true;
+                        return;
+                    }
+                }
+
+                if (isDirectlyHorizontal(target.hitbox) && isFacing(targetPosition.x) && Math.random() * 25 < difficulty) {
+                    float horizontalDistance = Math.abs(center.x - targetPosition.x);
+                    if (horizontalDistance > 90) {
+                        useNeutralAttack();
+                        suck = false;
+                    } else {
+                        useSideAttack();
+                    }
+                }
+            }
+        };
     }
 
     @Override

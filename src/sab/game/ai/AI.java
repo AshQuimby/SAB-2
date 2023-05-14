@@ -92,7 +92,7 @@ public class AI {
     }
 
     public float distanceToRightSide(Rectangle rect) {
-        return rect.x + rect.width - player.hitbox.x + player.hitbox.width;
+        return rect.x + rect.width - (player.hitbox.x + player.hitbox.width);
     }
 
     public void faceTarget(Rectangle target) {

@@ -9,10 +9,14 @@ import sab.game.DamageSource;
 import sab.game.Game;
 import sab.game.Player;
 import sab.game.SABSounds;
+import sab.game.ai.AI;
+import sab.game.ai.BaseAI;
 import sab.game.animation.Animation;
 import sab.game.attack.Attack;
 import sab.game.attack.bowl_boy.*;
 import sab.game.particle.Particle;
+import sab.game.stage.Ledge;
+import sab.game.stage.Platform;
 import sab.net.Keys;
 import sab.util.Utils;
 
@@ -32,6 +36,55 @@ public class BowlBoy extends FighterType {
     private Animation freefallSpinAnimation;
     private Animation freefallNormalAnimation;
     private Animation exUseAnimation;
+
+    @Override
+    public AI getAI(Player player, int difficulty) {
+        return new BaseAI(player, difficulty, 100) {
+            @Override
+            protected void recover(Platform targetPlatform, Ledge targetLedge) {
+                float x = player.hitbox.x + player.hitbox.width / 2;
+                float ledgeX = targetLedge.grabBox.x + targetLedge.grabBox.width / 2;
+
+                if (player.velocity.y <= 0) {
+                    pressKey(Keys.UP);
+                    if (player.getRemainingJumps() == 0 && isFacing(ledgeX)) {
+                        pressKey(Keys.ATTACK);
+                        return;
+                    }
+                }
+
+                if (x < ledgeX) {
+                    pressKey(Keys.RIGHT);
+                } else {
+                    pressKey(Keys.LEFT);
+                }
+            }
+
+            @Override
+            public void attack(Vector2 center, Player target, Vector2 targetPosition) {
+                BowlBoy bowlBoy = (BowlBoy) player.fighter.type;
+                int cards = bowlBoy.getCardCount();
+
+                if (bowlBoy.chargingShot && Math.random() * 20 < difficulty) {
+                    releaseKey(Keys.ATTACK);
+                    return;
+                }
+
+                if (cards > 0) {
+                    float horizontalDistance = Math.abs(center.x - targetPosition.x);
+                    if (horizontalDistance < 150 && isFacing(targetPosition.x)) useSideAttack();
+                } else {
+                    if (isDirectlyHorizontal(target.hitbox) && isFacing(targetPosition.x)) {
+                        useNeutralAttack();
+                    }
+                }
+
+                if (Math.random() * 60 < 2f) {
+                    useDownAttack();
+                }
+            }
+        };
+    }
 
     @Override
     public void setDefaults(sab.game.fighter.Fighter fighter) {

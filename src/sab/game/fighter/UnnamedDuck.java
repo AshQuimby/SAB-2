@@ -7,6 +7,8 @@ import com.seagull_engine.Seagraphics;
 import sab.game.Game;
 import sab.game.Player;
 import sab.game.SABSounds;
+import sab.game.ai.AI;
+import sab.game.ai.BaseAI;
 import sab.game.animation.Animation;
 import sab.game.attack.unnamed_duck.DuckGrab;
 import sab.game.attack.unnamed_duck.DuckSign;
@@ -54,6 +56,32 @@ public class UnnamedDuck extends FighterType {
         initializeItemsList();
         itemCoolDown = 0;
         defaultItemCoolDown = 360;
+    }
+
+    @Override
+    public AI getAI(Player player, int difficulty) {
+        return new BaseAI(player, difficulty, 0) {
+            @Override
+            public void attack(Vector2 center, Player target, Vector2 targetPosition) {
+
+                if (isDirectlyHorizontal(target.hitbox) && isFacing(targetPosition.x)) {
+                    float horizontalDistance = Math.abs(center.x - targetPosition.x);
+
+                    if (horizontalDistance <= 60) {
+                        useNeutralAttack();
+                    } else if (player.hasItem() && Math.random() * 20 < difficulty) {
+                        useSideAttack();
+                    }
+                } else if (isDirectlyBelow(target.hitbox) && Math.abs(center.y - targetPosition.y) > 32 && Math.random() * 20 < difficulty) {
+                    useUpAttack();
+                }
+
+                UnnamedDuck duck = (UnnamedDuck) player.fighter.type;
+                if (!player.hasItem() && duck.itemCoolDown == 0 && Math.random() * 60 < .8f) {
+                    useDownAttack();
+                }
+            }
+        };
     }
 
     @Override

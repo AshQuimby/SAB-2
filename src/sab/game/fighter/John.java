@@ -1,17 +1,21 @@
 package sab.game.fighter;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.math.Vector2;
 import com.seagull_engine.Seagraphics;
 
 import sab.game.Game;
 import sab.game.Player;
 import sab.game.SABSounds;
+import sab.game.ai.AI;
+import sab.game.ai.BaseAI;
 import sab.game.animation.Animation;
 import sab.game.attack.john.DownPunch;
 import sab.game.attack.john.JohnPunch;
 import sab.game.attack.john.JohnSlam;
 import sab.game.attack.john.JohnSuck;
 import sab.game.screen.VictoryScreen;
+import sab.net.Keys;
 
 public class John extends FighterType {
     private Animation suckAnimation;
@@ -51,6 +55,39 @@ public class John extends FighterType {
         fighter.knockbackAnimation = new Animation(new int[] {10}, 1, true);
         fighter.costumes = 4;
         justWon = true;
+    }
+
+    @Override
+    public AI getAI(Player player, int difficulty) {
+        return new BaseAI(player, difficulty, 16) {
+            @Override
+            public void attack(Vector2 center, Player target, Vector2 targetPosition) {
+                if (!player.touchingStage && player.hasAction() && getPlatformBelow() != null) {
+                    float horizontalDistance = Math.abs(center.x - targetPosition.x);
+                    if (horizontalDistance <= 80) pressKey(Keys.ATTACK);
+                }
+
+                if (isDirectlyHorizontal(target.hitbox) && isFacing(targetPosition.x)) {
+                    int ticksUntilInRange = 0;
+                    for (int i = 16; i <= 28; i++) {
+                        float predictedX = center.x + player.velocity.x * i / 2f;
+                        float predictedOpponentX = targetPosition.x + target.velocity.x * i;
+                        if (Math.abs(predictedX - predictedOpponentX) <= 60) {
+                            ticksUntilInRange = i;
+                            break;
+                        }
+                    }
+
+                    if (ticksUntilInRange >= 16) {
+                        useSideAttack();
+                    } else if (Math.random() * 25 < difficulty) {
+                        useUpAttack();
+                    }
+                } else if (isDirectlyAbove(target.hitbox) && Math.random() * 20 < difficulty) {
+                    useDownAttack();
+                }
+            }
+        };
     }
 
     @Override

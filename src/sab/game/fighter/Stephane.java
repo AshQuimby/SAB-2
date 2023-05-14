@@ -8,6 +8,8 @@ import com.seagull_engine.Seagraphics;
 
 import sab.game.*;
 import sab.game.action.PlayerAction;
+import sab.game.ai.AI;
+import sab.game.ai.BaseAI;
 import sab.game.animation.Animation;
 import sab.game.attack.Attack;
 import sab.game.attack.stephane.Baguette;
@@ -63,6 +65,35 @@ public class Stephane extends FighterType {
         bowFastAnimation = new Animation(new int[] {9, 10, 11, 14}, 4, true);
         bowFireworkAnimation = new Animation(new int[] {12, 13, 14}, 12, true);
         blocks = 16;
+    }
+
+    @Override
+    public AI getAI(Player player, int difficulty) {
+        return new BaseAI(player, difficulty, 64) {
+            @Override
+            public void attack(Vector2 center, Player target, Vector2 targetPosition) {
+                if (Math.random() * 20 > difficulty) return;
+
+                Stephane stephane = (Stephane) player.fighter.type;
+                if (isDirectlyBelow(target.hitbox) && stephane.blocks >= 4) {
+                    useUpAttack();
+                }
+
+                if (isDirectlyHorizontal(target.hitbox) && isFacing(targetPosition.x)) {
+                    float horizontalDistance = Math.abs(center.x - targetPosition.x);
+
+                    if (horizontalDistance >= 200 && stephane.blocks >= 16) {
+                        useSideAttack();
+                    } else {
+                        useNeutralAttack();
+                    }
+                }
+
+                if (getPlatformBelow() == null) {
+                    useDownAttack();
+                }
+            }
+        };
     }
 
     public boolean createBlock(Player player, Stage stage) {

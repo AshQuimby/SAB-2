@@ -10,6 +10,7 @@ import sab.game.attack.big_seagull.Glide;
 import sab.game.attack.big_seagull.Peck;
 import sab.game.attack.big_seagull.FeatherDart;
 import sab.game.attack.big_seagull.Gust;
+import sab.game.stage.Platform;
 import sab.net.Keys;
 
 public class BigSeagull extends FighterType {
@@ -50,26 +51,30 @@ public class BigSeagull extends FighterType {
 
     @Override
     public AI getAI(Player player, int difficulty) {
-        return new BaseAI(player, difficulty, 0) {
+        return new BaseAI(player, difficulty, 32) {
             @Override
             public void attack(Vector2 center, Player target, Vector2 targetPosition) {
-                if (isDirectlyHorizontal(target.hitbox) && Math.random() * 20 < difficulty) {
+                Platform platform = getPlatformBelow();
+                if (platform != null) {
+                    if (distanceToLeftSide(platform.hitbox) < 32) {
+                        pressKey(Keys.RIGHT);
+                        return;
+                    } else if (distanceToRightSide(platform.hitbox) < 32) {
+                        pressKey(Keys.LEFT);
+                        return;
+                    }
+                }
+
+                if (isDirectlyHorizontal(target.hitbox) && Math.random() * 20 < difficulty && isFacing(targetPosition.x)) {
                     if (target.damage > 30 && Math.random() * 100 + target.damage > 100) {
-                        releaseKey(Keys.LEFT);
-                        releaseKey(Keys.RIGHT);
-                        pressKey(Keys.ATTACK);
+                        useNeutralAttack();
                     } else {
                         if (Math.random() < .2) {
-                            releaseKey(Keys.LEFT);
-                            releaseKey(Keys.RIGHT);
-                            pressKey(Keys.DOWN);
-                            pressKey(Keys.ATTACK);
+                            useDownAttack();
                         } else {
                             pressKey(Keys.ATTACK);
                         }
                     }
-                } else if ((isDirectlyAbove(target.hitbox) || isDirectlyBelow(target.hitbox)) && Math.random() * 15 < difficulty) {
-                    pressKey(Keys.UP);
                 }
             }
         };

@@ -1,16 +1,20 @@
 package sab.game.fighter;
 
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
 import sab.game.Player;
 import sab.game.action.PlayerAction;
 import sab.game.SABSounds;
+import sab.game.ai.AI;
+import sab.game.ai.BaseAI;
 import sab.game.animation.Animation;
 import sab.game.attack.Attack;
 import sab.game.attack.snas.GlasterBaster;
 import sab.game.attack.snas.BoneSpike;
 import sab.game.attack.snas.SpinnyBone;
 import sab.game.particle.Particle;
+import sab.net.Keys;
 import sab.util.Utils;
 
 public class Snas extends FighterType {
@@ -43,6 +47,51 @@ public class Snas extends FighterType {
         chargeAnimation = new Animation(new int[] {4}, 7, true);
         fighter.freefallAnimation = new Animation(new int[]{7}, 1, true);
         fighter.costumes = 3;
+    }
+
+    @Override
+    public AI getAI(Player player, int difficulty) {
+        return new BaseAI(player, difficulty, 128) {
+            @Override
+            public void attack(Vector2 center, Player target, Vector2 targetPosition) {
+                if (player.charging()) {
+                    Rectangle adjustedTargetHitbox = new Rectangle(target.hitbox);
+                    adjustedTargetHitbox.x -= player.direction * 86;
+
+                    if (Math.random() * 20 < difficulty) {
+                        if (isDirectlyHorizontal(target.hitbox)) {
+                            faceTarget(target.hitbox);
+                        } else if (isDirectlyBelow(adjustedTargetHitbox)) {
+                            pressKey(Keys.UP);
+                        } else if (isDirectlyAbove(adjustedTargetHitbox)) {
+                            pressKey(Keys.DOWN);
+                        }
+                    }
+
+                    if (player.getCharge() <= 60 - Math.random() * 30) {
+                        pressKey(Keys.ATTACK);
+                    }
+
+                    return;
+                }
+
+                if (target.damage < 100 - difficulty * 5 || Math.random() < target.damage / 300f) {
+                    if (Math.random() * 60 > 3 + difficulty) return;
+                    if (Math.abs(center.x - targetPosition.x) < 200) {
+                        if (!player.touchingStage && !isDirectlyHorizontal(target.hitbox)) {
+                            useNeutralAttack();
+                        } else {
+                            faceTarget(target.hitbox);
+                            useSideAttack();
+                        }
+                    }
+
+                    return;
+                }
+
+                useDownAttack();
+            }
+        };
     }
 
     public void setDefaultHitbox(Fighter fighter, Player player) {

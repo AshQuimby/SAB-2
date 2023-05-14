@@ -2,17 +2,21 @@ package sab.game.fighter;
 
 
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
 import sab.game.Game;
 import sab.game.Player;
 import sab.game.SABSounds;
+import sab.game.ai.AI;
+import sab.game.ai.BaseAI;
 import sab.game.animation.Animation;
 import sab.game.attack.walouis.Racket;
 import sab.game.attack.walouis.Bomb;
 import sab.game.attack.walouis.Note;
 import sab.game.attack.walouis.TinyNote;
 import sab.game.particle.Particle;
+import sab.net.Keys;
 import sab.util.Utils;
 
 public class Walouis extends FighterType {
@@ -41,6 +45,59 @@ public class Walouis extends FighterType {
         fighter.description = "Walouis, the world famous jazz musician and singer is known for his smash hit albums such as: 'Waaht is Love', 'A Wah's Life', and 'Waaghing in the shadows.' He also sees success in his professional badminton career.";
         fighter.debut = "Marvin Badminton";
         fighter.costumes = 3;
+    }
+
+    @Override
+    public AI getAI(Player player, int difficulty) {
+        return new BaseAI(player, difficulty, 100) {
+            boolean useRacket;
+            Rectangle racketBounds = new Rectangle(0, 0, 208, 116);
+
+            @Override
+            public void attack(Vector2 center, Player target, Vector2 targetPosition) {
+                racketBounds.setCenter(center);
+                racketBounds.y += 24;
+                if (player.hasAction() && player.getCharge() < 90 && useRacket) {
+                    pressKey(Keys.ATTACK);
+
+                    if (racketBounds.overlaps(target.hitbox)) {
+                        releaseKey(Keys.ATTACK);
+                        return;
+                    }
+                }
+
+                if (Math.random() < .1f) {
+                    Rectangle futureTargetHitbox = new Rectangle(target.hitbox);
+                    Vector2 futureTargetVelocity = target.velocity.cpy();
+                    int ticksUntilCollision = 0;
+                    for (int i = 0; i < 20 + difficulty * 10; i++) {
+                        futureTargetHitbox.x += futureTargetVelocity.x;
+                        futureTargetHitbox.y += futureTargetVelocity.y;
+                        if (!target.touchingStage) futureTargetVelocity.y -= .96f;
+
+                        if (racketBounds.overlaps(futureTargetHitbox)) {
+                            ticksUntilCollision = i;
+                            break;
+                        }
+                    }
+
+                    if (ticksUntilCollision >= 6 && ticksUntilCollision <= 30) {
+                        useSideAttack();
+                        useRacket = true;
+                        return;
+                    }
+                }
+
+                if (isDirectlyHorizontal(target.hitbox) && isFacing(targetPosition.x)) {
+                    float horizontalDistance = Math.abs(center.x - targetPosition.x);
+                    if (horizontalDistance > 275 && Math.random() * 25 < difficulty) {
+                        useDownAttack();
+                    } else if (horizontalDistance < 150) {
+                        useNeutralAttack();
+                    }
+                }
+            }
+        };
     }
 
     @Override

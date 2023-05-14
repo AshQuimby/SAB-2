@@ -1,9 +1,12 @@
 package sab.game.fighter;
 
+import com.badlogic.gdx.math.Vector2;
 import com.seagull_engine.GameObject;
 import com.seagull_engine.Seagraphics;
 import sab.game.Game;
 import sab.game.Player;
+import sab.game.ai.AI;
+import sab.game.ai.BaseAI;
 import sab.game.animation.Animation;
 import sab.game.attack.Attack;
 import sab.game.attack.empty_soldier.AngrySoul;
@@ -11,6 +14,7 @@ import sab.game.attack.empty_soldier.EmptySoldierSlash;
 import sab.game.attack.empty_soldier.ShadowPlunge;
 import sab.game.attack.empty_soldier.ViceroyWings;
 import sab.game.particle.Particle;
+import sab.net.Keys;
 import sab.util.Utils;
 
 public class EmptySoldier extends FighterType {
@@ -48,6 +52,37 @@ public class EmptySoldier extends FighterType {
         swingAnimation = new Animation(new int[] {4, 5, 6, 0}, 2, true);
         castAnimation = new Animation(11, 13, 6, false);
         ticksSinceCast = 30;
+    }
+
+    @Override
+    public AI getAI(Player player, int difficulty) {
+        return new BaseAI(player, difficulty, 32) {
+            private static final int SLASH_DISTANCE = 50;
+
+            @Override
+            public void attack(Vector2 center, Player target, Vector2 targetPosition) {
+                EmptySoldier emptySoldier = (EmptySoldier) player.fighter.type;
+                if (emptySoldier.spirit < 15) {
+                    preferredHorizontalDistance = 0;
+                } else {
+                    preferredHorizontalDistance = 32;
+                }
+
+                if (isDirectlyHorizontal(target.hitbox) && isFacing(targetPosition.x)) {
+                    float horizontalDistance = Math.abs(center.x - targetPosition.x);
+
+                    if (horizontalDistance <= SLASH_DISTANCE) {
+                        useSideAttack();
+                    } else {
+                        if (emptySoldier.spirit >= 15 && Math.random() * 25 < difficulty) {
+                            useNeutralAttack();
+                        }
+                    }
+                } else if (isDirectlyAbove(target.hitbox) && Math.random() * 20 < difficulty) {
+                    useDownAttack();
+                }
+            }
+        };
     }
 
     @Override
