@@ -110,6 +110,10 @@ public class BaseAI extends AI {
 
     }
 
+    protected void parry(Attack attack) {
+        pressKey(Keys.PARRY);
+    }
+
     protected void moveToCenter() {
         movingToCenter = true;
         moveToCenterTime = 0;
@@ -215,6 +219,10 @@ public class BaseAI extends AI {
             Vector2 collision = getFutureCollision(nearestAttack, difficulty * 5);
 
             if (collision != null) {
+                if (collision.len() / nearestAttack.velocity.len() <= 20 && Math.random() * 5 < difficulty) {
+                    parry(nearestAttack);
+                    return;
+                }
                 if (collision.y > player.hitbox.y + player.hitbox.height) {
                     if (center.x > collision.x) {
                         releaseKey(Keys.LEFT);

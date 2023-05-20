@@ -6,6 +6,7 @@ import sab.game.SABSounds;
 import sab.game.ai.AI;
 import sab.game.ai.BaseAI;
 import sab.game.animation.Animation;
+import sab.game.attack.Attack;
 import sab.game.attack.big_seagull.Glide;
 import sab.game.attack.big_seagull.Peck;
 import sab.game.attack.big_seagull.FeatherDart;
@@ -53,6 +54,12 @@ public class BigSeagull extends FighterType {
     public AI getAI(Player player, int difficulty) {
         return new BaseAI(player, difficulty, 32) {
             @Override
+            public void parry(Attack attack) {
+                if (attack.reflectable) useNeutralAttack();
+                else super.parry(attack);
+            }
+
+            @Override
             public void attack(Vector2 center, Player target, Vector2 targetPosition) {
                 Platform platform = getPlatformBelow();
                 if (platform != null) {
@@ -72,7 +79,7 @@ public class BigSeagull extends FighterType {
                         if (Math.random() < .2) {
                             useDownAttack();
                         } else {
-                            pressKey(Keys.ATTACK);
+                            useSideAttack(player.direction);
                         }
                     }
                 }
