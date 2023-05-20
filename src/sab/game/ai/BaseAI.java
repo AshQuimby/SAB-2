@@ -219,7 +219,7 @@ public class BaseAI extends AI {
             Vector2 collision = getFutureCollision(nearestAttack, difficulty * 5);
 
             if (collision != null) {
-                if (collision.len() / nearestAttack.velocity.len() <= 20 && Math.random() * 5 < difficulty) {
+                if (collision.len() / nearestAttack.velocity.len() <= 20 && Math.random() * 10 < difficulty) {
                     parry(nearestAttack);
                     return;
                 }
