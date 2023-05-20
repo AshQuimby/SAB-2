@@ -10,7 +10,7 @@ import com.seagull_engine.Seagraphics;
 
 import sab.game.attack.AttackType;
 import sab.game.fighter.*;
-import sab.game.screen.character_select.CharacterSelectScreen;
+import sab.game.screen.CharacterSelectScreen;
 import sab.game.screen.extras.JukeboxScreen;
 import sab.game.screen.ModErrorScreen;
 import sab.game.screen.TitleScreen;

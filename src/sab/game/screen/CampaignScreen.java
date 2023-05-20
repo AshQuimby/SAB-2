@@ -8,7 +8,6 @@ import sab.dialogue.Dialogues;
 import sab.game.Game;
 import sab.game.SABSounds;
 import sab.game.fighter.*;
-import sab.game.screen.battle.LocalBattleScreen;
 import sab.game.stage.*;
 import sab.screen.Screen;
 import sab.screen.ScreenAdapter;
@@ -57,7 +56,7 @@ public class CampaignScreen extends ScreenAdapter {
         }
         if (keyCode == Input.Keys.ENTER) {
             SABSounds.playSound(SABSounds.SELECT);
-            LocalBattleScreen battleScreen = new LocalBattleScreen(new Fighter(new Marvin()), levels[selection].opponent, new int[] {0, 0}, levels[selection].stage, 0, levels[selection].difficulty, 3);
+            BattleScreen battleScreen = new BattleScreen(new Fighter(new Marvin()), levels[selection].opponent, new int[] {0, 0}, levels[selection].stage, 0, levels[selection].difficulty, 3);
             battleScreen.battle.setDialogue(Dialogues.getDialogue("chain_greeting.dlg"));
             return battleScreen;
         }

@@ -6,7 +6,6 @@ import com.seagull_engine.Seagraphics;
 import sab.error.SabError;
 import sab.game.Game;
 import sab.game.Settings;
-import sab.game.screen.character_select.HostedCharacterSelectScreen;
 import sab.game.screen.error.ErrorScreen;
 import sab.net.packet.SabPacketManager;
 import sab.net.server.Server;
@@ -72,7 +71,7 @@ public class HostGameScreen extends ScreenAdapter {
         }
 
         if (hasRemoteConnection) {
-            return new HostedCharacterSelectScreen(server, remoteClient);
+            return new CharacterSelectScreen(server);
         }
 
         return this;

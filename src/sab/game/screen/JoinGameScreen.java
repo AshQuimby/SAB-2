@@ -7,7 +7,6 @@ import com.seagull_engine.Seagraphics;
 import sab.error.SabError;
 import sab.game.Game;
 import sab.game.Settings;
-import sab.game.screen.character_select.JoinedCharacterSelectScreen;
 import sab.game.screen.error.ErrorScreen;
 import sab.net.client.Client;
 import sab.net.packet.*;
@@ -82,7 +81,7 @@ public class JoinGameScreen extends ScreenAdapter {
 
         if (System.currentTimeMillis() - timestamp < TIMEOUT_THRESHOLD) {
             if (client != null) {
-                return new JoinedCharacterSelectScreen(client);
+                return new CharacterSelectScreen(client);
             }
         } else {
             error = new SabError("Connection Failed", "Timed out");

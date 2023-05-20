@@ -8,5 +8,7 @@ public class SabPacketManager extends PacketManager {
         register(KickPacket.class);
         register(PlayerStatePacket.class);
         register(SpawnParticlePacket.class);
+        register(ScreenTransitionPacket.class);
+        register(StageSelectPacket.class);
     }
 }
