@@ -6,6 +6,7 @@ import com.seagull_engine.Seagraphics;
 import sab.error.SabError;
 import sab.game.Battle;
 import sab.game.Game;
+import sab.game.Player;
 import sab.game.SABSounds;
 import sab.game.fighter.Fighter;
 import sab.game.screen.error.ErrorScreen;
@@ -14,14 +15,19 @@ import sab.net.Keys;
 import sab.net.client.Client;
 import sab.net.packet.KeyEventPacket;
 import sab.net.packet.Packet;
+import sab.net.packet.PlayerStatePacket;
 import sab.net.server.Server;
 import sab.screen.*;
 
 public class BattleScreen extends NetScreen {
+    private static final int NETWORK_TICK_MILLISECONDS = 50;
+
     public Battle battle;
 
     private boolean disconnected;
     private boolean ended;
+
+    private long lastBroadcastTimestamp;
 
     public BattleScreen(Fighter player1, Fighter player2, int[] costumes, Stage stage, int player1Type, int player2Type, int lives) {
         super();
@@ -46,7 +52,8 @@ public class BattleScreen extends NetScreen {
         if (p instanceof KeyEventPacket kep) {
             if (kep.state) battle.getPlayer(0).keys.press(kep.key);
             else battle.getPlayer(0).keys.release(kep.key);
-            System.out.println("Received key event from server");
+        } else if (p instanceof PlayerStatePacket psp) {
+            psp.syncPlayer(battle.getPlayer(psp.playerId));
         }
     }
 
@@ -229,6 +236,14 @@ public class BattleScreen extends NetScreen {
         }
         battle.update();
         battle.postUpdate();
+        if (host && System.currentTimeMillis() - lastBroadcastTimestamp > 50) {
+            System.out.println(lastBroadcastTimestamp);
+            lastBroadcastTimestamp = System.currentTimeMillis();
+            for (int i = 0; i < battle.getPlayers().size(); i++) {
+                Player player = battle.getPlayer(i);
+                server.send(0, new PlayerStatePacket(player));
+            }
+        }
         return this;
     }
 
