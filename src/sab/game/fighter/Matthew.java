@@ -63,8 +63,16 @@ public class Matthew extends FighterType {
     public AI getAI(Player player, int difficulty) {
         return new BaseAI(player, difficulty, 150) {
             private static final int SLASH_DISTANCE = 64;
-            private static final int FROSTBALL_DAMAGE_REQUIRED = 60;
             private final Matthew matthew = (Matthew) player.fighter.type;
+
+            @Override
+            public void parry(Attack attack) {
+                if (matthew.counterCharge == 2) {
+                    useNeutralAttack();
+                } else {
+                    pressKey(Keys.PARRY);
+                }
+            }
 
             @Override
             public void attack(Vector2 center, Player target, Vector2 targetPosition) {
@@ -76,8 +84,10 @@ public class Matthew extends FighterType {
                     if (horizontalDistance <= SLASH_DISTANCE) {
                         useSideAttack();
                     }
-                } else if ((isDirectlyAbove(target.hitbox) || isDirectlyBelow(target.hitbox) && Math.abs(center.y - targetPosition.y) > 32) && Math.random() * 20 < difficulty) {
+                } else if ((isDirectlyBelow(target.hitbox) && Math.abs(center.y - targetPosition.y) > 32) && Math.random() * 20 < difficulty) {
                     useUpAttack();
+                } else if (isDirectlyAbove(target.hitbox)) {
+                    useDownAttack();
                 }
 
                 if (target.grabbingLedge()) {
