@@ -136,7 +136,7 @@ public class StageSelectScreen extends NetScreen {
         }
 
         if (starting) {
-            return new BattleScreen(client, player1, player2, new int[] {player1Costume, player2Costume}, stages.get(stageIndex), player1Type, player2Type, 3);
+            return new BattleScreen(client, player1, player2, new int[] {player1Costume, player2Costume}, stages.get(stageIndex), 3);
         }
 
         return this;
@@ -172,7 +172,7 @@ public class StageSelectScreen extends NetScreen {
         if (keyCode == Input.Keys.ENTER && (host || local)) {
             if (host) {
                 server.send(0, new ScreenTransitionPacket());
-                return new BattleScreen(server, player1, player2, new int[] {player1Costume, player2Costume}, stages.get(stageIndex), player1Type, player2Type, 3);
+                return new BattleScreen(server, player1, player2, new int[] {player1Costume, player2Costume}, stages.get(stageIndex), 3);
             }
             return new BattleScreen(player1, player2, new int[] {player1Costume, player2Costume}, stages.get(stageIndex), player1Type, player2Type, 3);
         }

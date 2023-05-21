@@ -29,15 +29,15 @@ public class BattleScreen extends NetScreen {
         SABSounds.playMusic(battle.getStage().music, true);
     }
 
-    public BattleScreen(Server server, Fighter player1, Fighter player2, int[] costumes, Stage stage, int player1Type, int player2Type, int lives) {
+    public BattleScreen(Server server, Fighter player1, Fighter player2, int[] costumes, Stage stage, int lives) {
         super(server);
-        battle = new Battle(player1, player2, costumes, stage, player1Type, player2Type, lives);
+        battle = new Battle(player1, player2, costumes, stage, 0, 0, lives);
         SABSounds.playMusic(battle.getStage().music, true);
     }
 
-    public BattleScreen(Client client, Fighter player1, Fighter player2, int[] costumes, Stage stage, int player1Type, int player2Type, int lives) {
+    public BattleScreen(Client client, Fighter player1, Fighter player2, int[] costumes, Stage stage, int lives) {
         super(client);
-        battle = new Battle(player1, player2, costumes, stage, player1Type, player2Type, lives);
+        battle = new Battle(player1, player2, costumes, stage, 0, 0, lives);
         SABSounds.playMusic(battle.getStage().music, true);
     }
 
