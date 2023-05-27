@@ -10,9 +10,10 @@ import java.util.Scanner;
 
 
 public class SabReader {
-    public static HashMap<String, String> read(File file) throws FileNotFoundException {
-        HashMap<String, String> contents = new HashMap<String, String>();
-        Scanner scanner = new Scanner(file);
+    public static HashMap<String, String> read(File file) {
+        HashMap<String, String> contents = new HashMap<>();
+        Scanner scanner = null;
+        try { scanner = new Scanner(file); } catch (FileNotFoundException e) { throw new RuntimeException(e); }
 
         while (scanner.hasNext()) {
             String token = scanner.next();
@@ -28,6 +29,36 @@ public class SabReader {
 
         scanner.close();
         return contents;
+    }
+
+    public static String readProperty(String property, File file) {
+        Scanner scanner = null;
+        try { scanner = new Scanner(file); } catch (FileNotFoundException e) { throw new RuntimeException(e); }
+        while (scanner.hasNext()) {
+            String token = scanner.next();
+
+            if (token.startsWith("@" + property)) {
+                String value = scanner.nextLine();
+                scanner.close();
+                return value.substring(1);
+            }
+        }
+        return null;
+    }
+
+    public static String readProperty(String property, String path) {
+        Scanner scanner = null;
+        try { scanner = new Scanner(new File("./")); } catch (FileNotFoundException e) { throw new RuntimeException(e); }
+        while (scanner.hasNext()) {
+            String token = scanner.next();
+
+            if (token.startsWith("@" + property)) {
+                String value = scanner.nextLine();
+                scanner.close();
+                return value.substring(1);
+            }
+        }
+        return null;
     }
 
     public static void write(HashMap<String, String> data, File file) throws FileNotFoundException, IOException {

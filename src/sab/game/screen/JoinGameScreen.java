@@ -12,7 +12,9 @@ import sab.net.client.Client;
 import sab.net.packet.*;
 import sab.screen.Screen;
 import sab.screen.ScreenAdapter;
+import sab.util.SabReader;
 
+import java.io.File;
 import java.io.IOException;
 
 public class JoinGameScreen extends ScreenAdapter {
@@ -27,7 +29,7 @@ public class JoinGameScreen extends ScreenAdapter {
                 () -> {
                     try {
                         // TODO: User specified host address
-                        client = new Client("localhost", Settings.getHostingPort(), new SabPacketManager());
+                        client = new Client(SabReader.readProperty("join_game_ip", "./saves/ips.sab"), Settings.getHostingPort(), new SabPacketManager());
                     } catch (IOException ignored) {
                         error = new SabError("Connection Failed", "Failed to connect");
                     }

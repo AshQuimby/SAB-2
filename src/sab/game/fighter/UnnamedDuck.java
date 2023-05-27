@@ -13,10 +13,10 @@ import sab.game.animation.Animation;
 import sab.game.attack.unnamed_duck.DuckGrab;
 import sab.game.attack.unnamed_duck.DuckSign;
 import sab.game.attack.unnamed_duck.Quack;
-import sab.game.items.BigGun;
-import sab.game.items.Item;
-import sab.game.items.Knife;
-import sab.game.items.Rake;
+import sab.game.item.BigGun;
+import sab.game.item.Item;
+import sab.game.item.Knife;
+import sab.game.item.Rake;
 import sab.game.particle.Particle;
 import sab.util.WeightedCollection;
 

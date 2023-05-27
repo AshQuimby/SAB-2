@@ -16,6 +16,7 @@ import sab.error.SabError;
 import sab.game.Game;
 import sab.game.Player;
 import sab.game.SABSounds;
+import sab.game.Settings;
 import sab.game.fighter.Fighter;
 import sab.game.fighter.FighterType;
 import sab.game.screen.error.ErrorScreen;
@@ -181,14 +182,14 @@ public class CharacterSelectScreen extends NetScreen {
 
         switch (keyCode) {
             // Player 1
-            case Input.Keys.A -> changeCharacter(player1, player2, -1);
-            case Input.Keys.D -> changeCharacter(player1, player2, 1);
+            case Input.Keys.A -> { if (!player1.ready) changeCharacter(player1, player2, -1); }
+            case Input.Keys.D -> { if (!player1.ready) changeCharacter(player1, player2, 1); }
             case Input.Keys.S -> changeCostume(player1, player2, -1);
             case Input.Keys.W -> changeCostume(player1, player2, 1);
 
             // Player 2
-            case Input.Keys.LEFT -> changeCharacter(player2, player1, -1);
-            case Input.Keys.RIGHT -> changeCharacter(player2, player1, 1);
+            case Input.Keys.LEFT -> { if (!player2.ready) changeCharacter(player2, player1, -1); }
+            case Input.Keys.RIGHT -> { if (!player2.ready) changeCharacter(player2, player1, 1); }
             case Input.Keys.DOWN -> changeCostume(player2, player1, -1);
             case Input.Keys.UP -> changeCostume(player2, player1, 1);
 

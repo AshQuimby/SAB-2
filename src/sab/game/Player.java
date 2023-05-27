@@ -2,7 +2,6 @@ package sab.game;
 
 import java.util.List;
 
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
@@ -16,14 +15,15 @@ import sab.game.animation.Animation;
 import sab.game.attack.Attack;
 import sab.game.attack.AttackType;
 import sab.game.fighter.Fighter;
-import sab.game.fighter.FighterType;
-import sab.game.items.Item;
+import sab.game.item.Item;
 import sab.game.particle.Particle;
 import sab.game.stage.Ledge;
 import sab.net.Keys;
 
 public class Player extends GameObject implements Hittable {
     public final Battle battle;
+
+    public boolean usedMacro;
 
     public InputState keys;
     public Fighter fighter;
@@ -124,6 +124,8 @@ public class Player extends GameObject implements Hittable {
         parryTime = 0;
 
         heldItem = null;
+
+        usedMacro = false;
 
         drawRectOffset = new Vector2();
         gameStats = new GameStats("Human " + fighter.name, id);

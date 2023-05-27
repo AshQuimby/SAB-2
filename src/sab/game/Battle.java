@@ -17,6 +17,7 @@ import com.seagull_engine.graphics.SeagullCamera;
 
 import sab.dialogue.Dialogue;
 import sab.game.ai.BaseAI;
+import sab.game.ass_ball.AssBall;
 import sab.game.attack.Attack;
 import sab.game.fighter.Chain;
 import sab.game.fighter.Fighter;
@@ -49,6 +50,7 @@ public class Battle {
     private List<GameObject> miscGameObjects;
     private List<GameObject> newGameObjects;
     private List<GameObject> deadGameObjects;
+    private List<AssBall> assBalls;
     private List<Particle> particles;
     private Map<Integer, GameObject> gameObjectsById;
     private Map<GameObject, Integer> idsByGameObject;
@@ -106,6 +108,7 @@ public class Battle {
         newGameObjects = new ArrayList<>();
         particles = new ArrayList<>();
         deadGameObjects = new ArrayList<>();
+        assBalls = new ArrayList<>();
         gameObjectsById = new HashMap<>();
         idsByGameObject = new HashMap<>();
         nextId = 0;
@@ -123,6 +126,7 @@ public class Battle {
         addNewGameObjects();
     }
 
+    // Relic of the past
     public Battle() {
         this(new Fighter(new Marvin()), new Fighter(new Chain()), new int[] {0, 0}, new Stage(new LastLocation()), 0, 0, 3);
     }
@@ -235,10 +239,13 @@ public class Battle {
 
         if (zoomOnFreeze) {
             camera.targetZoom = 0.5f;
-            camera.targetPosition = (player1.takingKnockback()) ? player1.hitbox.getCenter(new Vector2()) : player2.hitbox.getCenter(new Vector2());
+            camera.targetPosition = (player1.takingKnockback()) ? player1.getCenter() : player2.getCenter();
+        } else if (assBalls.size() > 0) {
+            camera.targetPosition = player1.getCenter().cpy().add(player2.getCenter()).scl(0.5f);
+            camera.targetPosition = camera.targetPosition.add(assBalls.get(0).getCenter()).scl(0.5f);
         } else {
-            camera.targetPosition = player1.hitbox.getCenter(new Vector2()).cpy().add(player2.hitbox.getCenter(new Vector2())).scl(0.5f);
-            float playerDist = player1.hitbox.getCenter(new Vector2()).dst(player2.hitbox.getCenter(new Vector2()));
+            camera.targetPosition = player1.getCenter().cpy().add(player2.getCenter()).scl(0.5f);
+            float playerDist = player1.getCenter().dst(player2.getCenter());
             camera.targetZoom = playerDist / 256;
 
             camera.targetZoom = Math.max(Math.min(stage.maxZoomOut, camera.targetZoom), slowdownDuration > 0 ? 0.5f : 0.75f);
@@ -315,6 +322,11 @@ public class Battle {
             if (newGameObject instanceof StageObject) {
                 stage.addStageObject((StageObject) newGameObject);
             }
+
+            if (newGameObject instanceof AssBall) {
+                assBalls.add((AssBall) newGameObject);
+            }
+
 
             if (misc) {
                 miscGameObjects.add(newGameObject);
@@ -414,6 +426,11 @@ public class Battle {
                 misc = false;
             }
 
+            if (deadGameObject instanceof AssBall) {
+                assBalls.remove(deadGameObject);
+                misc = false;
+            }
+
             if (deadGameObject instanceof StageObject) {
                 stage.getStageObjects().remove(deadGameObject);
             }
@@ -440,6 +457,12 @@ public class Battle {
                     deadGameObjects.add(attack);
                 }
             }
+            if (gameObject instanceof AssBall) {
+                AssBall assBall = (AssBall) gameObject;
+                if (!assBall.isAlive()) {
+                    deadGameObjects.add(assBall);
+                }
+            }
         }
 
         stage.update();
@@ -452,11 +475,22 @@ public class Battle {
             player.keys.update();
         }
     }
-
     public void postUpdate() {
         if (!paused && currentDialogue == null) {
             for (Player player : players) {
                 player.physicsUpdate(freezeFrames > 0 ? 0 : slowdownDuration > 0 ? 1f / slowdown : 1f);
+            }
+        }
+
+        for (Player player : players) {
+            if (player.usedMacro) {
+                player.keys.release(Keys.UP);
+                player.keys.release(Keys.DOWN);
+                player.keys.release(Keys.LEFT);
+                player.keys.release(Keys.RIGHT);
+                player.keys.release(Keys.ATTACK);
+                player.keys.release(Keys.PARRY);
+                player.usedMacro = false;
             }
         }
     }
@@ -464,6 +498,10 @@ public class Battle {
     public void onSuccessfulParry() {
         SABSounds.playSound("parry.mp3");
         parryFlash = 15;
+    }
+
+    public void spawnAssBall() {
+        addGameObject(new AssBall(new Vector2(0, 0), this));
     }
 
     public void continueDialogue() {
@@ -615,6 +653,10 @@ public class Battle {
 
         for (Particle particle : particles) {
             particle.render(g);
+        }
+
+        for (AssBall assBall : assBalls) {
+            assBall.render(g);
         }
 
         for (Ledge ledge : stage.getLedges()) {

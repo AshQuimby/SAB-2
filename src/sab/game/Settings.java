@@ -27,7 +27,7 @@ public class Settings {
 
         try {
             settings = SabReader.read(new File("../settings.sab"));
-        } catch (FileNotFoundException | RuntimeException e) {
+        } catch (RuntimeException e) {
             readError();
             loadSettings();
         }

@@ -54,6 +54,7 @@ public class PlayerController implements Controller {
                 Game.game.releaseControllerKey(playerId == 0 ? Input.Keys.S : Input.Keys.DOWN);
             }
             inputProcessor.keyDown(playerId == 0 ? Input.Keys.F : Input.Keys.M);
+            player.usedMacro = true;
         }
         if (getAxisFlick(3) != 0) {
             if (getAxisFlick(3) == 1) {
@@ -68,6 +69,7 @@ public class PlayerController implements Controller {
                 Game.game.releaseControllerKey(playerId == 0 ? Input.Keys.S : Input.Keys.DOWN);
             }
             inputProcessor.keyDown(playerId == 0 ? Input.Keys.F : Input.Keys.M);
+            player.usedMacro = true;
         }
     }
     public int getKeyFromAxis(int axis) {
@@ -93,9 +95,9 @@ public class PlayerController implements Controller {
         switch (button) {
             case 1 :
                 return inGame ? playerId == 0 ? Input.Keys.F : Input.Keys.M : Input.Keys.ENTER;
-            case 3 :
-                return playerId == 0 ? Input.Keys.T : Input.Keys.N;
             case 0 :
+                return playerId == 0 ? Input.Keys.T : Input.Keys.N;
+            case 3 :
                 return inGame ? playerId == 0 ? Input.Keys.W : Input.Keys.UP : Input.Keys.ESCAPE;
             case 2 :
                 return inGame ? playerId == 0 ? Input.Keys.SHIFT_LEFT : Input.Keys.SHIFT_RIGHT : -1;

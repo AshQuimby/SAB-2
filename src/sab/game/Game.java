@@ -242,7 +242,7 @@ public class Game extends Messenger {
                         checked = true;
                     }
                 }
-                if (!checked) {
+                if (!checked && !controller.getButton(i) && controllerKeysPressed.get(key) != null && controllerKeysPressed.get(key)) {
                     Gdx.input.getInputProcessor().keyUp(key);
                     controllerKeysPressed.replace(key, false);
                 }

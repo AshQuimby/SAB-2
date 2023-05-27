@@ -28,11 +28,11 @@ public class Chaser extends AttackType {
         attack.knockback.set(attack.owner.direction * 0.5f, 0.25f);
         attack.hitbox.setCenter(attack.owner.getCenter().add(data[0], data[1]));
         attack.velocity = new Vector2(12 * attack.owner.direction, 0);
-        target = attack.getNearestOpponent(-1);
     }
 
     @Override
     public void update(Attack attack) {
+        target = attack.getNearestOpponent(-1);
         attack.velocity = attack.velocity.add(target.getCenter().sub(attack.getCenter()).nor().scl(0.5f)).scl(15 / 16f);
         attack.rotation = attack.velocity.angleDeg();
         if (attack.collisionDirection != Direction.NONE) attack.alive = false;

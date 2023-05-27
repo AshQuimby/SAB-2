@@ -4,10 +4,7 @@ import com.badlogic.gdx.Input;
 import com.seagull_engine.Seagraphics;
 
 import sab.error.SabError;
-import sab.game.Battle;
-import sab.game.Game;
-import sab.game.Player;
-import sab.game.SABSounds;
+import sab.game.*;
 import sab.game.fighter.Fighter;
 import sab.game.screen.error.ErrorScreen;
 import sab.game.stage.Stage;
@@ -91,6 +88,11 @@ public class BattleScreen extends NetScreen {
             else if (keyCode == Input.Keys.W) keyCode = Input.Keys.UP;
             else if (keyCode == Input.Keys.F) keyCode = Input.Keys.M;
             else if (keyCode == Input.Keys.T) keyCode = Input.Keys.N;
+        }
+
+        // SPAWN MASSIVE BALLS
+        if (Settings.getDebugMode() && keyCode == Input.Keys.V) {
+            battle.spawnAssBall();
         }
 
         if (!battle.gameOver()) {
