@@ -14,8 +14,11 @@ import sab.game.attack.empty_soldier.EmptySoldierSlash;
 import sab.game.attack.empty_soldier.ShadowPlunge;
 import sab.game.attack.empty_soldier.ViceroyWings;
 import sab.game.particle.Particle;
+import sab.net.Connection;
 import sab.net.Keys;
 import sab.util.Utils;
+
+import java.io.IOException;
 
 public class EmptySoldier extends FighterType {
     private int spirit;
@@ -147,5 +150,15 @@ public class EmptySoldier extends FighterType {
         g.scalableDraw(g.imageProvider.getImage("spirit_bar_back.png"), player.getId() == 0 ? -256 - 72 - 4 : 256 + 4, -256, 72, 72);
         int drawAmount = (int) (spirit / 100f * 56);
         Game.game.window.batch.draw(g.imageProvider.getImage("spirit_bar.png"), player.getId() == 0 ? -256 - 56 - 12 : 256 + 12, -248, 56, drawAmount / 4 * 4, 0, 14, 14, -drawAmount / 4, false, true);
+    }
+
+    @Override
+    public byte[] getData() {
+        return new byte[] {(byte) spirit};
+    }
+
+    @Override
+    public void setData(byte[] data) {
+        spirit = data[0];
     }
 }

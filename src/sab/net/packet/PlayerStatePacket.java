@@ -12,6 +12,7 @@ public class PlayerStatePacket implements Packet {
     public Vector2 velocity;
     public byte inputs;
     public boolean facingRight;
+    public byte[] data;
 
     public PlayerStatePacket(Player player) {
         playerId = (byte) player.getId();
@@ -27,6 +28,8 @@ public class PlayerStatePacket implements Packet {
         }
 
         facingRight = player.direction == 1;
+
+        data = player.fighter.type.getData();
     }
 
     public PlayerStatePacket() {
@@ -42,6 +45,12 @@ public class PlayerStatePacket implements Packet {
         connection.writeFloat(velocity.y);
         connection.writeByte(inputs);
         connection.writeBoolean(facingRight);
+        connection.writeByte(data == null ? 0 : (byte) data.length);
+        if (data != null) {
+            for (byte datum : data) {
+                connection.writeByte(datum);
+            }
+        }
     }
 
     @Override
@@ -51,6 +60,14 @@ public class PlayerStatePacket implements Packet {
         velocity = new Vector2(connection.readFloat(), connection.readFloat());
         inputs = connection.readByte();
         facingRight = connection.readBoolean();
+
+        int dataLength = connection.readByte();
+        if (dataLength > 0) {
+            data = new byte[dataLength];
+            for (byte i = 0; i < dataLength; i++) {
+                data[i] = connection.readByte();
+            }
+        }
     }
 
     public void syncPlayer(Player player) {
@@ -70,6 +87,8 @@ public class PlayerStatePacket implements Packet {
         }
 
         player.direction = facingRight ? 1 : -1;
+
+        player.fighter.type.setData(data);
     }
 }
 
