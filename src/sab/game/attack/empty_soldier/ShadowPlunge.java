@@ -4,11 +4,10 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.seagull_engine.GameObject;
 import sab.game.attack.Attack;
-import sab.game.attack.AttackType;
+import sab.game.attack.MeleeAttackType;
 import sab.game.particle.Particle;
-import sab.util.Utils;
 
-public class ShadowPlunge extends AttackType {
+public class ShadowPlunge extends MeleeAttackType {
     @Override
     public void setDefaults(Attack attack) {
         attack.imageName = "shadow_plunge.png";
@@ -23,15 +22,15 @@ public class ShadowPlunge extends AttackType {
         attack.damage = 6;
         attack.direction = attack.owner.direction;
         attack.hitCooldown = 12;
-        attack.collideWithStage = false;
+        offset = new Vector2(0, 0);
     }
 
     @Override
     public void update(Attack attack) {
-        attack.velocity.y -= 1f;
-        attack.owner.hitbox.setCenter(attack.hitbox.getCenter(new Vector2()));
+        super.update(attack);
+        attack.owner.velocity.y -= 1f;
         attack.frame = (attack.life / 5) % 5;
-        attack.owner.frame = 8;
+        attack.owner.frame = 6;
         attack.drawRect.y += 28;
 
         if (attack.owner.touchingStage) {

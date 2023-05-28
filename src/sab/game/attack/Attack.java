@@ -28,6 +28,7 @@ public class Attack extends DamageSource {
     public boolean basedOffCostume;
     public int updatesPerTick;
     private final HashMap<GameObject, Integer> hitObjects;
+
     private Attack(Rectangle hitbox, Rectangle drawRect, String imageName, Vector2 velocity, AttackType type, boolean canHit, int life, int hitCooldown, boolean collideWithStage, int updatesPerTick, Player owner) {
         hitObjects = new HashMap<>();
         this.hitbox = new Rectangle(hitbox);
