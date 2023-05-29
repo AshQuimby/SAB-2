@@ -36,7 +36,7 @@ public class Chain extends FighterType {
         fighter.friction = .07f;
         fighter.mass = 4.36f;
         fighter.walkAnimation = new Animation(0, 3, 5, true);
-        fighter.costumes = 3;
+        fighter.costumes = 4;
         fighter.description = "Raised in the lands of Mydrule, Chain was trained by the royal guard from a young age to be a murder machine. With his trusty knives and a passion for violence Chain proves that children are still dangerous!";
         fighter.debut = "The Legend of the Tri-Knife";
         boomerangKnife = null;
