@@ -8,6 +8,8 @@ import sab.game.attack.MeleeAttackType;
 import sab.game.particle.Particle;
 
 public class ShadowPlunge extends MeleeAttackType {
+    private boolean hitGround;
+
     @Override
     public void setDefaults(Attack attack) {
         attack.imageName = "shadow_plunge.png";
@@ -33,12 +35,14 @@ public class ShadowPlunge extends MeleeAttackType {
         attack.owner.frame = 6;
         attack.drawRect.y += 28;
 
-        if (attack.owner.touchingStage) {
+        if (attack.owner.touchingStage && !hitGround) {
             attack.hitbox.width = 160;
             attack.hitbox.height = 80;
             attack.hitbox.setCenter(attack.owner.getCenter());
-            attack.life = 1;
+            attack.life = 3;
             attack.clearHitObjects();
+
+            hitGround = true;
         }
 
         if (attack.life == 1) {
@@ -59,8 +63,13 @@ public class ShadowPlunge extends MeleeAttackType {
 
     @Override
     public void hit(Attack attack, GameObject hit) {
-        Vector2 direction = hit.hitbox.getCenter(new Vector2()).sub(attack.hitbox.getCenter(new Vector2()));
-        attack.knockback.set(direction.nor().scl(attack.life == 1 ? 10 : 1));
+        Vector2 direction = hit.hitbox.getCenter(new Vector2()).sub(attack.hitbox.getCenter(new Vector2())).nor();
+        if (hitGround) {
+            attack.knockback.set(direction.x * 10, -1);
+        } else {
+            attack.knockback.set(0, -10);
+        }
+
         super.hit(attack, hit);
     }
 }
