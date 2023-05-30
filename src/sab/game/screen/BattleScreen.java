@@ -90,9 +90,13 @@ public class BattleScreen extends NetScreen {
             else if (keyCode == Input.Keys.T) keyCode = Input.Keys.N;
         }
 
-        // SPAWN MASSIVE BALLS
-        if (Settings.getDebugMode() && keyCode == Input.Keys.V) {
-            battle.spawnAssBall();
+        if (Settings.getDebugMode()) {
+            if (keyCode == Input.Keys.V) {
+                // SPAWN MASSIVE BALLS
+                battle.spawnAssBall();
+            } else if (keyCode == Input.Keys.H) {
+                battle.drawHitboxes = !battle.drawHitboxes;
+            }
         }
 
         if (!battle.gameOver()) {
@@ -226,7 +230,7 @@ public class BattleScreen extends NetScreen {
             Game.game.window.camera.zoom = 1;
             Game.game.window.camera.targetZoom = 1;
 
-            // TODO: Add Victory screen to multiplayer
+            // TODO: Add victory screen to multiplayer
             if (host) {
                 Game.game.window.camera.reset();
                 return new CharacterSelectScreen(server);
@@ -238,8 +242,7 @@ public class BattleScreen extends NetScreen {
         }
         battle.update();
         battle.postUpdate();
-        if (host && System.currentTimeMillis() - lastBroadcastTimestamp > 50) {
-            System.out.println(lastBroadcastTimestamp);
+        if (host && System.currentTimeMillis() - lastBroadcastTimestamp > NETWORK_TICK_MILLISECONDS) {
             lastBroadcastTimestamp = System.currentTimeMillis();
             for (int i = 0; i < battle.getPlayers().size(); i++) {
                 Player player = battle.getPlayer(i);

@@ -119,4 +119,12 @@ public abstract class FighterType {
 
     public void renderVictoryScreen(Fighter fighter, Player player, Player opponent, VictoryScreen screen, Seagraphics g) {
     }
+
+    public byte[] getData() {
+        return null;
+    }
+
+    public void setData(byte[] data) {
+
+    }
 }

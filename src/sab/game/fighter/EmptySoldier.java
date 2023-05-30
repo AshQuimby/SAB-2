@@ -14,14 +14,18 @@ import sab.game.attack.empty_soldier.EmptySoldierSlash;
 import sab.game.attack.empty_soldier.ShadowPlunge;
 import sab.game.attack.empty_soldier.ViceroyWings;
 import sab.game.particle.Particle;
+import sab.net.Connection;
 import sab.net.Keys;
 import sab.util.Utils;
+
+import java.io.IOException;
 
 public class EmptySoldier extends FighterType {
     private int spirit;
     private Animation swingAnimation;
     private Animation castAnimation;
     private int ticksSinceCast;
+    private int swingDirection;
 
     @Override
     public void setDefaults(Fighter fighter) {
@@ -37,21 +41,22 @@ public class EmptySoldier extends FighterType {
         fighter.speed = 12.2f;
         fighter.acceleration = 1f;
         fighter.jumpHeight = 176;
-        fighter.frames = 14;
+        fighter.frames = 12;
         fighter.friction = .3f;
         fighter.mass = 4.13f;
         fighter.walkAnimation = new Animation(1, 3, 5, true);
         fighter.costumes = 3;
         fighter.description = "FOR THE LAST TIME. EMPTY SOLDIER WAS THE NAME OF THE SCIENTIST! THE BUG IS CALLED: \"EMPTY SOLDIER'S MONSTER!\"";
         fighter.debut = "Empty Soldier";
-        fighter.freefallAnimation = new Animation(new int[] {8}, 1, false);
-        fighter.ledgeAnimation = new Animation(new int[] {9}, 1, false);
-        fighter.knockbackAnimation = new Animation(new int[] {10}, 1, false);
+        fighter.freefallAnimation = new Animation(new int[] {6}, 1, false);
+        fighter.ledgeAnimation = new Animation(new int[] {7}, 1, false);
+        fighter.knockbackAnimation = new Animation(new int[] {8}, 1, false);
 
         spirit = 100;
-        swingAnimation = new Animation(new int[] {4, 5, 6, 0}, 2, true);
-        castAnimation = new Animation(11, 13, 6, false);
+        swingAnimation = new Animation(new int[] {4}, 8, true);
+        castAnimation = new Animation(9, 11, 6, false);
         ticksSinceCast = 30;
+        swingDirection = -1;
     }
 
     @Override
@@ -88,7 +93,7 @@ public class EmptySoldier extends FighterType {
     @Override
     public void update(Fighter fighter, Player player) {
         if (!player.hasAction() && !player.touchingStage && !player.grabbingLedge()) {
-            player.frame = player.velocity.y > -5 ? 7 : 8;
+            player.frame = player.velocity.y > -5 ? 5 : 6;
         }
 
         if (++ticksSinceCast < 30) {
@@ -112,7 +117,8 @@ public class EmptySoldier extends FighterType {
     @Override
     public void sideAttack(Fighter fighter, Player player) {
         swingAnimation.reset();
-        player.startAttack(new EmptySoldierSlash(), swingAnimation, 6, 6, false);
+        player.startAttack(new EmptySoldierSlash(), swingAnimation, 6, 6, false, new int[] {swingDirection});
+        swingDirection = -swingDirection;
     }
 
     @Override
@@ -147,5 +153,15 @@ public class EmptySoldier extends FighterType {
         g.scalableDraw(g.imageProvider.getImage("spirit_bar_back.png"), player.getId() == 0 ? -256 - 72 - 4 : 256 + 4, -256, 72, 72);
         int drawAmount = (int) (spirit / 100f * 56);
         Game.game.window.batch.draw(g.imageProvider.getImage("spirit_bar.png"), player.getId() == 0 ? -256 - 56 - 12 : 256 + 12, -248, 56, drawAmount / 4 * 4, 0, 14, 14, -drawAmount / 4, false, true);
+    }
+
+    @Override
+    public byte[] getData() {
+        return new byte[] {(byte) spirit};
+    }
+
+    @Override
+    public void setData(byte[] data) {
+        spirit = data[0];
     }
 }

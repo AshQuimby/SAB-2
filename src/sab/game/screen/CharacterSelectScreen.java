@@ -1,12 +1,15 @@
 package sab.game.screen;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
@@ -283,30 +286,37 @@ public class CharacterSelectScreen extends NetScreen {
     }
 
     private void updateTimesPlayed() {
+        Path path = Paths.get("../saves/times_played.sab");
         try {
-            HashMap<String, String> timesPlayed = SabReader.read(new File("../saves/timesplayed.sab"));
-            if (timesPlayed.containsKey(player1.availableFighters.get(player1.index).id)) {
-                int num = Integer.parseInt(timesPlayed.get(player1.availableFighters.get(player1.index).id));
-                num++;
-                timesPlayed.replace(player1.availableFighters.get(player1.index).id, "" + num);
-            } else {
-                timesPlayed.put(player1.availableFighters.get(player1.index).id, "1");
-            }
-            if (timesPlayed.containsKey(player2.availableFighters.get(player2.index).id)) {
-                int num = Integer.parseInt(timesPlayed.get(player2.availableFighters.get(player2.index).id));
-                num++;
-                timesPlayed.replace(player2.availableFighters.get(player2.index).id, "" + num);
-            } else {
-                timesPlayed.put(player2.availableFighters.get(player2.index).id, "1");
-            }
+            Files.createDirectories(path.getParent());
+        } catch (IOException ignored) {
+            // Directory already exists
+        }
 
-            SabReader.write(timesPlayed, new File("../saves/timesplayed.sab"));
-        } catch (Exception e) {
+        File file = path.toFile();
+        if (!file.exists()) {
             try {
-                Files.createFile(Paths.get("../saves/timesplayed.sab"));
-            } catch (IOException err) {
-                err.printStackTrace();
+                if (!file.createNewFile()) {
+                    return;
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+                return;
             }
+        }
+
+        file = new File("../saves/times_played.sab");
+        HashMap<String, String> timesPlayed = SabReader.read(file);
+
+        String id1 = player1.availableFighters.get(player1.index).id;
+        String id2 = player2.availableFighters.get(player2.index).id;
+        timesPlayed.put(id1, String.valueOf(Integer.parseInt(timesPlayed.getOrDefault(id1, "0")) + 1));
+        timesPlayed.put(id2, String.valueOf(Integer.parseInt(timesPlayed.getOrDefault(id2, "0")) + 1));
+
+        try {
+            SabReader.write(timesPlayed, file);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 

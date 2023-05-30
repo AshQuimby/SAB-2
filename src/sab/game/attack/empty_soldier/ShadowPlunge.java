@@ -4,11 +4,12 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.seagull_engine.GameObject;
 import sab.game.attack.Attack;
-import sab.game.attack.AttackType;
+import sab.game.attack.MeleeAttackType;
 import sab.game.particle.Particle;
-import sab.util.Utils;
 
-public class ShadowPlunge extends AttackType {
+public class ShadowPlunge extends MeleeAttackType {
+    private boolean hitGround;
+
     @Override
     public void setDefaults(Attack attack) {
         attack.imageName = "shadow_plunge.png";
@@ -23,23 +24,25 @@ public class ShadowPlunge extends AttackType {
         attack.damage = 6;
         attack.direction = attack.owner.direction;
         attack.hitCooldown = 12;
-        attack.collideWithStage = false;
+        offset = new Vector2(0, 0);
     }
 
     @Override
     public void update(Attack attack) {
-        attack.velocity.y -= 1f;
-        attack.owner.hitbox.setCenter(attack.hitbox.getCenter(new Vector2()));
+        super.update(attack);
+        attack.owner.velocity.y -= 1f;
         attack.frame = (attack.life / 5) % 5;
-        attack.owner.frame = 8;
+        attack.owner.frame = 6;
         attack.drawRect.y += 28;
 
-        if (attack.owner.touchingStage) {
+        if (attack.owner.touchingStage && !hitGround) {
             attack.hitbox.width = 160;
             attack.hitbox.height = 80;
             attack.hitbox.setCenter(attack.owner.getCenter());
-            attack.life = 1;
+            attack.life = 3;
             attack.clearHitObjects();
+
+            hitGround = true;
         }
 
         if (attack.life == 1) {
@@ -60,8 +63,13 @@ public class ShadowPlunge extends AttackType {
 
     @Override
     public void hit(Attack attack, GameObject hit) {
-        Vector2 direction = hit.hitbox.getCenter(new Vector2()).sub(attack.hitbox.getCenter(new Vector2()));
-        attack.knockback.set(direction.nor().scl(attack.life == 1 ? 10 : 1));
+        Vector2 direction = hit.hitbox.getCenter(new Vector2()).sub(attack.hitbox.getCenter(new Vector2())).nor();
+        if (hitGround) {
+            attack.knockback.set(direction.x * 10, -1);
+        } else {
+            attack.knockback.set(0, -10);
+        }
+
         super.hit(attack, hit);
     }
 }
