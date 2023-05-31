@@ -177,7 +177,6 @@ public class Attack extends DamageSource {
 
     public void kill() {
         type.onKill(this);
-        alive = false;
     }
 
     @Override

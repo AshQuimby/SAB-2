@@ -89,11 +89,11 @@ public class GlasterBaster extends MeleeAttackType {
                 }
             }
             if (!attack.owner.charging() && !fired) {
-                attack.kill();
+                attack.alive = false;
             }
         } else {
             if (attack.owner.isStuck()) {
-                attack.kill();
+                attack.alive = false;
             }
             attack.frame = 1;
         }
