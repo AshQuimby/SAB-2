@@ -10,6 +10,7 @@ import sab.game.SABSounds;
 import sab.game.ai.AI;
 import sab.game.ai.BaseAI;
 import sab.game.animation.Animation;
+import sab.game.attack.Attack;
 import sab.game.attack.unnamed_duck.DuckGrab;
 import sab.game.attack.unnamed_duck.DuckSign;
 import sab.game.attack.unnamed_duck.Quack;
@@ -25,6 +26,7 @@ public class UnnamedDuck extends FighterType {
     private WeightedCollection<Item> items;
     private int defaultItemCoolDown;
     private int itemCoolDown;
+    private Attack duckSign;
 
     @Override
     public void setDefaults(Fighter fighter) {

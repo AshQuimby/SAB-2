@@ -46,7 +46,7 @@ public class Attack extends DamageSource {
     }
 
     public Attack(AttackType type, Player player) {
-        alive = true;
+        alive = false;
         life = 120;
         hitbox = new Rectangle();
         hitbox.setPosition(new Vector2());
@@ -94,6 +94,7 @@ public class Attack extends DamageSource {
     }
 
     public void onSpawn(int[] data) {
+        alive = true;
         if (directional && owner != null) {
             direction = owner.direction;
         }
