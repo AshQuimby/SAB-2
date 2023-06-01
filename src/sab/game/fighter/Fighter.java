@@ -139,6 +139,10 @@ public class Fighter implements Cloneable {
         type.downAttack(this, player);
     }
 
+    public void finalAss(Player player) {
+        type.finalAss(this, player);
+    }
+
     public void chargeAttack(Player player, int charge) {
         type.chargeAttack(this, player, charge);
     }

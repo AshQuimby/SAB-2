@@ -115,7 +115,7 @@ public class Walouis extends FighterType {
 
     @Override
     public void sideAttack(sab.game.fighter.Fighter fighter, Player player) {
-        if (!player.usedRecovery) player.startAttack(new Racket(), fighter.walkAnimation, 1, 0, false);
+        /* if (!player.usedRecovery) */ player.startAttack(new Racket(), fighter.walkAnimation, 1, 0, false);
     }
 
     @Override

@@ -1,9 +1,11 @@
 package sab.game.attack.unnamed_duck;
 
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import sab.game.Direction;
 import sab.game.attack.Attack;
 import sab.game.attack.AttackType;
+import sab.game.particle.Particle;
 
 public class DuckSign extends AttackType {
     @Override
@@ -27,6 +29,11 @@ public class DuckSign extends AttackType {
         attack.direction = 1;
         attack.hitbox.setCenter(attack.owner.getCenter().sub(new Vector2(0, 32)));
         attack.velocity = new Vector2(0, -8);
+    }
+
+    @Override
+    public void onKill(Attack attack) {
+        attack.owner.battle.addParticle(new Particle(1, attack.getCenter(), new Vector2(MathUtils.random(-2f, 2f), 5), 80, 64, attack.direction, 1, "no_ducks.png"));
     }
 
     @Override

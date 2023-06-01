@@ -72,6 +72,14 @@ public class Particle extends GameObject {
         type = 2;
     }
 
+    public Particle(float gravity, Vector2 position, Vector2 velocity, float width, float height, int direction, int maxRotationSpeed, String image) {
+        this(position, velocity, width, height, image);
+        rotationSpeed = MathUtils.random(-maxRotationSpeed, maxRotationSpeed);
+        this.direction = direction;
+        this.gravity = gravity;
+        type = 2;
+    }
+
     public Particle(float gravity, Vector2 position, Vector2 velocity, float width, float height, float sizeMultiplier, int maxRotationSpeed, String image) {
         this(position, velocity, width, height, image);
         rotationSpeed = MathUtils.random(-maxRotationSpeed, maxRotationSpeed);

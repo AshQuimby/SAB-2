@@ -24,6 +24,7 @@ public class Player extends GameObject implements Hittable {
     public final Battle battle;
 
     public boolean usedMacro;
+    private boolean assCharged;
 
     public InputState keys;
     public Fighter fighter;
@@ -519,6 +520,7 @@ public class Player extends GameObject implements Hittable {
                     else fighter.sideAttack(this);
                 } else {
                     if (hasItem()) fighter.useItem(this);
+                    else if (assCharged) fighter.finalAss(this);
                     else fighter.neutralAttack(this);
                 }
             } else {
@@ -707,6 +709,14 @@ public class Player extends GameObject implements Hittable {
         iFrames = duration;
     }
 
+    public void grantFinalAss() {
+        assCharged = true;
+    }
+
+    public boolean isAssCharged() {
+        return assCharged;
+    }
+
     @Override
     public boolean onHit(DamageSource source) {
         int damageBefore = damage;
@@ -775,7 +785,17 @@ public class Player extends GameObject implements Hittable {
                     frame = freezeFrame;
                 }
                 preRender(g);
+                if (assCharged) {
+                    g.usefulDraw(g.imageProvider.getImage("glow.png"), drawRect.x - 16, drawRect.y - 16, (int) drawRect.width + 32, (int) drawRect.height + 32, 0, 1, 0, false, false);
+                    drawRect.x += MathUtils.random(-4f, 4f);
+                    drawRect.y += MathUtils.random(-4f, 4f);
+                }
                 fighter.render(this, g);
+                drawRect.setCenter(getCenter().add(fighter.imageOffsetX * direction, fighter.imageOffsetY).add(drawRectOffset));
+                fighter.render(this, g);
+                if (hasItem()) {
+                    heldItem.renderHeld(this, g);
+                }
                 postRender(g);
 
                 if (frozen > 0) {
@@ -788,10 +808,6 @@ public class Player extends GameObject implements Hittable {
             if (Settings.getDrawPlayerArrows()) {
                 Vector2 arrowPosition = getCenter().add(-8, drawRect.height / 2 + 4);
                 g.usefulDraw(g.imageProvider.getImage("player_arrows.png"), arrowPosition.x, arrowPosition.y, 16, 8, id == -1 ? 3 : id,3, 0, false, false);
-            }
-            fighter.render(this, g);
-            if (hasItem()) {
-                heldItem.renderHeld(this, g);
             }
         }
     }

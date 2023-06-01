@@ -89,23 +89,25 @@ public class BigSeagull extends FighterType {
 
     @Override
     public void update(sab.game.fighter.Fighter fighter, Player player) {
-        if (Math.abs(player.velocity.x) < 0.1f && player.velocity.y == 0 && player.keys.isPressed(Keys.DOWN)) {
-            player.frame = 12;
-        }
-
-        if (!player.touchingStage && !player.grabbingLedge()) {
-            if (player.velocity.len() < 10) {
-                player.frame = hoverAnimation.stepLooping();
-            } else {
-                player.frame = flyingAnimation.stepLooping();
+        if (player.isReady()) {
+            if (Math.abs(player.velocity.x) < 0.1f && player.velocity.y == 0 && player.keys.isPressed(Keys.DOWN)) {
+                player.frame = 12;
             }
-            float targetRotation = (float) Math.toDegrees(Math.atan2(player.velocity.y, Math.abs(player.velocity.x)))
-                    * player.direction * Math.abs(player.velocity.x) / 20;
-            player.rotation = player.rotation + (targetRotation - player.rotation) * .1f;
-        } else {
-            flyingAnimation.reset();
-            hoverAnimation.reset();
-            player.rotation = 0;
+
+            if (!player.touchingStage && !player.grabbingLedge()) {
+                if (player.velocity.len() < 10) {
+                    player.frame = hoverAnimation.stepLooping();
+                } else {
+                    player.frame = flyingAnimation.stepLooping();
+                }
+                float targetRotation = (float) Math.toDegrees(Math.atan2(player.velocity.y, Math.abs(player.velocity.x)))
+                        * player.direction * Math.abs(player.velocity.x) / 20;
+                player.rotation = player.rotation + (targetRotation - player.rotation) * .1f;
+            } else {
+                flyingAnimation.reset();
+                hoverAnimation.reset();
+                player.rotation = 0;
+            }
         }
 
         if (player.velocity.y < 0) player.velocity.y *= 0.95f;

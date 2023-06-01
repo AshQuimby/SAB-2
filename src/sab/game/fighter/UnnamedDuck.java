@@ -12,6 +12,7 @@ import sab.game.ai.BaseAI;
 import sab.game.animation.Animation;
 import sab.game.attack.Attack;
 import sab.game.attack.unnamed_duck.DuckGrab;
+import sab.game.attack.unnamed_duck.DuckItem;
 import sab.game.attack.unnamed_duck.DuckSign;
 import sab.game.attack.unnamed_duck.Quack;
 import sab.game.item.BigGun;
@@ -118,7 +119,8 @@ public class UnnamedDuck extends FighterType {
     public void upAttack(Fighter fighter, Player player) {
         if (!player.usedRecovery) {
             player.velocity.y = 24;
-            player.startAttack(new DuckSign(), new Animation(new int[]{ 7 }, 1, true), 1, 4, true);
+            if (duckSign != null) duckSign.alive = false;
+            duckSign = player.startAttack(new DuckSign(), new Animation(new int[]{ 7 }, 1, true), 1, 4, true);
             player.usedRecovery = true;
             SABSounds.playSound("sign.mp3");
         }

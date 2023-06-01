@@ -10,10 +10,7 @@ import sab.game.ai.AI;
 import sab.game.ai.BaseAI;
 import sab.game.animation.Animation;
 import sab.game.attack.Attack;
-import sab.game.attack.marvin.Wrench;
-import sab.game.attack.marvin.Fireball;
-import sab.game.attack.marvin.Frostball;
-import sab.game.attack.marvin.Toilet;
+import sab.game.attack.marvin.*;
 import sab.game.particle.Particle;
 import sab.net.Keys;
 
@@ -94,7 +91,7 @@ public class Marvin extends FighterType {
     public void neutralAttack(sab.game.fighter.Fighter fighter, Player player) {
         if (!player.usedRecovery) {
             swingAnimation.reset();
-            player.startAttack(new Fireball(), swingAnimation, 6, 10, false);
+            player.startAttack(new Fireball(), swingAnimation, 8, 14, false);
             player.velocity.y /= 3;
             player.velocity.x *= 0.9f;
         }
@@ -117,6 +114,15 @@ public class Marvin extends FighterType {
                 player.removeJumps();
                 player.usedRecovery = true;
             }
+        }
+    }
+
+    @Override
+    public void finalAss(Fighter fighter, Player player) {
+        if (!player.usedRecovery) {
+            player.setIFrames(8);
+            squatAnimation.reset();
+            player.startIndefiniteAttack(new Pipe(), squatAnimation, 1, false, new int[0]);
         }
     }
 

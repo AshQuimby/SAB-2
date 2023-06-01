@@ -22,6 +22,6 @@ public class IndefinitePlayerAction extends PlayerAction {
 
     @Override
     public boolean finished() {
-        return !attack.alive;
+        return !attack.alive && super.finished();
     }
 }

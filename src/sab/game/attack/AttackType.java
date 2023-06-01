@@ -2,6 +2,7 @@ package sab.game.attack;
 
 import com.seagull_engine.GameObject;
 import com.seagull_engine.Seagraphics;
+import sab.game.Player;
 
 public abstract class AttackType implements Cloneable {
     public void setDefaults(Attack attack) {
@@ -46,5 +47,11 @@ public abstract class AttackType implements Cloneable {
 
     public void onParry(Attack attack) {
         attack.alive = false;
+    }
+
+    public static Attack createAttack(AttackType type, int[] data, Player owner) {
+        Attack attack = new Attack(type, owner);
+        owner.battle.addAttack(attack, data);
+        return attack;
     }
 }

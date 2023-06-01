@@ -27,7 +27,7 @@ public class AssBall extends GameObject implements Hittable {
         velocity = new Vector2();
         frameCount = 18;
         flyTo = new Vector2(0, 0);
-        health = 300;
+        health = 100;
     }
 
     public void update() {
@@ -35,7 +35,7 @@ public class AssBall extends GameObject implements Hittable {
         rotationSpeed += -velocity.x / 16;
         rotation += rotationSpeed;
         rotationSpeed *= 0.9f;
-        color = new Color(1f, 1f, 1f, 1f).fromHsv(age % 360, 1f, 1f);
+        color = new Color(1f, 1f, 1f, 0.8f).fromHsv(age % 360, 1f, 1f);
         velocity = velocity.add(flyTo.cpy().sub(getCenter()).nor().scl(0.125f)).scl(63 / 64f);
         frame = age / 8 % 18;
         age++;
@@ -43,9 +43,10 @@ public class AssBall extends GameObject implements Hittable {
 
     public void kill() {
         for (int i = 0; i < 8; i++) {
-            battle.addParticle(new Particle(getCenter(), new Vector2(4 * MathUtils.random(), 0).rotateDeg(MathUtils.random() * 360), 32, 32, 0, "twinkle.png"));
+            battle.addParticle(new Particle(getCenter(), new Vector2(4 * MathUtils.random(), 0).rotateDeg(MathUtils.random() * 360), 64, 64, 0, "twinkle.png"));
         }
         SABSounds.playSound("shatter.mp3");
+        lastPlayerToHit.grantFinalAss();
     }
 
     public boolean isAlive() {
@@ -73,6 +74,8 @@ public class AssBall extends GameObject implements Hittable {
     @Override
     public void render(Seagraphics g) {
         // g.usefulDraw(g.imageProvider.getImage("glow.png"), drawRect.x - 20, drawRect.y - 20, (int) drawRect.width + 40, (int) drawRect.height + 40, 0, 1, 0, false, false);
+        Color paleTint = new Color(1f, 1f, 1f, 1f).fromHsv(age % 360, 0.85f, 1);
+        g.usefulTintDraw(g.imageProvider.getImage("ball_shine.png"), drawRect.x - 70, drawRect.y - 70, (int) drawRect.width + 140, (int) drawRect.height + 140, 0, 1, rotation * 2, false, false, paleTint);
         g.usefulDraw(g.imageProvider.getImage("ball_shine.png"), drawRect.x - 70, drawRect.y - 70, (int) drawRect.width + 140, (int) drawRect.height + 140, 0, 1, rotation, false, false);
         g.usefulTintDraw(g.imageProvider.getImage("ass_ball.png"), drawRect.x, drawRect.y, (int) drawRect.width, (int) drawRect.height, 0, 1, 0, false, false, color);
         g.usefulDraw(g.imageProvider.getImage("ass_ball_overlay.png"), drawRect.x, drawRect.y, (int) drawRect.width, (int) drawRect.height, frame, frameCount, 0, false, false);

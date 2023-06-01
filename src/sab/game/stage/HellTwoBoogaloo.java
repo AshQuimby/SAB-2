@@ -87,7 +87,7 @@ public class HellTwoBoogaloo extends StageType {
                     }
                     stageObject.velocity = target.getCenter().sub(stageObject.getCenter()).nor().scl(3.5f);
                     player.hitbox.setCenter(stageObject.getCenter());
-                    battle.addAttack(new Attack(new DuckItem(), player), new int[]{ 0, 0, (int) stageObject.hitbox.width + 4, (int) stageObject.hitbox.height + 4, 8, 12, 8, 0, 0 });
+                    battle.addAttack(new Attack(new DuckItem(), player), new int[]{ 0, 0, (int) stageObject.hitbox.width + 4, (int) stageObject.hitbox.height + 4, 8, 12, 8, 1, 8 });
                     Vector2 oldCenter = stageObject.getCenter();
                     stageObject.hitbox.width += MathUtils.sin(Game.getTick() / 2) * 80;
                     stageObject.hitbox.height += MathUtils.cos(Game.getTick() / 2) * 80;
