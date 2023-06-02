@@ -280,6 +280,8 @@ public class Player extends GameObject implements Hittable {
         respawnTime = 180;
         gameStats.died();
         iFrames = 60;
+        if (assCharged) battle.spawnAssBall();
+        assCharged = false;
         battle.getPlayer(1 - id).gameStats.gotKill();
         SABSounds.playSound("death.mp3");
         lives -= livesCost;
@@ -520,7 +522,10 @@ public class Player extends GameObject implements Hittable {
                     else fighter.sideAttack(this);
                 } else {
                     if (hasItem()) fighter.useItem(this);
-                    else if (assCharged) fighter.finalAss(this);
+                    else if (assCharged) {
+                        fighter.finalAss(this);
+                        assCharged = false;
+                    }
                     else fighter.neutralAttack(this);
                 }
             } else {

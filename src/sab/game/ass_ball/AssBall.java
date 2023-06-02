@@ -27,7 +27,7 @@ public class AssBall extends GameObject implements Hittable {
         velocity = new Vector2();
         frameCount = 18;
         flyTo = new Vector2(0, 0);
-        health = 100;
+        health = 5;
     }
 
     public void update() {

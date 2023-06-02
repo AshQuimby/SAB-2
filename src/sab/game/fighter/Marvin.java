@@ -118,27 +118,27 @@ public class Marvin extends FighterType {
     }
 
     @Override
-    public void finalAss(Fighter fighter, Player player) {
-        if (!player.usedRecovery) {
-            player.setIFrames(8);
-            squatAnimation.reset();
-            player.startIndefiniteAttack(new Pipe(), squatAnimation, 1, false, new int[0]);
-        }
-    }
-
-    @Override
     public void downAttack(sab.game.fighter.Fighter fighter, Player player) {
         if (!player.usedRecovery) {
-            player.startChargeAttack(new PlayerAction(5, true, 0), 5, 60);
+            player.startChargeAttack(new PlayerAction(5, true, 0), 5, 90);
         }
     }
 
     @Override
     public void chargeAttack(sab.game.fighter.Fighter fighter, Player player, int charge) {
         throwAnimation.reset();
-        player.startAttack(new Frostball(), throwAnimation, 7, 10, false, new int[]{charge});
+        player.startAttack(new Frostball(), throwAnimation, 7, 10, false, new int[]{ charge });
         player.velocity.y /= 3;
         player.velocity.x *= 0.9f;
+    }
+
+    @Override
+    public void finalAss(Fighter fighter, Player player) {
+        if (!player.usedRecovery) {
+            player.setIFrames(8);
+            squatAnimation.reset();
+            player.startIndefiniteAttack(new Pipe(), squatAnimation, 1, false, new int[0]);
+        }
     }
 
     @Override

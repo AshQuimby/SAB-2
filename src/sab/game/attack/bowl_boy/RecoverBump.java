@@ -16,6 +16,7 @@ public class RecoverBump extends AttackType {
         attack.hitCooldown = 4;
         attack.life = 30;
         attack.hitbox = new Rectangle(0, 0, 40, 40);
+        attack.reflectable = false;
     }
 
     @Override

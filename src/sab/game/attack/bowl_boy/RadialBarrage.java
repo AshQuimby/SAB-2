@@ -18,6 +18,7 @@ public class RadialBarrage extends AttackType {
         attack.frameCount = 6;
         attack.directional = false;
         attack.hitCooldown = 30;
+        attack.reflectable = false;
     }
 
     @Override

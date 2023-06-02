@@ -6,10 +6,8 @@ import sab.game.ai.AI;
 import sab.game.ai.BaseAI;
 import sab.game.animation.Animation;
 import sab.game.attack.Attack;
-import sab.game.attack.chain.AirSlash;
-import sab.game.attack.chain.ChainSlash;
-import sab.game.attack.chain.BoomerangKnife;
-import sab.game.attack.chain.FallingKnife;
+import sab.game.attack.chain.*;
+import sab.game.attack.marvin.Pipe;
 
 public class Chain extends FighterType {
     private Animation swingAnimation;
@@ -114,9 +112,17 @@ public class Chain extends FighterType {
                 fallingKnife.alive = false;
                 fallingKnife = null;
             }
-
             swingAnimation.reset();
             fallingKnife = player.startAttack(new FallingKnife(), swingAnimation, 6, 16, false);
+        }
+    }
+
+    @Override
+    public void finalAss(Fighter fighter, Player player) {
+        if (!player.usedRecovery) {
+            player.setIFrames(4);
+            swingAnimation.reset();
+            player.startIndefiniteAttack(new FinalSlash(), swingAnimation, 1, false);
         }
     }
 }
