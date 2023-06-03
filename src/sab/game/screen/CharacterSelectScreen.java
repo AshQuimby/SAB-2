@@ -13,6 +13,7 @@ import java.util.Map;
 
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.math.MathUtils;
 import com.seagull_engine.Seagraphics;
 
 import sab.error.SabError;
@@ -22,6 +23,7 @@ import sab.game.SABSounds;
 import sab.game.Settings;
 import sab.game.fighter.Fighter;
 import sab.game.fighter.FighterType;
+import sab.game.fighter.Random;
 import sab.game.screen.error.ErrorScreen;
 import sab.modloader.ModLoader;
 import sab.net.client.Client;
@@ -68,6 +70,7 @@ public class CharacterSelectScreen extends NetScreen {
                 f.type.setDefaults(f);
                 availableFighters.add(f);
             }
+            availableFighters.add(new Fighter(new Random()));
         }
     }
 
@@ -201,6 +204,14 @@ public class CharacterSelectScreen extends NetScreen {
                 if (player1.ready && player2.ready && (local || host)) {
                     player1.availableFighters.get(player1.index).walkAnimation.reset();
                     player2.availableFighters.get(player2.index).walkAnimation.reset();
+                    Fighter p1Fighter = player1.availableFighters.get(player1.index).copy();
+                    if (p1Fighter.type instanceof Random) {
+                        p1Fighter = player1.availableFighters.get(MathUtils.random(player2.availableFighters.size() - 2));
+                    }
+                    Fighter p2Fighter = player2.availableFighters.get(player2.index).copy();
+                    if (p2Fighter.type instanceof Random) {
+                        p2Fighter = player2.availableFighters.get(MathUtils.random(player2.availableFighters.size() - 2));
+                    }
                     updateTimesPlayed();
                     updateCharacterList = true;
                     SABSounds.playSound(SABSounds.BLIP);
@@ -208,16 +219,16 @@ public class CharacterSelectScreen extends NetScreen {
                         server.send(0, new ScreenTransitionPacket());
                         return new StageSelectScreen(
                                 server,
-                                player1.availableFighters.get(player1.index).copy(),
-                                player2.availableFighters.get(player2.index).copy(),
+                                p1Fighter,
+                                p2Fighter,
                                 player1.costume,
                                 player2.costume,
                                 player1.type,
                                 player2.type);
                     }
                     return new StageSelectScreen(
-                            player1.availableFighters.get(player1.index).copy(),
-                            player2.availableFighters.get(player2.index).copy(),
+                            p1Fighter,
+                            p2Fighter,
                             player1.costume,
                             player2.costume,
                             player1.type,
@@ -346,7 +357,7 @@ public class CharacterSelectScreen extends NetScreen {
             updateCharacterList = false;
         }
 
-        int fighterCount = Game.game.fighters.size();
+        int fighterCount = Game.game.fighters.size() + 1;
 
         if (player1.costume >= player1.availableFighters.get(player1.index).costumes) player1.costume = player1.availableFighters.get(player1.index).costumes - 1;
         if (player2.costume >= player2.availableFighters.get(player2.index).costumes) player2.costume = player2.availableFighters.get(player2.index).costumes - 1;
