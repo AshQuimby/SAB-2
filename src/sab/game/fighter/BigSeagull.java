@@ -63,12 +63,30 @@ public class BigSeagull extends FighterType {
             @Override
             public void attack(Vector2 center, Player target, Vector2 targetPosition) {
                 Platform platform = getPlatformBelow();
+                boolean belowTarget = target.hitbox.y > player.hitbox.y + player.hitbox.height;
+                boolean targetAboveVoid = getPlatformBelow(target) == null;
                 if (platform != null) {
-                    if (distanceToLeftSide(platform.hitbox) < 32) {
-                        pressKey(Keys.RIGHT);
+                    if (distanceToLeftSide(platform.hitbox) < 16 && targetPosition.x < center.x && targetAboveVoid) {
+                        if (player.velocity.x < 0) {
+                            pressKey(Keys.RIGHT);
+                            return;
+                        }
+                        if (belowTarget) {
+                            pressKey(Keys.UP);
+                            return;
+                        }
+                        useNeutralAttack();
                         return;
-                    } else if (distanceToRightSide(platform.hitbox) < 32) {
-                        pressKey(Keys.LEFT);
+                    } else if (distanceToRightSide(platform.hitbox) < 16 && targetPosition.x > center.x && targetAboveVoid) {
+                        if (player.velocity.x > 0) {
+                            pressKey(Keys.LEFT);
+                            return;
+                        }
+                        if (belowTarget) {
+                            pressKey(Keys.UP);
+                            return;
+                        }
+                        useNeutralAttack();
                         return;
                     }
                 }

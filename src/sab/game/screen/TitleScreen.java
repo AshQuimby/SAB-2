@@ -29,19 +29,9 @@ public class TitleScreen extends SelectorScreen {
         drawTitle(g);
         g.useStaticCamera();
 
-        g.usefulTintDraw(g.imageProvider.getImage("pixel.png"), -400 / 2, -Game.game.window.resolutionY / 2, 400, 380, 0, 1, 0, false, false, new Color(0, 0, 0, 0.5f));
-
         for (int i = 0; i < options.length; i++) {
-            Rectangle bounds = g.getTextBounds(options[i], Game.getDefaultFont(), 0, i * -52 + 6, 1.5f * Game.getDefaultFontScale(), 0);
-
-            float color = i == selectorIndex ? 1f : 0;
-
-            g.usefulTintDraw(g.imageProvider.getImage("pixel.png"), bounds.x - 4, bounds.y + 4, (int) bounds.width + 9, (int) -bounds.height - 9, 1, 0, 0, false, false,
-                    new Color(color, color, color, 0.5f));
-
-            g.drawText(options[i], Game.getDefaultFont(), 0,  i * -52 + 6, 1.5f * Game.getDefaultFontScale(), Color.WHITE, 0);
+            Utils.drawButton(g, 0, -i * 52 - 24, options[i], 1.5f * Game.getDefaultFontScale(), selectorIndex == i);
         }
-        
     }
 
     public static void drawTitle(Seagraphics g) {

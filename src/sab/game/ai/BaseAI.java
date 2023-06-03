@@ -61,6 +61,14 @@ public class BaseAI extends AI {
                 pressKey(Keys.UP);
             }
 
+            Attack threat = getNearestEnemyAttack();
+            if (threat != null) {
+                Vector2 collision = getFutureCollision(threat, difficulty * 5);
+                if (collision == null) return;
+
+                pressKey(Keys.PARRY);
+            }
+
             return;
         }
 
@@ -232,7 +240,9 @@ public class BaseAI extends AI {
                         pressKey(Keys.LEFT);
                     }
                 } else if (player.velocity.y <= 0) {
-                    pressKey(Keys.UP);
+                    if (player.getRemainingJumps() == 0) {
+                        pressKey(Keys.PARRY);
+                    } else pressKey(Keys.UP);
                 }
             }
         }
