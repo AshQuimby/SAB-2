@@ -43,6 +43,7 @@ public class SabReader {
                 return value.substring(1);
             }
         }
+        scanner.close();
         return null;
     }
 
@@ -58,6 +59,7 @@ public class SabReader {
                 return value.substring(1);
             }
         }
+        scanner.close();
         return null;
     }
 

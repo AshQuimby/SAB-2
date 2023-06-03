@@ -3,6 +3,8 @@ package sab.game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.controllers.*;
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.PixmapIO;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.math.MathUtils;
 import com.seagull_engine.Messenger;
@@ -20,11 +22,16 @@ import sab.modloader.ModLoader;
 import sab.screen.Screen;
 import sab.util.Utils;
 
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
+import java.nio.ByteBuffer;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.sql.Date;
 import java.util.*;
+import java.util.List;
+import java.util.zip.Deflater;
 
 public class Game extends Messenger {
     public static final Game game = new Game();
@@ -159,6 +166,18 @@ public class Game extends Messenger {
             } else {
                 goFullscreened();
             }
+        } else if (keyCode == Input.Keys.F12) {
+            Pixmap pixmap = Pixmap.createFromFrameBuffer(0, 0, Gdx.graphics.getBackBufferWidth(), Gdx.graphics.getBackBufferHeight());
+            ByteBuffer pixels = pixmap.getPixels();
+
+            // This loop makes sure the whole screenshot is opaque and looks exactly like what the user is seeing
+            int size = Gdx.graphics.getBackBufferWidth() * Gdx.graphics.getBackBufferHeight() * 4;
+            for (int i = 3; i < size; i += 4) {
+                pixels.put(i, (byte) 255);
+            }
+            String imagePath = "../screenshots/" + Calendar.getInstance().getTime().toString().replace(":", "-").replace(" ", "-") + ".png";
+            PixmapIO.writePNG(Gdx.files.local(imagePath), pixmap, Deflater.DEFAULT_COMPRESSION, true);
+            pixmap.dispose();
         }
         screen = screen.keyPressed(keyCode);
     }

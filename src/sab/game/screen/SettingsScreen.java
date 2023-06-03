@@ -90,6 +90,7 @@ public class SettingsScreen extends SelectorScreen {
         if (inSubSelection) {
             SABSounds.playSound(SABSounds.BLIP);
             subSelectionIndex = (subSelectionIndex - 1) % subSelection[selectorIndex].length;
+            System.out.println(-1 % 4);
         } else {
 //            super.decrementSelection();
         }

@@ -313,7 +313,7 @@ public class CharacterSelectScreen extends NetScreen {
         timesPlayed.put(id1, String.valueOf(Integer.parseInt(timesPlayed.getOrDefault(id1, "0")) + 1));
         timesPlayed.put(id2, String.valueOf(Integer.parseInt(timesPlayed.getOrDefault(id2, "0")) + 1));
 
-        File legacyFile = new File("..saves/timesplayed.sab");
+        File legacyFile = new File("../saves/timesplayed.sab");
         if (legacyFile.exists()) {
             HashMap<String, String> legacyTimesPlayed = SabReader.read(legacyFile);
             for (String fighter : legacyTimesPlayed.keySet()) {

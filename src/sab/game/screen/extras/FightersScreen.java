@@ -1,5 +1,6 @@
 package sab.game.screen.extras;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,6 +16,7 @@ import sab.game.fighter.FighterType;
 import sab.modloader.ModLoader;
 import sab.screen.Screen;
 import sab.screen.ScreenAdapter;
+import sab.util.SabReader;
 import sab.util.Utils;
 
 public class FightersScreen extends ScreenAdapter {
@@ -38,16 +40,32 @@ public class FightersScreen extends ScreenAdapter {
 
         g.drawText(fighters.get(characterIndex).name, Game.getDefaultFont(), 0, Game.game.window.resolutionY / 2 - 64, 3 * Game.getDefaultFontScale(), Color.WHITE, 0);
 
-        String description = "     " + fighters.get(characterIndex).description + " \n \nDebut: " + fighters.get(characterIndex).debut;
+        String timesPlayed = SabReader.readProperty(fighters.get(characterIndex).id, new File("../saves/times_played.sab"));
+        if (timesPlayed == null) {
+            timesPlayed = "Why haven't you played me yet :(";
+        } else {
+            int numTimesPlayed = Integer.parseInt(timesPlayed);
+            timesPlayed += " (";
+            if (numTimesPlayed >= 1000) timesPlayed += "Beyond Insanity";
+            else if (numTimesPlayed >= 500) timesPlayed += "Godlike";
+            else if (numTimesPlayed >= 250) timesPlayed += "Religious";
+            else if (numTimesPlayed >= 100) timesPlayed += "Maining";
+            else if (numTimesPlayed >= 50) timesPlayed += "Adept";
+            else if (numTimesPlayed >= 20) timesPlayed += "Rookie";
+            else if (numTimesPlayed >= 5) timesPlayed += "Newbie";
+            else timesPlayed += "Inexperienced";
+            timesPlayed += ")";
+        }
+        String description = "     " + fighters.get(characterIndex).description + " \n \nDebut: " + fighters.get(characterIndex).debut + "\n \nTimes Played: " + timesPlayed;
 
-        description = Utils.textWrap(g, description, 1, 400);
+        description = Utils.textWrap(g, description, 1, 460);
 
         g.drawText(description, Game.getDefaultFont(), -Game.game.window.resolutionX / 2 + 32, Game.game.window.resolutionY / 2 - 220, Game.getDefaultFontScale(), Color.WHITE, -1);
 
         Rectangle dots = new Rectangle(0, -320, (16 + 8) * fighters.size(), 16);
         
         dots.setCenter(0, -320);
-        
+
         for (int i = 0; i < fighters.size(); i++) {
             g.usefulTintDraw(g.imageProvider.getImage("dot.png"), dots.x + i * dots.width / fighters.size(), dots.y, 16, 16, 0, 1, 0, false, false, i == characterIndex ? Color.WHITE : new Color(0.5f, 0.5f, 0.5f, 0.5f));
         }
