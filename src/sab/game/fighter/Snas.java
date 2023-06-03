@@ -33,10 +33,10 @@ public class Snas extends FighterType {
         fighter.imageOffsetX = 0;
         fighter.imageOffsetY = 4;
         fighter.frames = 9;
-        fighter.acceleration = .34f;
+        fighter.acceleration = .38f;
         fighter.jumpHeight = 130;
         fighter.friction = .225f;
-        fighter.mass = 5.4f;
+        fighter.mass = 6.1f;
         fighter.airJumps = 1;
         fighter.walkAnimation = new Animation(0, 3, 5, true);
         fighter.description = "This laid back skeleton wizard doesn't always look the magical part. You should be wary as his boneomancy can pack quite a punch and he has a bone to pick with you.";

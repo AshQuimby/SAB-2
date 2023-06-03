@@ -42,6 +42,7 @@ public class John extends FighterType {
         fighter.mass = 8.5f;
         fighter.airJumps = 3;
         fighter.doubleJumpMultiplier = 0.6f;
+        fighter.airDodgeSpeed = 5;
 
         fighter.description = "American attorney John Joseph has a spotless legal record. Despite this, he finds it tough to get work after he was cursed and turned into a pink sphere for all eternity. In this state he worked exclusively his upper body so much that his legs atrophied to the point of being vestigial.";
         fighter.debut = "John Joseph's Nightmare World";

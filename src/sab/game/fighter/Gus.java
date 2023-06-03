@@ -43,6 +43,7 @@ public class Gus extends FighterType {
         fighter.description = "First name Amon, This hazmat suit wearing astronaut is always getting into trouble no matter where they go. Sometimes they're the alien, sometimes they're chased by the alien, but they can never seem to catch a break.";
         fighter.debut = "Around Ourselves";
         fighter.costumes = 4;
+        fighter.airDodgeSpeed = 6;
 
         shootAnimation = new Animation(9, 10, 5, true);
         tongueAnimation = new Animation(4, 5, 7, true);

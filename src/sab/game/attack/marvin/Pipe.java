@@ -2,6 +2,7 @@ package sab.game.attack.marvin;
 
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.Vector2;
+import com.seagull_engine.GameObject;
 import sab.game.Direction;
 import sab.game.SABSounds;
 import sab.game.attack.Attack;
@@ -24,9 +25,9 @@ public class Pipe extends AttackType {
         attack.hitbox.height = 56;
         attack.drawRect.width = 64;
         attack.drawRect.height = 64;
-        attack.damage = 12;
+        attack.damage = 6;
         attack.direction = -1;
-        attack.hitCooldown = 60;
+        attack.hitCooldown = 30;
         attack.reflectable = false;
         attack.parryable = false;
     }
@@ -38,13 +39,14 @@ public class Pipe extends AttackType {
             pipeDirection = 0;
             head = true;
         } else {
-            attack.life = 60 + data[5];
+            attack.life = 60 - data[5];
             pipeDirection = data[0];
             previousPipeDirection = data[4];
             turnt = data[1] == 1 ? true : false;
             attack.hitbox.x = data[2];
             attack.hitbox.y = data[3];
         }
+        attack.knockback = new Vector2(-12, 0);
         SABSounds.playSound("crunch.mp3");
     }
 
@@ -64,20 +66,6 @@ public class Pipe extends AttackType {
         } else {
             attack.rotation = 90 * pipeDirection;
             attack.frame = 0;
-        }
-        switch (pipeDirection) {
-            case 0 :
-                attack.knockback = new Vector2(0, 14);
-                break;
-            case 1 :
-                attack.knockback = new Vector2(14, 0);
-                break;
-            case 2 :
-                attack.knockback = new Vector2(0, -14);
-                break;
-            case 3 :
-                attack.knockback = new Vector2(-14, 0);
-                break;
         }
 
         if (head) {
@@ -122,6 +110,12 @@ public class Pipe extends AttackType {
                 previousPipeDirection = pipeDirection;
             }
         }
+    }
+
+    @Override
+    public void successfulHit(Attack attack, GameObject hit) {
+        attack.knockback = hit.getCenter().sub(attack.getCenter()).nor().scl(12);
+        attack.knockback.y = Math.abs(attack.knockback.y);
     }
 
     @Override

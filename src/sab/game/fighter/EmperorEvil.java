@@ -37,13 +37,14 @@ public class EmperorEvil extends FighterType {
         fighter.jumpHeight = 90;
         fighter.doubleJumpMultiplier = 0.8f;
         fighter.speed = 9.2f;
-        fighter.acceleration = .32f;
+        fighter.acceleration = .35f;
         fighter.friction = .22f;
         fighter.mass = 7.5f;
         fighter.airJumps = 1;
         fighter.walkAnimation = new Animation(0, 3, 7, true);
         fighter.description = "Emperor E. Vile is a big mean alligator who steals all of the bananas from the monkeys. He doesn't even eat bananas, nobody knows why he takes them in the first place.";
         fighter.debut = "King Kong City";
+        fighter.airDodgeSpeed = 5;
 
         shootAnimation = new Animation(new int[] {9, 5}, 18, true);
         chompAnimation = new Animation(new int[] {4, 5}, 6, true);

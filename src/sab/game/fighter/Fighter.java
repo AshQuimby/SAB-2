@@ -67,6 +67,9 @@ public class Fighter implements Cloneable {
     public float jumpHeight;
     public float doubleJumpMultiplier;
 
+    // The speed at which a fighter will move after air-dodging in a direction
+    public float airDodgeSpeed;
+
     // The multiplier of the player's velocity, larger numbers make characters more "slippery" (greater than zero but less than one)
     public float friction;
 
@@ -97,6 +100,7 @@ public class Fighter implements Cloneable {
         doubleJumpMultiplier = 0.75f;
         jumpHeight = 50;
         friction = .05f;
+        airDodgeSpeed = 8;
         mass = 1;
         walkAnimation = null;
         ledgeAnimation = new Animation(new int[]{8}, 1, false);

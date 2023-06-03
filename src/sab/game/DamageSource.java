@@ -5,6 +5,7 @@ import com.seagull_engine.GameObject;
 
 public class DamageSource extends GameObject {
     public int damage;
+    private int customHitLag = -1;
     public Vector2 knockback;
     public boolean reflectable;
     public boolean parryable;
@@ -23,6 +24,14 @@ public class DamageSource extends GameObject {
 
     public static DamageSource genericDamageSource(int damage, Vector2 knockback, boolean reflectable, boolean parryable) {
         return new DamageSource(damage, knockback, reflectable, parryable);
+    }
+
+    public void setStaticHitlag(int hitlag) {
+        customHitLag = hitlag;
+    }
+
+    public int getCustomHitLag() {
+        return customHitLag;
     }
 
     public void onParry() {

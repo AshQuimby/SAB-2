@@ -65,6 +65,8 @@ public class Player extends GameObject implements Hittable {
     private boolean charging;
     private boolean hide;
     private boolean ledgeGrabbing;
+    private boolean usedAirDodge;
+    private int airDodging;
 
     public Player(Fighter fighter) {
         this.fighter = fighter;
@@ -165,6 +167,7 @@ public class Player extends GameObject implements Hittable {
 
             if (collisionDirection == Direction.DOWN) {
                 touchingStage = true;
+                usedAirDodge = false;
             }
 
             if (knockbackDuration > 0) {
@@ -533,11 +536,26 @@ public class Player extends GameObject implements Hittable {
             }
 
             // Parrying
-            if (keys.isJustPressed(Keys.PARRY) && parryTime <= -20) {
-                fighter.onParry(this);
-                parryTime = 20;
-                fighter.parryAnimation.reset();
-                startAnimation(1, fighter.parryAnimation, 30, false);
+            if (keys.isJustPressed(Keys.PARRY)) {
+                if (touchingStage) {
+                    if (parryTime <= -20) {
+                        fighter.onParry(this);
+                        parryTime = 20;
+                        fighter.parryAnimation.reset();
+                        startAnimation(1, fighter.parryAnimation, 30, false);
+                    }
+                } else if (!usedAirDodge) {
+                    if (iFrames < 20) iFrames = 20;
+                    if (keys.isPressed(Keys.LEFT) ^ keys.isPressed(Keys.RIGHT)) {
+                        velocity.x = fighter.airDodgeSpeed * direction;
+                        if (keys.isPressed(Keys.UP)) velocity.y = 6;
+                        else velocity.y = 2;
+                        airDodging = (int) fighter.airDodgeSpeed;
+                    } else {
+                        velocity.scl(0);
+                    }
+                    usedAirDodge = true;
+                }
             }
         }
 
@@ -651,7 +669,10 @@ public class Player extends GameObject implements Hittable {
     }
 
     public void gravityAndFriction() {
-        velocity.y -= 0.96f;
+        if (airDodging > 0) {
+            velocity.y -= 0.6f;
+            airDodging--;
+        } else velocity.y -= 0.96f;
 
         applyForce(velocity.cpy().scl(-fighter.friction));
         if (touchingStage && (!(keys.isPressed(Keys.LEFT) ^ keys.isPressed(Keys.RIGHT)) || charging)) {
@@ -741,7 +762,9 @@ public class Player extends GameObject implements Hittable {
         } else {
             knockback.setAngleRad(newKnockback.angleRad());
         }
-        knockbackDuration = (int) (knockback.len() * 0.225f);
+
+        if (source.getCustomHitLag() < 0) knockbackDuration = (int) (knockback.len() * 0.225f);
+        else knockbackDuration = source.getCustomHitLag();
 
         boolean shouldDie = false;
 

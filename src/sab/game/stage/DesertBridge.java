@@ -17,9 +17,9 @@ public class DesertBridge extends StageType {
         stage.unsafeBlastZone = new Rectangle(-1520 / 2, -1088 / 2, 1520, 1088);
 
         stage.addStageObject(new StageObject(
-                -1600 / 2f,
+                -1800 / 2f,
                 -18,
-                1600,
+                1800,
                 24,
                 "desert_bridge_top.png", stage) {
             @Override

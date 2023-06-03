@@ -106,6 +106,7 @@ public class BowlBoy extends FighterType {
         fighter.debut = "Bowl Boy & Pot Head in: Deal-tastic Demon";
         gunHandPosition = new Vector2();
         chargingShot = true;
+        fighter.airDodgeSpeed = 8.5f;
 
         gunMode = false;
 

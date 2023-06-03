@@ -17,56 +17,62 @@ public class FinalSlash extends MeleeAttackType {
     public void setDefaults(Attack attack) {
         attack.imageName = "chain_final_slash.png";
         attack.life = 360;
-        attack.frameCount = 13;
+        attack.frameCount = 15;
         attack.velocity = new Vector2();
-        attack.hitbox.width = 224;
-        attack.hitbox.height = 224;
-        attack.drawRect.width = 256;
-        attack.drawRect.height = 256;
-        attack.damage = 12;
+        attack.hitbox.width = 256;
+        attack.hitbox.height = 256;
+        attack.drawRect.width = 320;
+        attack.drawRect.height = 320;
+        attack.damage = 2;
         attack.direction = attack.owner.direction;
-        attack.hitCooldown = 4;
         attack.reflectable = false;
         attack.parryable = false;
-        attack.staticKnockback = true;
-        offset = new Vector2(128, 0);
+        offset = new Vector2(96, 0);
         usePlayerDirection = true;
-        swingSpeed = 12;
+        swingSpeed = 5;
         killWhenPlayerStuck = false;
+        attack.hitCooldown = 100;
+        attack.staticKnockback = true;
     }
 
     @Override
     public void onSpawn(Attack attack, int[] data) {
         super.onSpawn(attack, data);
-        attack.owner.velocity.y *= 0.05f;
         attack.owner.touchingStage = false;
-        attack.knockback = new Vector2(12 * attack.direction, 8f);
+        attack.knockback = new Vector2(12f * attack.direction, 5f);
     }
 
     @Override
     public void update(Attack attack) {
         super.update(attack);
-        attack.hitCooldown = Math.round(swingSpeed + 4);
+        attack.owner.move(new Vector2(0, 0.25f));
         attack.owner.velocity.scl(0);
         attack.owner.stun(2);
         attack.owner.setIFrames(2);
-        swingSpeed -= 0.125f;
+        swingSpeed -= 0.01f;
         attack.owner.frame = 6;
-        if (attack.owner.keys.isJustPressed(Keys.ATTACK)) swingSpeed -= 0.125f;
-        if (attack.life % Math.ceil(swingSpeed) == 0 && ++attack.frame >= attack.frameCount) attack.frame = 0;
-        attack.canHit = attack.frame == 2 || attack.frame == 7 || attack.frame == 11;
+        if (attack.owner.keys.isJustPressed(Keys.ATTACK)) swingSpeed -= 0.05f;
+        if (swingSpeed <= 2) swingSpeed = 2;
+        if (attack.life % (int) Math.ceil(swingSpeed) == 0) {
+            attack.clearHitObjects();
+            if (++attack.frame >= attack.frameCount) {
+                attack.frame = 0;
+            }
+        }
+        attack.canHit = attack.frame == 2 || attack.frame == 6 || attack.frame == 12;
+        if (attack.life < 30) attack.staticKnockback = false;
+        if (attack.life == 1 && attack.frame != 14) {
+            attack.life += swingSpeed;
+        }
     }
 
     @Override
     public void successfulHit(Attack attack, GameObject hit) {
-        CollisionResolver.moveWithCollisions(hit, attack.owner.hitbox.getCenter(new Vector2()).sub(hit.hitbox.getCenter(new Vector2())).scl(0.75f), attack.owner.battle.getSolidStageObjects());
-        if (hit instanceof Player) ((Player) hit).stun(2);
-        if (attack.life <= 4) {
-            attack.staticKnockback = false;
-            attack.knockback = new Vector2(0, 8).rotateDeg(MathUtils.random(-1f, 1f) * 16);
-        }
-        for (int i = 0; i < 4; i++) {
-            attack.owner.battle.addParticle(new Particle(0.1f, hit.getCenter(), Utils.randomParticleVelocity(8), 32, 32, 0.9f, 0, "blood.png"));
+        if (hit instanceof Player) {
+            Player hitPlayer = (Player) hit;
+            if (attack.life > 10) hitPlayer.stun(30);
+            hitPlayer.hitbox.x += Math.signum(attack.getCenter().x + 64 * attack.direction - hitPlayer.getCenter().x) * 3;
+            hitPlayer.hitbox.y += Math.signum(attack.getCenter().y - hitPlayer.getCenter().y) * 3;
         }
     }
 }

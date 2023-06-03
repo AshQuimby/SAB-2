@@ -48,6 +48,7 @@ public class UnnamedDuck extends FighterType {
         fighter.walkAnimation = new Animation(1, 4, 6, true);
         fighter.description = "This unruly duck is constantly causing mischief. Whether it's stealing somebody's gardening tools or committing a political assassination, this duck could be behind it. The strange thing is, nobody knows its name. Researchers have concluded that it does have one. One paper came to the conclusion of [REDACTED], but it is impossible to verify the claim.";
         fighter.debut = "No Name Duck Game";
+        fighter.airDodgeSpeed = 9;
 
         quackAnimation = new Animation(new int[] {5, 6}, 6, true);
         fighter.freefallAnimation = new Animation(new int[] {7}, 1, true);

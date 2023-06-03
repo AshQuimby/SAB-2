@@ -44,6 +44,7 @@ public class EmptySoldier extends FighterType {
         fighter.frames = 12;
         fighter.friction = .3f;
         fighter.mass = 4.13f;
+        fighter.airDodgeSpeed = 10;
         fighter.walkAnimation = new Animation(1, 3, 5, true);
         fighter.costumes = 3;
         fighter.description = "FOR THE LAST TIME. EMPTY SOLDIER WAS THE NAME OF THE SCIENTIST! THE BUG IS CALLED: \"EMPTY SOLDIER'S MONSTER!\"";
