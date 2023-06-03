@@ -40,9 +40,8 @@ public class GlasterBaster extends MeleeAttackType {
 
     @Override
     public void update(Attack attack) {
-        super.update(attack);
-
         if (!fired) {
+            super.update(attack);
             attack.life++;
             if (attack.owner.getCharge() >= 60) {
                 attack.frame = 1;

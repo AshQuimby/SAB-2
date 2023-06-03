@@ -482,8 +482,8 @@ public class Player extends GameObject implements Hittable {
                 charging = false;
             } else {
                 gravityAndFriction();
-                return;
             }
+            return;
         }
 
         if (keys.isPressed(Keys.LEFT)) {
@@ -526,8 +526,7 @@ public class Player extends GameObject implements Hittable {
                 } else {
                     if (hasItem()) fighter.useItem(this);
                     else if (assCharged && !repeatAttack) {
-                        fighter.finalAss(this);
-                        assCharged = false;
+                        if (fighter.finalAss(this)) assCharged = false;
                     }
                     else fighter.neutralAttack(this);
                 }

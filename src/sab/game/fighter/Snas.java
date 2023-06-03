@@ -22,6 +22,7 @@ import sab.util.Utils;
 public class Snas extends FighterType {
     private Animation attackAnimation;
     private Animation chargeAnimation;
+    private Animation chargeCooldownAnimation;
     private boolean beheaded;
 
     @Override
@@ -45,9 +46,10 @@ public class Snas extends FighterType {
         fighter.debut = "Belowstory";
         
         beheaded = false;
-        attackAnimation = new Animation(new int[] {4, 5, 0}, 7, true);
-        chargeAnimation = new Animation(new int[] {4}, 7, true);
-        fighter.freefallAnimation = new Animation(new int[]{7}, 1, true);
+        attackAnimation = new Animation(new int[] { 4, 5, 0 }, 7, true);
+        chargeAnimation = new Animation(new int[] { 4 }, 7, true);
+        chargeCooldownAnimation = new Animation(new int[] { 4, 5, 0 }, 4, true);
+        fighter.freefallAnimation = new Animation(new int[]{ 7 }, 1, true);
         fighter.costumes = 3;
     }
 
@@ -159,6 +161,8 @@ public class Snas extends FighterType {
 
     @Override
     public void chargeAttack(Fighter fighter, Player player, int charge) {
+        chargeCooldownAnimation.reset();
+        player.startAnimation(1, chargeCooldownAnimation, 12, true);
     }
 
     @Override

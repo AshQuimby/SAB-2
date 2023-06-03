@@ -133,12 +133,14 @@ public class Marvin extends FighterType {
     }
 
     @Override
-    public void finalAss(Fighter fighter, Player player) {
+    public boolean finalAss(Fighter fighter, Player player) {
         if (!player.usedRecovery) {
             player.setIFrames(8);
             squatAnimation.reset();
             player.startIndefiniteAttack(new Pipe(), squatAnimation, 1, false, new int[0]);
+            return true;
         }
+        return false;
     }
 
     @Override
@@ -146,6 +148,14 @@ public class Marvin extends FighterType {
         if (Game.game.window.getTick() % 5 == 0) {
             for (int i = 0; i < 4; i++)
             player.battle.addParticle(new Particle(player.hitbox.getCenter(new Vector2()).add(new Vector2(charge / 4f + 36 + MathUtils.sin(Game.game.window.getTick() / 8f) * 8f, 0).rotateDeg(i * 90 + Game.game.window.getTick() * 4)).add(0, 48), new Vector2(-1, 0).rotateDeg(i * 90 + Game.game.window.getTick() * 2), 32, 32, "frostfire.png"));
+        }
+        if (player.keys.isPressed(Keys.LEFT) ^ player.keys.isPressed(Keys.RIGHT)) {
+            if (player.keys.isPressed(Keys.LEFT)) {
+                if (!player.keys.isPressed(Keys.RIGHT)) player.direction = -1;
+            }
+            if (player.keys.isPressed(Keys.RIGHT)) {
+                if (!player.keys.isPressed(Keys.LEFT)) player.direction = 1;
+            }
         }
         player.velocity.y *= 0.9f;
         player.frame = chargeAnimation.stepLooping();

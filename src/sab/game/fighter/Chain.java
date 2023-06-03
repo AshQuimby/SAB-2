@@ -118,11 +118,13 @@ public class Chain extends FighterType {
     }
 
     @Override
-    public void finalAss(Fighter fighter, Player player) {
+    public boolean finalAss(Fighter fighter, Player player) {
         if (!player.usedRecovery) {
             player.setIFrames(4);
             swingAnimation.reset();
             player.startIndefiniteAttack(new FinalSlash(), swingAnimation, 1, false);
+            return true;
         }
+        return false;
     }
 }

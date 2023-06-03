@@ -164,14 +164,16 @@ public class Walouis extends FighterType {
     }
 
     @Override
-    public void finalAss(Fighter fighter, Player player) {
+    public boolean finalAss(Fighter fighter, Player player) {
         if (!player.usedRecovery) {
             // 740 is sax time, 150 is the saxophone animation
             playingSaxFor = 740 + 150;
             player.battle.addAttack(new Attack(new Saxophone(), player), null);
             SABSounds.pauseMusic();
             SABSounds.playSound("spotlight.mp3");
+            return true;
         }
+        return false;
     }
 
     @Override

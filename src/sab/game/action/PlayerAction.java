@@ -16,7 +16,8 @@ public class PlayerAction {
     private boolean usedAttack;
     
     public PlayerAction(int delay, boolean important, int endLag) {
-        this.delay = delay;
+        if (delay == 0) this.delay = 1;
+        else this.delay = delay;
         this.important = important;
         attack = null;
         this.endLag = endLag;
@@ -24,7 +25,8 @@ public class PlayerAction {
     }
 
     public PlayerAction(int delay, Animation animation, boolean important, int endLag) {
-        this.delay = delay;
+        if (delay == 0) this.delay = 1;
+        else this.delay = delay;
         this.important = important;
         this.animation = animation;
         attack = null;
@@ -33,7 +35,8 @@ public class PlayerAction {
     }
 
     public PlayerAction(int delay, Attack attack, boolean important, int endLag, int[] data) {
-        this.delay = delay;
+        if (delay == 0) this.delay = 1;
+        else this.delay = delay;
         this.important = important;
         this.attack = attack;
         this.endLag = endLag;
@@ -41,7 +44,8 @@ public class PlayerAction {
     }
 
     public PlayerAction(int delay, Attack attack, Animation animation, boolean important, int endLag, int[] data) {
-        this.delay = delay;
+        if (delay == 0) this.delay = 1;
+        else this.delay = delay;
         this.important = important;
         this.attack = attack;
         this.animation = animation;

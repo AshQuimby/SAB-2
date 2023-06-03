@@ -48,8 +48,8 @@ public abstract class FighterType {
 
     }
 
-    public void finalAss(Fighter fighter, Player player) {
-
+    public boolean finalAss(Fighter fighter, Player player) {
+        return true;
     }
 
     public void neutralSpecial(Fighter fighter, Player player) {
