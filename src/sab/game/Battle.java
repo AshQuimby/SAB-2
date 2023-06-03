@@ -67,6 +67,7 @@ public class Battle {
     private boolean paused;
     private boolean pauseOverlayHidden;
     private int pauseMenuIndex;
+    private int battleTick;
     private int parryFlash;
 
     // Screen effect variables
@@ -111,6 +112,7 @@ public class Battle {
         nextId = 0;
 
         drawHitboxes = false;
+        battleTick = 0;
 
         addGameObject(player1);
         addGameObject(player2);
@@ -388,6 +390,7 @@ public class Battle {
             }
         }
         updateCameraEffects();
+        battleTick++;
 
         if (winner == null && (player1.getLives() == 0 || player2.getLives() == 0)) {
             endGame(player1.getLives() > 0 ? player1 : (player2.getLives() == 0 ? null : player2), player1.getLives() > 0 ? player2 : (player2.getLives() == 0 ? null : player1));
@@ -597,6 +600,10 @@ public class Battle {
         return attacks;
     }
 
+    public int getBattleTick() {
+        return battleTick;
+    }
+
     private void drawHitbox(GameObject gameObject, Seagraphics g) {
         Rectangle hitbox = gameObject.hitbox;
 
@@ -645,10 +652,6 @@ public class Battle {
             if (drawHitboxes) drawHitbox(player, g);
         }
 
-        for (Attack attack : attacks) {
-            if (attack.alive && attack.drawAbovePlayers) attack.render(g);
-        }
-
         stage.renderPlatforms(g);
 
         for (Particle particle : particles) {
@@ -657,6 +660,10 @@ public class Battle {
 
         for (AssBall assBall : assBalls) {
             assBall.render(g);
+        }
+
+        for (Attack attack : attacks) {
+            if (attack.alive && attack.drawAbovePlayers) attack.render(g);
         }
 
         for (Ledge ledge : stage.getLedges()) {

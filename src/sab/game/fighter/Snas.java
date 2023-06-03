@@ -1,8 +1,10 @@
 package sab.game.fighter;
 
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
+import sab.game.Game;
 import sab.game.Player;
 import sab.game.action.PlayerAction;
 import sab.game.SABSounds;
@@ -161,6 +163,7 @@ public class Snas extends FighterType {
 
     @Override
     public void charging(Fighter fighter, Player player, int charge) {
+        if (Game.game.window.getTick() % 4 == 0) player.battle.addParticle(new Particle(Utils.randomPointInRect(player.hitbox), new Vector2(1, 0).rotateDeg(MathUtils.random() * 360), 24, 24, "snas_fire.png"));
         player.velocity.y *= 0.8f;
         player.frame = chargeAnimation.stepLooping();
     }

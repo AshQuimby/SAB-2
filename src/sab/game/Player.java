@@ -525,7 +525,7 @@ public class Player extends GameObject implements Hittable {
                     else fighter.sideAttack(this);
                 } else {
                     if (hasItem()) fighter.useItem(this);
-                    else if (assCharged) {
+                    else if (assCharged && !repeatAttack) {
                         fighter.finalAss(this);
                         assCharged = false;
                     }
@@ -715,7 +715,7 @@ public class Player extends GameObject implements Hittable {
 
     @Override
     public boolean canBeHit(DamageSource source) {
-        if (parryTime > 0) {
+        if (source.parryable && parryTime > 0) {
             source.onParry();
             battle.onSuccessfulParry();
             if (source.owner != null) {

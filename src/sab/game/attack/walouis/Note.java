@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.seagull_engine.GameObject;
 
+import com.sun.jdi.VMDisconnectedException;
 import sab.game.Direction;
 import sab.game.attack.Attack;
 import sab.game.attack.AttackType;
@@ -28,13 +29,13 @@ public class Note extends AttackType {
 
     @Override
     public void update(Attack attack) {
-        if (attack.collisionDirection != Direction.NONE) {
+        if (attack.collideWithStage && attack.collisionDirection != Direction.NONE) {
             attack.alive = false;
         }
         if (attack.life % 10 == 0) {
             attack.direction *= -1;
         }
-        attack.velocity.y += Math.sin(attack.life / 2.5f) * 1f;
+        attack.velocity.y += Math.sin(attack.life / 2.5f) * 0.75f;
     }
 
     @Override
@@ -66,6 +67,25 @@ public class Note extends AttackType {
             attack.velocity.x = 2;
         } else if (data[0] == 2) {
             attack.velocity.x = -2;
+        } else if (data[0] == 3) {
+            attack.reflectable = false;
+            attack.parryable = false;
+            attack.life = 640;
+            attack.collideWithStage = false;
+            attack.hitbox.setCenter(attack.owner.getCenter());
+            attack.hitbox.y += 20;
+            attack.velocity = new Vector2(0, 5).rotateDeg(data[1] * 45 + attack.getBattle().getBattleTick());
+            attack.drawAbovePlayers = true;
+        }
+        else if (data[0] == 4) {
+            attack.reflectable = false;
+            attack.parryable = false;
+            attack.life = 640;
+            attack.collideWithStage = false;
+            attack.hitbox.setCenter(attack.owner.getCenter());
+            attack.hitbox.y += 20;
+            attack.velocity = attack.getNearestOpponent(-1).getCenter().sub(attack.getCenter()).nor().scl(5);
+            attack.drawAbovePlayers = true;
         }
         attack.knockback = attack.velocity.cpy().scl(0.5f);
     }

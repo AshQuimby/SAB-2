@@ -11,16 +11,19 @@ import sab.game.SABSounds;
 import sab.game.ai.AI;
 import sab.game.ai.BaseAI;
 import sab.game.animation.Animation;
-import sab.game.attack.walouis.Racket;
-import sab.game.attack.walouis.Bomb;
-import sab.game.attack.walouis.Note;
-import sab.game.attack.walouis.TinyNote;
+import sab.game.attack.Attack;
+import sab.game.attack.walouis.*;
 import sab.game.particle.Particle;
 import sab.net.Keys;
 import sab.util.Utils;
 
 public class Walouis extends FighterType {
+    static {
+        // Allows us to play this song internally as a sound despite being in the music folder
+        SABSounds.soundEngine.loadSound("music/misc/walouis_sax_solo.mp3");
+    }
     private Animation throwAnimation;
+    private int playingSaxFor;
 
     @Override
     public void setDefaults(sab.game.fighter.Fighter fighter) {
@@ -45,6 +48,7 @@ public class Walouis extends FighterType {
         fighter.description = "Walouis, the world famous jazz musician and singer is known for his smash hit albums such as: 'Waaht is Love', 'A Wah's Life', and 'Waaghing in the shadows.' He also sees success in his professional badminton career.";
         fighter.debut = "Marvin Badminton";
         fighter.costumes = 3;
+        playingSaxFor = 0;
     }
 
     @Override
@@ -102,7 +106,26 @@ public class Walouis extends FighterType {
 
     @Override
     public void update(sab.game.fighter.Fighter fighter, Player player) {
-
+        if (playingSaxFor > 0) {
+            if (playingSaxFor > 740) {
+                player.frame = 10;
+            } else if (playingSaxFor > 30) {
+                if ((playingSaxFor - 20) % 30 == 0) {
+                    for (int i = 0; i < 8; i++) {
+                        player.battle.addAttack(new Attack(new Note(), player), new int[] { 3, i });
+                    }
+                    if ((playingSaxFor - 20) % 60 == 0) player.battle.addAttack(new Attack(new Note(), player), new int[] { 4 });
+                    // player.battle.addAttack(new Attack(new Note(), player), new int[] { 4 });
+                }
+                player.frame = 11;
+            }
+            player.stun(2);
+            player.setIFrames(2);
+            playingSaxFor--;
+        }
+        if (playingSaxFor == 740) {
+            SABSounds.playSound("walouis_sax_solo.mp3");
+        }
     }
 
     @Override
@@ -139,8 +162,19 @@ public class Walouis extends FighterType {
     }
 
     @Override
+    public void finalAss(Fighter fighter, Player player) {
+        if (!player.usedRecovery) {
+            // 740 is sax time, 150 is the saxophone animation
+            playingSaxFor = 740 + 150;
+            player.battle.addAttack(new Attack(new Saxophone(), player), null);
+            SABSounds.pauseMusic();
+            SABSounds.playSound("spotlight.mp3");
+        }
+    }
+
+    @Override
     public void charging(Fighter fighter, Player player, int charge) {
-        if (Game.game.window.getTick() % 4 == 0) player.battle.addParticle(new Particle(Utils.randomPointInRect(player.hitbox), new Vector2(1, 0).rotateDeg(MathUtils.random() * 359), 24, 24, "fire.png"));
+        if (Game.game.window.getTick() % 4 == 0) player.battle.addParticle(new Particle(Utils.randomPointInRect(player.hitbox), new Vector2(1, 0).rotateDeg(MathUtils.random() * 360), 24, 24, "fire.png"));
         player.velocity.y *= 0.85f;
         player.velocity.x *= 0.95f;
     }

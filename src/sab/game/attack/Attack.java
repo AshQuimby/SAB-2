@@ -7,11 +7,8 @@ import com.badlogic.gdx.math.Vector2;
 import com.seagull_engine.GameObject;
 import com.seagull_engine.Seagraphics;
 
-import sab.game.DamageSource;
-import sab.game.Direction;
-import sab.game.Hittable;
-import sab.game.Player;
-import sab.game.CollisionResolver;
+import sab.game.*;
+import sab.game.stage.Stage;
 import sab.util.Utils;
 
 public class Attack extends DamageSource {
@@ -183,6 +180,14 @@ public class Attack extends DamageSource {
     @Override
     public void render(Seagraphics g) {
         type.render(this, g);
+    }
+
+    public Battle getBattle() {
+        return owner.battle;
+    }
+
+    public Stage getStage() {
+        return owner.battle.getStage();
     }
 
     // Finds the nearest opponent player in range of maxDistance, set maxDistance to less than 0 for infinite tracking. Returns null when there is not an eligible target
