@@ -93,7 +93,7 @@ public class EmptySoldier extends FighterType {
 
     @Override
     public void update(Fighter fighter, Player player) {
-        if (!player.hasAction() && !player.touchingStage && !player.grabbingLedge()) {
+        if (player.isReady() && !player.touchingStage && !player.grabbingLedge()) {
             player.frame = player.velocity.y > -5 ? 5 : 6;
         }
 
@@ -124,9 +124,8 @@ public class EmptySoldier extends FighterType {
 
     @Override
     public void upAttack(Fighter fighter, Player player) {
-        if (spirit >= 30) {
+        if (!player.usedRecovery) {
             player.startAttack(new ViceroyWings(), null, 6, 8, false);
-            spirit -= 30;
         }
     }
 

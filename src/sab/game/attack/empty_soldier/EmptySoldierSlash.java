@@ -32,6 +32,7 @@ public class EmptySoldierSlash extends MeleeAttackType {
 
     @Override
     public void update(Attack attack) {
+        super.update(attack);
         attack.frame = Math.min(4, 6 - attack.life);
     }
 
