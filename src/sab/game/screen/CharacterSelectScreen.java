@@ -313,6 +313,23 @@ public class CharacterSelectScreen extends NetScreen {
         timesPlayed.put(id1, String.valueOf(Integer.parseInt(timesPlayed.getOrDefault(id1, "0")) + 1));
         timesPlayed.put(id2, String.valueOf(Integer.parseInt(timesPlayed.getOrDefault(id2, "0")) + 1));
 
+        File legacyFile = new File("..saves/timesplayed.sab");
+        if (legacyFile.exists()) {
+            HashMap<String, String> legacyTimesPlayed = SabReader.read(legacyFile);
+            for (String fighter : legacyTimesPlayed.keySet()) {
+                String amount = legacyTimesPlayed.get(fighter);
+                try {
+                    Integer.parseInt(amount);
+                } catch (NumberFormatException e) {
+                    System.out.println("Error parsing legacy times played value for " + fighter);
+                    System.out.println("Could not parse " + amount);
+                    continue;
+                }
+                timesPlayed.put(fighter, String.valueOf(Integer.parseInt(timesPlayed.getOrDefault(fighter, "0")) + Integer.parseInt(amount)));
+            }
+            legacyFile.delete();
+        }
+
         try {
             SabReader.write(timesPlayed, file);
         } catch (IOException e) {
