@@ -12,9 +12,9 @@ import sab.game.SABSounds;
 import sab.game.Settings;
 import sab.game.Game;
 import sab.screen.Screen;
+import sab.util.Utils;
 
 public class SettingsScreen extends SelectorScreen {
-    
     private HashMap<String, String> settings;
     private String[][] subSelection;
     private String[][] subSelectionSettingIds;
@@ -223,10 +223,11 @@ public class SettingsScreen extends SelectorScreen {
 
         String title = options[selectorIndex];
         Rectangle bounds = g.getTextBounds(title, Game.getDefaultFont(), 0, 320, 2 * Game.getDefaultFontScale(), 0);
-        g.usefulTintDraw(g.imageProvider.getImage("pixel.png"), bounds.x - 4, bounds.y + 4, (int) bounds.width + 9, (int) -bounds.height - 9, 0, 1, 0, false, false, new Color(0, 0, 0, 0.5f));
-        g.drawText(title, Game.getDefaultFont(), 0, 320, 2 * Game.getDefaultFontScale(), Color.WHITE, 0);
+        //g.usefulTintDraw(g.imageProvider.getImage("pixel.png"), bounds.x - 4, bounds.y + 4, (int) bounds.width + 9, (int) -bounds.height - 9, 0, 1, 0, false, false, new Color(0, 0, 0, 0.5f));
+        //g.drawText(title, Game.getDefaultFont(), 0, 320, 2 * Game.getDefaultFontScale(), Color.WHITE, 0);
+        Utils.drawButton(g, 24, 288, title, 2 * Game.getDefaultFontScale(), inSubSelection);
         if (inSubSelection) {
-            g.usefulTintDraw(g.imageProvider.getImage("pixel.png"), bounds.x - 4, bounds.y + 4, (int) bounds.width + 9, (int) -bounds.height - 9, 0, 1, 0, false, false, new Color(0, 0, 0, 0.25f));
+            //g.usefulTintDraw(g.imageProvider.getImage("pixel.png"), bounds.x - 4, bounds.y + 4, (int) bounds.width + 9, (int) -bounds.height - 9, 0, 1, 0, false, false, new Color(0, 0, 0, 0.25f));
         }
 //        for (int i = 0; i < options.length; i++) {
 //            Rectangle bounds = g.drawText(options[i], Game.getDefaultFont(), Game.game.window.resolutionX / 2 - 8,  i * -52 - 16, 1.5f, Color.WHITE, 1);
@@ -267,28 +268,30 @@ public class SettingsScreen extends SelectorScreen {
         }
 
         if (selectorIndex < subSelectionSettingIds.length) {
-            g.usefulTintDraw(g.imageProvider.getImage("pixel.png"), Game.game.window.resolutionX / 2 - 500, -Game.game.window.resolutionY / 2, 500, 350, 0, 1, 0, false, false, new Color(0, 0, 0, 0.5f));
+            //g.usefulTintDraw(g.imageProvider.getImage("pixel.png"), Game.game.window.resolutionX / 2 - 500, -Game.game.window.resolutionY / 2, 500, 350, 0, 1, 0, false, false, new Color(0, 0, 0, 0.5f));
             for (int i = 0; i < subSelection[selectorIndex].length; i++) {
                 String settingName = subSelection[selectorIndex][i];
                 int x = Game.game.window.resolutionX / 2 - 16;
                 int y = -60 - i * 40;
-                bounds = g.getTextBounds(settingName, Game.getDefaultFont(), x, y, 1.25f * Game.getDefaultFontScale(), 1);
-                Color buttonColor = subSelectionIndex == i ? new Color(1, 1, 1, 0.5f) : new Color(0, 0, 0, 0.5f);
-                g.usefulTintDraw(g.imageProvider.getImage("pixel.png"), bounds.x - 4, bounds.y + 4, (int) bounds.width + 9, (int) -bounds.height - 9, 0, 1, 0, false, false, buttonColor);
-                g.drawText(settingName, Game.getDefaultFont(), x, y, 1.25f * Game.getDefaultFontScale(), Color.WHITE, 1);
+//                bounds = g.getTextBounds(settingName, Game.getDefaultFont(), x, y, 1.25f * Game.getDefaultFontScale(), 1);
+//                Color buttonColor = subSelectionIndex == i ? new Color(1, 1, 1, 0.5f) : new Color(0, 0, 0, 0.5f);
+                //g.usefulTintDraw(g.imageProvider.getImage("pixel.png"), bounds.x - 4, bounds.y + 4, (int) bounds.width + 9, (int) -bounds.height - 9, 0, 1, 0, false, false, buttonColor);
+                //g.drawText(settingName, Game.getDefaultFont(), x, y, 1.25f * Game.getDefaultFontScale(), Color.WHITE, 1);
+                Utils.drawButton(g, x, y, settingName, 1.25f * Game.getDefaultFontScale(), inSubSelection && subSelectionIndex == i, 1);
             }
             if (!inSubSelection) {
-                g.usefulTintDraw(g.imageProvider.getImage("pixel.png"), Game.game.window.resolutionX / 2 - 500, -Game.game.window.resolutionY / 2, 500, 350, 0, 1, 0, false, false, new Color(0, 0, 0, 0.25f));
+                //g.usefulTintDraw(g.imageProvider.getImage("pixel.png"), Game.game.window.resolutionX / 2 - 500, -Game.game.window.resolutionY / 2, 500, 350, 0, 1, 0, false, false, new Color(0, 0, 0, 0.25f));
             }
         }
 
 
         bounds = g.getTextBounds(setting, Game.getDefaultFont(), 0, 0, textSize * Game.getDefaultFontScale(), 0);
 
-        g.usefulTintDraw(g.imageProvider.getImage("pixel.png"), bounds.x - 4, bounds.y + 4, (int) bounds.width + 9, (int) -bounds.height - 9, 1, 0, 0, false, false,
-                new Color(0, 0, 0, 0.5f));
+        //g.usefulTintDraw(g.imageProvider.getImage("pixel.png"), bounds.x - 4, bounds.y + 4, (int) bounds.width + 9, (int) -bounds.height - 9, 1, 0, 0, false, false,
+        //        new Color(0, 0, 0, 0.5f));
 
-        g.drawText(setting, Game.getDefaultFont(),  0, 0, textSize * Game.getDefaultFontScale(), Color.WHITE, 0);
+        //g.drawText(setting, Game.getDefaultFont(),  0, 0, textSize * Game.getDefaultFontScale(), Color.WHITE, 0);
+        Utils.drawButton(g, 0, 0, setting, 1.25f * Game.getDefaultFontScale(), true);
 
     }
 }

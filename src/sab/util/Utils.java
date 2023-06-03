@@ -93,7 +93,11 @@ public class Utils {
     }
 
     public static void drawButton(Seagraphics g, float x, float y, String text, float textSize, boolean highlighted) {
-        Rectangle textBounds = g.getTextBounds(text, g.imageProvider.getFont(Settings.getDefaultFont()), x, y, textSize, 0);
+        drawButton(g, x, y, text, textSize, highlighted, 0);
+    }
+
+    public static void drawButton(Seagraphics g, float x, float y, String text, float textSize, boolean highlighted, int anchor) {
+        Rectangle textBounds = g.getTextBounds(text, g.imageProvider.getFont(Settings.getDefaultFont()), x, y, textSize, anchor);
         textBounds.width = ((int) (textBounds.width * 4)) / 4 - 16;
         textBounds.height = ((int) (textBounds.height * 4)) / 4 - 16;
         Texture image = g.imageProvider.getImage("button_patch" + (highlighted ? "_highlighted" : "") + ".png");
@@ -109,6 +113,6 @@ public class Utils {
         Game.game.window.batch.draw(image, textBounds.x, textBounds.y + textBounds.height, textBounds.width, 16, .4f, .6f, .6f, 1f);
 
         Game.game.window.batch.draw(image, textBounds.x, textBounds.y, textBounds.width, textBounds.height, .4f, .4f, .6f, .6f);
-        g.drawText(text, g.imageProvider.getFont(Settings.getDefaultFont()), textBounds.x + textBounds.width / 2 + 1, textBounds.y + 19, textSize, highlighted ? Color.WHITE : Color.LIGHT_GRAY, 0);
+        g.drawText(text, g.imageProvider.getFont(Settings.getDefaultFont()), textBounds.x + textBounds.width / 2, textBounds.y + textBounds.height * 1.5f, textSize, highlighted ? Color.WHITE : Color.LIGHT_GRAY, 0);
     }
 }
