@@ -21,6 +21,7 @@ public class Walouis extends FighterType {
     static {
         // Allows us to play this song internally as a sound despite being in the music folder
         SABSounds.soundEngine.loadSound("music/misc/walouis_sax_solo.mp3");
+        SABSounds.soundEngine.loadSound("music/misc/walouis_sax_solo_alt.mp3");
     }
     private Animation throwAnimation;
     private int playingSaxFor;
@@ -124,7 +125,8 @@ public class Walouis extends FighterType {
             playingSaxFor--;
         }
         if (playingSaxFor == 740) {
-            SABSounds.playSound("walouis_sax_solo.mp3");
+            if (MathUtils.randomBoolean(0.75f)) SABSounds.playSound("walouis_sax_solo.mp3");
+            else SABSounds.playSound("walouis_sax_solo_alt.mp3");
         }
     }
 

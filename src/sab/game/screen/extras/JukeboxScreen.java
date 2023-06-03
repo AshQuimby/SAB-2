@@ -61,6 +61,7 @@ public class JukeboxScreen extends ScreenAdapter {
         addSong("wings_of_glory.mp3", "Wings of Glory", "a_viper", 130, "error_background.png");
         addSong("genetically_engineered_bad.mp3", "Genetically Engineered Bad", "AshQuimby", 120, "no_ducks.png");
         addSong("walouis_sax_solo.mp3", "Walouis' Sax Solo", "Beat Thorn", 80, "warzone_background.png");
+        addSong("walouis_sax_solo_alt.mp3", "Walouis' Second Sax Solo", "AshQuimby/a_viper", 80, "warzone_night_background.png");
     }
 
     public static void addSong(String fileName, String songName, String artist, int tempo, String jukeboxBackground) {
