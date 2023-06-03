@@ -1,6 +1,7 @@
 package sab.game.fighter;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.math.MathUtils;
 import com.seagull_engine.GameObject;
 import com.seagull_engine.Seagraphics;
 import sab.game.DamageSource;
@@ -115,6 +116,10 @@ public abstract class FighterType {
 
     public void onSuccessfulParry(Fighter fighter, Player player, DamageSource parried) {
 
+    }
+
+    public int getRandomCostume(Fighter fighter) {
+        return MathUtils.random(fighter.costumes - 1);
     }
 
     public String getVictorySongId(Fighter fighter, Player player) {

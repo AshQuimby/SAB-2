@@ -206,11 +206,13 @@ public class CharacterSelectScreen extends NetScreen {
                     player2.availableFighters.get(player2.index).walkAnimation.reset();
                     Fighter p1Fighter = player1.availableFighters.get(player1.index).copy();
                     if (p1Fighter.type instanceof Random) {
-                        p1Fighter = player1.availableFighters.get(MathUtils.random(player2.availableFighters.size() - 2));
+                        p1Fighter = player1.availableFighters.get(MathUtils.random(player1.availableFighters.size() - 2));
+                        player1.costume = p1Fighter.getRandomCostume();
                     }
                     Fighter p2Fighter = player2.availableFighters.get(player2.index).copy();
                     if (p2Fighter.type instanceof Random) {
                         p2Fighter = player2.availableFighters.get(MathUtils.random(player2.availableFighters.size() - 2));
+                        player2.costume = p2Fighter.getRandomCostume();
                     }
                     updateTimesPlayed();
                     updateCharacterList = true;
@@ -369,6 +371,13 @@ public class CharacterSelectScreen extends NetScreen {
 
         String player1Costume = player1.costume == 0 ? "" : "_alt_" + player1.costume;
         String player2Costume = player2.costume == 0 ? "" : "_alt_" + player2.costume;
+
+//        if (player1.availableFighters.get(player1.index).type instanceof Random) {
+//            player1.costume = 1;
+//        }
+//        if (player2.availableFighters.get(player2.index).type instanceof Random) {
+//            player2.costume = 0;
+//        }
 
         if (player1.availableFighters.get(player1.index).id.equals("gus") && player1.costume == 2 && player1.sus) player1Costume += "_alt";
         if (player2.availableFighters.get(player2.index).id.equals("gus") && player2.costume == 2 && player2.sus) player2Costume += "_alt";

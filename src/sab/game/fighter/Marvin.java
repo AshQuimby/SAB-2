@@ -13,6 +13,7 @@ import sab.game.attack.Attack;
 import sab.game.attack.marvin.*;
 import sab.game.particle.Particle;
 import sab.net.Keys;
+import sab.util.Utils;
 
 public class Marvin extends FighterType {
     private Animation swingAnimation;
@@ -167,5 +168,15 @@ public class Marvin extends FighterType {
             return super.getVictorySongId(fighter, player);
         }
         return "starvin_victory.mp3";
+    }
+
+    @Override
+    public int getRandomCostume(Fighter fighter) {
+        if (Utils.aprilFools()) {
+            if (MathUtils.randomBoolean(0.25f)) {
+                return 1929;
+            }
+        }
+        return super.getRandomCostume(fighter);
     }
 }

@@ -196,6 +196,10 @@ public class Fighter implements Cloneable {
         type.onParry(this, player);
     }
 
+    public int getRandomCostume() {
+        return type.getRandomCostume(this);
+    }
+
     public void onSuccessfulParry(Player player, DamageSource parried) {
         type.onSuccessfulParry(this, player, parried);
     }
