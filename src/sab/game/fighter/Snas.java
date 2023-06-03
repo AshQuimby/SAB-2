@@ -79,7 +79,7 @@ public class Snas extends FighterType {
                     return;
                 }
 
-                if (target.damage < 100 - difficulty * 5 || Math.random() < target.damage / 300f) {
+                if (target.damage < 100 - difficulty * 5 || Math.random() > target.damage / 300f) {
                     if (Math.random() * 60 > 3 + difficulty) return;
                     if (Math.abs(center.x - targetPosition.x) < 200) {
                         if (!player.touchingStage && !isDirectlyHorizontal(target.hitbox)) {
