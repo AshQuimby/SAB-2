@@ -21,7 +21,6 @@ public class MagicBanana extends AttackType {
     public void setDefaults(Attack attack) {
         attack.imageName = "banana.png";
         attack.life = 360;
-        attack.frameCount = 1;
         attack.hitbox.width = 96;
         attack.hitbox.height = 96;
         attack.drawRect.width = 128;
@@ -32,6 +31,7 @@ public class MagicBanana extends AttackType {
         attack.directional = false;
         attack.collideWithStage = true;
         attack.reflectable = false;
+        attack.parryable = false;
     }
 
     @Override
@@ -86,7 +86,7 @@ public class MagicBanana extends AttackType {
     }
 
     @Override
-    public void hit(Attack attack, GameObject hit) {
+    public void successfulHit(Attack attack, GameObject hit) {
         attack.velocity.scl(2);
         attack.knockback.scl(1 + kbMult);
         if (attack.life > 30) attack.life = 30;

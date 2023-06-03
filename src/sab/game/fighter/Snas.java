@@ -167,7 +167,9 @@ public class Snas extends FighterType {
 
     @Override
     public void charging(Fighter fighter, Player player, int charge) {
-        if (Game.game.window.getTick() % 4 == 0) player.battle.addParticle(new Particle(Utils.randomPointInRect(player.hitbox), new Vector2(1, 0).rotateDeg(MathUtils.random() * 360), 24, 24, "snas_fire.png"));
+        if (player.costume != 2 && Game.game.window.getTick() % 4 == 0) {
+            player.battle.addParticle(new Particle(Utils.randomPointInRect(player.hitbox), new Vector2(1, 0).rotateDeg(MathUtils.random() * 360), 24, 24, player.costume == 0 ? "snas_fire.png" : "snas_orange_fire.png"));
+        }
         player.velocity.y *= 0.8f;
         player.frame = chargeAnimation.stepLooping();
     }
