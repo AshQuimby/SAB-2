@@ -49,7 +49,7 @@ public class BattleScreen extends NetScreen {
         if (p instanceof KeyEventPacket kep) {
             if (kep.state) battle.getPlayer(0).keys.press(kep.key);
             else battle.getPlayer(0).keys.release(kep.key);
-        } else if (p instanceof PlayerStatePacket psp) {
+        } else if (p instanceof PlayerStatePacket psp && battle != null) {
             psp.syncPlayer(battle.getPlayer(psp.playerId));
         }
     }
