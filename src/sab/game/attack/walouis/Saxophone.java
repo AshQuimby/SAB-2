@@ -19,7 +19,6 @@ public class Saxophone extends AttackType {
         attack.hitbox = new Rectangle(0, 0, 1, 1);
         attack.drawRect = new Rectangle(0, 0, 32, 56);
         attack.life = 740 + 150;
-        attack.drawAbovePlayers = true;
     }
 
     @Override
@@ -49,6 +48,10 @@ public class Saxophone extends AttackType {
 
     @Override
     public void render(Attack attack, Seagraphics g) {
+    }
+
+    @Override
+    public void lateRender(Attack attack, Seagraphics g) {
         g.getDynamicCamera().targetZoom = attack.getStage().maxZoomOut;
         if (attack.life >= 740) super.render(attack, g);
         int spotlightSize = 3840;

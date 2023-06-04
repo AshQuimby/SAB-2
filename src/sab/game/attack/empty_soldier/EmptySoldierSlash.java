@@ -13,7 +13,6 @@ public class EmptySoldierSlash extends MeleeAttackType {
     @Override
     public void setDefaults(Attack attack) {
         attack.imageName = "screw.png";
-        attack.drawAbovePlayers = true;
         attack.life = 6;
         attack.frameCount = 5;
         attack.velocity = new Vector2();
@@ -46,6 +45,10 @@ public class EmptySoldierSlash extends MeleeAttackType {
 
     @Override
     public void render(Attack attack, Seagraphics g) {
+    }
+
+    @Override
+    public void lateRender(Attack attack, Seagraphics g) {
         g.usefulDraw(
                 g.imageProvider.getImage(attack.imageName),
                 attack.drawRect.x,

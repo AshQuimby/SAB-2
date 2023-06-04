@@ -45,6 +45,9 @@ public abstract class AttackType implements Cloneable {
             false);
     }
 
+    public void lateRender(Attack attack, Seagraphics g) {
+    }
+
     public void onParry(Attack attack) {
         attack.alive = false;
     }

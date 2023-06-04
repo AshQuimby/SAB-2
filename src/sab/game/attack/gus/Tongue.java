@@ -22,7 +22,6 @@ public class Tongue extends AttackType {
         attack.drawRect.width = 64;
         attack.drawRect.height = 8;
         attack.damage = 16;
-        attack.direction = attack.owner.direction;
         attack.hitCooldown = 15;
         attack.reflectable = false;
         tipper = new Rectangle();
@@ -34,6 +33,7 @@ public class Tongue extends AttackType {
     public void update(Attack attack) {
         attack.hitbox.setCenter(attack.owner.hitbox.getCenter(new Vector2()).add((attack.hitbox.width + attack.owner.hitbox.width) / 2 * attack.owner.direction, 12));
         tipper.setCenter(attack.hitbox.getCenter(new Vector2()).add(attack.direction * (attack.hitbox.width / 2 - tipper.width / 2), 2));
+        attack.direction = attack.owner.direction;
 
         if (attack.life <= 5) {
             attack.frame = 1;

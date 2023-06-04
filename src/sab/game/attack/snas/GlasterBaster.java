@@ -2,6 +2,7 @@ package sab.game.attack.snas;
 
 import com.badlogic.gdx.math.Vector2;
 
+import com.seagull_engine.Seagraphics;
 import sab.game.Direction;
 import sab.game.SABSounds;
 import sab.game.attack.Attack;
@@ -15,7 +16,6 @@ public class GlasterBaster extends MeleeAttackType {
     @Override
     public void setDefaults(Attack attack) {
         attack.imageName = "glaster_baster.png";
-        attack.drawAbovePlayers = true;
         attack.hitbox.width = 76;
         attack.hitbox.height = 76;
         attack.drawRect.set(attack.hitbox);
@@ -96,5 +96,14 @@ public class GlasterBaster extends MeleeAttackType {
             }
             attack.frame = 1;
         }
+    }
+
+    @Override
+    public void render(Attack attack, Seagraphics g) {
+    }
+
+    @Override
+    public void lateRender(Attack attack, Seagraphics g) {
+        super.render(attack, g);
     }
 }

@@ -38,6 +38,7 @@ public class MiniGus extends AttackType {
 
     @Override
     public void update(sab.game.attack.Attack attack) {
+        if (attack.life == 170) attack.canHit = true;
         if (attack.life <= 50) {
             attack.canHit = false;
             attack.frame = ventAnimation.step();
@@ -70,8 +71,11 @@ public class MiniGus extends AttackType {
     @Override
     public void onSpawn(sab.game.attack.Attack attack, int[] data) {
         attack.hitbox.setCenter(attack.owner.hitbox.getCenter(new Vector2()).add(attack.owner.direction * 20, 4));
-        attack.direction = attack.owner.direction;
         attack.velocity.set(attack.direction * 4, 5);
+        if (data != null) {
+            attack.hitbox.setCenter(data[0], data[1] + 24);
+            attack.canHit = false;
+        }
     }
 
     @Override

@@ -29,7 +29,6 @@ public class JohnSuck extends MeleeAttackType {
         attack.parryable = false;
         attack.frameCount = 6;
         attack.life = -1;
-        attack.drawAbovePlayers = true;
         trappedPlayer = null;
         attack.hitCooldown = 1;
         spit = false;
@@ -94,9 +93,12 @@ public class JohnSuck extends MeleeAttackType {
             attack.owner.startAnimation(0, suckAnimation, 360, false);
         }
     }
-
     @Override
     public void render(Attack attack, Seagraphics g) {
+    }
+
+    @Override
+    public void lateRender(Attack attack, Seagraphics g) {
         if (trappedPlayer == null && attack.life < 0) super.render(attack, g);
     }
 

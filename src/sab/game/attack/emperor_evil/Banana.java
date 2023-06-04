@@ -31,8 +31,8 @@ public class Banana extends AttackType {
 
         if (attack.collisionDirection != Direction.NONE) {
             if (attack.collisionDirection == Direction.UP || attack.collisionDirection == Direction.DOWN) {
-                attack.velocity.x *= 0.8f;
-                attack.velocity.y *= -0.5f;
+                attack.velocity.x *= 1.25f;
+                attack.velocity.y *= -0.58f;
             } else if (attack.collisionDirection == Direction.RIGHT || attack.collisionDirection == Direction.LEFT) {
                 attack.velocity.x *= -1;
                 attack.knockback.x *= -1;
@@ -57,6 +57,14 @@ public class Banana extends AttackType {
         attack.hitbox.setCenter(attack.owner.hitbox.getCenter(new Vector2()));
         attack.velocity = new Vector2(5 * MathUtils.random(-1f, 1f), 24);
         attack.direction = attack.velocity.x > 0 ? 1 : -1;
-        attack.knockback = new Vector2(6 * attack.owner.direction, 5);
+        attack.knockback = new Vector2(6 * attack.direction, 5);
+        if (data != null) {
+            attack.hitbox.x = data[0];
+            attack.hitbox.y = attack.getStage().getStageEdge(Direction.UP);
+            attack.life = 240;
+            attack.velocity.y = 0;
+            attack.parryable = false;
+            attack.reflectable = false;
+        }
     }
 }

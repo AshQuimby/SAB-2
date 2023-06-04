@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.seagull_engine.GameObject;
 
+import com.seagull_engine.Seagraphics;
 import com.sun.jdi.VMDisconnectedException;
 import sab.game.Direction;
 import sab.game.attack.Attack;
@@ -75,7 +76,6 @@ public class Note extends AttackType {
             attack.hitbox.setCenter(attack.owner.getCenter());
             attack.hitbox.y += 20;
             attack.velocity = new Vector2(0, 5).rotateDeg(data[1] * 45 + attack.getBattle().getBattleTick());
-            attack.drawAbovePlayers = true;
         }
         else if (data[0] == 4) {
             attack.reflectable = false;
@@ -85,8 +85,16 @@ public class Note extends AttackType {
             attack.hitbox.setCenter(attack.owner.getCenter());
             attack.hitbox.y += 20;
             attack.velocity = attack.getNearestOpponent(-1).getCenter().sub(attack.getCenter()).nor().scl(5);
-            attack.drawAbovePlayers = true;
         }
         attack.knockback = attack.velocity.cpy().scl(0.5f);
+    }
+
+    @Override
+    public void render(Attack attack, Seagraphics g) {
+    }
+
+    @Override
+    public void lateRender(Attack attack, Seagraphics g) {
+        super.render(attack, g);
     }
 }

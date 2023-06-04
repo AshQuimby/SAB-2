@@ -643,7 +643,7 @@ public class Battle {
         stage.renderDetails(g);
 
         for (Attack attack : attacks) {
-            if (!attack.drawAbovePlayers && attack.alive) attack.render(g);
+            attack.render(g);
             if (drawHitboxes) drawHitbox(attack, g);
         }
 
@@ -663,7 +663,7 @@ public class Battle {
         }
 
         for (Attack attack : attacks) {
-            if (attack.alive && attack.drawAbovePlayers) attack.render(g);
+            attack.lateRender(g);
         }
 
         for (Ledge ledge : stage.getLedges()) {

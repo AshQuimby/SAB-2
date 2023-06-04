@@ -25,7 +25,6 @@ public class Baguette extends AttackType {
         attack.direction = attack.owner.direction;
         attack.hitCooldown = 10;
         attack.reflectable = false;
-        attack.drawAbovePlayers = true;
 
         swing = 90;
     }
@@ -53,5 +52,14 @@ public class Baguette extends AttackType {
     public void onSpawn(Attack attack, int[] data) {
         attack.hitbox.setCenter(attack.owner.hitbox.getCenter(new Vector2()).add(16 * attack.owner.direction, -4));
         attack.knockback = new Vector2(attack.owner.direction * 7, 3);
+    }
+
+    @Override
+    public void render(Attack attack, Seagraphics g) {
+    }
+
+    @Override
+    public void lateRender(Attack attack, Seagraphics g) {
+        super.render(attack, g);
     }
 }

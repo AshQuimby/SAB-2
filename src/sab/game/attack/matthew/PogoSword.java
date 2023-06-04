@@ -2,6 +2,7 @@ package sab.game.attack.matthew;
 
 import com.badlogic.gdx.math.Vector2;
 import com.seagull_engine.GameObject;
+import com.seagull_engine.Seagraphics;
 import sab.game.Direction;
 import sab.game.SABSounds;
 import sab.game.attack.Attack;
@@ -24,7 +25,6 @@ public class PogoSword extends MeleeAttackType {
         attack.direction = attack.owner.direction;
         attack.hitCooldown = 10;
         attack.reflectable = false;
-        attack.drawAbovePlayers = true;
 
         offset = new Vector2(0, 0);
         usePlayerDirection = true;
@@ -67,4 +67,13 @@ public class PogoSword extends MeleeAttackType {
         super.onSpawn(attack, data);
         attack.knockback = new Vector2(0, -10);
     }
+    @Override
+    public void render(Attack attack, Seagraphics g) {
+    }
+
+    @Override
+    public void lateRender(Attack attack, Seagraphics g) {
+        super.render(attack, g);
+    }
+
 }

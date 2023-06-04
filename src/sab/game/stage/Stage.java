@@ -7,10 +7,8 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.seagull_engine.Seagraphics;
 
-import sab.game.Battle;
-import sab.game.DamageSource;
-import sab.game.Player;
-import sab.game.Game;
+import org.lwjgl.system.NonnullDefault;
+import sab.game.*;
 
 public class Stage {
     public String id;
@@ -109,6 +107,21 @@ public class Stage {
 
     public void addLedge(Ledge ledge) {
         ledges.add(ledge);
+    }
+
+    public float getStageEdge(Direction side) {
+        switch (side) {
+            case UP :
+                return safeBlastZone.y + safeBlastZone.height;
+            case DOWN :
+                return safeBlastZone.y;
+            case LEFT :
+                return safeBlastZone.x;
+            case RIGHT :
+                return safeBlastZone.x + safeBlastZone.width;
+            default :
+                return 0;
+        }
     }
 
     public List<StageObject> getStageObjects() {

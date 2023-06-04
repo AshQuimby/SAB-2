@@ -10,10 +10,7 @@ import sab.game.action.PlayerAction;
 import sab.game.ai.AI;
 import sab.game.ai.BaseAI;
 import sab.game.animation.Animation;
-import sab.game.attack.emperor_evil.Chomp;
-import sab.game.attack.emperor_evil.ExplosiveBarrel;
-import sab.game.attack.emperor_evil.Cannonball;
-import sab.game.attack.emperor_evil.MagicBanana;
+import sab.game.attack.emperor_evil.*;
 import sab.game.particle.Particle;
 import sab.net.Keys;
 
@@ -49,7 +46,7 @@ public class EmperorEvil extends FighterType {
         shootAnimation = new Animation(new int[] {9, 5}, 18, true);
         chompAnimation = new Animation(new int[] {4, 5}, 6, true);
         barrel = new Animation(new int[] {10}, 60, true);
-        chargeAnimation = new Animation(new int[] {11, 12, 13}, 8, true);
+        chargeAnimation = new Animation(new int[] {11, 12, 13, 11, 12, 13}, 8, true);
         fighter.freefallAnimation = new Animation(new int[]{7}, 1, true);
         fighter.costumes = 3;
     }
@@ -166,5 +163,16 @@ public class EmperorEvil extends FighterType {
             }
         }
         player.frame = chargeAnimation.stepLooping();
+    }
+
+    @Override
+    public boolean finalAss(Fighter fighter, Player player) {
+        if (!player.usedRecovery) {
+            chargeAnimation.reset();
+            player.setIFrames(120);
+            player.startAttack(new BananaRain(), chargeAnimation, 8, 32, false);
+            return true;
+        }
+        return false;
     }
 }

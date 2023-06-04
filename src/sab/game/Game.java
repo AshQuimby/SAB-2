@@ -178,6 +178,8 @@ public class Game extends Messenger {
             String imagePath = "../screenshots/" + Calendar.getInstance().getTime().toString().replace(":", "-").replace(" ", "-") + ".png";
             PixmapIO.writePNG(Gdx.files.local(imagePath), pixmap, Deflater.DEFAULT_COMPRESSION, true);
             pixmap.dispose();
+        } else if (keyCode == Input.Keys.F3) {
+            window.getImages().loadFolder("assets/images");
         }
         screen = screen.keyPressed(keyCode);
     }

@@ -18,8 +18,12 @@ public class Random extends FighterType {
     public void setDefaults(Fighter fighter) {
         fighter.id = "random";
         fighter.name = "Random";
-        fighter.frames = 1;
-        fighter.walkAnimation = new Animation(new int[] { 0 }, 5, true);
+        fighter.frames = 4;
+        fighter.walkAnimation = new Animation(new int[] { 0, 1, 2, 3 }, 20, true);
+        fighter.renderWidth = 72;
+        fighter.renderHeight = 72;
+        fighter.hitboxWidth = 72;
+        fighter.hitboxHeight = 72;
         fighter.costumes = 1;
     }
 }

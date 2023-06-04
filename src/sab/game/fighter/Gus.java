@@ -1,16 +1,17 @@
 package sab.game.fighter;
 
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.seagull_engine.GameObject;
 import sab.game.Player;
+import sab.game.SABSounds;
+import sab.game.action.PlayerAction;
 import sab.game.ai.AI;
 import sab.game.ai.BaseAI;
 import sab.game.animation.Animation;
 import sab.game.attack.Attack;
-import sab.game.attack.gus.SussyVent;
-import sab.game.attack.gus.Tongue;
-import sab.game.attack.gus.Bullet;
-import sab.game.attack.gus.MiniGus;
+import sab.game.attack.emperor_evil.Banana;
+import sab.game.attack.gus.*;
 import sab.game.stage.Ledge;
 import sab.game.stage.Platform;
 import sab.net.Keys;
@@ -19,11 +20,33 @@ public class Gus extends FighterType {
     private Animation shootAnimation;
     private Animation tongueAnimation;
     private Animation placeMiniGusAnimation;
-
+    private Animation idleBreatheAnimation;
+    private Animation workOutAnimation;
+    private Animation jogAnimation;
+    private Animation punchHookAnimation;
+    private Animation punchUppercutAnimation;
+    private int amongUsManBreathTimer;
     private Attack miniGus;
+    private boolean amongUsManMode;
+    private boolean landingChecker;
 
     @Override
     public void setDefaults(sab.game.fighter.Fighter fighter) {
+        setGusDefaults(fighter);
+        fighter.description = "First name Amon, This hazmat suit wearing astronaut is always getting into trouble no matter where they go. Sometimes they're the alien, sometimes they're chased by the alien, but they can never seem to catch a break.";
+        fighter.debut = "Around Ourselves";
+        fighter.costumes = 4;
+
+        shootAnimation = new Animation(9, 10, 5, true);
+        tongueAnimation = new Animation(4, 5, 7, true);
+        placeMiniGusAnimation = new Animation(new int[] { 11, 0 }, 8, true);
+        idleBreatheAnimation = new Animation(new int[] { 14, 15, 16, 17 }, 30, true);
+        workOutAnimation = new Animation(new int[] { 18, 19, 20, 21 }, 12, true);
+        jogAnimation = new Animation(new int[] { 22, 23, 24, 25 }, 10, true);
+    }
+
+    private void setGusDefaults(Fighter fighter) {
+        amongUsManMode = false;
         fighter.id = "gus";
         fighter.name = "Gus";
         fighter.hitboxWidth = 40;
@@ -36,18 +59,72 @@ public class Gus extends FighterType {
         fighter.speed = 7f;
         fighter.acceleration = .75f;
         fighter.jumpHeight = 128;
-        fighter.friction = .175f;
+        fighter.friction = 0.175f;
+        fighter.doubleJumpMultiplier = 0.75f;
         fighter.mass = 2.8f;
         fighter.airJumps = 1;
         fighter.walkAnimation = new Animation(0, 3, 7, true);
-        fighter.description = "First name Amon, This hazmat suit wearing astronaut is always getting into trouble no matter where they go. Sometimes they're the alien, sometimes they're chased by the alien, but they can never seem to catch a break.";
-        fighter.debut = "Around Ourselves";
-        fighter.costumes = 4;
+        fighter.ledgeAnimation = new Animation(new int[]{ 8 }, 1, false);
         fighter.airDodgeSpeed = 6;
+        fighter.useWalkAnimationInAir = true;
+    }
 
-        shootAnimation = new Animation(9, 10, 5, true);
-        tongueAnimation = new Animation(4, 5, 7, true);
-        placeMiniGusAnimation = new Animation(new int[] {11, 0}, 8, false);
+    private void setAmongUsManDefaults(Fighter fighter, Player player) {
+        amongUsManMode = true;
+        fighter.id = "amon_gus_man";
+        fighter.name = "Gus";
+        fighter.hitboxWidth = 48;
+        fighter.hitboxHeight = 92;
+        fighter.renderWidth = 96;
+        fighter.renderHeight = 112;
+        fighter.imageOffsetX = 0;
+        fighter.imageOffsetY = (112 - 92) / 2 - 8;
+        fighter.frames = 36;
+        fighter.speed = 4.8f;
+        fighter.acceleration = 0.38f;
+        fighter.jumpHeight = 145;
+        fighter.friction = 0.125f;
+        fighter.doubleJumpMultiplier = 0.85f;
+        fighter.mass = 1000f;
+        fighter.airJumps = 1;
+        fighter.walkAnimation = new Animation(1, 6, 7, true) {
+            @Override
+            public void onFrameChange(int newFrame) {
+                if ((newFrame) % 3 == 0) {
+                    impact(player);
+                }
+            }
+        };
+
+        punchHookAnimation = new Animation(26, 30, 6, true) {
+            @Override
+            public void onFrameChange(int newFrame) {
+                player.move(new Vector2(8 * player.direction, 0));
+            }
+        };
+
+        punchUppercutAnimation = new Animation(31, 35, 6, true) {
+            @Override
+            public void onFrameChange(int newFrame) {
+                player.move(new Vector2(8 * player.direction, 0));
+            }
+        };
+
+        fighter.knockbackAnimation = new Animation(new int[] { 11, 12, 13, 14 }, 5, true);
+        fighter.ledgeAnimation = new Animation(new int[]{ 7 }, 1, true);
+        fighter.freefallAnimation = new Animation(new int[]{ 9 }, 1, true);
+        fighter.airDodgeSpeed = 6;
+        fighter.useWalkAnimationInAir = false;
+    }
+
+    private void impact(Player player) {
+        player.battle.shakeCamera(6);
+        SABSounds.playSound("john_step.mp3");
+    }
+
+    @Override
+    public void start(Fighter fighter, Player player) {
+        setAmongUsManDefaults(fighter, player);
     }
 
     @Override
@@ -155,6 +232,54 @@ public class Gus extends FighterType {
     }
 
     @Override
+    public void update(Fighter fighter, Player player) {
+        if (amongUsManMode) {
+            if (player.touchingStage) {
+                if (!landingChecker) {
+                    impact(player);
+                }
+                landingChecker = true;
+            } else {
+                landingChecker = false;
+            }
+
+            if (player.isReady()) {
+                if (!player.touchingStage) {
+                    if (player.velocity.y < 0) {
+                        player.frame = 9;
+                    } else {
+                        player.frame = 8;
+                    }
+                } else {
+                    if (amongUsManBreathTimer == 120) {
+                        switch (MathUtils.random(2)) {
+                            case 0 :
+                                fighter.idleAnimation = workOutAnimation;
+                                workOutAnimation.reset();
+                                break;
+                            case 1 :
+                                fighter.idleAnimation = idleBreatheAnimation;
+                                idleBreatheAnimation.reset();
+                                break;
+                            case 2 :
+                                fighter.idleAnimation = jogAnimation;
+                                jogAnimation.reset();
+                                break;
+                        }
+                    } else if (amongUsManBreathTimer < 120) {
+                        fighter.idleAnimation = new Animation(new int[] { 0 }, 1, true);
+                    }
+                }
+            }
+            if (player.isStationary()) {
+                amongUsManBreathTimer++;
+            } else {
+                amongUsManBreathTimer = 0;
+            }
+        }
+    }
+
+    @Override
     public void neutralAttack(sab.game.fighter.Fighter fighter, Player player) {
         if (!player.usedRecovery) {
             shootAnimation.reset();
@@ -165,15 +290,48 @@ public class Gus extends FighterType {
     @Override
     public void sideAttack(sab.game.fighter.Fighter fighter, Player player) {
         if (!player.usedRecovery) {
-            tongueAnimation.reset();
-            player.startAttack(new Tongue(), tongueAnimation, 1, 15, false);
+            if (amongUsManMode) {
+                if (player.velocity.y < 0) player.velocity.y = 0;
+                player.velocity.x *= 0.5f;
+                punchHookAnimation.reset();
+                player.startAttack(new AmonGusManPunch(), punchHookAnimation, 12, 18, true);
+            } else {
+                tongueAnimation.reset();
+                player.startAttack(new Tongue(), tongueAnimation, 4, 10, false);
+            }
+        }
+    }
+
+    @Override
+    public void onEndAction(PlayerAction action, Fighter fighter, Player player) {
+        if (amongUsManMode) {
+
+            // Side punch combo
+            if (player.keys.isPressed(Keys.ATTACK)) {
+                if (action.usingAnimation(punchHookAnimation)) {
+
+                    // Start the next hit of the combo if the player is still holding attack
+                    if (player.velocity.y < 0) player.velocity.y = 0;
+                    player.velocity.x *= 0.5f;
+                    punchUppercutAnimation.reset();
+                    player.startAttack(new AmonGusManPunch(), punchUppercutAnimation, 12, 18, true);
+                } else if (action.usingAnimation(punchUppercutAnimation)) {
+
+                    // Allow the player to change directions when finishing the combo
+                    if (player.keys.isPressed(Keys.RIGHT) && player.direction == -1) player.direction = 1;
+                    else if (player.keys.isPressed(Keys.LEFT) && player.direction == 1) player.direction = -1;
+
+                    // Restart the combo
+                    sideAttack(fighter, player);
+                }
+            }
         }
     }
 
     @Override
     public void downAttack(sab.game.fighter.Fighter fighter, Player player) {
         if (!player.usedRecovery) {
-            if (miniGus == null || !miniGus.alive) {
+            if (miniGus == null || !miniGus.alive || amongUsManMode) {
                 placeMiniGusAnimation.reset();
                 miniGus = player.startAttack(new MiniGus(), placeMiniGusAnimation, 8, 12, false);
             }
@@ -185,6 +343,22 @@ public class Gus extends FighterType {
         if (!player.usedRecovery) {
             player.startAttack(new SussyVent(), 8, 12, false);
             player.removeJumps();
+        }
+    }
+
+    @Override
+    public boolean finalAss(Fighter fighter, Player player) {
+        if (!player.usedRecovery) {
+            setAmongUsManDefaults(fighter, player);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public void onJump(Fighter fighter, Player player, boolean doubleJump) {
+        if (amongUsManMode && !doubleJump) {
+            impact(player);
         }
     }
 }

@@ -1,5 +1,6 @@
 package sab.game;
 
+import java.security.Key;
 import java.util.List;
 
 import com.badlogic.gdx.math.MathUtils;
@@ -146,6 +147,7 @@ public class Player extends GameObject implements Hittable {
 
     public void move(Vector2 v, float physicsScalar) {
         Vector2 movement = v.cpy().scl(physicsScalar);
+        if (movement.y <= 0 && movement.y > -0.5f) movement.y = -0.5f;
 
         while (movement.len() > 0) {
             Vector2 step = movement.cpy().limit(1);
@@ -345,8 +347,20 @@ public class Player extends GameObject implements Hittable {
         knockback.add(force.cpy().scl(1f / fighter.mass));
     }
 
+    public void syncHitbox() {
+        Vector2 center = getCenter();
+        hitbox = new Rectangle(hitbox.x, hitbox.y, fighter.hitboxWidth, fighter.hitboxHeight);
+        hitbox.setCenter(center);
+    }
+
+    public void syncDrawRect() {
+        drawRect.setSize(fighter.renderWidth, fighter.renderHeight);
+    }
+
     @Override
     public void update() {
+        syncHitbox();
+
         usedCharge = 0;
 
         if (lives == 0) return;
@@ -396,25 +410,30 @@ public class Player extends GameObject implements Hittable {
         ledgeGrabbing = ledge != null;
 
         if (knockbackDuration > 0) {
-            if (currentAction != null && !currentAction.isImportant()) currentAction = null;
+            if (currentAction != null && currentAction.isImportant()) {
+                knockbackDuration = 0;
+                knockback = new Vector2();
+            } else {
+                if (currentAction != null) currentAction = null;
 
-            if (ledge != null) { 
-                ledgeCooldown = 8;
-                ledge = null;
-            }
+                if (ledge != null) {
+                    ledgeCooldown = 8;
+                    ledge = null;
+                }
 
-            usedRecovery = false;
-            velocity = knockback.cpy().scl(1.5f / (fighter.mass / 2f + 2));
-            gravityAndFriction();
-            repeatAttack = false;
-            usedCharge = 0;
-            charge = 0;
-            charging = false;
-            if (knockbackDuration-- <= 0) {
-                knockback = new Vector2(0, 0);
-                velocity.scl(0.2f);
+                usedRecovery = false;
+                velocity = knockback.cpy().scl(1.5f / (fighter.mass / 2f + 2));
+                gravityAndFriction();
+                repeatAttack = false;
+                usedCharge = 0;
+                charge = 0;
+                charging = false;
+                if (knockbackDuration-- <= 0) {
+                    knockback = new Vector2(0, 0);
+                    velocity.scl(0.2f);
+                }
+                return;
             }
-            return;
         } else {
             knockback = new Vector2(0, 0);
         }
@@ -473,13 +492,14 @@ public class Player extends GameObject implements Hittable {
         if (currentAction != null) {
             currentAction.update(this);
             if (currentAction.finished()) {
-                fighter.onEndAction(currentAction, this);
+                PlayerAction previousAction = currentAction;
                 currentAction = null;
                 if (charging) fighter.chargeAttack(this, charge);
                 usedCharge = charge;
                 charge = 0;
                 minCharge = 0;
                 charging = false;
+                fighter.onEndAction(previousAction, this);
             } else {
                 gravityAndFriction();
             }
@@ -498,19 +518,23 @@ public class Player extends GameObject implements Hittable {
             if (touchingStage) {
                 velocity.y = getJumpVelocity();
                 SABSounds.playSound("jump.mp3");
+                fighter.onJump(this, false);
             } else if (extraJumpsUsed < fighter.airJumps && velocity.y < getJumpVelocity() * fighter.doubleJumpMultiplier) {
                 velocity.y = getJumpVelocity() * fighter.doubleJumpMultiplier;
                 SABSounds.playSound("double_jump.mp3");
                 extraJumpsUsed++;
                 battle.addParticle(new Particle(getCenter().sub(0, hitbox.height / 2), new Vector2(), 56, 16, 3, 3, direction, "double_jump.png"));
+                fighter.onJump(this, true);
             }
         }
 
-        if (keys.isPressed(Keys.LEFT) ^ keys.isPressed(Keys.RIGHT)) {
-            frame = fighter.walkAnimation.stepLooping();
-        } else {
-            frame = fighter.idleAnimation.stepLooping();
-            fighter.walkAnimation.reset();
+        if (!fighter.useWalkAnimationInAir && touchingStage || fighter.useWalkAnimationInAir) {
+            if (keys.isPressed(Keys.LEFT) ^ keys.isPressed(Keys.RIGHT)) {
+                frame = fighter.walkAnimation.stepLooping();
+            } else {
+                frame = fighter.idleAnimation.stepLooping();
+                fighter.walkAnimation.reset();
+            }
         }
         // Player actions
         if (occupied <= 0) {
@@ -582,6 +606,10 @@ public class Player extends GameObject implements Hittable {
     // Returns true if the player is not stuck and is not performing an action
     public boolean isReady() {
         return !isStuck() && !hasAction();
+    }
+
+    public boolean isStationary() {
+        return !(keys.isPressed(Keys.RIGHT) ^ keys.isPressed(Keys.LEFT)) && !keys.isPressed(Keys.UP) && touchingStage && isReady();
     }
 
     public boolean charging() {
@@ -682,6 +710,7 @@ public class Player extends GameObject implements Hittable {
     @Override
     public void postUpdate() {
         if (knockbackDuration > 0) frame = fighter.knockbackAnimation.stepLooping();
+        else fighter.knockbackAnimation.reset();
 
         if (--parryTime > -20) {
             parryTime--;
@@ -805,6 +834,7 @@ public class Player extends GameObject implements Hittable {
 
     @Override
     public void render(Seagraphics g) {
+        syncDrawRect();
         if (!hide) {
             if (fighter.preRender(this, g)) {
                 drawRect.setCenter(getCenter().add(fighter.imageOffsetX * direction, fighter.imageOffsetY).add(drawRectOffset));
@@ -829,7 +859,7 @@ public class Player extends GameObject implements Hittable {
                     g.usefulDraw(g.imageProvider.getImage("ice.png"), drawRect.x - 4, drawRect.y - 4, (int) drawRect.width + 8, (int) drawRect.height + 8, 0, 1, rotation, false, false);
                 }
                 if (respawnTime > 0) {
-                    g.usefulDraw(g.imageProvider.getImage("p" + (id + 1) + "_spawn_platform.png"), drawRect.getCenter(new Vector2()).x - 40, drawRect.y - 32, 80, 32, 0, 1, rotation, false, false);
+                    g.usefulDraw(g.imageProvider.getImage("p" + (id + 1) + "_spawn_platform.png"), drawRect.getCenter(new Vector2()).x - 40, hitbox.y - 32, 80, 32, 0, 1, rotation, false, false);
                 }
             }
             if (Settings.getDrawPlayerArrows()) {

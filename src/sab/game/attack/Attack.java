@@ -13,7 +13,6 @@ import sab.util.Utils;
 
 public class Attack extends DamageSource {
     public sab.game.attack.AttackType type;
-    public boolean drawAbovePlayers;
     public boolean alive;
     public boolean canHit;
     public int life;
@@ -61,7 +60,6 @@ public class Attack extends DamageSource {
         updatesPerTick = 1;
         canHit = true;
         this.type = type;
-        drawAbovePlayers = false;
         type.setDefaults(this);
         if (basedOffCostume) {
             if (owner.costume > 0) {
@@ -180,6 +178,10 @@ public class Attack extends DamageSource {
     @Override
     public void render(Seagraphics g) {
         type.render(this, g);
+    }
+
+    public void lateRender(Seagraphics g) {
+        type.lateRender(this, g);
     }
 
     public Battle getBattle() {

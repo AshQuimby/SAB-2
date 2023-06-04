@@ -76,6 +76,9 @@ public class Fighter implements Cloneable {
     // Increases fall speed and decreases knockback
     public float mass;
 
+    // Whether or not this fighter will use their walk animation in midair, useful for custom midair animations.
+    public boolean useWalkAnimationInAir;
+
     // The animations all characters must have to function
     public Animation walkAnimation;
     public Animation ledgeAnimation;
@@ -112,6 +115,7 @@ public class Fighter implements Cloneable {
         debut = "This is the debut, it is the \"game\" your character originates from.";
         itemOffset = new Vector2();
         this.type = type;
+        useWalkAnimationInAir = true;
         type.setDefaults(this);
     }
 
@@ -164,6 +168,10 @@ public class Fighter implements Cloneable {
     }
     public void onEndAction(PlayerAction action, Player player) {
         type.onEndAction(action, this, player);
+    }
+
+    public void onJump(Player player, boolean doubleJump) {
+        type.onJump(this, player, doubleJump);
     }
 
     public void useItem(Player player) {

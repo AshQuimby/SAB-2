@@ -51,7 +51,7 @@ public class ExplosiveBarrel extends MeleeAttackType {
             attack.owner.battle.addParticle(new Particle(attack.hitbox.getCenter(new Vector2()), new Vector2(4 * MathUtils.random(), 0).rotateDeg(MathUtils.random() * 360), 96, 96, 0, "smoke.png"));
         }
         for (int i = 0; i < 4; i++) {
-            attack.owner.battle.addAttack(new Attack(new Banana(), attack.owner), new int[]{0});
+            attack.owner.battle.addAttack(new Attack(new Banana(), attack.owner), null);
         }
         if (attack.owner.knockback.len() < 30) attack.owner.knockback = new Vector2(0, 0);
         attack.owner.velocity.y = 32;

@@ -82,6 +82,10 @@ public abstract class FighterType {
         return true;
     }
 
+    public void onJump(Fighter fighter, Player player, boolean doubleJump) {
+
+    }
+
     public void useItem(Fighter fighter, Player player) {
 
     }
