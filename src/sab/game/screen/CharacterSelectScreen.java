@@ -67,7 +67,6 @@ public class CharacterSelectScreen extends NetScreen {
 
             for (Class<? extends FighterType> fighter : Game.game.fighters) {
                 Fighter f = new Fighter(ModLoader.getFighterType(fighter));
-                f.type.setDefaults(f);
                 availableFighters.add(f);
             }
             availableFighters.add(new Fighter(new Random()));

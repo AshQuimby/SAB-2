@@ -81,6 +81,8 @@ public class Racket extends AttackType {
                 }
             }
             attack.canHit = true;
+        } else {
+            attack.canHit = false;
         }
     }
 

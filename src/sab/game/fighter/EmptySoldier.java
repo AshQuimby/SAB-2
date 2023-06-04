@@ -126,6 +126,7 @@ public class EmptySoldier extends FighterType {
     public void upAttack(Fighter fighter, Player player) {
         if (!player.usedRecovery) {
             player.startAttack(new ViceroyWings(), null, 6, 8, false);
+            player.usedRecovery = true;
         }
     }
 

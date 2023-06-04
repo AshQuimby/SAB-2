@@ -25,6 +25,7 @@ public class Gus extends FighterType {
     private Animation jogAnimation;
     private Animation punchHookAnimation;
     private Animation punchUppercutAnimation;
+    private Animation flipAnimation;
     private int amongUsManBreathTimer;
     private Attack miniGus;
     private boolean amongUsManMode;
@@ -43,6 +44,7 @@ public class Gus extends FighterType {
         idleBreatheAnimation = new Animation(new int[] { 14, 15, 16, 17 }, 30, true);
         workOutAnimation = new Animation(new int[] { 18, 19, 20, 21 }, 12, true);
         jogAnimation = new Animation(new int[] { 22, 23, 24, 25 }, 10, true);
+        flipAnimation = new Animation(new int[] { 36 }, 1000, true);
     }
 
     private void setGusDefaults(Fighter fighter) {
@@ -79,7 +81,7 @@ public class Gus extends FighterType {
         fighter.renderHeight = 112;
         fighter.imageOffsetX = 0;
         fighter.imageOffsetY = (112 - 92) / 2 - 8;
-        fighter.frames = 36;
+        fighter.frames = 40;
         fighter.speed = 4.8f;
         fighter.acceleration = 0.38f;
         fighter.jumpHeight = 145;
@@ -113,7 +115,7 @@ public class Gus extends FighterType {
         fighter.knockbackAnimation = new Animation(new int[] { 11, 12, 13, 14 }, 5, true);
         fighter.ledgeAnimation = new Animation(new int[]{ 7 }, 1, true);
         fighter.freefallAnimation = new Animation(new int[]{ 9 }, 1, true);
-        fighter.airDodgeSpeed = 6;
+        fighter.airDodgeSpeed = 20;
         fighter.useWalkAnimationInAir = false;
     }
 
@@ -234,6 +236,9 @@ public class Gus extends FighterType {
     @Override
     public void update(Fighter fighter, Player player) {
         if (amongUsManMode) {
+            if (!player.hitbox.overlaps(player.battle.getStage().getSafeBlastZone()) && player.hitbox.y < 0) {
+                player.hitbox.setCenter(player.battle.getStage().getSafeBlastZone().getCenter(new Vector2()).add(0, player.battle.getStage().getUnsafeBlastZone().height / 2));
+            }
             if (player.touchingStage) {
                 if (!landingChecker) {
                     impact(player);
@@ -331,9 +336,18 @@ public class Gus extends FighterType {
     @Override
     public void downAttack(sab.game.fighter.Fighter fighter, Player player) {
         if (!player.usedRecovery) {
-            if (miniGus == null || !miniGus.alive || amongUsManMode) {
-                placeMiniGusAnimation.reset();
-                miniGus = player.startAttack(new MiniGus(), placeMiniGusAnimation, 8, 12, false);
+            if (amongUsManMode) {
+                if (player.touchingStage) {
+
+                } else {
+                    flipAnimation.reset();
+                    miniGus = player.startIndefiniteAttack(new AmonGrandSlam(), flipAnimation, (int) Math.max(0, player.velocity.y), false);
+                }
+            } else {
+                if (miniGus == null || !miniGus.alive || amongUsManMode) {
+                    placeMiniGusAnimation.reset();
+                    miniGus = player.startAttack(new MiniGus(), placeMiniGusAnimation, 8, 12, false);
+                }
             }
         }
     }
