@@ -112,7 +112,7 @@ public class Battle {
         idsByGameObject = new HashMap<>();
         nextId = 0;
 
-        assBallSpawnTime = MathUtils.random(3000, 6000);
+        assBallSpawnTime = MathUtils.random(1500, 3000);
 
         drawHitboxes = false;
         battleTick = 0;
@@ -399,7 +399,7 @@ public class Battle {
             assBallSpawnTime--;
             if (assBallSpawnTime <= 0) {
                 spawnAssBall();
-                assBallSpawnTime = MathUtils.random(4000, 7000);
+                assBallSpawnTime = MathUtils.random(3000, 6000);
             }
         }
 

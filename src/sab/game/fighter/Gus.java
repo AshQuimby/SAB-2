@@ -261,7 +261,7 @@ public class Gus extends FighterType {
     public void update(Fighter fighter, Player player) {
         if (amongUsManMode) {
             if (amongUsManTimeLeft > 0) {
-                if (--amongUsManTimeLeft <= 0 && player.isReady()) {
+                if (--amongUsManTimeLeft <= 0 && !player.hasAction()) {
                     player.velocity.scl(0);
                     player.startAttack(new SussyVent(), flipAnimation, 8, 12, true, new int[] { 2 });
                 }
