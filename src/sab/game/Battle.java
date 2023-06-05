@@ -58,6 +58,7 @@ public class Battle {
     private int slowdown;
     private int slowdownDuration;
     private int freezeFrames;
+    private int assBallSpawnTime;
     private boolean zoomOnFreeze;
     private boolean freezeUpdate;
     private int screenShatter;
@@ -110,6 +111,8 @@ public class Battle {
         gameObjectsById = new HashMap<>();
         idsByGameObject = new HashMap<>();
         nextId = 0;
+
+        assBallSpawnTime = MathUtils.random(3000, 6000);
 
         drawHitboxes = false;
         battleTick = 0;
@@ -391,6 +394,14 @@ public class Battle {
         }
         updateCameraEffects();
         battleTick++;
+
+        if (Settings.getAssBalls()) {
+            assBallSpawnTime--;
+            if (assBallSpawnTime <= 0) {
+                spawnAssBall();
+                assBallSpawnTime = MathUtils.random(4000, 7000);
+            }
+        }
 
         if (winner == null && (player1.getLives() == 0 || player2.getLives() == 0)) {
             endGame(player1.getLives() > 0 ? player1 : (player2.getLives() == 0 ? null : player2), player1.getLives() > 0 ? player2 : (player2.getLives() == 0 ? null : player1));

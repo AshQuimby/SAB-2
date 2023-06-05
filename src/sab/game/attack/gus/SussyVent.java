@@ -38,7 +38,7 @@ public class SussyVent extends AttackType {
             }
             if (bigManMode && !transitionVent || !bigManMode && transitionVent) attack.owner.frame = 36;
             else attack.owner.frame = 6;
-            if (attack.owner.takingKnockback())
+            if (attack.owner.takingKnockback() && !transitionVent)
                 attack.alive = false;
         } else if (attack.life > 10) {
             attack.owner.hide();
