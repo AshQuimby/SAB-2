@@ -18,7 +18,7 @@ public class Quack extends MeleeAttackType {
         attack.damage = 8;
         SABSounds.playSound("quack.mp3");
         usePlayerDirection = true;
-        offset = new Vector2(36 * attack.direction, 16);
+        offset = new Vector2(36, 16);
     }
 
     @Override

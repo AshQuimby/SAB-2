@@ -3,6 +3,7 @@ package sab.game.fighter;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.seagull_engine.GameObject;
+import sab.game.DamageSource;
 import sab.game.Player;
 import sab.game.SABSounds;
 import sab.game.action.PlayerAction;
@@ -26,6 +27,8 @@ public class Gus extends FighterType {
     private Animation punchHookAnimation;
     private Animation punchUppercutAnimation;
     private Animation flipAnimation;
+    private Animation ventSlapAnimation;
+    private Animation suplexGrabAnimation;
     private int amongUsManBreathTimer;
     private Attack miniGus;
     private boolean amongUsManMode;
@@ -36,8 +39,9 @@ public class Gus extends FighterType {
         setGusDefaults(fighter);
         fighter.description = "First name Amon, This hazmat suit wearing astronaut is always getting into trouble no matter where they go. Sometimes they're the alien, sometimes they're chased by the alien, but they can never seem to catch a break.";
         fighter.debut = "Around Ourselves";
-        fighter.costumes = 4;
+        fighter.costumes = 6;
 
+        // Attack animations
         shootAnimation = new Animation(9, 10, 5, true);
         tongueAnimation = new Animation(4, 5, 7, true);
         placeMiniGusAnimation = new Animation(new int[] { 11, 0 }, 8, true);
@@ -45,6 +49,8 @@ public class Gus extends FighterType {
         workOutAnimation = new Animation(new int[] { 18, 19, 20, 21 }, 12, true);
         jogAnimation = new Animation(new int[] { 22, 23, 24, 25 }, 10, true);
         flipAnimation = new Animation(new int[] { 36 }, 1000, true);
+        ventSlapAnimation = new Animation(40, 46, 6, true);
+        suplexGrabAnimation = new Animation(47, 49, 12, true);
     }
 
     private void setGusDefaults(Fighter fighter) {
@@ -67,6 +73,7 @@ public class Gus extends FighterType {
         fighter.airJumps = 1;
         fighter.walkAnimation = new Animation(0, 3, 7, true);
         fighter.ledgeAnimation = new Animation(new int[]{ 8 }, 1, false);
+        fighter.parryAnimation = new Animation(new int[]{5, 0, 0}, 10, false);
         fighter.airDodgeSpeed = 6;
         fighter.useWalkAnimationInAir = true;
     }
@@ -81,7 +88,7 @@ public class Gus extends FighterType {
         fighter.renderHeight = 112;
         fighter.imageOffsetX = 0;
         fighter.imageOffsetY = (112 - 92) / 2 - 8;
-        fighter.frames = 40;
+        fighter.frames = 54;
         fighter.speed = 4.8f;
         fighter.acceleration = 0.38f;
         fighter.jumpHeight = 145;
@@ -113,8 +120,9 @@ public class Gus extends FighterType {
         };
 
         fighter.knockbackAnimation = new Animation(new int[] { 11, 12, 13, 14 }, 5, true);
-        fighter.ledgeAnimation = new Animation(new int[]{ 7 }, 1, true);
-        fighter.freefallAnimation = new Animation(new int[]{ 9 }, 1, true);
+        fighter.ledgeAnimation = new Animation(new int[] { 7 }, 1, true);
+        fighter.freefallAnimation = new Animation(new int[] { 9 }, 1, true);
+        fighter.parryAnimation = new Animation(new int[] { 53, 0, 0 }, 10, false);
         fighter.airDodgeSpeed = 20;
         fighter.useWalkAnimationInAir = false;
     }
@@ -126,7 +134,6 @@ public class Gus extends FighterType {
 
     @Override
     public void start(Fighter fighter, Player player) {
-        setAmongUsManDefaults(fighter, player);
     }
 
     @Override
@@ -287,8 +294,13 @@ public class Gus extends FighterType {
     @Override
     public void neutralAttack(sab.game.fighter.Fighter fighter, Player player) {
         if (!player.usedRecovery) {
-            shootAnimation.reset();
-            player.startAttack(new Bullet(), shootAnimation, 5, 5, false);
+            if (amongUsManMode) {
+                suplexGrabAnimation.reset();
+                player.startAttack(new AmonGrab(), suplexGrabAnimation, 12, 24, true, null);
+            } else {
+                shootAnimation.reset();
+                player.startRepeatingAttack(new Bullet(), shootAnimation, 5, 5, false, null);
+            }
         }
     }
 
@@ -299,7 +311,7 @@ public class Gus extends FighterType {
                 if (player.velocity.y < 0) player.velocity.y = 0;
                 player.velocity.x *= 0.5f;
                 punchHookAnimation.reset();
-                player.startAttack(new AmonGusManPunch(), punchHookAnimation, 12, 18, true);
+                player.startAttack(new AmonGusManPunch(), punchHookAnimation, 12, 18, true, new int[0]);
             } else {
                 tongueAnimation.reset();
                 player.startAttack(new Tongue(), tongueAnimation, 4, 10, false);
@@ -319,7 +331,7 @@ public class Gus extends FighterType {
                     if (player.velocity.y < 0) player.velocity.y = 0;
                     player.velocity.x *= 0.5f;
                     punchUppercutAnimation.reset();
-                    player.startAttack(new AmonGusManPunch(), punchUppercutAnimation, 12, 18, true);
+                    player.startAttack(new AmonGusManPunch(), punchUppercutAnimation, 12, 18, true, new int[0]);
                 } else if (action.usingAnimation(punchUppercutAnimation)) {
 
                     // Allow the player to change directions when finishing the combo
@@ -338,10 +350,12 @@ public class Gus extends FighterType {
         if (!player.usedRecovery) {
             if (amongUsManMode) {
                 if (player.touchingStage) {
-
+                    ventSlapAnimation.reset();
+                    player.velocity.scl(0);
+                    player.startAttack(new VentSlap(), ventSlapAnimation, 12, 30, true);
                 } else {
                     flipAnimation.reset();
-                    miniGus = player.startIndefiniteAttack(new AmonGrandSlam(), flipAnimation, (int) Math.max(0, player.velocity.y), false);
+                    player.startIndefiniteAttack(new AmonGrandSlam(), flipAnimation, 4, true);
                 }
             } else {
                 if (miniGus == null || !miniGus.alive || amongUsManMode) {
@@ -355,8 +369,13 @@ public class Gus extends FighterType {
     @Override
     public void upAttack(Fighter fighter, Player player) {
         if (!player.usedRecovery) {
-            player.startAttack(new SussyVent(), 8, 12, false);
-            player.removeJumps();
+            if (amongUsManMode) {
+                flipAnimation.reset();
+                player.startAttack(new SussyVent(), flipAnimation, 8, 12, true, new int[] { 1 });
+            } else {
+                player.startAttack(new SussyVent(), 8, 12, false);
+                player.removeJumps();
+            }
         }
     }
 
@@ -367,6 +386,19 @@ public class Gus extends FighterType {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public void onSuccessfulParry(Fighter fighter, Player player, DamageSource parried) {
+        // Retaliate if opponent is near and on a successful parry
+        if (parried.owner != null) {
+            if (parried.owner.getCenter().dst(player.getCenter()) < 96) {
+                player.direction = (int) Math.signum(parried.owner.getCenter().x - player.getCenter().x);
+                player.velocity.scl(0);
+                punchHookAnimation.reset();
+                player.startAttack(new AmonGusManPunch(), punchHookAnimation, 12, 18, true);
+            }
+        }
     }
 
     @Override

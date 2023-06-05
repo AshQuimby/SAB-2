@@ -154,7 +154,7 @@ public class Snas extends FighterType {
     @Override
     public void downAttack(Fighter fighter, Player player) {
         if (!(player.usedRecovery || beheaded)) {
-            player.startChargeAttack(new PlayerAction(4, true, 0), 30, 60);
+            player.startChargeAttack(new PlayerAction(4, false, 0), 30, 60);
             player.battle.addAttack(new Attack(new GlasterBaster(), player), new int[]{0});
         }
     }
@@ -162,7 +162,7 @@ public class Snas extends FighterType {
     @Override
     public void chargeAttack(Fighter fighter, Player player, int charge) {
         chargeCooldownAnimation.reset();
-        player.startAnimation(1, chargeCooldownAnimation, 12, true);
+        player.startAnimation(1, chargeCooldownAnimation, 12, false);
     }
 
     @Override

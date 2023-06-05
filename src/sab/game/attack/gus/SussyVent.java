@@ -8,6 +8,8 @@ import sab.game.attack.AttackType;
 import sab.net.Keys;
 
 public class SussyVent extends AttackType {
+    private boolean bigManMode;
+    private int ventCloseTime;
     @Override
     public void setDefaults(Attack attack) {
         attack.imageName = "vent.png";
@@ -20,14 +22,19 @@ public class SussyVent extends AttackType {
         attack.collideWithStage = true;
         attack.reflectable = false;
         attack.canHit = false;
+        ventCloseTime = 10;
     }
 
     @Override
     public void update(Attack attack) {
-        if (attack.life >= 390) {
+        if (ventCloseTime > 0) {
+            ventCloseTime--;
             attack.frame = 1;
-            if (attack.life >= 395) attack.frame = 2;
-            attack.owner.frame = 6;
+            if (attack.life >= 395) {
+                attack.frame = 2;
+            }
+            if (bigManMode) attack.owner.frame = 36;
+            else attack.owner.frame = 6;
             if (attack.owner.takingKnockback())
                 attack.alive = false;
         } else if (attack.life > 10) {
@@ -42,15 +49,19 @@ public class SussyVent extends AttackType {
 
             if (attack.owner.keys.isPressed(Keys.UP)) {
                 attack.velocity.y += 1f;
+                if (bigManMode) attack.velocity.y += 1f;
             }
             if (attack.owner.keys.isPressed(Keys.DOWN)) {
                 attack.velocity.y -= 1f;
+                if (bigManMode) attack.velocity.y -= 1f;
             }
             if (attack.owner.keys.isPressed(Keys.LEFT)) {
                 attack.velocity.x -= 1f;
+                if (bigManMode) attack.velocity.x -= 1f;
             }
             if (attack.owner.keys.isPressed(Keys.RIGHT)) {
                 attack.velocity.x += 1f;
+                if (bigManMode) attack.velocity.x += 1f;
             }
             if (attack.owner.keys.isJustPressed(Keys.ATTACK)) {
                 attack.life = 11;
@@ -59,7 +70,8 @@ public class SussyVent extends AttackType {
             attack.velocity.scl(.8f);
         } else {
             attack.velocity.set(0, 0);
-            attack.owner.velocity.y = 5;
+            if (bigManMode) attack.owner.velocity.y = 14;
+            else attack.owner.velocity.y = 5;
             attack.owner.reveal();
             attack.owner.invulnerable = false;
             if (attack.life > 5) {
@@ -78,7 +90,18 @@ public class SussyVent extends AttackType {
     public void onSpawn(Attack attack, int[] data) {
         attack.hitbox.setCenter(attack.owner.hitbox.getCenter(new Vector2()));
         attack.owner.velocity.x = 0;
-        attack.owner.velocity.y = 5;
+        if (data != null) {
+            if (data[0] == 0) {
+                attack.owner.velocity.y = 5;
+                attack.life = 20;
+            } else {
+                attack.owner.velocity.y = 10;
+                bigManMode = true;
+                attack.life += 7;
+            }
+        } else {
+            attack.owner.velocity.y = 5;
+        }
     }
 
     @Override

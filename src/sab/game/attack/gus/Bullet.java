@@ -21,7 +21,7 @@ public class Bullet extends AttackType {
         attack.hitbox.height = 8;
         attack.drawRect.width = 8;
         attack.drawRect.height = 8;
-        attack.damage = 4;
+        attack.damage = 8;
         attack.directional = true;
         attack.hitCooldown = 20;
         attack.collideWithStage = true;

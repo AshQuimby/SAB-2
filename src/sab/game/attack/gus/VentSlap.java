@@ -7,39 +7,50 @@ import sab.game.SABSounds;
 import sab.game.attack.Attack;
 import sab.game.attack.MeleeAttackType;
 
-public class AmonGusManPunch extends MeleeAttackType {
+public class VentSlap extends MeleeAttackType {
     @Override
     public void setDefaults(Attack attack) {
         attack.imageName = "none.png";
-        attack.life = 8;
+        attack.life = 36;
         attack.velocity = new Vector2();
         attack.hitbox.width = 80;
-        attack.hitbox.height = 64;
-        attack.damage = 20;
+        attack.hitbox.height = 24;
+        attack.damage = 12;
         attack.direction = attack.owner.direction;
-        attack.hitCooldown = 12;
+        attack.hitCooldown = 8;
         attack.reflectable = false;
         attack.parryable = false;
+        attack.staticKnockback = true;
 
-        offset = new Vector2(12, 8);
+        offset = new Vector2(40, -48);
         usePlayerDirection = true;
     }
 
     @Override
     public void update(Attack attack) {
         super.update(attack);
+        attack.frame = attack.owner.frame;
+        attack.canHit = attack.frame == 42 || attack.frame == 45;
+        if (attack.frame == 45) {
+            attack.hitbox.width = 80;
+            attack.hitbox.height = 96;
+            offset = new Vector2(20, 4);
+            moveToPlayer(attack);
+            attack.staticKnockback = false;
+            attack.knockback = new Vector2(14 * attack.direction, -6);
+        }
     }
 
     @Override
     public void successfulHit(Attack attack, GameObject hit) {
-        attack.owner.battle.shakeCamera(5);
+        attack.owner.battle.shakeCamera(8);
         SABSounds.playSound("crunch.mp3");
     }
 
     @Override
     public void onSpawn(Attack attack, int[] data) {
         super.onSpawn(attack, data);
-        attack.knockback = new Vector2(14 * attack.owner.direction, 8);
+        attack.knockback = new Vector2(-8 * attack.direction, 24);
         attack.owner.battle.shakeCamera(5);
         SABSounds.playSound("john_step.mp3");
         if (data != null) attack.getBattle().addAttack(new Attack(new ProjectileGus(), attack.owner), new int[] { (int) attack.getCenter().x, (int) attack.getCenter().y });

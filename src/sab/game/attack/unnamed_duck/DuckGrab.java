@@ -27,7 +27,7 @@ public class DuckGrab extends MeleeAttackType {
         attack.parryable = false;
         attack.reflectable = false;
         usePlayerDirection = true;
-        offset = new Vector2(36 * attack.direction, 16);
+        offset = new Vector2(36, 16);
         grabbedPlayer = null;
     }
 

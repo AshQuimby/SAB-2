@@ -747,11 +747,11 @@ public class Player extends GameObject implements Hittable {
             source.onParry();
             battle.onSuccessfulParry();
             if (source.owner != null) {
-                source.owner.stun(12);
+                source.owner.stun(15);
             }
+            resetAction();
             fighter.onSuccessfulParry(this, source);
             parryTime = -20;
-            resetAction();
             setIFrames(10);
             battle.addParticle(new Particle(getCenter().add(4 * direction, hitbox.height / 3), new Vector2(1 * MathUtils.random(), 0).rotateDeg(MathUtils.random() * 360), 64, 64, 0, "twinkle.png"));
             return false;
@@ -777,7 +777,7 @@ public class Player extends GameObject implements Hittable {
         damage += source.damage;
 
         battle.shakeCamera(3);
-        battle.freezeFrame((source.damage / 50), 2, 1, false);
+        battle.freezeFrame((int) Math.ceil(source.damage / 50f), 2, 1, false);
 
         SABSounds.playSound("hit.mp3");
         Vector2 newKnockback = source.knockback.cpy();
@@ -888,5 +888,13 @@ public class Player extends GameObject implements Hittable {
 
     public int getId() {
         return id;
+    }
+
+    public String getImageName() {
+        return fighter.id + (costume == 0 ? "" : ("_alt_" + costume)) + ".png";
+    }
+
+    public String getRenderName() {
+        return fighter.id + "_render" + (costume == 0 ? "" : ("_alt_" + costume)) + ".png";
     }
 }
