@@ -8,6 +8,7 @@ import sab.game.attack.Attack;
 import sab.game.attack.MeleeAttackType;
 
 public class VentSlap extends MeleeAttackType {
+    private int previousFrame;
     @Override
     public void setDefaults(Attack attack) {
         attack.imageName = "none.png";
@@ -30,6 +31,10 @@ public class VentSlap extends MeleeAttackType {
     public void update(Attack attack) {
         super.update(attack);
         attack.frame = attack.owner.frame;
+        if (previousFrame != attack.frame) {
+            if (attack.frame == 42) SABSounds.playSound("vent_open.mp3");
+            else if (attack.frame == 45) SABSounds.playSound("vent_close.mp3");
+        }
         attack.canHit = attack.frame == 42 || attack.frame == 45;
         if (attack.frame == 45) {
             attack.hitbox.width = 80;
@@ -39,6 +44,7 @@ public class VentSlap extends MeleeAttackType {
             attack.staticKnockback = false;
             attack.knockback = new Vector2(14 * attack.direction, -6);
         }
+        previousFrame = attack.frame;
     }
 
     @Override
@@ -52,7 +58,6 @@ public class VentSlap extends MeleeAttackType {
         super.onSpawn(attack, data);
         attack.knockback = new Vector2(-8 * attack.direction, 24);
         attack.owner.battle.shakeCamera(5);
-        SABSounds.playSound("john_step.mp3");
         if (data != null) attack.getBattle().addAttack(new Attack(new ProjectileGus(), attack.owner), new int[] { (int) attack.getCenter().x, (int) attack.getCenter().y });
     }
 

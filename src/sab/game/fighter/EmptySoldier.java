@@ -3,6 +3,7 @@ package sab.game.fighter;
 import com.badlogic.gdx.math.Vector2;
 import com.seagull_engine.GameObject;
 import com.seagull_engine.Seagraphics;
+import sab.game.DamageSource;
 import sab.game.Game;
 import sab.game.Player;
 import sab.game.ai.AI;

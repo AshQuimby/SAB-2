@@ -59,7 +59,7 @@ public class AmonGrab extends MeleeAttackType {
             }
             if (attack.life == 2) {
                 attack.damage = 24;
-                SABSounds.playSound("crash.mp3");
+                SABSounds.playSound("impostor_kill.mp3");
                 attack.knockback = new Vector2(16 * attack.owner.direction * -1, 8);
                 attack.clearHitObjects();
                 attack.canHit = true;

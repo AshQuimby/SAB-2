@@ -30,6 +30,7 @@ public class Gus extends FighterType {
     private Animation ventSlapAnimation;
     private Animation suplexGrabAnimation;
     private int amongUsManBreathTimer;
+    private int amongUsManTimeLeft;
     private Attack miniGus;
     private boolean amongUsManMode;
     private boolean landingChecker;
@@ -53,7 +54,7 @@ public class Gus extends FighterType {
         suplexGrabAnimation = new Animation(47, 49, 12, true);
     }
 
-    private void setGusDefaults(Fighter fighter) {
+    public void setGusDefaults(Fighter fighter) {
         amongUsManMode = false;
         fighter.id = "gus";
         fighter.name = "Gus";
@@ -71,6 +72,10 @@ public class Gus extends FighterType {
         fighter.doubleJumpMultiplier = 0.75f;
         fighter.mass = 2.8f;
         fighter.airJumps = 1;
+        fighter.ledgeAnimation = new Animation(new int[]{8}, 1, false);
+        fighter.knockbackAnimation = new Animation(new int[]{7}, 1, false);
+        fighter.freefallAnimation = new Animation(new int[]{6}, 1, false);
+        fighter.idleAnimation = new Animation(new int[]{0}, 60, false);
         fighter.walkAnimation = new Animation(0, 3, 7, true);
         fighter.ledgeAnimation = new Animation(new int[]{ 8 }, 1, false);
         fighter.parryAnimation = new Animation(new int[]{5, 0, 0}, 10, false);
@@ -78,7 +83,8 @@ public class Gus extends FighterType {
         fighter.useWalkAnimationInAir = true;
     }
 
-    private void setAmongUsManDefaults(Fighter fighter, Player player) {
+    public void setAmongUsManDefaults(Fighter fighter, Player player) {
+        amongUsManTimeLeft = 600;
         amongUsManMode = true;
         fighter.id = "amon_gus_man";
         fighter.name = "Gus";
@@ -134,6 +140,17 @@ public class Gus extends FighterType {
 
     @Override
     public void start(Fighter fighter, Player player) {
+    }
+
+    @Override
+    public boolean onHit(Fighter fighter, Player player, DamageSource source) {
+        if (amongUsManMode) amongUsManTimeLeft -= source.damage / 2;
+        return super.onHit(fighter, player, source);
+    }
+
+    @Override
+    public void hitObject(Fighter fighter, Player player, Attack attack, GameObject hit) {
+        if (amongUsManMode) amongUsManTimeLeft += attack.damage * 2;
     }
 
     @Override
@@ -243,6 +260,12 @@ public class Gus extends FighterType {
     @Override
     public void update(Fighter fighter, Player player) {
         if (amongUsManMode) {
+            if (amongUsManTimeLeft > 0) {
+                if (--amongUsManTimeLeft <= 0 && player.isReady()) {
+                    player.velocity.scl(0);
+                    player.startAttack(new SussyVent(), flipAnimation, 8, 12, true, new int[] { 2 });
+                }
+            }
             if (!player.hitbox.overlaps(player.battle.getStage().getSafeBlastZone()) && player.hitbox.y < 0) {
                 player.hitbox.setCenter(player.battle.getStage().getSafeBlastZone().getCenter(new Vector2()).add(0, player.battle.getStage().getUnsafeBlastZone().height / 2));
             }
@@ -321,8 +344,7 @@ public class Gus extends FighterType {
 
     @Override
     public void onEndAction(PlayerAction action, Fighter fighter, Player player) {
-        if (amongUsManMode) {
-
+        if (amongUsManMode && amongUsManTimeLeft > 0) {
             // Side punch combo
             if (player.keys.isPressed(Keys.ATTACK)) {
                 if (action.usingAnimation(punchHookAnimation)) {
@@ -382,7 +404,8 @@ public class Gus extends FighterType {
     @Override
     public boolean finalAss(Fighter fighter, Player player) {
         if (!player.usedRecovery) {
-            setAmongUsManDefaults(fighter, player);
+            fighter.freefallAnimation.reset();
+            player.startAttack(new SussyVent(), fighter.freefallAnimation, 8, 12, true, new int[] { 0 });
             return true;
         }
         return false;
@@ -406,5 +429,11 @@ public class Gus extends FighterType {
         if (amongUsManMode && !doubleJump) {
             impact(player);
         }
+    }
+
+    @Override
+    public String getVictorySongId(Fighter fighter, Player player) {
+        if (amongUsManMode && player.costume == 4) return "deal_tastic_victory.mp3";
+        return super.getVictorySongId(fighter, player);
     }
 }
