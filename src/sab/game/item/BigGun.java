@@ -7,9 +7,9 @@ import sab.game.Player;
 import sab.game.attack.unnamed_duck.BigBullet;
 
 public class BigGun extends Item {
-
     private int spinny;
 
+    @Override
     public void setDefaults() {
         super.setDefaults();
         imageName = "revolver.png";

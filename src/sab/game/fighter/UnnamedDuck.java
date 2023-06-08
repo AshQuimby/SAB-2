@@ -15,10 +15,7 @@ import sab.game.attack.unnamed_duck.DuckGrab;
 import sab.game.attack.unnamed_duck.DuckItem;
 import sab.game.attack.unnamed_duck.DuckSign;
 import sab.game.attack.unnamed_duck.Quack;
-import sab.game.item.BigGun;
-import sab.game.item.Item;
-import sab.game.item.Knife;
-import sab.game.item.Rake;
+import sab.game.item.*;
 import sab.game.particle.Particle;
 import sab.util.WeightedCollection;
 
@@ -167,9 +164,11 @@ public class UnnamedDuck extends FighterType {
 
     public void initializeItemsList() {
         items = new WeightedCollection<>();
-        items.add(new Rake(), 2);
-        items.add(new Knife(), 2);
-        items.add(new BigGun(), 2);
+        items.add(new Rake(), 1);
+        items.add(new Knife(), 1);
+        items.add(new BigGun(), 1);
+        items.add(new Jerrycan(), 1);
+        items.add(new Molotov(), 1);
     }
 
     @Override

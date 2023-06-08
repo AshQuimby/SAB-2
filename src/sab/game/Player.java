@@ -671,8 +671,9 @@ public class Player extends GameObject implements Hittable {
     }
 
     public void tossItem() {
-        heldItem.onToss(this);
+        Item item = heldItem;
         heldItem = null;
+        item.onToss(this);
     }
 
     private float getJumpVelocity() {

@@ -8,10 +8,10 @@ import sab.game.animation.Animation;
 import sab.game.attack.unnamed_duck.DuckItem;
 
 public class Knife extends Item {
-
     private Animation swing;
     private Animation animation;
 
+    @Override
     public void setDefaults() {
         super.setDefaults();
         imageName = "knife_item.png";

@@ -12,6 +12,7 @@ import sab.game.Player;
 public abstract class Item extends GameObject {
     protected Vector2 offset;
     protected int uses;
+
     public void setDefaults() {
         hitbox = new Rectangle(0, 0, 64, 64);
         drawRect = new Rectangle(hitbox);
