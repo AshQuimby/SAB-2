@@ -128,7 +128,7 @@ public class Attack extends DamageSource {
 
         if (canHit) {
             for (GameObject target : owner.battle.getHittableGameObjects()) {
-                attemptHit(target);
+                attemptHit(target, (Hittable) target);
             }
         }
 
@@ -141,23 +141,21 @@ public class Attack extends DamageSource {
         }
     }
 
-    public void attemptHit(GameObject target) {
-        if (target != owner && type.canHit(this, target)) {
-            if ((hitObjects.get(target) == null || hitObjects.get(target) == 0)) {
-                Hittable hit = ((Hittable) target);
-                boolean canBeHit = hit.canBeHit(this);
-                if (canBeHit) successfulHit(target);
-                type.hit(this, target);
-                if (canBeHit) hit.onHit(this);
+    public void attemptHit(GameObject target, Hittable hit) {
+        if (canHit) {
+            if (target != owner && type.canHit(this, target)) {
+                if ((hitObjects.get(target) == null || hitObjects.get(target) == 0)) {
+                    boolean canBeHit = hit.canBeHit(this);
+                    if (canBeHit) successfulHit(target);
+                    type.hit(this, target);
+                    if (canBeHit) hit.onHit(this);
+                }
             }
         }
     }
 
     public void clearHitObject(GameObject gameObject) {
         hitObjects.remove(gameObject);
-    }
-
-    public void hit(GameObject hit) {
     }
 
     public void successfulHit(GameObject hit) {
