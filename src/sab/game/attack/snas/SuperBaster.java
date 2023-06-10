@@ -60,7 +60,9 @@ public class SuperBaster extends MeleeAttackType {
             super.update(attack);
             target = attack.getNearestOpponent(-1);
             Vector2 toTarget = target.getCenter().sub(attack.getCenter());
-            attack.rotation = toTarget.angleDeg();
+            if (attack.life < -30) {
+                attack.rotation = toTarget.angleDeg();
+            }
             attack.knockback = new Vector2(16, 0).setAngleDeg(attack.rotation);
             if (attack.life < -120) {
                 fired = true;

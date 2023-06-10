@@ -599,6 +599,10 @@ public class Battle {
         paused = !paused;
     }
 
+    public boolean isPaused() {
+        return paused;
+    }
+
     public Player getPlayer(int player) {
         return players.get(player);
     }

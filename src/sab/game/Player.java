@@ -147,7 +147,6 @@ public class Player extends GameObject implements Hittable {
 
     public void move(Vector2 v, float physicsScalar) {
         Vector2 movement = v.cpy().scl(physicsScalar);
-        if (movement.y <= 0 && movement.y > -0.5f) movement.y = -0.5f;
 
         while (movement.len() > 0) {
             Vector2 step = movement.cpy().limit(1);
@@ -500,9 +499,8 @@ public class Player extends GameObject implements Hittable {
                 minCharge = 0;
                 charging = false;
                 fighter.onEndAction(previousAction, this);
-            } else {
-                gravityAndFriction();
             }
+            gravityAndFriction();
             return;
         }
 
@@ -700,7 +698,9 @@ public class Player extends GameObject implements Hittable {
         if (airDodging > 0) {
             velocity.y -= 0.6f;
             airDodging--;
-        } else velocity.y -= 0.96f;
+        } else {
+            velocity.y -= 0.96f;
+        }
 
         applyForce(velocity.cpy().scl(-fighter.friction));
         if (touchingStage && (!(keys.isPressed(Keys.LEFT) ^ keys.isPressed(Keys.RIGHT)) || charging)) {

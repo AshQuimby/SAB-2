@@ -96,7 +96,7 @@ public class BattleScreen extends NetScreen {
                 battle.spawnAssBall();
             } else if (keyCode == Input.Keys.H) {
                 battle.drawHitboxes = !battle.drawHitboxes;
-            } else if (keyCode == Input.Keys.SPACE) {
+            } else if (keyCode == Input.Keys.SPACE && battle.isPaused()) {
                 battle.unpause();
                 battle.update();
                 battle.postUpdate();
