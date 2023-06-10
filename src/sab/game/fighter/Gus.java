@@ -414,7 +414,7 @@ public class Gus extends FighterType {
     @Override
     public void onSuccessfulParry(Fighter fighter, Player player, DamageSource parried) {
         // Retaliate if opponent is near and on a successful parry
-        if (parried.owner != null) {
+        if (amongUsManMode && parried.owner != null) {
             if (parried.owner.getCenter().dst(player.getCenter()) < 96) {
                 player.direction = (int) Math.signum(parried.owner.getCenter().x - player.getCenter().x);
                 player.velocity.scl(0);

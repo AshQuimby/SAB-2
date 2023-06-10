@@ -16,7 +16,6 @@ public class Quack extends MeleeAttackType {
         attack.life = 10;
         attack.hitCooldown = 10;
         attack.damage = 8;
-        SABSounds.playSound("quack.mp3");
         usePlayerDirection = true;
         offset = new Vector2(36, 16);
     }
@@ -26,6 +25,7 @@ public class Quack extends MeleeAttackType {
         attack.direction = attack.owner.direction;
         attack.hitbox.setCenter(attack.owner.getCenter().add(new Vector2(32 * attack.direction, 16)));
         attack.knockback = new Vector2(5 * attack.direction, 3);
+        SABSounds.playSound("quack.mp3");
     }
 
     @Override

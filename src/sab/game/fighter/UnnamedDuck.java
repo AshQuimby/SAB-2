@@ -11,10 +11,8 @@ import sab.game.ai.AI;
 import sab.game.ai.BaseAI;
 import sab.game.animation.Animation;
 import sab.game.attack.Attack;
-import sab.game.attack.unnamed_duck.DuckGrab;
-import sab.game.attack.unnamed_duck.DuckItem;
-import sab.game.attack.unnamed_duck.DuckSign;
-import sab.game.attack.unnamed_duck.Quack;
+import sab.game.attack.unnamed_duck.*;
+import sab.game.attack.walouis.Saxophone;
 import sab.game.item.*;
 import sab.game.particle.Particle;
 import sab.util.WeightedCollection;
@@ -144,6 +142,15 @@ public class UnnamedDuck extends FighterType {
                 }
             }
         }
+    }
+
+    @Override
+    public boolean finalAss(Fighter fighter, Player player) {
+        if (!player.usedRecovery) {
+            player.battle.addAttack(new Attack(new MegaBell(), player), null);
+            return true;
+        }
+        return false;
     }
 
     @Override
