@@ -158,6 +158,10 @@ public class Attack extends DamageSource {
         hitObjects.remove(gameObject);
     }
 
+    public void clearHitObjects() {
+        hitObjects.clear();
+    }
+
     public void successfulHit(GameObject hit) {
         if (hitObjects.containsKey(hit))
             hitObjects.replace(hit, hitCooldown);
