@@ -615,6 +615,10 @@ public class Battle {
         return attacks;
     }
 
+    public List<AssBall> getAssBalls() {
+        return assBalls;
+    }
+
     public int getBattleTick() {
         return battleTick;
     }
