@@ -63,7 +63,7 @@ public class BaseAI extends AI {
 
             Attack threat = getNearestEnemyAttack();
             if (threat != null) {
-                Vector2 collision = getFutureCollision(threat, difficulty * 5);
+                FutureCollision collision = getFutureCollision(threat, difficulty * 5);
                 if (collision == null) return;
 
                 pressKey(Keys.PARRY);
@@ -92,7 +92,7 @@ public class BaseAI extends AI {
         }
     }
 
-    protected Vector2 getFutureCollision(Attack attack, int maxFramesAhead) {
+    protected FutureCollision getFutureCollision(Attack attack, int maxFramesAhead) {
         Rectangle futureHitbox = new Rectangle(player.hitbox);
         Vector2 futureVelocity = player.velocity.cpy();
 
@@ -107,7 +107,7 @@ public class BaseAI extends AI {
             futureAttackHitbox.y += attack.velocity.y;
 
             if (futureHitbox.overlaps(futureAttackHitbox)) {
-                return futureHitbox.getCenter(new Vector2());
+                return new FutureCollision(futureHitbox.getCenter(new Vector2()), i);
             }
         }
 
@@ -217,30 +217,29 @@ public class BaseAI extends AI {
                 pressKey(Keys.LEFT);
             }
 
-            if (getPlatformBelow(target) != null && target.hitbox.y > player.hitbox.y && player.velocity.y <= 0) {
+            if (getPlatformBelow(target) != null && target.hitbox.y > player.hitbox.y && !target.takingKnockback() && player.velocity.y <= 0) {
                 pressKey(Keys.UP);
             }
         }
 
         Attack nearestAttack = getNearestEnemyAttack();
         if (nearestAttack != null) {
-            Vector2 collision = getFutureCollision(nearestAttack, difficulty * 5);
+            FutureCollision collision = getFutureCollision(nearestAttack, difficulty * 5);
 
             if (collision != null) {
-                if (collision.len() / nearestAttack.velocity.len() <= 20 && Math.random() * 10 < difficulty) {
+                if (collision.ticksUntil() <= 20 && Math.random() * 10 < difficulty) {
                     parry(nearestAttack);
                     return;
                 }
-                if (collision.y > player.hitbox.y + player.hitbox.height) {
-                    if (center.x > collision.x) {
-                        releaseKey(Keys.LEFT);
-                        pressKey(Keys.RIGHT);
-                    } else {
-                        releaseKey(Keys.RIGHT);
-                        pressKey(Keys.LEFT);
-                    }
-                } else if (player.velocity.y <= 0) {
-                    if (player.getRemainingJumps() == 0) {
+                if (center.x > collision.position().x) {
+                    releaseKey(Keys.LEFT);
+                    pressKey(Keys.RIGHT);
+                } else {
+                    releaseKey(Keys.RIGHT);
+                    pressKey(Keys.LEFT);
+                }
+                if (collision.position().y <= player.hitbox.y + player.hitbox.height && player.velocity.y <= 0) {
+                    if (player.getRemainingJumps() == 0 && difficulty >= 3) {
                         pressKey(Keys.PARRY);
                     } else pressKey(Keys.UP);
                 }

@@ -92,7 +92,7 @@ public class BigSeagull extends FighterType {
                 }
 
                 if (isDirectlyHorizontal(target.hitbox) && Math.random() * 20 < difficulty && isFacing(targetPosition.x)) {
-                    if (target.damage > 30 && Math.random() * 100 + target.damage > 100) {
+                    if (target.damage > 30 && Math.random() * 100 + target.damage > 170) {
                         useNeutralAttack();
                     } else {
                         if (Math.random() < .2) {

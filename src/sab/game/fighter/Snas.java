@@ -64,21 +64,27 @@ public class Snas extends FighterType {
             @Override
             public void attack(Vector2 center, Player target, Vector2 targetPosition) {
                 if (player.charging()) {
+                    releaseAllKeys();
+                    pressKey(Keys.ATTACK);
                     Rectangle adjustedTargetHitbox = new Rectangle(target.hitbox);
                     adjustedTargetHitbox.x -= player.direction * 86;
 
+                    boolean linedUp = false;
                     if (Math.random() * 20 < difficulty) {
                         if (isDirectlyHorizontal(target.hitbox)) {
                             faceTarget(target.hitbox);
+                            linedUp = true;
                         } else if (isDirectlyBelow(adjustedTargetHitbox)) {
                             pressKey(Keys.UP);
+                            linedUp = true;
                         } else if (isDirectlyAbove(adjustedTargetHitbox)) {
                             pressKey(Keys.DOWN);
+                            linedUp = true;
                         }
                     }
 
-                    if (player.getCharge() <= 60 - Math.random() * 30) {
-                        pressKey(Keys.ATTACK);
+                    if (linedUp && Math.abs(adjustedTargetHitbox.x - center.x) <= 360 && Math.abs(adjustedTargetHitbox.y - center.y) <= 360) {
+                        releaseKey(Keys.ATTACK);
                     }
 
                     return;
@@ -98,7 +104,7 @@ public class Snas extends FighterType {
                     return;
                 }
 
-                useDownAttack();
+                if (Math.abs(targetPosition.x - center.x) <= 250 && Math.abs(targetPosition.y - center.y) <= 250) useDownAttack();
             }
         };
     }
