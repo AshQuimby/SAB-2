@@ -96,6 +96,18 @@ public class Utils {
         drawButton(g, x, y, text, textSize, highlighted, 0);
     }
 
+    public static boolean raycast(Vector2 position, float rotation, int distance, Rectangle rect) {
+        if (distance < 0) throw new IllegalArgumentException("Method raycast() cannot have negative distance.");
+        Vector2 step = new Vector2(1, 0).setAngleDeg(rotation);
+        Vector2 castPos = position.cpy();
+        while (distance > 0) {
+            castPos.add(step);
+            if (rect.contains(castPos)) return true;
+            distance--;
+        }
+        return false;
+    }
+
     public static void drawButton(Seagraphics g, float x, float y, String text, float textSize, boolean highlighted, int anchor) {
         Rectangle textBounds = g.getTextBounds(text, g.imageProvider.getFont(Settings.getDefaultFont()), x, y, textSize, anchor);
         textBounds.width = ((int) (textBounds.width * 4)) / 4 - 16;

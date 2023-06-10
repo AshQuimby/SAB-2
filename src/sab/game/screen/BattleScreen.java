@@ -101,6 +101,10 @@ public class BattleScreen extends NetScreen {
                 battle.update();
                 battle.postUpdate();
                 battle.pause();
+            } else if (keyCode == Input.Keys.B) {
+                for (Player player : battle.getPlayers()) {
+                    player.grantFinalAss();
+                }
             }
         }
 

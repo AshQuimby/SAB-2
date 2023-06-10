@@ -768,6 +768,10 @@ public class Player extends GameObject implements Hittable {
         assCharged = true;
     }
 
+    public void revokeFinalAss() {
+        assCharged = false;
+    }
+
     public boolean isAssCharged() {
         return assCharged;
     }
@@ -778,7 +782,7 @@ public class Player extends GameObject implements Hittable {
         damage += source.damage;
 
         battle.shakeCamera(3);
-        battle.freezeFrame((int) Math.ceil(source.damage / 50f), 2, 1, false);
+        battle.freezeFrame((int) Math.round((source.damage - 10) / 30f), 2, 1, false);
 
         SABSounds.playSound("hit.mp3");
         Vector2 newKnockback = source.knockback.cpy();

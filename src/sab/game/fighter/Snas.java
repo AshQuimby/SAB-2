@@ -15,6 +15,7 @@ import sab.game.attack.Attack;
 import sab.game.attack.snas.GlasterBaster;
 import sab.game.attack.snas.BoneSpike;
 import sab.game.attack.snas.SpinnyBone;
+import sab.game.attack.snas.SuperBaster;
 import sab.game.particle.Particle;
 import sab.net.Keys;
 import sab.util.Utils;
@@ -24,6 +25,8 @@ public class Snas extends FighterType {
     private Animation chargeAnimation;
     private Animation chargeCooldownAnimation;
     private boolean beheaded;
+    private int spawnBastersFor;
+    private int bastersSpawned;
 
     @Override
     public void setDefaults(Fighter fighter) {
@@ -51,6 +54,8 @@ public class Snas extends FighterType {
         chargeCooldownAnimation = new Animation(new int[] { 4, 5, 0 }, 4, true);
         fighter.freefallAnimation = new Animation(new int[]{ 7 }, 1, true);
         fighter.costumes = 3;
+        spawnBastersFor = 0;
+        bastersSpawned = 0;
     }
 
     @Override
@@ -105,6 +110,16 @@ public class Snas extends FighterType {
 
     @Override
     public void update(Fighter fighter, Player player) {
+        if (spawnBastersFor > 0) {
+            spawnBastersFor--;
+            if (spawnBastersFor % 60 == 0) {
+                player.battle.addAttack(new Attack(new SuperBaster(), player), new int[] { bastersSpawned });
+                bastersSpawned++;
+            }
+            if (spawnBastersFor == 0) {
+                player.revokeFinalAss();
+            }
+        }
         if (player.usedRecovery && !player.isStuck() && beheaded) {
             player.frame = 6;
             player.resize(52, 32);
@@ -172,5 +187,17 @@ public class Snas extends FighterType {
         }
         player.velocity.y *= 0.8f;
         player.frame = chargeAnimation.stepLooping();
+    }
+
+    @Override
+    public boolean finalAss(Fighter fighter, Player player) {
+        if (!player.usedRecovery && spawnBastersFor == 0) {
+            player.battle.addAttack(new Attack(new SuperBaster(), player), new int[] { 0 });
+            SABSounds.playSound("snas.mp3");
+            bastersSpawned = 1;
+            spawnBastersFor = 180;
+            return false;
+        }
+        return false;
     }
 }

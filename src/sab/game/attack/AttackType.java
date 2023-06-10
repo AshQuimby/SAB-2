@@ -2,6 +2,8 @@ package sab.game.attack;
 
 import com.seagull_engine.GameObject;
 import com.seagull_engine.Seagraphics;
+import sab.game.Game;
+import sab.game.Hittable;
 import sab.game.Player;
 
 public abstract class AttackType implements Cloneable {
@@ -43,6 +45,10 @@ public abstract class AttackType implements Cloneable {
             attack.rotation,
             attack.direction == 1,
             false);
+    }
+
+    public boolean canHit(Attack attack, GameObject hit) {
+        return hit.hitbox.overlaps(attack.hitbox);
     }
 
     public void lateRender(Attack attack, Seagraphics g) {

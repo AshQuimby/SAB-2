@@ -128,12 +128,14 @@ public class Attack extends DamageSource {
 
         if (canHit) {
             for (GameObject target : owner.battle.getHittableGameObjects()) {
-                if (hitbox.overlaps(target.hitbox) && target != owner && (hitObjects.get(target) == null || hitObjects.get(target) == 0)) {
-                    Hittable hit = ((Hittable) target);
-                    boolean canBeHit = hit.canBeHit(this);
-                    if (canBeHit) successfulHit(target);
-                    hit(target);
-                    if (canBeHit) hit.onHit(this);
+                if (target != owner && type.canHit(this, target)) {
+                    if ((hitObjects.get(target) == null || hitObjects.get(target) == 0)) {
+                        Hittable hit = ((Hittable) target);
+                        boolean canBeHit = hit.canBeHit(this);
+                        if (canBeHit) successfulHit(target);
+                        hit(target);
+                        if (canBeHit) hit.onHit(this);
+                    }
                 }
             }
         }

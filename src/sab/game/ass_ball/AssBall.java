@@ -18,6 +18,7 @@ public class AssBall extends GameObject implements Hittable {
     private Battle battle;
     private float rotationSpeed;
     private Player lastPlayerToHit;
+    private boolean killed;
     public AssBall(Vector2 position, Battle battle) {
         super();
         this.battle = battle;
@@ -27,7 +28,8 @@ public class AssBall extends GameObject implements Hittable {
         velocity = new Vector2();
         frameCount = 18;
         flyTo = new Vector2(0, 0);
-        health = 5;
+        health = 50;
+        killed = false;
     }
 
     public void update() {
@@ -42,11 +44,14 @@ public class AssBall extends GameObject implements Hittable {
     }
 
     public void kill() {
-        for (int i = 0; i < 8; i++) {
-            battle.addParticle(new Particle(getCenter(), new Vector2(4 * MathUtils.random(), 0).rotateDeg(MathUtils.random() * 360), 64, 64, 0, "twinkle.png"));
+        if (!killed) {
+            for (int i = 0; i < 8; i++) {
+                battle.addParticle(new Particle(getCenter(), new Vector2(4 * MathUtils.random(), 0).rotateDeg(MathUtils.random() * 360), 64, 64, 0, "twinkle.png"));
+            }
+            SABSounds.playSound("shatter.mp3");
+            lastPlayerToHit.grantFinalAss();
+            killed = true;
         }
-        SABSounds.playSound("shatter.mp3");
-        lastPlayerToHit.grantFinalAss();
     }
 
     public boolean isAlive() {
