@@ -268,6 +268,7 @@ public class Player extends GameObject implements Hittable {
     }
 
     public void kill(int livesCost) {
+        fighter.onKill(this);
         for (int i = 0; i < 16; i++) {
             battle.addParticle(new Particle(hitbox.getCenter(new Vector2()), hitbox.getCenter(new Vector2()).scl(-0.025f * MathUtils.random(0.125f, 1f)).rotateDeg(MathUtils.random(-2.5f, 2.5f)), 128, 128, "twinkle.png"));
         }
