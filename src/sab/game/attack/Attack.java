@@ -154,6 +154,14 @@ public class Attack extends DamageSource {
         }
     }
 
+    // Similar to attemptHit() but will ignore if hitboxes overlap, if the target is the owner of this attack, if the attack is on hitcooldown for the target, or if the attack's canHit field is true
+    public void forceAttemptHit(GameObject target, Hittable hit) {
+        boolean canBeHit = hit.canBeHit(this);
+        if (canBeHit) successfulHit(target);
+        type.hit(this, target);
+        if (canBeHit) hit.onHit(this);
+    }
+
     public void clearHitObject(GameObject gameObject) {
         hitObjects.remove(gameObject);
     }
