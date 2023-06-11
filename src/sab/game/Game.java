@@ -10,6 +10,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.seagull_engine.Messenger;
 import com.seagull_engine.Seagraphics;
 
+import com.seagull_engine.graphics.SpriteShader;
 import sab.game.attack.AttackType;
 import sab.game.fighter.*;
 import sab.game.screen.CharacterSelectScreen;
@@ -49,6 +50,8 @@ public class Game extends Messenger {
 
     public final Map<String, Mod> mods;
 
+    private Map<String, SpriteShader> shaders;
+
     public Game() {
         mods = new HashMap<>();
         selectNewTitleScreen();
@@ -78,10 +81,17 @@ public class Game extends Messenger {
             return 1.5f;
         }
     }
+
+    public SpriteShader getShader(String id) {
+        return shaders.get(id);
+    }
     
     // Initial load tasks (like from Among Us)
     @Override
     public void load() {
+        shaders = new HashMap<>();
+        shaders.put("enchanted_baguette", new SpriteShader("shaders/default.vsh", "shaders/enchanted_baguette.fsh"));
+        
         Controllers.addListener(controllerManager);
         Settings.loadSettings();
         Mod baseGame = new Mod("Super Ass Brothers: Remasstered", "sab", "1.0", "Base game content");
@@ -287,6 +297,9 @@ public class Game extends Messenger {
     @Override
     public void close() {
         screen.close();
+        for (SpriteShader shader : shaders.values()) {
+            shader.dispose();
+        }
     }
 
     // Loads mods in the mods folder

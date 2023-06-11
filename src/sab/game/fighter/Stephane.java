@@ -12,15 +12,12 @@ import sab.game.ai.AI;
 import sab.game.ai.BaseAI;
 import sab.game.animation.Animation;
 import sab.game.attack.Attack;
-import sab.game.attack.stephane.Baguette;
-import sab.game.attack.stephane.Arrow;
-import sab.game.attack.stephane.BlockSmash;
-import sab.game.attack.stephane.Firework;
+import sab.game.attack.stephane.*;
+import sab.game.attack.stephane.Zombie;
 import sab.game.particle.Particle;
 import sab.game.stage.Platform;
 import sab.game.stage.Stage;
 import sab.game.stage.StageObject;
-import sab.game.stage.StageObjectBehaviour;
 import sab.net.Keys;
 import sab.util.Utils;
 
@@ -31,6 +28,9 @@ public class Stephane extends FighterType {
     private Animation bowFastAnimation;
     private Animation bowFireworkAnimation;
     private float blocks;
+
+    private boolean creativeMode;
+    private int creativeModeTimeLeft;
 
     @Override
     public void setDefaults(Fighter fighter) {
@@ -174,6 +174,28 @@ public class Stephane extends FighterType {
 
     @Override
     public void update(Fighter fighter, Player player) {
+        if (creativeMode) {
+            if (--creativeModeTimeLeft == 0) {
+                creativeMode = false;
+            }
+
+            player.velocity.scl(0);
+            if (!player.hasAction()) {
+                if (player.keys.isPressed(Keys.LEFT)) {
+                    player.velocity.x -= 10;
+                }
+                if (player.keys.isPressed(Keys.RIGHT)) {
+                    player.velocity.x += 10;
+                }
+                if (player.keys.isPressed(Keys.UP)) {
+                    player.velocity.y += 10;
+                }
+                if (player.keys.isPressed(Keys.DOWN)) {
+                    player.velocity.y -= 10;
+                }
+            }
+        }
+
         if (player.usingAnimation(bowAnimation) && player.touchingStage) {
             if (bowAnimation.getFrame() == 11 && player.keys.isPressed(Keys.ATTACK)) {
                 player.resetAction();
@@ -191,36 +213,61 @@ public class Stephane extends FighterType {
     public void neutralAttack(Fighter fighter, Player player) {
         if (!player.usedRecovery) {
             swingAnimation.reset();
-            player.startRepeatingAttack(new Baguette(), swingAnimation, 4, 18, false, new int[0]);
+            player.startRepeatingAttack(new Baguette(), swingAnimation, 4, 18, creativeMode, new int[] {creativeMode ? 1 : 0});
         }
     }
 
     @Override
     public void sideAttack(Fighter fighter, Player player) {
         if (!player.usedRecovery) {
-            if (player.touchingStage) {
-                bowAnimation.reset();
-                player.startAttack(new Arrow(), bowAnimation, 24, 12, false, null);
+            if (creativeMode) {
+                swingAnimation.reset();
+                player.startAttack(new Zombie(), swingAnimation, 4, 18, true);
             } else {
-                bowFastAnimation.reset();
-                player.startAttack(new Arrow(), bowFastAnimation, 12, 4, false, null);
+                if (player.touchingStage) {
+                    bowAnimation.reset();
+                    player.startAttack(new Arrow(), bowAnimation, 24, 12, false, null);
+                } else {
+                    bowFastAnimation.reset();
+                    player.startAttack(new Arrow(), bowFastAnimation, 12, 4, false, null);
+                }
             }
         }
     }
 
     @Override
     public void upAttack(Fighter fighter, Player player) {
-        createBlock(player, player.battle.getStage());
-        createBlock(player, player.battle.getStage());
-        createBlock(player, player.battle.getStage());
-        createBlock(player, player.battle.getStage());
-        blockPlaceAnimation.reset();
-        player.startAnimation(1, blockPlaceAnimation, 12, false);
+        if (creativeMode) {
+            swingAnimation.reset();
+            player.startAttack(new Wraith(), swingAnimation, 4, 18, true);
+        } else {
+            createBlock(player, player.battle.getStage());
+            createBlock(player, player.battle.getStage());
+            createBlock(player, player.battle.getStage());
+            createBlock(player, player.battle.getStage());
+            blockPlaceAnimation.reset();
+            player.startAnimation(1, blockPlaceAnimation, 12, false);
+        }
     }
 
     @Override
     public void downAttack(Fighter fighter, Player player) {
-        createBlock(player, player.battle.getStage());
+        if (creativeMode) {
+            swingAnimation.reset();
+            player.startAttack(new Creeper(), swingAnimation, 4, 18, true);
+        } else {
+            createBlock(player, player.battle.getStage());
+        }
+    }
+
+    @Override
+    public boolean finalAss(Fighter fighter, Player player) {
+        if (!player.usedRecovery) {
+            creativeMode = true;
+            creativeModeTimeLeft = 3000;
+            return true;
+        }
+        return false;
     }
 
     @Override

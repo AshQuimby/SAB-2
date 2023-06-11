@@ -42,7 +42,7 @@ public class Bomb extends AttackType {
             attack.resize(120, 120);
             attack.damage = 16;
             attack.velocity = new Vector2();
-            attack.knockback.scl(4);
+            attack.knockback.scl(10);
         }
     
         if (attack.collisionDirection != Direction.NONE) {

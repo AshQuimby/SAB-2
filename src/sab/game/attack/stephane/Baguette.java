@@ -5,11 +5,14 @@ import com.badlogic.gdx.math.Vector2;
 import com.seagull_engine.GameObject;
 
 import com.seagull_engine.Seagraphics;
+import com.seagull_engine.graphics.SpriteShader;
+import sab.game.Game;
 import sab.game.attack.Attack;
 import sab.game.attack.AttackType;
 
 public class Baguette extends AttackType {
     private float swing;
+    private boolean enchanted;
 
     @Override
     public void setDefaults(Attack attack) {
@@ -36,11 +39,14 @@ public class Baguette extends AttackType {
         attack.hitbox.setCenter(position);
     }
 
-    @Override
-    public void update(Attack attack) {
+    private void updatePosition(Attack attack) {
         attack.rotation = swing * attack.direction;
         setRootPosition(attack, new Vector2(attack.owner.hitbox.x + attack.owner.hitbox.width / 2 + MathUtils.cosDeg(swing) * 20 * attack.direction - attack.direction * 12, attack.owner.hitbox.y + MathUtils.sinDeg(swing) * 20 + 24));
+    }
 
+    @Override
+    public void update(Attack attack) {
+        updatePosition(attack);
         swing -= 10;
     }
 
@@ -50,8 +56,10 @@ public class Baguette extends AttackType {
 
     @Override
     public void onSpawn(Attack attack, int[] data) {
-        attack.hitbox.setCenter(attack.owner.hitbox.getCenter(new Vector2()).add(16 * attack.owner.direction, -4));
-        attack.knockback = new Vector2(attack.owner.direction * 7, 3);
+        enchanted = data[0] == 1;
+        updatePosition(attack);
+        attack.knockback = new Vector2(attack.owner.direction * 7, 3).scl(enchanted ? 2 : 1);
+        if (enchanted) attack.damage *= 2;
     }
 
     @Override
@@ -60,6 +68,15 @@ public class Baguette extends AttackType {
 
     @Override
     public void lateRender(Attack attack, Seagraphics g) {
+        if (enchanted) {
+            g.setShader(Game.game.getShader("enchanted_baguette"));
+            Game.game.getShader("enchanted_baguette").getShader().setUniformf("u_tick", Game.game.window.getTick());
+            g.imageProvider.getImage("glint.png").bind(1);
+            Game.game.getShader("enchanted_baguette").getShader().setUniformi("u_glint", 1);
+            g.imageProvider.getImage(attack.imageName).bind(0);
+            Game.game.getShader("enchanted_baguette").getShader().setUniformi("u_texture", 0);
+        }
         super.render(attack, g);
+        g.resetShader();
     }
 }
