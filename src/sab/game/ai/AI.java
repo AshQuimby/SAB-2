@@ -7,6 +7,7 @@ import com.seagull_engine.GameObject;
 import sab.game.CollisionResolver;
 import sab.game.Game;
 import sab.game.Player;
+import sab.game.ass_ball.AssBall;
 import sab.game.attack.Attack;
 import sab.game.stage.Ledge;
 import sab.game.stage.Platform;
@@ -173,6 +174,19 @@ public class AI {
         return bestTarget;
     }
 
+    public final AssBall getNearestAssBall() {
+        float bestDistance = -1;
+        AssBall bestTarget = null;
+        for (AssBall target : player.battle.getAssBalls()) {
+            float distance = player.hitbox.getCenter(new Vector2()).dst(target.hitbox.getCenter(new Vector2()));
+            if (distance <= bestDistance || bestDistance < 0) {
+                bestTarget = target;
+                bestDistance = distance;
+            }
+        }
+        return bestTarget;
+    }
+
     public final Platform getNearestPlatform() {
         float bestDistance = -1;
         GameObject bestTarget = null;
@@ -209,6 +223,22 @@ public class AI {
         for (GameObject target : player.battle.getPlatforms()) {
             if (target.hitbox.x < player.hitbox.x + player.hitbox.width && target.hitbox.x + target.hitbox.width > player.hitbox.x) {
                 float verticalDistance = player.hitbox.y - (target.hitbox.y + target.hitbox.height);
+                if (verticalDistance < 0) continue;
+                if (verticalDistance <= bestVerticalDistance || bestVerticalDistance < 0) {
+                    bestTarget = target;
+                    bestVerticalDistance = verticalDistance;
+                }
+            }
+        }
+        return (Platform) bestTarget;
+    }
+
+    public final Platform getPlatformBelow(Rectangle hitbox) {
+        float bestVerticalDistance = -1;
+        GameObject bestTarget = null;
+        for (GameObject target : player.battle.getPlatforms()) {
+            if (target.hitbox.x < hitbox.x + hitbox.width && target.hitbox.x + target.hitbox.width > hitbox.x) {
+                float verticalDistance = hitbox.y - (target.hitbox.y + target.hitbox.height);
                 if (verticalDistance < 0) continue;
                 if (verticalDistance <= bestVerticalDistance || bestVerticalDistance < 0) {
                     bestTarget = target;

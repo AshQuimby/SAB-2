@@ -264,7 +264,7 @@ public class Stephane extends FighterType {
     public boolean finalAss(Fighter fighter, Player player) {
         if (!player.usedRecovery) {
             creativeMode = true;
-            creativeModeTimeLeft = 3000;
+            creativeModeTimeLeft = 15 * 60;
             return true;
         }
         return false;
@@ -272,7 +272,8 @@ public class Stephane extends FighterType {
 
     @Override
     public void onKill(Fighter fighter, Player player) {
-
+        creativeMode = false;
+        creativeModeTimeLeft = 0;
     }
 
     @Override
