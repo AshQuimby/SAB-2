@@ -30,7 +30,7 @@ public class Chain extends FighterType {
         fighter.speed = 10f;
         fighter.acceleration = .4f;
         fighter.jumpHeight = 128;
-        fighter.frames = 9;
+        fighter.frames = 11;
         fighter.friction = .07f;
         fighter.mass = 4.36f;
         fighter.walkAnimation = new Animation(0, 3, 5, true);
@@ -39,6 +39,8 @@ public class Chain extends FighterType {
         fighter.debut = "The Legend of the Tri-Knife";
         boomerangKnife = null;
         fallingKnife = null;
+        fighter.parryAnimation = new Animation(new int[]{ 9, 0, 0 }, 10, false);
+        fighter.airDodgeAnimation = new Animation(new int[]{ 10 }, 1, false);
         swingAnimation = new Animation(new int[] {4, 5, 3}, 5, true);
         flyingAnimation = new Animation(new int[] {6}, 5, true);
         fighter.freefallAnimation = new Animation(new int[]{3}, 1, false);

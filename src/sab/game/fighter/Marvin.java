@@ -32,7 +32,7 @@ public class Marvin extends FighterType {
         fighter.renderHeight = 64;
         fighter.imageOffsetX = 0;
         fighter.imageOffsetY = 2;
-        fighter.frames = 12;
+        fighter.frames = 14;
         fighter.jumpHeight = 160;
         fighter.friction = .2f;
         fighter.mass = 5f;
@@ -40,7 +40,8 @@ public class Marvin extends FighterType {
         fighter.walkAnimation = new Animation(0, 3, 5, true);
         fighter.description = "Retired Albany plumber now princess saving daydreamer, Marvin is a troubled man who is always distracted by his dreams about the things he could be. He can't seem to escape from his brother's success as a musician.";
         fighter.debut = "Super Marvin Plumber";
-
+        fighter.parryAnimation = new Animation(new int[]{ 12, 0, 0 }, 10, false);
+        fighter.airDodgeAnimation = new Animation(new int[]{ 13 }, 1, false);
         swingAnimation = new Animation(new int[] {4, 5, 0}, 7, true);
         squatAnimation = new Animation(new int[] {6}, 4, true);
         chargeAnimation = new Animation(new int[] {9}, 4, true);

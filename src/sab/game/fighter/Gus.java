@@ -433,7 +433,10 @@ public class Gus extends FighterType {
 
     @Override
     public String getVictorySongId(Fighter fighter, Player player) {
-        if (amongUsManMode && player.costume == 4) return "deal_tastic_victory.mp3";
+        if (player.costume == 4) {
+            if (amongUsManMode) return "deal_tastic_victory.mp3";
+            else return "minion_victory.mp3";
+        }
         return super.getVictorySongId(fighter, player);
     }
 }

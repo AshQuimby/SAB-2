@@ -84,6 +84,7 @@ public class Fighter implements Cloneable {
     public Animation ledgeAnimation;
     public Animation knockbackAnimation;
     public Animation freefallAnimation;
+    public Animation airDodgeAnimation;
     public Animation idleAnimation;
     public Animation parryAnimation;
 
@@ -111,6 +112,7 @@ public class Fighter implements Cloneable {
         freefallAnimation = new Animation(new int[]{6}, 1, false);
         idleAnimation = new Animation(new int[]{0}, 60, false);
         parryAnimation = new Animation(new int[]{5, 0, 0}, 10, false);
+        airDodgeAnimation = new Animation(new int[]{6}, 1, false);
         description = "This is the default description. Change it by changing the \"description\" field. Text wrapping is handled by the engine so you don't have to add new lines.";
         debut = "This is the debut, it is the \"game\" your character originates from.";
         itemOffset = new Vector2();

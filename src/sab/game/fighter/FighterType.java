@@ -103,7 +103,7 @@ public abstract class FighterType {
 
     public void render(Fighter fighter, Player player, Seagraphics g) {
         String costumeString = fighter.id + (player.costume == 0 ? "" : "_alt_" + player.costume) + ".png";
-        g.usefulTintDraw(g.imageProvider.getImage(costumeString), player.drawRect.x, player.drawRect.y, (int) player.drawRect.width, (int) player.drawRect.height, player.frame, fighter.frames, player.rotation, player.direction == 1, false, player.getIFrames() / 10 % 2 == 0 ? Color.WHITE : new Color(1, 1, 1, 0.5f));
+        g.usefulTintDraw(g.imageProvider.getImage(costumeString), player.drawRect.x, player.drawRect.y, (int) player.drawRect.width, (int) player.drawRect.height, player.frame, fighter.frames, player.rotation, player.direction == 1, false, player.getIFrames() / 5 % 2 == 0 ? Color.WHITE : new Color(1, 1, 1, 0.5f));
     }
 
     public void postRender(Fighter fighter, Player player, Seagraphics g) {

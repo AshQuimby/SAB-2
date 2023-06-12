@@ -68,6 +68,7 @@ public class Player extends GameObject implements Hittable {
     private boolean ledgeGrabbing;
     private boolean usedAirDodge;
     private int airDodging;
+    private Vector2 airDodge;
 
     public Player(Fighter fighter) {
         this.fighter = fighter;
@@ -566,12 +567,10 @@ public class Player extends GameObject implements Hittable {
                         startAnimation(1, fighter.parryAnimation, 30, false);
                     }
                 } else if (!usedAirDodge) {
-                    if (iFrames < 20) iFrames = 20;
+                    if (iFrames < 15) iFrames = 15;
                     if (keys.isPressed(Keys.LEFT) ^ keys.isPressed(Keys.RIGHT)) {
-                        velocity.x = fighter.airDodgeSpeed * direction;
-                        if (keys.isPressed(Keys.UP)) velocity.y = 6;
-                        else velocity.y = 2;
-                        airDodging = (int) fighter.airDodgeSpeed;
+                        airDodging = 10;
+                        airDodge = new Vector2(fighter.airDodgeSpeed * direction * 0.7f, keys.isPressed(Keys.DOWN) ? -3 : keys.isPressed(Keys.UP) ? 4 : 1);
                     } else {
                         velocity.scl(0);
                     }
@@ -696,15 +695,15 @@ public class Player extends GameObject implements Hittable {
 
     public void gravityAndFriction() {
         if (airDodging > 0) {
-            velocity.y -= 0.6f;
+            frame = fighter.airDodgeAnimation.stepLooping();
+            velocity = (airDodge);
             airDodging--;
         } else {
             velocity.y -= 0.96f;
-        }
-
-        applyForce(velocity.cpy().scl(-fighter.friction));
-        if (touchingStage && (!(keys.isPressed(Keys.LEFT) ^ keys.isPressed(Keys.RIGHT)) || charging)) {
-            velocity.x *= 0.3f;
+            applyForce(velocity.cpy().scl(-fighter.friction));
+            if (touchingStage && (!(keys.isPressed(Keys.LEFT) ^ keys.isPressed(Keys.RIGHT)) || charging)) {
+                velocity.x *= 0.3f;
+            }
         }
     }
 
@@ -748,7 +747,7 @@ public class Player extends GameObject implements Hittable {
             source.onParry();
             battle.onSuccessfulParry();
             if (source.owner != null) {
-                source.owner.stun(15);
+                source.owner.stun(20);
             }
             resetAction();
             fighter.onSuccessfulParry(this, source);
