@@ -4,6 +4,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
 import sab.game.Player;
+import sab.game.ass_ball.AssBall;
 import sab.game.attack.Attack;
 import sab.game.stage.Ledge;
 import sab.game.stage.PassablePlatform;
@@ -120,6 +121,10 @@ public class BaseAI extends AI {
 
     protected void parry(Attack attack) {
         pressKey(Keys.PARRY);
+    }
+
+    protected boolean shouldUseFinalAss(Player target) {
+        return true;
     }
 
     protected void moveToCenter() {
@@ -258,6 +263,11 @@ public class BaseAI extends AI {
             pressKey(Keys.DOWN);
         }
 
+        if (player.isAssCharged() && shouldUseFinalAss(target)) {
+            releaseAllKeys();
+            useNeutralAttack();
+            return;
+        }
         attack(center, target, targetPosition);
     }
 }

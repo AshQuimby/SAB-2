@@ -49,6 +49,12 @@ public class Chain extends FighterType {
         return new BaseAI(player, difficulty, 24) {
             private static final int SLASH_DISTANCE = 40;
 
+            protected boolean shouldUseFinalAss(Player target) {
+                Vector2 center = player.getCenter();
+                Vector2 targetCenter = target.getCenter();
+                return isFacing(targetCenter.x) && Math.abs(targetCenter.x - center.x) < 256 && isDirectlyHorizontal(target.hitbox);
+            }
+
             @Override
             public void attack(Vector2 center, Player target, Vector2 targetPosition) {
                 if (Math.random() * 20 > difficulty) return;
