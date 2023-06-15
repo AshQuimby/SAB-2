@@ -18,6 +18,7 @@ import sab.game.attack.matthew.UpwardsSlash;
 import sab.game.particle.Particle;
 import sab.net.Keys;
 import sab.util.Utils;
+import sab.util.SABRandom;
 
 public class Matthew extends FighterType {
 
@@ -77,7 +78,7 @@ public class Matthew extends FighterType {
 
             @Override
             public void attack(Vector2 center, Player target, Vector2 targetPosition) {
-                if (Math.random() * 25 > difficulty) return;
+                if (SABRandom.random() * 25 > difficulty) return;
 
                 if (isDirectlyHorizontal(target.hitbox) && isFacing(targetPosition.x)) {
                     float horizontalDistance = Math.abs(center.x - targetPosition.x);
@@ -85,7 +86,7 @@ public class Matthew extends FighterType {
                     if (horizontalDistance <= SLASH_DISTANCE) {
                         useSideAttack();
                     }
-                } else if ((isDirectlyBelow(target.hitbox) && Math.abs(center.y - targetPosition.y) > 32) && Math.random() * 20 < difficulty) {
+                } else if ((isDirectlyBelow(target.hitbox) && Math.abs(center.y - targetPosition.y) > 32) && SABRandom.random() * 20 < difficulty) {
                     useUpAttack();
                 } else if (isDirectlyAbove(target.hitbox)) {
                     useDownAttack();
@@ -102,7 +103,7 @@ public class Matthew extends FighterType {
                     else useDownAttack();
                 }
 
-                if (matthew.counterCharge == 2 && (MathUtils.random(difficulty + 2) > 2 || difficulty >= 5)) {
+                if (matthew.counterCharge == 2 && (SABRandom.random(difficulty + 2) > 2 || difficulty >= 5)) {
                     Attack nearestThreat = getNearestEnemyAttack();
                     if (nearestThreat != null) {
                         if (getFutureCollision(nearestThreat, 24) != null) {

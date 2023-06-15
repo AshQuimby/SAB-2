@@ -1,5 +1,7 @@
 package sab.game.attack.emperor_evil;
 
+import sab.util.SABRandom;
+import sab.util.SABRandom;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.seagull_engine.GameObject;
@@ -43,7 +45,7 @@ public class Banana extends AttackType {
     @Override
     public void onKill(sab.game.attack.Attack attack) {
         for (int i = 0; i < 4 ; i++) {
-            attack.owner.battle.addParticle(new Particle(attack.hitbox.getCenter(new Vector2()), new Vector2(4 * MathUtils.random(), 0).rotateDeg(MathUtils.random() * 360), 32, 32, 0, "smoke.png"));
+            attack.owner.battle.addParticle(new Particle(attack.hitbox.getCenter(new Vector2()), new Vector2(4 * SABRandom.random(), 0).rotateDeg(SABRandom.random() * 360), 32, 32, 0, "smoke.png"));
         }
     }
 
@@ -55,7 +57,7 @@ public class Banana extends AttackType {
     @Override
     public void onSpawn(Attack attack, int[] data) {
         attack.hitbox.setCenter(attack.owner.hitbox.getCenter(new Vector2()));
-        attack.velocity = new Vector2(5 * MathUtils.random(-1f, 1f), 24);
+        attack.velocity = new Vector2(5 * SABRandom.random(-1f, 1f), 24);
         attack.direction = attack.velocity.x > 0 ? 1 : -1;
         attack.knockback = new Vector2(6 * attack.direction, 5);
         if (data != null) {

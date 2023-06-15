@@ -9,6 +9,7 @@ import sab.game.animation.Animation;
 import sab.game.attack.Attack;
 import sab.game.attack.AttackType;
 import sab.game.particle.Particle;
+import sab.util.SABRandom;
 
 public class ProjectileGus extends AttackType {
     @Override
@@ -33,7 +34,7 @@ public class ProjectileGus extends AttackType {
     @Override
     public void onSpawn(Attack attack, int[] data) {
         attack.hitbox.setCenter(data[0], data[1]);
-        attack.velocity = new Vector2(24 * attack.direction, 4 * MathUtils.random(-1f, 1f));
+        attack.velocity = new Vector2(24 * attack.direction, 4 * SABRandom.random(-1f, 1f));
         attack.knockback = new Vector2(4 * attack.direction, 2);
     }
 

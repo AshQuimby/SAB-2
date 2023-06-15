@@ -8,6 +8,7 @@ import sab.game.SABSounds;
 import sab.game.attack.Attack;
 import sab.game.attack.MeleeAttackType;
 import sab.game.particle.Particle;
+import sab.util.SABRandom;
 
 public class ExplosiveBarrel extends MeleeAttackType {
 
@@ -47,8 +48,8 @@ public class ExplosiveBarrel extends MeleeAttackType {
     public void onKill(Attack attack) {
         attack.owner.rotation = 0;
         for (int i = 0; i < 6 ; i++) {
-            attack.owner.battle.addParticle(new Particle(attack.hitbox.getCenter(new Vector2()), new Vector2(4 * MathUtils.random(), 0).rotateDeg(MathUtils.random() * 360), 64, 64, 0, "fire.png"));
-            attack.owner.battle.addParticle(new Particle(attack.hitbox.getCenter(new Vector2()), new Vector2(4 * MathUtils.random(), 0).rotateDeg(MathUtils.random() * 360), 96, 96, 0, "smoke.png"));
+            attack.owner.battle.addParticle(new Particle(attack.hitbox.getCenter(new Vector2()), new Vector2(4 * SABRandom.random(), 0).rotateDeg(SABRandom.random() * 360), 64, 64, 0, "fire.png"));
+            attack.owner.battle.addParticle(new Particle(attack.hitbox.getCenter(new Vector2()), new Vector2(4 * SABRandom.random(), 0).rotateDeg(SABRandom.random() * 360), 96, 96, 0, "smoke.png"));
         }
         for (int i = 0; i < 4; i++) {
             attack.owner.battle.addAttack(new Attack(new Banana(), attack.owner), null);
@@ -57,7 +58,7 @@ public class ExplosiveBarrel extends MeleeAttackType {
         attack.owner.velocity.y = 32;
         attack.owner.usedRecovery = true;
         attack.owner.removeJumps();
-        attack.owner.battle.addParticle(new Particle(1, attack.owner.hitbox.getCenter(new Vector2()), new Vector2(MathUtils.random(-2f, 2f), 5), 64, 80, 1, "barrel.png"));
+        attack.owner.battle.addParticle(new Particle(1, attack.owner.hitbox.getCenter(new Vector2()), new Vector2(SABRandom.random(-2f, 2f), 5), 64, 80, 1, "barrel.png"));
         SABSounds.playSound("explosion.mp3");
     }
     

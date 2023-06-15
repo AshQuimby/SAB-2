@@ -8,6 +8,7 @@ import sab.game.SABSounds;
 import sab.game.attack.Attack;
 import sab.game.attack.MeleeAttackType;
 import sab.game.particle.Particle;
+import sab.util.SABRandom;
 
 public class ShadowPlunge extends MeleeAttackType {
     private boolean hitGround;
@@ -49,8 +50,8 @@ public class ShadowPlunge extends MeleeAttackType {
         }
 
         if (attack.life % 3 == 0) {
-            Vector2 particlePosition = attack.getCenter().add(MathUtils.random(-8f, 8f), MathUtils.random(-8f, 8f));
-            Vector2 particleVelocity = new Vector2(MathUtils.random(-3f, 3f), MathUtils.random(1f, 4f));
+            Vector2 particlePosition = attack.getCenter().add(SABRandom.random(-8f, 8f), SABRandom.random(-8f, 8f));
+            Vector2 particleVelocity = new Vector2(SABRandom.random(-3f, 3f), SABRandom.random(1f, 4f));
             Particle particle = new Particle(particlePosition, particleVelocity, 32, 32, 6, 5, particleVelocity.x > 0 ? 1 : -1, "shadowling.png");
             attack.owner.battle.addParticle(particle);
         }
@@ -62,8 +63,8 @@ public class ShadowPlunge extends MeleeAttackType {
 
     private void shadowExplosion(Attack attack) {
         for (int i = 0; i < 12; i++) {
-            Vector2 particlePosition = new Vector2(MathUtils.random(attack.owner.hitbox.x, attack.owner.hitbox.x + attack.owner.hitbox.width), attack.owner.hitbox.y);
-            Vector2 particleVelocity = new Vector2(MathUtils.random(-7f, 7f), MathUtils.random(-2f, 3f));
+            Vector2 particlePosition = new Vector2(SABRandom.random(attack.owner.hitbox.x, attack.owner.hitbox.x + attack.owner.hitbox.width), attack.owner.hitbox.y);
+            Vector2 particleVelocity = new Vector2(SABRandom.random(-7f, 7f), SABRandom.random(-2f, 3f));
             Particle particle = new Particle(particlePosition, particleVelocity, 32, 32, 6, 5, particleVelocity.x > 0 ? 1 : -1, "shadowling.png");
             attack.owner.battle.addParticle(particle);
         }

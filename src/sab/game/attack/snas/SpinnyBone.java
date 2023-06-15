@@ -9,6 +9,7 @@ import sab.game.SABSounds;
 import sab.game.attack.Attack;
 import sab.game.attack.AttackType;
 import sab.game.particle.Particle;
+import sab.util.SABRandom;
 
 public class SpinnyBone extends AttackType {
     @Override
@@ -61,7 +62,7 @@ public class SpinnyBone extends AttackType {
     @Override
     public void onKill(sab.game.attack.Attack attack) {
         for (int i = 0; i < 4 ; i++) {
-            attack.owner.battle.addParticle(new Particle(1, attack.hitbox.getCenter(new Vector2()), new Vector2(4 * MathUtils.random(), MathUtils.random(0.5f, 0.5f)).rotateDeg(MathUtils.random() * 360), 24, 24, 2, "bone_particle.png"));
+            attack.owner.battle.addParticle(new Particle(1, attack.hitbox.getCenter(new Vector2()), new Vector2(4 * SABRandom.random(), SABRandom.random(0.5f, 0.5f)).rotateDeg(SABRandom.random() * 360), 24, 24, 2, "bone_particle.png"));
         }
     }
 

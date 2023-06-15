@@ -9,6 +9,7 @@ import sab.game.Direction;
 import sab.game.SABSounds;
 import sab.game.attack.Attack;
 import sab.game.attack.AttackType;
+import sab.util.SABRandom;
 
 public class ThrownMolotov extends AttackType {
     @Override
@@ -37,7 +38,7 @@ public class ThrownMolotov extends AttackType {
             if (++attack.frame == 7) attack.frame = 0;
         }
 
-        //attack.owner.battle.addParticle(new Particle(Utils.randomPointInRect(attack.drawRect), new Vector2(2 * MathUtils.random(), 0).rotateDeg(MathUtils.random() * 360), 8, 8, 0, "fire.png"));
+        //attack.owner.battle.addParticle(new Particle(Utils.randomPointInRect(attack.drawRect), new Vector2(2 * SABRandom.random(), 0).rotateDeg(SABRandom.random() * 360), 8, 8, 0, "fire.png"));
     }
 
     @Override
@@ -57,7 +58,7 @@ public class ThrownMolotov extends AttackType {
     public void onKill(Attack attack) {
         for (int i = 0; i < 10; i++) {
             Vector2 spawnPosition = attack.getCenter();
-            Vector2 velocity = new Vector2(MathUtils.random(-7f, 7f), MathUtils.random(3f, 5f)).add(attack.velocity.x / 5, 0);
+            Vector2 velocity = new Vector2(SABRandom.random(-7f, 7f), SABRandom.random(3f, 5f)).add(attack.velocity.x / 5, 0);
 
             attack.getBattle().addAttack(new Attack(new FlammableLiquid(), attack.owner), new int[] {
                     Float.floatToIntBits(spawnPosition.x),

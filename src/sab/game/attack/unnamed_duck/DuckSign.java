@@ -6,6 +6,7 @@ import sab.game.Direction;
 import sab.game.attack.Attack;
 import sab.game.attack.AttackType;
 import sab.game.particle.Particle;
+import sab.util.SABRandom;
 
 public class DuckSign extends AttackType {
     @Override
@@ -33,7 +34,7 @@ public class DuckSign extends AttackType {
 
     @Override
     public void onKill(Attack attack) {
-        attack.owner.battle.addParticle(new Particle(1, attack.getCenter(), new Vector2(MathUtils.random(-2f, 2f), 5), 80, 64, attack.direction, 1, "no_ducks.png"));
+        attack.owner.battle.addParticle(new Particle(1, attack.getCenter(), new Vector2(SABRandom.random(-2f, 2f), 5), 80, 64, attack.direction, 1, "no_ducks.png"));
     }
 
     @Override

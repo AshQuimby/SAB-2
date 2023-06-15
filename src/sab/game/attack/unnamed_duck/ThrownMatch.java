@@ -9,6 +9,7 @@ import sab.game.attack.Attack;
 import sab.game.attack.AttackType;
 import sab.game.particle.Particle;
 import sab.util.Utils;
+import sab.util.SABRandom;
 
 public class ThrownMatch extends AttackType {
     @Override
@@ -43,7 +44,7 @@ public class ThrownMatch extends AttackType {
         attack.velocity.y -= .96f;
         attack.rotation -= attack.velocity.x;
 
-        attack.owner.battle.addParticle(new Particle(Utils.randomPointInRect(attack.drawRect), new Vector2(2 * MathUtils.random(), 0).rotateDeg(MathUtils.random() * 360), 8, 8, 0, "fire.png"));
+        attack.owner.battle.addParticle(new Particle(Utils.randomPointInRect(attack.drawRect), new Vector2(2 * SABRandom.random(), 0).rotateDeg(SABRandom.random() * 360), 8, 8, 0, "fire.png"));
     }
 
     @Override

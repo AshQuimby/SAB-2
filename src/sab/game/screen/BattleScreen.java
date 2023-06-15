@@ -229,8 +229,10 @@ public class BattleScreen extends NetScreen {
     public Screen update() {
         if (disconnected) {
             if (host) {
+                battle.endBattle();
                 return new ErrorScreen(new SabError("Client Disconnected", "Player 2 disconnected"));
             } else {
+                battle.endBattle();
                 return new ErrorScreen(new SabError("Lost Connection", "Lost connection to the server"));
             }
         }
@@ -242,11 +244,14 @@ public class BattleScreen extends NetScreen {
             // TODO: Add victory screen to multiplayer
             if (host) {
                 Game.game.window.camera.reset();
+                battle.endBattle();
                 return new CharacterSelectScreen(server);
             } else if (!local) {
                 Game.game.window.camera.reset();
+                battle.endBattle();
                 return new CharacterSelectScreen(client);
             }
+            battle.endBattle();
             return new VictoryScreen(battle.winner, battle.loser, battle.getStage().background);
         }
         battle.update();

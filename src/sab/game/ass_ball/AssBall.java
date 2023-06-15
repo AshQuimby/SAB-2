@@ -9,6 +9,7 @@ import com.seagull_engine.Seagraphics;
 import sab.game.*;
 import sab.game.particle.Particle;
 import sab.util.Utils;
+import sab.util.SABRandom;
 
 public class AssBall extends GameObject implements Hittable {
     private Color color;
@@ -19,6 +20,7 @@ public class AssBall extends GameObject implements Hittable {
     private float rotationSpeed;
     private Player lastPlayerToHit;
     private boolean killed;
+
     public AssBall(Vector2 position, Battle battle) {
         super();
         this.battle = battle;
@@ -45,8 +47,8 @@ public class AssBall extends GameObject implements Hittable {
 
     public void kill() {
         if (!killed) {
-            for (int i = 0; i < 8; i++) {
-                battle.addParticle(new Particle(getCenter(), new Vector2(4 * MathUtils.random(), 0).rotateDeg(MathUtils.random() * 360), 64, 64, 0, "twinkle.png"));
+            for (int i = 0; i < 15; i++) {
+                battle.addParticle(new Particle(getCenter(), new Vector2(4 * SABRandom.random(), 0).rotateDeg(SABRandom.random() * 360), 96, 96, 0, "twinkle.png"));
             }
             SABSounds.playSound("shatter.mp3");
             lastPlayerToHit.grantFinalAss();
@@ -60,15 +62,18 @@ public class AssBall extends GameObject implements Hittable {
 
     @Override
     public boolean onHit(DamageSource source) {
-        velocity = source.knockback.cpy();
-        health -= source.damage;
-        if (source.owner != null) lastPlayerToHit = source.owner;
-        if (health <= 0) {
-            kill();
-        } else {
-            SABSounds.playSound("hit.mp3");
+        if (!killed) {
+            velocity = source.knockback.cpy();
+            health -= source.damage;
+            if (source.owner != null) lastPlayerToHit = source.owner;
+            if (health <= 0) {
+                kill();
+            } else {
+                SABSounds.playSound("hit.mp3");
+            }
+            return true;
         }
-        return true;
+        return false;
     }
 
     @Override

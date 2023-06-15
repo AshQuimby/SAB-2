@@ -16,6 +16,7 @@ import sab.game.attack.walouis.Saxophone;
 import sab.game.item.*;
 import sab.game.particle.Particle;
 import sab.util.WeightedCollection;
+import sab.util.SABRandom;
 
 public class UnnamedDuck extends FighterType {
     private Animation quackAnimation;
@@ -68,15 +69,15 @@ public class UnnamedDuck extends FighterType {
 
                     if (horizontalDistance <= 60) {
                         useNeutralAttack();
-                    } else if (player.hasItem() && Math.random() * 20 < difficulty) {
+                    } else if (player.hasItem() && SABRandom.random() * 20 < difficulty) {
                         useSideAttack();
                     }
-                } else if (isDirectlyBelow(target.hitbox) && Math.abs(center.y - targetPosition.y) > 32 && Math.random() * 20 < difficulty) {
+                } else if (isDirectlyBelow(target.hitbox) && Math.abs(center.y - targetPosition.y) > 32 && SABRandom.random() * 20 < difficulty) {
                     useUpAttack();
                 }
 
                 UnnamedDuck duck = (UnnamedDuck) player.fighter.type;
-                if (!player.hasItem() && duck.itemCoolDown == 0 && Math.random() * 60 < .8f) {
+                if (!player.hasItem() && duck.itemCoolDown == 0 && SABRandom.random() * 60 < .8f) {
                     useDownAttack();
                 }
             }
@@ -131,7 +132,7 @@ public class UnnamedDuck extends FighterType {
             } else {
                 if (itemCoolDown > 0) {
                     for (int i = 0; i < 4 ; i++) {
-                        player.battle.addParticle(new Particle(player.getCenter().add(new Vector2(fighter.itemOffset.x * player.direction, fighter.itemOffset.y)), new Vector2(4 * MathUtils.random(), 0).rotateDeg(MathUtils.random() * 360), 32, 32, 0, "smoke.png"));
+                        player.battle.addParticle(new Particle(player.getCenter().add(new Vector2(fighter.itemOffset.x * player.direction, fighter.itemOffset.y)), new Vector2(4 * SABRandom.random(), 0).rotateDeg(SABRandom.random() * 360), 32, 32, 0, "smoke.png"));
                     }
                     SABSounds.playSound("sign.mp3");
                 } else {

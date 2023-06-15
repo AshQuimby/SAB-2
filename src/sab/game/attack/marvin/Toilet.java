@@ -9,6 +9,7 @@ import sab.game.SABSounds;
 import sab.game.attack.Attack;
 import sab.game.attack.AttackType;
 import sab.game.particle.Particle;
+import sab.util.SABRandom;
 
 public class Toilet extends AttackType {
     private boolean playerLaunched;
@@ -49,7 +50,7 @@ public class Toilet extends AttackType {
         if (playerLaunched) {
             attack.velocity.y -= 0.25f;
             if (attack.life % 8 == 0) {
-                attack.owner.battle.addParticle(new Particle(attack.drawRect.getCenter(new Vector2()).add(0, 12), new Vector2(2 * (MathUtils.random() - 0.5f), 5 * (MathUtils.random() + 0.5f)), 32, 48, "water.png"));
+                attack.owner.battle.addParticle(new Particle(attack.drawRect.getCenter(new Vector2()).add(0, 12), new Vector2(2 * (SABRandom.random() - 0.5f), 5 * (SABRandom.random() + 0.5f)), 32, 48, "water.png"));
             }
         } else {
             attack.velocity.y -= 0.015f;

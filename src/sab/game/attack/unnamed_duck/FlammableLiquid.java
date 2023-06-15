@@ -10,6 +10,7 @@ import sab.game.attack.Attack;
 import sab.game.attack.AttackType;
 import sab.game.particle.Particle;
 import sab.util.Utils;
+import sab.util.SABRandom;
 
 public class FlammableLiquid extends AttackType {
     public Color color;
@@ -46,9 +47,9 @@ public class FlammableLiquid extends AttackType {
         }
         if (onFire) {
             attack.canHit = true;
-            if (MathUtils.random() < .1f) {
-                if (attack.life >= 60) attack.owner.battle.addParticle(new Particle(Utils.randomPointInRect(attack.drawRect), new Vector2(MathUtils.random(-1f, 1f), MathUtils.random(.2f, 2f)), 16, 16, 0, "fire.png"));
-                else attack.owner.battle.addParticle(new Particle(Utils.randomPointInRect(attack.drawRect), new Vector2(MathUtils.random(-1f, 1f), MathUtils.random(.2f, 2f)), 16, 16, 0, "smoke.png"));
+            if (SABRandom.random() < .1f) {
+                if (attack.life >= 60) attack.owner.battle.addParticle(new Particle(Utils.randomPointInRect(attack.drawRect), new Vector2(SABRandom.random(-1f, 1f), SABRandom.random(.2f, 2f)), 16, 16, 0, "fire.png"));
+                else attack.owner.battle.addParticle(new Particle(Utils.randomPointInRect(attack.drawRect), new Vector2(SABRandom.random(-1f, 1f), SABRandom.random(.2f, 2f)), 16, 16, 0, "smoke.png"));
             }
         } else {
             for (Attack otherAttack : attack.getBattle().getAttacks()) {

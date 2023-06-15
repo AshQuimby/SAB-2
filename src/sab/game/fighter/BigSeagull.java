@@ -13,6 +13,7 @@ import sab.game.attack.big_seagull.FeatherDart;
 import sab.game.attack.big_seagull.Gust;
 import sab.game.stage.Platform;
 import sab.net.Keys;
+import sab.util.SABRandom;
 
 public class BigSeagull extends FighterType {
     private Animation hoverAnimation;
@@ -91,11 +92,11 @@ public class BigSeagull extends FighterType {
                     }
                 }
 
-                if (isDirectlyHorizontal(target.hitbox) && Math.random() * 20 < difficulty && isFacing(targetPosition.x)) {
-                    if (target.damage > 30 && Math.random() * 100 + target.damage > 170) {
+                if (isDirectlyHorizontal(target.hitbox) && SABRandom.random() * 20 < difficulty && isFacing(targetPosition.x)) {
+                    if (target.damage > 30 && SABRandom.random() * 100 + target.damage > 170) {
                         useNeutralAttack();
                     } else {
-                        if (Math.random() < .2) {
+                        if (SABRandom.random() < .2) {
                             useDownAttack();
                         } else {
                             useSideAttack(player.direction);
@@ -136,14 +137,14 @@ public class BigSeagull extends FighterType {
     @Override
     public void neutralAttack(sab.game.fighter.Fighter fighter, Player player) {
         gustAnimation.reset();
-        player.startAttack(new Gust(), gustAnimation, 1, 24, true);
+        player.startAttack(new Gust(), gustAnimation, 1, 24, false);
         SABSounds.playSound("gust.mp3");
     }
 
     @Override
     public void sideAttack(sab.game.fighter.Fighter fighter, Player player) {
         peckAnimation.reset();
-        player.startAttack(new Peck(), peckAnimation, 1, 12, true);
+        player.startAttack(new Peck(), peckAnimation, 1, 12, false);
     }
 
     @Override
@@ -160,6 +161,6 @@ public class BigSeagull extends FighterType {
     @Override
     public void downAttack(Fighter fighter, Player player) {
         gustAnimation.reset();
-        player.startAttack(new FeatherDart(), gustAnimation, 1, 24, true, new int[] {0});
+        player.startAttack(new FeatherDart(), gustAnimation, 1, 24, false, new int[] {0});
     }
 }

@@ -16,6 +16,7 @@ import sab.game.attack.gus.*;
 import sab.game.stage.Ledge;
 import sab.game.stage.Platform;
 import sab.net.Keys;
+import sab.util.SABRandom;
 
 public class Gus extends FighterType {
     private Animation shootAnimation;
@@ -230,7 +231,7 @@ public class Gus extends FighterType {
                     }
                 }
 
-                if (Math.random() * 15 > difficulty) return;
+                if (SABRandom.random() * 15 > difficulty) return;
                 if (isDirectlyHorizontal(target.hitbox) && isFacing(targetPosition.x)) {
                     float horizontalDistance = Math.abs(center.x - targetPosition.x);
 
@@ -287,7 +288,7 @@ public class Gus extends FighterType {
                     }
                 } else {
                     if (amongUsManBreathTimer == 120) {
-                        switch (MathUtils.random(2)) {
+                        switch (SABRandom.random(2)) {
                             case 0 :
                                 fighter.idleAnimation = workOutAnimation;
                                 workOutAnimation.reset();

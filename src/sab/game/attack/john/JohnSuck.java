@@ -12,6 +12,7 @@ import sab.game.attack.Attack;
 import sab.game.attack.MeleeAttackType;
 import sab.game.particle.Particle;
 import sab.net.Keys;
+import sab.util.SABRandom;
 
 public class JohnSuck extends MeleeAttackType {
     private Player trappedPlayer;
@@ -50,7 +51,7 @@ public class JohnSuck extends MeleeAttackType {
             trappedPlayer.velocity.scl(0);
             attack.owner.drawRectOffset = new Vector2();
             for (int i = 0; i < 8 ; i++) {
-                attack.owner.battle.addParticle(new Particle(attack.hitbox.getCenter(new Vector2()), new Vector2(4 * MathUtils.random(), 0).rotateDeg(MathUtils.random() * 360), 32, 32, 0, "smoke.png"));
+                attack.owner.battle.addParticle(new Particle(attack.hitbox.getCenter(new Vector2()), new Vector2(4 * SABRandom.random(), 0).rotateDeg(SABRandom.random() * 360), 32, 32, 0, "smoke.png"));
             }
             trappedPlayer = null;
         }
@@ -74,7 +75,7 @@ public class JohnSuck extends MeleeAttackType {
             attack.owner.occupy(1);
             attack.owner.velocity.x *= 0.96f;
             attack.owner.velocity.y *= 0.96f;
-            attack.owner.drawRectOffset = new Vector2(MathUtils.random(-2f, 2f), MathUtils.random(-2f, 2f));
+            attack.owner.drawRectOffset = new Vector2(SABRandom.random(-2f, 2f), SABRandom.random(-2f, 2f));
             if (spit) {
                 trappedPlayer.invulnerable = false;
                 trappedPlayer.reveal();
@@ -115,7 +116,7 @@ public class JohnSuck extends MeleeAttackType {
             attack.knockback = new Vector2();
             attack.hitCooldown = 1000;
             for (int i = 0; i < 8 ; i++) {
-                attack.owner.battle.addParticle(new Particle(attack.hitbox.getCenter(new Vector2()), new Vector2(4 * MathUtils.random(), 0).rotateDeg(MathUtils.random() * 360), 32, 32, 0, "smoke.png"));
+                attack.owner.battle.addParticle(new Particle(attack.hitbox.getCenter(new Vector2()), new Vector2(4 * SABRandom.random(), 0).rotateDeg(SABRandom.random() * 360), 32, 32, 0, "smoke.png"));
             }
         }
     }

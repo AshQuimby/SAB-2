@@ -20,6 +20,7 @@ import sab.game.item.Item;
 import sab.game.particle.Particle;
 import sab.game.stage.Ledge;
 import sab.net.Keys;
+import sab.util.SABRandom;
 
 public class Player extends GameObject implements Hittable {
     public final Battle battle;
@@ -271,7 +272,7 @@ public class Player extends GameObject implements Hittable {
     public void kill(int livesCost) {
         fighter.onKill(this);
         for (int i = 0; i < 16; i++) {
-            battle.addParticle(new Particle(hitbox.getCenter(new Vector2()), hitbox.getCenter(new Vector2()).scl(-0.025f * MathUtils.random(0.125f, 1f)).rotateDeg(MathUtils.random(-2.5f, 2.5f)), 128, 128, "twinkle.png"));
+            battle.addParticle(new Particle(hitbox.getCenter(new Vector2()), hitbox.getCenter(new Vector2()).scl(-0.025f * SABRandom.random(0.125f, 1f)).rotateDeg(SABRandom.random(-2.5f, 2.5f)), 128, 128, "twinkle.png"));
         }
         battle.shakeCamera(6);
         rotation = 0;
@@ -390,6 +391,7 @@ public class Player extends GameObject implements Hittable {
         if (ai != null) ai.update();
 
         if (stunned > 0) {
+            if (hasAction()) resetAction();
             stunned--;
             return;
         }
@@ -754,7 +756,7 @@ public class Player extends GameObject implements Hittable {
             fighter.onSuccessfulParry(this, source);
             parryTime = -20;
             setIFrames(10);
-            battle.addParticle(new Particle(getCenter().add(4 * direction, hitbox.height / 3), new Vector2(1 * MathUtils.random(), 0).rotateDeg(MathUtils.random() * 360), 64, 64, 0, "twinkle.png"));
+            battle.addParticle(new Particle(getCenter().add(4 * direction, hitbox.height / 3), new Vector2(1 * SABRandom.random(), 0).rotateDeg(SABRandom.random() * 360), 64, 64, 0, "twinkle.png"));
             return false;
         }
         return fighter.onHit(this, source) && !invulnerable;
@@ -849,8 +851,8 @@ public class Player extends GameObject implements Hittable {
                 preRender(g);
                 if (assCharged) {
                     g.usefulDraw(g.imageProvider.getImage("glow.png"), drawRect.x - 16, drawRect.y - 16, (int) drawRect.width + 32, (int) drawRect.height + 32, 0, 1, 0, false, false);
-                    drawRect.x += MathUtils.random(-4f, 4f);
-                    drawRect.y += MathUtils.random(-4f, 4f);
+                    drawRect.x += SABRandom.random(-4f, 4f);
+                    drawRect.y += SABRandom.random(-4f, 4f);
                 }
                 fighter.render(this, g);
                 drawRect.setCenter(getCenter().add(fighter.imageOffsetX * direction, fighter.imageOffsetY).add(drawRectOffset));

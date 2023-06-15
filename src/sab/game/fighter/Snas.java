@@ -19,6 +19,7 @@ import sab.game.attack.snas.SuperBaster;
 import sab.game.particle.Particle;
 import sab.net.Keys;
 import sab.util.Utils;
+import sab.util.SABRandom;
 
 public class Snas extends FighterType {
     private Animation attackAnimation;
@@ -70,7 +71,7 @@ public class Snas extends FighterType {
                     adjustedTargetHitbox.x -= player.direction * 86;
 
                     boolean linedUp = false;
-                    if (Math.random() * 20 < difficulty) {
+                    if (SABRandom.random() * 20 < difficulty) {
                         if (isDirectlyHorizontal(target.hitbox)) {
                             faceTarget(target.hitbox);
                             linedUp = true;
@@ -90,8 +91,8 @@ public class Snas extends FighterType {
                     return;
                 }
 
-                if (target.damage < 100 - difficulty * 5 || Math.random() > target.damage / 300f) {
-                    if (Math.random() * 60 > 3 + difficulty) return;
+                if (target.damage < 100 - difficulty * 5 || SABRandom.random() > target.damage / 300f) {
+                    if (SABRandom.random() * 60 > 3 + difficulty) return;
                     if (Math.abs(center.x - targetPosition.x) < 200) {
                         if (!player.touchingStage && !isDirectlyHorizontal(target.hitbox)) {
                             useNeutralAttack();
@@ -189,7 +190,7 @@ public class Snas extends FighterType {
     @Override
     public void charging(Fighter fighter, Player player, int charge) {
         if (player.costume != 2 && Game.game.window.getTick() % 4 == 0) {
-            player.battle.addParticle(new Particle(Utils.randomPointInRect(player.hitbox), new Vector2(1, 0).rotateDeg(MathUtils.random() * 360), 24, 24, player.costume == 0 ? "snas_fire.png" : "snas_orange_fire.png"));
+            player.battle.addParticle(new Particle(Utils.randomPointInRect(player.hitbox), new Vector2(1, 0).rotateDeg(SABRandom.random() * 360), 24, 24, player.costume == 0 ? "snas_fire.png" : "snas_orange_fire.png"));
         }
         player.velocity.y *= 0.8f;
         player.frame = chargeAnimation.stepLooping();

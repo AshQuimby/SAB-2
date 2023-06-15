@@ -77,11 +77,11 @@ public class Utils {
     }
 
     public static Vector2 randomPointInRect(Rectangle rect) {
-        return new Vector2(MathUtils.random(rect.x, rect.x + rect.width), MathUtils.random(rect.y, rect.y + rect.height));
+        return new Vector2(SABRandom.random(rect.x, rect.x + rect.width), SABRandom.random(rect.y, rect.y + rect.height));
     }
 
     public static Vector2 randomParticleVelocity(float magnitude) {
-        return new Vector2(magnitude, 0).rotateDeg(MathUtils.random(0, 360));
+        return new Vector2(magnitude, 0).rotateDeg(SABRandom.random(0, 360));
     }
 
     public static String appendCostumeToIdentifier(String base, int costume, String fileFormat) {

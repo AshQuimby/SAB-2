@@ -29,8 +29,10 @@ import sab.game.stage.StageObject;
 import sab.net.Keys;
 import sab.net.VoidFunction;
 import sab.util.Utils;
+import sab.util.SABRandom;
 
 public class Battle {
+    private long seed;
     private List<Player> players;
     private Player player1;
     private Player player2;
@@ -79,6 +81,8 @@ public class Battle {
     private VoidFunction<Particle> spawnParticleCallback;
 
     public Battle(Fighter fighter1, Fighter fighter2, int[] costumes, Stage stage, int player1Type, int player2Type, int lives) {
+        seed = System.currentTimeMillis();
+        SABRandom.createNewBattleRandom(seed);
         Game.controllerManager.setInGameState(true);
         this.stage = stage;
         stage.setBattle(this);
@@ -112,7 +116,7 @@ public class Battle {
         idsByGameObject = new HashMap<>();
         nextId = 0;
 
-        assBallSpawnTime = MathUtils.random(1500, 3000);
+        assBallSpawnTime = SABRandom.random(1500, 3000);
 
         drawHitboxes = false;
         battleTick = 0;
@@ -285,13 +289,18 @@ public class Battle {
     }
 
     public void updateCameraEffects() {
-        float effectiveCameraShake = Math.min(cameraShake / 2f, 6);
-        float shakeX = MathUtils.random(-effectiveCameraShake * effectiveCameraShake / 2f, effectiveCameraShake * effectiveCameraShake / 2f);
-        float shakeY = MathUtils.random(-effectiveCameraShake * effectiveCameraShake / 2f, effectiveCameraShake * effectiveCameraShake / 2f);
+        if (cameraShake > 0) {
+            float effectiveCameraShake = Math.min(cameraShake / 2f, 6);
 
-        cameraShakeVector = new Vector2(shakeX, shakeY);
+            if (effectiveCameraShake > 0) {
+                float shakeX = SABRandom.random(-effectiveCameraShake * effectiveCameraShake / 2f, effectiveCameraShake * effectiveCameraShake / 2f);
+                float shakeY = SABRandom.random(-effectiveCameraShake * effectiveCameraShake / 2f, effectiveCameraShake * effectiveCameraShake / 2f);
 
-        if (cameraShake > 0) cameraShake--;
+                cameraShakeVector = new Vector2(shakeX, shakeY);
+            }
+
+            cameraShake--;
+        }
     }
     
     public void updatePlayerKeys() {
@@ -399,7 +408,7 @@ public class Battle {
             assBallSpawnTime--;
             if (assBallSpawnTime <= 0) {
                 spawnAssBall();
-                assBallSpawnTime = MathUtils.random(3000, 6000);
+                assBallSpawnTime = SABRandom.random(3000, 6000);
             }
         }
 
@@ -489,6 +498,7 @@ public class Battle {
             player.keys.update();
         }
     }
+
     public void postUpdate() {
         if (!paused && currentDialogue == null) {
             for (Player player : players) {
@@ -507,6 +517,14 @@ public class Battle {
                 player.usedMacro = false;
             }
         }
+    }
+
+    public void endBattle() {
+        for (Player player : players) {
+//            TODO: Add this to players when I come around to it
+//            player.onEndBattle();
+        }
+        SABRandom.disposeBattleRandom();
     }
 
     public void onSuccessfulParry() {

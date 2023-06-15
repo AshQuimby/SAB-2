@@ -10,6 +10,7 @@ import sab.game.SABSounds;
 import sab.game.attack.Attack;
 import sab.game.attack.AttackType;
 import sab.game.particle.Particle;
+import sab.util.SABRandom;
 
 public class Bullet extends AttackType {
     @Override
@@ -30,7 +31,7 @@ public class Bullet extends AttackType {
 
     @Override
     public void update(Attack attack) {
-        attack.owner.battle.addParticle(new Particle(attack.getCenter(), new Vector2(0, MathUtils.random(-.2f, .2f)), 16, 16, 20, "smoke.png"));
+        attack.owner.battle.addParticle(new Particle(attack.getCenter(), new Vector2(0, SABRandom.random(-.2f, .2f)), 16, 16, 20, "smoke.png"));
         if (attack.collisionDirection != Direction.NONE) attack.alive = false;
     }
 
@@ -46,8 +47,8 @@ public class Bullet extends AttackType {
         attack.owner.battle.addParticle(new Particle(
             1.2f,
             attack.hitbox.getCenter(new Vector2()),
-            new Vector2(MathUtils.random(-1f, 1f),
-            MathUtils.random(4f, 10f)),
+            new Vector2(SABRandom.random(-1f, 1f),
+            SABRandom.random(4f, 10f)),
             16,
             8,
             12,

@@ -8,6 +8,7 @@ import sab.game.Player;
 import sab.game.attack.Attack;
 import sab.game.attack.AttackType;
 import sab.game.particle.Particle;
+import sab.util.SABRandom;
 
 public class Frostball extends AttackType {
     boolean bounced;
@@ -65,7 +66,7 @@ public class Frostball extends AttackType {
     @Override
     public void onKill(sab.game.attack.Attack attack) {
         for (int i = 0; i < 8 ; i++) {
-            attack.owner.battle.addParticle(new Particle(attack.hitbox.getCenter(new Vector2()), new Vector2(4 * MathUtils.random(), 0).rotateDeg(MathUtils.random() * 360), 96, 96, 0, "frostfire.png"));
+            attack.owner.battle.addParticle(new Particle(attack.hitbox.getCenter(new Vector2()), new Vector2(4 * SABRandom.random(), 0).rotateDeg(SABRandom.random() * 360), 96, 96, 0, "frostfire.png"));
         }
     }
 

@@ -19,6 +19,7 @@ import sab.game.stage.Ledge;
 import sab.game.stage.Platform;
 import sab.net.Keys;
 import sab.util.Utils;
+import sab.util.SABRandom;
 
 import java.security.Key;
 
@@ -65,7 +66,7 @@ public class BowlBoy extends FighterType {
                 BowlBoy bowlBoy = (BowlBoy) player.fighter.type;
                 int cards = bowlBoy.getCardCount();
 
-                if (bowlBoy.chargingShot && Math.random() * 20 < difficulty) {
+                if (bowlBoy.chargingShot && SABRandom.random() * 20 < difficulty) {
                     releaseKey(Keys.ATTACK);
                     return;
                 }
@@ -79,7 +80,7 @@ public class BowlBoy extends FighterType {
                     }
                 }
 
-                if (Math.random() * 60 < 2f) {
+                if (SABRandom.random() * 60 < 2f) {
                     useDownAttack();
                 }
             }
@@ -186,7 +187,7 @@ public class BowlBoy extends FighterType {
                     SABSounds.playSound("charge_shot_charged.mp3");
                 }
                 chargeShotCharge++;
-                if (Game.game.window.getTick() % (chargeShotCharge > 30 ? 3 : 9) == 0) player.battle.addParticle(new Particle(player.getCenter().add(gunHandPosition), new Vector2(1, 0).rotateDeg(MathUtils.random(360)), 8, 8, "charge_shot_dust.png"));
+                if (Game.game.window.getTick() % (chargeShotCharge > 30 ? 3 : 9) == 0) player.battle.addParticle(new Particle(player.getCenter().add(gunHandPosition), new Vector2(1, 0).rotateDeg(SABRandom.random(360)), 8, 8, "charge_shot_dust.png"));
             }  else if (shootRecoil <= 0) {
                 shootRecoil = shootBullet(fighter, player);
                 if (!chargingShot) SABSounds.playSound("bowl_boy_shooty.mp3");

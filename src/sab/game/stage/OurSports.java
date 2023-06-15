@@ -7,6 +7,7 @@ import com.seagull_engine.Seagraphics;
 
 import sab.game.*;
 import sab.game.particle.Particle;
+import sab.util.SABRandom;
 
 public class OurSports extends StageType {
     private Platform platform;
@@ -74,7 +75,7 @@ public class OurSports extends StageType {
                 lightning--;
             }
             if (stormTime % 2 == 0) {
-                battle.addParticle(new Particle(0, new Vector2(MathUtils.random(stage.getUnsafeBlastZone().x, stage.getUnsafeBlastZone().x + stage.getUnsafeBlastZone().width + Game.game.window.resolutionX/2), stage.getSafeBlastZone().height), new Vector2(-15, -15), 25, 25, 0, "rain.png"));
+                battle.addParticle(new Particle(0, new Vector2(SABRandom.random(stage.getUnsafeBlastZone().x, stage.getUnsafeBlastZone().x + stage.getUnsafeBlastZone().width + Game.game.window.resolutionX/2), stage.getSafeBlastZone().height), new Vector2(-15, -15), 25, 25, 0, "rain.png"));
             }
             if (stormTime % 600 == 0) {
                 lightning = 60;

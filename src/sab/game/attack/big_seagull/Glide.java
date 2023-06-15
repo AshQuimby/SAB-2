@@ -9,6 +9,7 @@ import sab.game.attack.AttackType;
 import sab.game.particle.Particle;
 import sab.net.Keys;
 import sab.util.Utils;
+import sab.util.SABRandom;
 
 public class Glide extends AttackType {
     @Override
@@ -37,7 +38,7 @@ public class Glide extends AttackType {
         attack.owner.rotation = attack.rotation;
         attack.owner.frame = 15;
         if (attack.life % 3 == 0) {
-            attack.owner.battle.addParticle(new Particle(Utils.randomPointInRect(attack.owner.hitbox), new Vector2(MathUtils.random(-0.5f, 0.5f), MathUtils.random(-0.5f, 0.5f)), 40, 56, 3, "feather.png"));
+            attack.owner.battle.addParticle(new Particle(Utils.randomPointInRect(attack.owner.hitbox), new Vector2(SABRandom.random(-0.5f, 0.5f), SABRandom.random(-0.5f, 0.5f)), 40, 56, 3, "feather.png"));
         }
         if (attack.owner.keys.isJustPressed(Keys.ATTACK)) {
             attack.alive = false;

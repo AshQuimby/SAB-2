@@ -67,7 +67,7 @@ public class WeightedCollection<E> implements Collection<E> {
         for (double weight : weights) {
             totalWeight += weight;
         }
-        double value = Math.random() * totalWeight;
+        double value = SABRandom.random() * totalWeight;
         E element = getFromValue(value);
         remove(element);
         return element;
@@ -78,7 +78,7 @@ public class WeightedCollection<E> implements Collection<E> {
         for (double weight : weights) {
             totalWeight += weight;
         }
-        double value = Math.random() * totalWeight;
+        double value = SABRandom.random() * totalWeight;
         return getFromValue(value);
     }
 

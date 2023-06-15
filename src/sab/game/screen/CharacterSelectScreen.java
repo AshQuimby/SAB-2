@@ -34,6 +34,7 @@ import sab.net.server.Server;
 import sab.screen.Screen;
 import sab.util.SabReader;
 import sab.util.Utils;
+import sab.util.SABRandom;
 
 public class CharacterSelectScreen extends NetScreen {
     protected static class CharacterSelection {
@@ -59,7 +60,7 @@ public class CharacterSelectScreen extends NetScreen {
             this.index = index;
             this.costume = costume;
 
-            sus = availableFighters.get(index).id.equals("gus") && costume == 2 && Math.random() <= .01;
+            sus = availableFighters.get(index).id.equals("gus") && costume == 2 && SABRandom.random() <= .01;
         }
 
         public void updateAvailableFighters() {
@@ -205,12 +206,12 @@ public class CharacterSelectScreen extends NetScreen {
                     player2.availableFighters.get(player2.index).walkAnimation.reset();
                     Fighter p1Fighter = player1.availableFighters.get(player1.index).copy();
                     if (p1Fighter.type instanceof Random) {
-                        p1Fighter = player1.availableFighters.get(MathUtils.random(player1.availableFighters.size() - 2));
+                        p1Fighter = player1.availableFighters.get(SABRandom.random(player1.availableFighters.size() - 2));
                         player1.costume = p1Fighter.getRandomCostume();
                     }
                     Fighter p2Fighter = player2.availableFighters.get(player2.index).copy();
                     if (p2Fighter.type instanceof Random) {
-                        p2Fighter = player2.availableFighters.get(MathUtils.random(player2.availableFighters.size() - 2));
+                        p2Fighter = player2.availableFighters.get(SABRandom.random(player2.availableFighters.size() - 2));
                         player2.costume = p2Fighter.getRandomCostume();
                     }
                     updateTimesPlayed();

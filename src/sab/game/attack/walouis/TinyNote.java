@@ -11,6 +11,7 @@ import sab.game.Player;
 import sab.game.SABSounds;
 import sab.game.attack.Attack;
 import sab.game.attack.AttackType;
+import sab.util.SABRandom;
 
 public class TinyNote extends AttackType {
 
@@ -53,7 +54,7 @@ public class TinyNote extends AttackType {
     public void onSpawn(Attack attack, int[] data) {
         attack.owner.frame = 11;
         attack.hitbox.setCenter(attack.owner.hitbox.getCenter(new Vector2()).add(8 * attack.owner.direction, -8));
-        attack.velocity = new Vector2(8 * attack.owner.direction, 0).rotateDeg((MathUtils.random() -0.5f) * 12);
+        attack.velocity = new Vector2(8 * attack.owner.direction, 0).rotateDeg((SABRandom.random() -0.5f) * 12);
         attack.knockback = new Vector2(0, 0);
         SABSounds.playSound("wagh.mp3");
     }

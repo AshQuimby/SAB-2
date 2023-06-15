@@ -10,6 +10,7 @@ import sab.game.animation.Animation;
 import sab.game.attack.AttackType;
 import sab.game.particle.Particle;
 import sab.net.Keys;
+import sab.util.SABRandom;
 
 public class MagicBanana extends AttackType {
 
@@ -81,7 +82,7 @@ public class MagicBanana extends AttackType {
     @Override
     public void onKill(Attack attack) {
         for (int i = 0; i < 4 ; i++) {
-            attack.owner.battle.addParticle(new Particle(attack.hitbox.getCenter(new Vector2()), new Vector2(4 * MathUtils.random(), 0).rotateDeg(MathUtils.random() * 360), 32, 32, 0, "smoke.png"));
+            attack.owner.battle.addParticle(new Particle(attack.hitbox.getCenter(new Vector2()), new Vector2(4 * SABRandom.random(), 0).rotateDeg(SABRandom.random() * 360), 32, 32, 0, "smoke.png"));
         }
     }
 

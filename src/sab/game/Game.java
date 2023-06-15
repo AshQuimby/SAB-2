@@ -22,6 +22,7 @@ import sab.modloader.Mod;
 import sab.modloader.ModLoader;
 import sab.screen.Screen;
 import sab.util.Utils;
+import sab.util.SABRandom;
 
 import java.awt.*;
 import java.io.File;
@@ -133,7 +134,7 @@ public class Game extends Messenger {
         if (Utils.christmas()) {
             titleBackground = "title_screen_background_christmas.png";
         } else {
-            switch (MathUtils.random.nextInt(3)) {
+            switch (SABRandom.random(3)) {
                 case 0 -> {
                     titleBackground = "title_screen_background.png";
                 }

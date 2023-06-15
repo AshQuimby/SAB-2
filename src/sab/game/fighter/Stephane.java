@@ -1,4 +1,5 @@
 package sab.game.fighter;
+
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
@@ -20,6 +21,7 @@ import sab.game.stage.Stage;
 import sab.game.stage.StageObject;
 import sab.net.Keys;
 import sab.util.Utils;
+import sab.util.SABRandom;
 
 public class Stephane extends FighterType {
     private Animation swingAnimation;
@@ -72,7 +74,7 @@ public class Stephane extends FighterType {
         return new BaseAI(player, difficulty, 64) {
             @Override
             public void attack(Vector2 center, Player target, Vector2 targetPosition) {
-                if (Math.random() * 20 > difficulty) return;
+                if (SABRandom.random() * 20 > difficulty) return;
 
                 Stephane stephane = (Stephane) player.fighter.type;
                 if (isDirectlyBelow(target.hitbox) && stephane.blocks >= 4) {
@@ -298,7 +300,7 @@ public class Stephane extends FighterType {
                     if (touchingPlatform) {
                         blocks++;
                         SABSounds.playSound("crunch.mp3");
-                        player.battle.addParticle(new Particle(1.2f, player.getCenter().add(24 * player.direction, -24), new Vector2(MathUtils.random(-1f, 1f), MathUtils.random(4f, 10f)),32,32,12, "block.png"));
+                        player.battle.addParticle(new Particle(1.2f, player.getCenter().add(24 * player.direction, -24), new Vector2(SABRandom.random(-1f, 1f), SABRandom.random(4f, 10f)),32,32,12, "block.png"));
                     }
                 }
             }

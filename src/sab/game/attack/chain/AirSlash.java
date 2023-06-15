@@ -11,6 +11,7 @@ import sab.game.attack.MeleeAttackType;
 import sab.game.particle.Particle;
 import sab.net.Keys;
 import sab.util.Utils;
+import sab.util.SABRandom;
 
 public class AirSlash extends MeleeAttackType {
     @Override
@@ -62,7 +63,7 @@ public class AirSlash extends MeleeAttackType {
         if (hit instanceof Player) ((Player) hit).stun(2);
         if (attack.life <= 4) {
             attack.staticKnockback = false;
-            attack.knockback = new Vector2(0, 8).rotateDeg(MathUtils.random(-1f, 1f) * 16);
+            attack.knockback = new Vector2(0, 8).rotateDeg(SABRandom.random(-1f, 1f) * 16);
         }
         for (int i = 0; i < 4; i++) {
             attack.owner.battle.addParticle(new Particle(0.1f, hit.getCenter(), Utils.randomParticleVelocity(8), 32, 32, 0.9f, 0, "blood.png"));

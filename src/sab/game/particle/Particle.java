@@ -8,6 +8,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.seagull_engine.GameObject;
 import com.seagull_engine.Seagraphics;
+import sab.util.SABRandom;
 
 public class Particle extends GameObject {
     public byte type;
@@ -35,12 +36,12 @@ public class Particle extends GameObject {
 
     public Particle(Vector2 position, Vector2 velocity, float width, float height, float maxRotationSpeed, String image) {
         this(position, velocity, width, height, image);
-        rotationSpeed = MathUtils.random(-maxRotationSpeed, maxRotationSpeed);
+        rotationSpeed = SABRandom.random(-maxRotationSpeed, maxRotationSpeed);
     }
 
     public Particle(Vector2 position, Vector2 velocity, float width, float height, float maxRotationSpeed, Color tint, String image) {
         this(position, velocity, width, height, image);
-        rotationSpeed = MathUtils.random(-maxRotationSpeed, maxRotationSpeed);
+        rotationSpeed = SABRandom.random(-maxRotationSpeed, maxRotationSpeed);
         this.tint = tint;
     }
 
@@ -67,14 +68,14 @@ public class Particle extends GameObject {
 
     public Particle(float gravity, Vector2 position, Vector2 velocity, float width, float height, int maxRotationSpeed, String image) {
         this(position, velocity, width, height, image);
-        rotationSpeed = MathUtils.random(-maxRotationSpeed, maxRotationSpeed);
+        rotationSpeed = SABRandom.random(-maxRotationSpeed, maxRotationSpeed);
         this.gravity = gravity;
         type = 2;
     }
 
     public Particle(float gravity, Vector2 position, Vector2 velocity, float width, float height, int direction, int maxRotationSpeed, String image) {
         this(position, velocity, width, height, image);
-        rotationSpeed = MathUtils.random(-maxRotationSpeed, maxRotationSpeed);
+        rotationSpeed = SABRandom.random(-maxRotationSpeed, maxRotationSpeed);
         this.direction = direction;
         this.gravity = gravity;
         type = 2;
@@ -82,7 +83,7 @@ public class Particle extends GameObject {
 
     public Particle(float gravity, Vector2 position, Vector2 velocity, float width, float height, float sizeMultiplier, int maxRotationSpeed, String image) {
         this(position, velocity, width, height, image);
-        rotationSpeed = MathUtils.random(-maxRotationSpeed, maxRotationSpeed);
+        rotationSpeed = SABRandom.random(-maxRotationSpeed, maxRotationSpeed);
         this.gravity = gravity;
         this.sizeMultiplier = sizeMultiplier;
         type = 3;

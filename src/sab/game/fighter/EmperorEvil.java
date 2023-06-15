@@ -13,6 +13,7 @@ import sab.game.animation.Animation;
 import sab.game.attack.emperor_evil.*;
 import sab.game.particle.Particle;
 import sab.net.Keys;
+import sab.util.SABRandom;
 
 public class EmperorEvil extends FighterType {
     private Animation shootAnimation;
@@ -88,7 +89,7 @@ public class EmperorEvil extends FighterType {
                     }
                 }
 
-                if (isDirectlyHorizontal(target.hitbox) && isFacing(targetPosition.x) && Math.random() * 25 < difficulty) {
+                if (isDirectlyHorizontal(target.hitbox) && isFacing(targetPosition.x) && SABRandom.random() * 25 < difficulty) {
                     float horizontalDistance = Math.abs(center.x - targetPosition.x);
                     if (horizontalDistance > 90) {
                         useNeutralAttack();
@@ -150,7 +151,7 @@ public class EmperorEvil extends FighterType {
             player.velocity.y /= 3;
             player.velocity.x *= 0.9f;
             for (int i = 0; i < 8; i++) {
-                player.battle.addParticle(new Particle(player.hitbox.getCenter(new Vector2()), new Vector2(2 * MathUtils.random(-1f, 1f), 4 * MathUtils.random()), 64, 64, 0, "bananafire.png"));
+                player.battle.addParticle(new Particle(player.hitbox.getCenter(new Vector2()), new Vector2(2 * SABRandom.random(-1f, 1f), 4 * SABRandom.random()), 64, 64, 0, "bananafire.png"));
             }
         }
     }

@@ -10,6 +10,7 @@ import sab.game.stage.Ledge;
 import sab.game.stage.PassablePlatform;
 import sab.game.stage.Platform;
 import sab.net.Keys;
+import sab.util.SABRandom;
 
 public class BaseAI extends AI {
     private int mashCooldown;
@@ -232,7 +233,7 @@ public class BaseAI extends AI {
             FutureCollision collision = getFutureCollision(nearestAttack, difficulty * 5);
 
             if (collision != null) {
-                if (collision.ticksUntil() <= 20 && Math.random() * 10 < difficulty) {
+                if (collision.ticksUntil() <= 20 && SABRandom.random() * 10 < difficulty) {
                     parry(nearestAttack);
                     return;
                 }

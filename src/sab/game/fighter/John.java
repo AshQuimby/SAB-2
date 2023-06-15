@@ -16,6 +16,7 @@ import sab.game.attack.john.JohnSlam;
 import sab.game.attack.john.JohnSuck;
 import sab.game.screen.VictoryScreen;
 import sab.net.Keys;
+import sab.util.SABRandom;
 
 public class John extends FighterType {
     private Animation suckAnimation;
@@ -81,10 +82,10 @@ public class John extends FighterType {
 
                     if (ticksUntilInRange >= 16) {
                         useSideAttack();
-                    } else if (Math.random() * 25 < difficulty) {
+                    } else if (SABRandom.random() * 25 < difficulty) {
                         useUpAttack();
                     }
-                } else if (isDirectlyAbove(target.hitbox) && Math.random() * 20 < difficulty) {
+                } else if (isDirectlyAbove(target.hitbox) && SABRandom.random() * 20 < difficulty) {
                     useDownAttack();
                 }
             }

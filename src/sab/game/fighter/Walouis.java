@@ -16,6 +16,7 @@ import sab.game.attack.walouis.*;
 import sab.game.particle.Particle;
 import sab.net.Keys;
 import sab.util.Utils;
+import sab.util.SABRandom;
 
 public class Walouis extends FighterType {
     static {
@@ -72,7 +73,7 @@ public class Walouis extends FighterType {
                     }
                 }
 
-                if (Math.random() < .1f) {
+                if (SABRandom.random() < .1f) {
                     Rectangle futureTargetHitbox = new Rectangle(target.hitbox);
                     Vector2 futureTargetVelocity = target.velocity.cpy();
                     int ticksUntilCollision = 0;
@@ -96,7 +97,7 @@ public class Walouis extends FighterType {
 
                 if (isDirectlyHorizontal(target.hitbox) && isFacing(targetPosition.x)) {
                     float horizontalDistance = Math.abs(center.x - targetPosition.x);
-                    if (horizontalDistance > 275 && Math.random() * 25 < difficulty) {
+                    if (horizontalDistance > 275 && SABRandom.random() * 25 < difficulty) {
                         useDownAttack();
                     } else if (horizontalDistance < 150) {
                         useNeutralAttack();
@@ -126,7 +127,7 @@ public class Walouis extends FighterType {
             playingSaxFor--;
         }
         if (playingSaxFor == 740) {
-            if (MathUtils.randomBoolean(0.75f)) SABSounds.playSound("walouis_sax_solo.mp3");
+            if (SABRandom.randomBoolean(0.75f)) SABSounds.playSound("walouis_sax_solo.mp3");
             else SABSounds.playSound("walouis_sax_solo_alt.mp3");
         }
     }
@@ -179,7 +180,7 @@ public class Walouis extends FighterType {
 
     @Override
     public void charging(Fighter fighter, Player player, int charge) {
-        if (Game.game.window.getTick() % 4 == 0) player.battle.addParticle(new Particle(Utils.randomPointInRect(player.hitbox), new Vector2(1, 0).rotateDeg(MathUtils.random() * 360), 24, 24, "fire.png"));
+        if (Game.game.window.getTick() % 4 == 0) player.battle.addParticle(new Particle(Utils.randomPointInRect(player.hitbox), new Vector2(1, 0).rotateDeg(SABRandom.random() * 360), 24, 24, "fire.png"));
         player.velocity.y *= 0.85f;
         player.velocity.x *= 0.95f;
     }

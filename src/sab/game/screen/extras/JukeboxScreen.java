@@ -15,6 +15,7 @@ import sab.game.SABSounds;
 import sab.screen.Screen;
 import sab.screen.ScreenAdapter;
 import sab.util.Utils;
+import sab.util.SABRandom;
 
 public class JukeboxScreen extends ScreenAdapter {
     private static List<String> songIDs = new ArrayList<>();
@@ -125,7 +126,7 @@ public class JukeboxScreen extends ScreenAdapter {
     }
 
     private void createRaveLights() {
-        int numLights = MathUtils.random(4, 6);
+        int numLights = SABRandom.random(4, 6);
         for (int i = 0; i < numLights; i++) {
             raveLights.add(new RaveLight());
         }
@@ -208,24 +209,24 @@ public class JukeboxScreen extends ScreenAdapter {
         RaveLight() {
             ArrayList<Float> colors = new ArrayList<>();
             colors.add(1f);
-            colors.add(MathUtils.random() * 0.75f + 0.25f);
+            colors.add(SABRandom.random() * 0.75f + 0.25f);
             colors.add(0.25f);
             float[] rgb = new float[3];
             for (int i = 0; i < 3; i++) {
-                int colorIndex = MathUtils.random(colors.size() - 1);
+                int colorIndex = SABRandom.random(colors.size() - 1);
                 rgb[i] = colors.get(colorIndex);
                 colors.remove(colorIndex);
             }
             color = new Color(rgb[0], rgb[1], rgb[2], 0.25f);
 
-            rotation = MathUtils.random(0, 360);
-            rotationSpeed = MathUtils.random(-2f, 2f    );
-            x = MathUtils.random(-Game.game.window.resolutionX / 8, Game.game.window.resolutionX / 8);
+            rotation = SABRandom.random(0, 360);
+            rotationSpeed = SABRandom.random(-2f, 2f    );
+            x = SABRandom.random(-Game.game.window.resolutionX / 8, Game.game.window.resolutionX / 8);
         }
 
         void render(Seagraphics g) {
             rotation += (int) (rotationSpeed);
-            rotationSpeed += MathUtils.random(-0.005f, 0.005f) * songTempos.get(playing);
+            rotationSpeed += SABRandom.random(-0.005f, 0.005f) * songTempos.get(playing);
             rotationSpeed = Math.max(-6, Math.min(6, rotationSpeed));
             g.usefulTintDraw(g.imageProvider.getImage("rave_light.png"), x, -Game.game.window.resolutionY + 32, 256, 2560, 0, 1, (int) rotation, false, false, color);
         }

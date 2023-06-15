@@ -18,6 +18,7 @@ import sab.game.particle.Particle;
 import sab.net.Connection;
 import sab.net.Keys;
 import sab.util.Utils;
+import sab.util.SABRandom;
 
 import java.io.IOException;
 
@@ -81,11 +82,11 @@ public class EmptySoldier extends FighterType {
                     if (horizontalDistance <= SLASH_DISTANCE) {
                         useSideAttack();
                     } else {
-                        if (emptySoldier.spirit >= 15 && Math.random() * 25 < difficulty) {
+                        if (emptySoldier.spirit >= 15 && SABRandom.random() * 25 < difficulty) {
                             useNeutralAttack();
                         }
                     }
-                } else if (isDirectlyAbove(target.hitbox) && Math.random() * 20 < difficulty) {
+                } else if (isDirectlyAbove(target.hitbox) && SABRandom.random() * 20 < difficulty) {
                     useDownAttack();
                 }
             }
