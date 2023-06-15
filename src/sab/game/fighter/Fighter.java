@@ -15,7 +15,7 @@ public class Fighter implements Cloneable {
     /*
      * The "id" value may be confusing, but it works internally
      * Instead of having to have multiple different strings for every possible image the character uses
-     * we use "id" to tell the program the first word in all the image files.
+     * we use "id" to tell the program the derivative of all the image files.
      * This does mean that the names of images for fighters have to be standardized:
      * 
      * In battle art is "<id>.png"
@@ -41,11 +41,11 @@ public class Fighter implements Cloneable {
     public int renderWidth;
     public int renderHeight;
 
-    // The offset of the character's hitbox (This allows you to have hitboxes that line up with the image of the character)
+    // The offset of the character's hitbox (This allows you to have hitboxes that are not the same size but still line up with the image of the character)
     public int imageOffsetX;
     public int imageOffsetY;
 
-    // The offset of held items based off of the selected fighter
+    // The offset of held items based off of the selected fighter, only used for Unnamed Duck
     public Vector2 itemOffset;
 
     // The number of midair jumps this character can use

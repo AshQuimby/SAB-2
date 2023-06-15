@@ -27,6 +27,7 @@ import sab.util.SABRandom;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.nio.ByteBuffer;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -81,6 +82,10 @@ public class Game extends Messenger {
         } else {
             return 1.5f;
         }
+    }
+
+    public Screen getScreen() {
+        return screen;
     }
 
     public SpriteShader getShader(String id) {
@@ -212,6 +217,19 @@ public class Game extends Messenger {
         checkControllerKeys();
         screen = screen.update();
         controllerManager.update();
+    }
+
+    public FighterType fighterFromString(String string) {
+        for (Class<? extends FighterType> fighter : fighters) {
+            if (fighter.getName().equals(string)) {
+                try {
+                    return (FighterType) fighter.getConstructors()[0].newInstance(null);
+                } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+        return null;
     }
 
     public void checkControllerKeys() {

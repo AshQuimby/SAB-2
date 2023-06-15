@@ -28,6 +28,7 @@ import sab.game.stage.Stage;
 import sab.game.stage.StageObject;
 import sab.net.Keys;
 import sab.net.VoidFunction;
+import sab.replay.ReplayAI;
 import sab.util.Utils;
 import sab.util.SABRandom;
 
@@ -68,8 +69,10 @@ public class Battle {
     // Pause game variables
     // Pausing should not be available on servers unless the server owner pauses the game
     private boolean paused;
+    public boolean hasAssBalls;
+    public boolean hasStageHazards;
     private boolean pauseOverlayHidden;
-    private int pauseMenuIndex;
+    public int pauseMenuIndex;
     private int battleTick;
     private int parryFlash;
 
@@ -80,19 +83,25 @@ public class Battle {
     // Callbacks
     private VoidFunction<Particle> spawnParticleCallback;
 
-    public Battle(Fighter fighter1, Fighter fighter2, int[] costumes, Stage stage, int player1Type, int player2Type, int lives) {
-        seed = System.currentTimeMillis();
+    public Battle(long seed, Fighter fighter1, Fighter fighter2, int[] costumes, Stage stage, int player1Type, int player2Type, int lives, boolean hasAssBalls, boolean hasStageHazards) {
         SABRandom.createNewBattleRandom(seed);
         Game.controllerManager.setInGameState(true);
         this.stage = stage;
         stage.setBattle(this);
         stage.init();
 
+        this.hasAssBalls = hasAssBalls;
+        this.hasStageHazards = hasStageHazards;
+
         players = new ArrayList<>();
         player1 = new Player(fighter1, costumes[0], 0, lives, this);
         player1.setAI(player1Type == 0 ? null : player1.fighter.getAI(player1, player1Type));
+
+        if (player1Type == -1) player1.setAI(new ReplayAI());
         player2 = new Player(fighter2, costumes[1], 1, lives, this);
         player2.setAI(player2Type == 0 ? null : player2.fighter.getAI(player2, player2Type));
+
+        if (player2Type == -1) player2.setAI(new ReplayAI());
         player2.direction = -1;
         paused = false;
         pauseOverlayHidden = false;
@@ -134,7 +143,7 @@ public class Battle {
 
     // Relic of the past
     public Battle() {
-        this(new Fighter(new Marvin()), new Fighter(new Chain()), new int[] {0, 0}, new Stage(new LastLocation()), 0, 0, 3);
+        this(System.currentTimeMillis(), new Fighter(new Marvin()), new Fighter(new Chain()), new int[] {0, 0}, new Stage(new LastLocation()), 0, 0, 3, true, true);
     }
 
     public void setDialogue(Dialogue dialogue) {
@@ -349,11 +358,12 @@ public class Battle {
         newGameObjects.clear();
     }
 
-    public void update() {
+    // Returns true if a tick passed, returns false if cut off
+    public boolean update() {
         if (currentDialogue != null) {
             continueDialogue();
             updatePlayerKeys();
-            return;
+            return false;
         }
 
         if (screenShatter > 0) {
@@ -369,18 +379,13 @@ public class Battle {
         }
 
         if (paused) {
-            if (player1.keys.isJustPressed(Keys.DOWN) || player2.keys.isJustPressed(Keys.DOWN)) {
-                pauseMenuIndex = Utils.loop(pauseMenuIndex, 1, 3, 0);
-            } else if (player1.keys.isJustPressed(Keys.UP) || player2.keys.isJustPressed(Keys.UP)) {
-                pauseMenuIndex = Utils.loop(pauseMenuIndex, -1, 3, 0);
-            }
             if (player1.keys.isJustPressed(Keys.ATTACK) || player2.keys.isJustPressed(Keys.ATTACK)) {
                 triggerPauseMenu();
             }
             for (Player player : players) {
                 player.keys.update();
             }
-            return;
+            return false;
         }
 
         for (PlayerController playerController : Game.controllerManager.getControllers()) {
@@ -392,11 +397,11 @@ public class Battle {
             if (slowdownDuration > 0) {
                 if (Game.game.window.getTick() % slowdown == 0) updateCameraEffects();
             }
-            return;
+            return false;
         } else {
             if (slowdownDuration > 0) {
                 slowdownDuration--;
-                if (Game.game.window.getTick() % slowdown != 0) return;
+                if (Game.game.window.getTick() % slowdown != 0) return false;
             } else {
                 zoomOnFreeze = false;
             }
@@ -404,7 +409,7 @@ public class Battle {
         updateCameraEffects();
         battleTick++;
 
-        if (Settings.getAssBalls()) {
+        if (hasAssBalls) {
             assBallSpawnTime--;
             if (assBallSpawnTime <= 0) {
                 spawnAssBall();
@@ -497,6 +502,8 @@ public class Battle {
         for (Player player : players) {
             player.keys.update();
         }
+
+        return true;
     }
 
     public void postUpdate() {

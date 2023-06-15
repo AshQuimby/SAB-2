@@ -13,7 +13,6 @@ import sab.util.SABRandom;
 public class Chain extends FighterType {
     private Animation swingAnimation;
     private Animation flyingAnimation;
-
     private Attack boomerangKnife;
     private Attack fallingKnife;
 

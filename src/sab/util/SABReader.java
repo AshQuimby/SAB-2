@@ -6,10 +6,11 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 
 
-public class SabReader {
+public class SABReader {
     public static HashMap<String, String> read(File file) {
         HashMap<String, String> contents = new HashMap<>();
         Scanner scanner = null;
@@ -63,7 +64,7 @@ public class SabReader {
         return null;
     }
 
-    public static void write(HashMap<String, String> data, File file) throws FileNotFoundException, IOException {
+    public static void write(Map<String, String> data, File file) throws IOException {
         String path = file.getPath();
         if (file.exists()) {
             Files.delete(file.toPath());
@@ -72,8 +73,18 @@ public class SabReader {
         f.createNewFile();
         FileWriter writer = new FileWriter(f);
         for (String key : data.keySet()) {
-            writer.write("@" + key + " " + data.get(key) + "\n");
+            if (data.get(key).length() > 0) writer.write("@" + key + " " + data.get(key) + "\n");
         }
         writer.close();
+    }
+
+    public static void createFile(String path, Map<String, String> data) throws IOException {
+        File f = new File(path);
+
+        if (f.exists()) throw new IllegalArgumentException("Specified path already exists");
+
+        f.createNewFile();
+
+        write(data, f);
     }
 }

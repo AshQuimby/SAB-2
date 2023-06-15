@@ -16,7 +16,7 @@ import sab.game.fighter.FighterType;
 import sab.modloader.ModLoader;
 import sab.screen.Screen;
 import sab.screen.ScreenAdapter;
-import sab.util.SabReader;
+import sab.util.SABReader;
 import sab.util.Utils;
 
 public class FightersScreen extends ScreenAdapter {
@@ -40,7 +40,7 @@ public class FightersScreen extends ScreenAdapter {
 
         g.drawText(fighters.get(characterIndex).name, Game.getDefaultFont(), 0, Game.game.window.resolutionY / 2 - 64, 3 * Game.getDefaultFontScale(), Color.WHITE, 0);
 
-        String timesPlayed = SabReader.readProperty(fighters.get(characterIndex).id, new File("../saves/times_played.sab"));
+        String timesPlayed = SABReader.readProperty(fighters.get(characterIndex).id, new File("../saves/times_played.sab"));
         if (timesPlayed == null) {
             timesPlayed = "Why haven't you played me yet :(";
         } else {

@@ -13,7 +13,7 @@ import sab.net.client.Client;
 import sab.net.packet.*;
 import sab.screen.Screen;
 import sab.screen.ScreenAdapter;
-import sab.util.SabReader;
+import sab.util.SABReader;
 import sab.util.Utils;
 
 import java.io.File;
@@ -58,7 +58,7 @@ public class JoinGameScreen extends ScreenAdapter {
         }
 
         file = new File("../saves/servers.sab");
-        HashMap<String, String> servers = SabReader.read(file);
+        HashMap<String, String> servers = SABReader.read(file);
 
         String mostRecent = servers.get("most_recent");
         if (mostRecent != null) {
@@ -72,11 +72,11 @@ public class JoinGameScreen extends ScreenAdapter {
 
     private void join() {
         File serversFile = new File("../saves/servers.sab");
-        HashMap<String, String> servers = SabReader.read(serversFile);
+        HashMap<String, String> servers = SABReader.read(serversFile);
         servers.put("most_recent", hostIp);
         servers.put(hostIp, hostPort);
         try {
-            SabReader.write(servers, serversFile);
+            SABReader.write(servers, serversFile);
         } catch (IOException e) {
             e.printStackTrace();
         }

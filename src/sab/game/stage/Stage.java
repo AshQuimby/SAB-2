@@ -29,7 +29,7 @@ public class Stage {
     protected Rectangle unsafeBlastZone;
 
     protected Battle battle;
-    private StageType type;
+    public StageType type;
 
     public Stage(StageType type) {
         id = "stage";

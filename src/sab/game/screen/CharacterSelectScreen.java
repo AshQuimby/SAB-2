@@ -1,7 +1,6 @@
 package sab.game.screen;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -9,18 +8,15 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.math.MathUtils;
 import com.seagull_engine.Seagraphics;
 
 import sab.error.SabError;
 import sab.game.Game;
 import sab.game.Player;
 import sab.game.SABSounds;
-import sab.game.Settings;
 import sab.game.fighter.Fighter;
 import sab.game.fighter.FighterType;
 import sab.game.fighter.Random;
@@ -32,7 +28,7 @@ import sab.net.packet.Packet;
 import sab.net.packet.ScreenTransitionPacket;
 import sab.net.server.Server;
 import sab.screen.Screen;
-import sab.util.SabReader;
+import sab.util.SABReader;
 import sab.util.Utils;
 import sab.util.SABRandom;
 
@@ -319,7 +315,7 @@ public class CharacterSelectScreen extends NetScreen {
         }
 
         file = new File("../saves/times_played.sab");
-        HashMap<String, String> timesPlayed = SabReader.read(file);
+        HashMap<String, String> timesPlayed = SABReader.read(file);
 
         String id1 = player1.availableFighters.get(player1.index).id;
         String id2 = player2.availableFighters.get(player2.index).id;
@@ -328,7 +324,7 @@ public class CharacterSelectScreen extends NetScreen {
 
         File legacyFile = new File("../saves/timesplayed.sab");
         if (legacyFile.exists()) {
-            HashMap<String, String> legacyTimesPlayed = SabReader.read(legacyFile);
+            HashMap<String, String> legacyTimesPlayed = SABReader.read(legacyFile);
             for (String fighter : legacyTimesPlayed.keySet()) {
                 String amount = legacyTimesPlayed.get(fighter);
                 try {
@@ -344,7 +340,7 @@ public class CharacterSelectScreen extends NetScreen {
         }
 
         try {
-            SabReader.write(timesPlayed, file);
+            SABReader.write(timesPlayed, file);
         } catch (IOException e) {
             e.printStackTrace();
         }

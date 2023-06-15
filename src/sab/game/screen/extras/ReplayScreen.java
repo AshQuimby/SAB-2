@@ -1,5 +1,6 @@
 package sab.game.screen.extras;
 
+import com.badlogic.gdx.Files;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
@@ -13,12 +14,20 @@ import sab.replay.Replay;
 import sab.screen.Screen;
 import sab.util.Utils;
 
-public class ExtrasScreen extends SelectorScreen {
-    
-    public ExtrasScreen() {
-        super(new String[] {"Fighters", "Credits", "Jukebox", "Mods", "Replays", "Back"});
+import java.io.File;
+
+public class ReplayScreen extends SelectorScreen {
+
+    public ReplayScreen() {
+        super(new File("../saves/replays").list());
+        String[] replays = new String[options.length + 1];
+        for (int i = 0; i < options.length; i++) {
+            replays[i] = options[i];
+        }
+        replays[options.length] = "Back";
+        options = replays;
     }
-    
+
     @Override
     public void render(Seagraphics g) {
         g.useDynamicCamera();
@@ -37,7 +46,7 @@ public class ExtrasScreen extends SelectorScreen {
             //float color = i == selectorIndex ? 1f : 0;
 
             //g.usefulTintDraw(g.imageProvider.getImage("pixel.png"), bounds.x - 4, bounds.y + 4, (int) bounds.width + 9, (int) -bounds.height - 9, 1, 0, 0, false, false,
-                    //new Color(color, color, color, 0.5f));
+            //new Color(color, color, color, 0.5f));
 
             //g.drawText(options[i], Game.getDefaultFont(), 0,  i * -52 - 26, 1.5f * Game.getDefaultFontScale(), Color.WHITE, 0);
             Utils.drawButton(g, 0, -i * 52 - 26, options[i],1.5f * Game.getDefaultFontScale(), selectorIndex == i);
@@ -47,37 +56,12 @@ public class ExtrasScreen extends SelectorScreen {
     @Override
     public Screen onSelect(int selection) {
         SABSounds.playSound(SABSounds.SELECT);
-        switch(selection) {
-            case 0 -> {
-                Game.game.window.camera.reset();
-                return new FightersScreen();
-            }
-            case 1 -> {
-                Game.game.window.camera.reset();
-                return new CreditsScreen();
-            }
-            case 2 -> {
-                Game.game.window.camera.reset();
-                return new JukeboxScreen();
-            }
-
-            case 3 -> {
-            }
-
-            case 4 -> {
-                Game.game.window.camera.reset();
-                return new ReplayScreen();
-            }
-
-            case 5 -> {
-                return onBack();
-            }
-            default -> {
-
-            }
+        if (selection == options.length - 1) {
+            return onBack();
+        } else {
+            File[] replays = new File("../saves/replays").listFiles();
+            return new BattleScreen(replays[selection]);
         }
-
-        return this;
     }
 
     @Override

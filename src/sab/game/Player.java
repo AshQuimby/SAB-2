@@ -20,6 +20,7 @@ import sab.game.item.Item;
 import sab.game.particle.Particle;
 import sab.game.stage.Ledge;
 import sab.net.Keys;
+import sab.replay.ReplayAI;
 import sab.util.SABRandom;
 
 public class Player extends GameObject implements Hittable {
@@ -139,8 +140,12 @@ public class Player extends GameObject implements Hittable {
     }
 
     public void setAI(AI ai) {
-        if (ai != null) gameStats.setType("AI " + fighter.name, id);
+        if (ai != null && !(ai instanceof ReplayAI)) gameStats.setType("AI " + fighter.name, id);
         this.ai = ai;
+    }
+
+    public boolean isHuman() {
+        return ai == null;
     }
 
     public void move(Vector2 v) {

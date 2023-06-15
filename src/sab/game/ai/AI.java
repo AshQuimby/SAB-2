@@ -1,5 +1,7 @@
 package sab.game.ai;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.seagull_engine.GameObject;
@@ -9,11 +11,13 @@ import sab.game.Game;
 import sab.game.Player;
 import sab.game.ass_ball.AssBall;
 import sab.game.attack.Attack;
+import sab.game.screen.BattleScreen;
 import sab.game.stage.Ledge;
 import sab.game.stage.Platform;
 import sab.net.Keys;
 import sab.util.Utils;
 
+import java.security.Key;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
@@ -34,24 +38,44 @@ public class AI {
 
     // Presses the key in the player object attached to this class
     public final void pressKey(int keyCode) {
-        if (!isKeyLocked(keyCode)) player.keys.press(keyCode);
+        if (!isKeyLocked(keyCode)) {
+            player.keys.press(keyCode);
+//            if (player.battle != null) {
+//                BattleScreen battleScreen = (BattleScreen) Game.game.getScreen();
+//                battleScreen.keyPressed(getGdxKeyCode(keyCode));
+//            }
+        }
     }
 
     // Releases the key in the player object attached to this class
     public final void releaseKey(int keyCode) {
-        if (!isKeyLocked(keyCode)) player.keys.release(keyCode);
+        if (!isKeyLocked(keyCode)) {
+            player.keys.release(keyCode);
+//            if (player.battle != null) {
+//                BattleScreen battleScreen = (BattleScreen) Game.game.getScreen();
+//                battleScreen.keyReleased(getGdxKeyCode(keyCode));
+//            }
+        }
     }
 
     // Presses the key in the player object attached to this class only if it isn't pressed
     public final void tapKey(int keyCode) {
-        if (!isKeyLocked(keyCode)) if (!player.keys.isPressed(keyCode)) player.keys.press(keyCode);
+        if (!isKeyLocked(keyCode)) {
+            if (!player.keys.isPressed(keyCode)) {
+                player.keys.press(keyCode);
+            }
+        }
     }
 
     // Toggles between the states of the key in the player object attached to this class
     public final void toggleKey(int keyCode) {
-        if (!isKeyLocked(keyCode))
-            if (player.keys.isPressed(keyCode)) player.keys.release(keyCode);
-            else player.keys.release(keyCode);
+        if (!isKeyLocked(keyCode)) {
+            if (player.keys.isPressed(keyCode)) {
+                player.keys.release(keyCode);
+            } else {
+                player.keys.press(keyCode);
+            }
+        }
     }
 
     // Locks the status of the key, causing the press, release, tap, and toggle key methods to do nothing
@@ -62,6 +86,26 @@ public class AI {
     // Unlocks the status of the key
     public final void unlockKey(int keyCode) {
         if (isKeyLocked(keyCode)) lockedKeys.remove(keyCode);
+    }
+
+    // Returns -1 if keyCode is not a key that AIs can press
+    public int getGdxKeyCode(int keyCode) {
+        if (player.getId() == 0) {
+            if (keyCode == Keys.UP) return Input.Keys.W;
+            if (keyCode == Keys.DOWN) return Input.Keys.S;
+            if (keyCode == Keys.LEFT) return Input.Keys.A;
+            if (keyCode == Keys.RIGHT) return Input.Keys.D;
+            if (keyCode == Keys.ATTACK) return Input.Keys.F;
+            if (keyCode == Keys.PARRY) return Input.Keys.T;
+        } else if (player.getId() == 1) {
+            if (keyCode == Keys.UP) return Input.Keys.UP;
+            if (keyCode == Keys.DOWN) return Input.Keys.DOWN;
+            if (keyCode == Keys.LEFT) return Input.Keys.LEFT;
+            if (keyCode == Keys.RIGHT) return Input.Keys.RIGHT;
+            if (keyCode == Keys.ATTACK) return Input.Keys.M;
+            if (keyCode == Keys.PARRY) return Input.Keys.N;
+        }
+        return -1;
     }
 
     public final boolean isKeyLocked(int keyCode) {

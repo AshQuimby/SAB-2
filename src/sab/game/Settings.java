@@ -5,7 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashMap;
 
-import sab.util.SabReader;
+import sab.util.SABReader;
 
 public class Settings {
     private static boolean staticCamera;
@@ -26,7 +26,7 @@ public class Settings {
         HashMap<String, String> settings = null;
 
         try {
-            settings = SabReader.read(new File("../settings.sab"));
+            settings = SABReader.read(new File("../settings.sab"));
         } catch (RuntimeException e) {
             readError();
             loadSettings();
@@ -73,7 +73,7 @@ public class Settings {
 
     public static void writeFile() {
         try {
-            SabReader.write(toHashMap(), new File("../settings.sab"));
+            SABReader.write(toHashMap(), new File("../settings.sab"));
         } catch (FileNotFoundException e) {
         } catch (IOException e) {
         }
