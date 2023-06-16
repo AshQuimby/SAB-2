@@ -135,7 +135,9 @@ public class BaseAI extends AI {
     }
     
     @Override
-    public void update() {
+    public final void update() {
+        super.update();
+
         dontChase = false;
         releaseAllKeys();
         unlockAllKeys();

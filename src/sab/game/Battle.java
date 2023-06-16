@@ -94,14 +94,17 @@ public class Battle {
         this.hasStageHazards = hasStageHazards;
 
         players = new ArrayList<>();
+
         player1 = new Player(fighter1, costumes[0], 0, lives, this);
         player1.setAI(player1Type == 0 ? null : player1.fighter.getAI(player1, player1Type));
 
         if (player1Type == -1) player1.setAI(new ReplayAI());
+
         player2 = new Player(fighter2, costumes[1], 1, lives, this);
         player2.setAI(player2Type == 0 ? null : player2.fighter.getAI(player2, player2Type));
 
         if (player2Type == -1) player2.setAI(new ReplayAI());
+
         player2.direction = -1;
         paused = false;
         pauseOverlayHidden = false;

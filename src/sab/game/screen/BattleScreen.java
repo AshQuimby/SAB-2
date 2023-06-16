@@ -47,10 +47,12 @@ public class BattleScreen extends NetScreen {
         costumes[1] = Integer.parseInt(SABReader.readProperty("player2Costume", replay));
 
         int lives = Integer.parseInt(SABReader.readProperty("lives", replay));
-        int player1Type = Integer.parseInt(SABReader.readProperty("player1AI", replay));
-        int player2Type = Integer.parseInt(SABReader.readProperty("player2AI", replay));
-        if (player2Type == 0) player2Type = -1;
-        if (player1Type == 0) player1Type = -1;
+//        int player1Type = Integer.parseInt(SABReader.readProperty("player1AI", replay));
+//        int player2Type = Integer.parseInt(SABReader.readProperty("player2AI", replay));
+//        if (player2Type == 0) player2Type = -1;
+//        if (player1Type == 0) player1Type = -1;
+        int player1Type = -1;
+        int player2Type = -1;
 
         boolean assBalls = Boolean.parseBoolean(SABReader.readProperty("assBalls", replay));
         boolean stageHazards = Boolean.parseBoolean(SABReader.readProperty("stageHazards", replay));

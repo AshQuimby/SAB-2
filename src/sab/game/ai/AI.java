@@ -26,35 +26,48 @@ public class AI {
     protected final Player player;
     protected int difficulty;
     private final Set<Integer> lockedKeys;
+    private final Set<Integer> keyState;
 
     public AI(Player player, int difficulty) {
         this.player = player;
         this.difficulty = difficulty;
         lockedKeys = new HashSet<>();
+        keyState = new HashSet<>();
     }
 
     public void update() {
     }
 
+    public void updateKeys() {
+        for (int i = 0; i < 6; i++) {
+            if (player.keys.isValidInput(i) && keyState.contains(i)) {
+                if (!player.keys.isPressed(i)) {
+                    player.keys.press(i);
+                    BattleScreen battleScreen = (BattleScreen) Game.game.getScreen();
+                    battleScreen.keyPressed(getGdxKeyCode(i));
+                }
+            } else {
+                if (player.keys.isPressed(i)) {
+                    player.keys.release(i);
+                    BattleScreen battleScreen = (BattleScreen) Game.game.getScreen();
+                    battleScreen.keyReleased(getGdxKeyCode(i));
+                }
+            }
+        }
+        keyState.clear();
+    }
+
     // Presses the key in the player object attached to this class
     public final void pressKey(int keyCode) {
         if (!isKeyLocked(keyCode)) {
-            player.keys.press(keyCode);
-//            if (player.battle != null) {
-//                BattleScreen battleScreen = (BattleScreen) Game.game.getScreen();
-//                battleScreen.keyPressed(getGdxKeyCode(keyCode));
-//            }
+            if (!keyState.contains(keyCode)) keyState.add(keyCode);
         }
     }
 
     // Releases the key in the player object attached to this class
     public final void releaseKey(int keyCode) {
         if (!isKeyLocked(keyCode)) {
-            player.keys.release(keyCode);
-//            if (player.battle != null) {
-//                BattleScreen battleScreen = (BattleScreen) Game.game.getScreen();
-//                battleScreen.keyReleased(getGdxKeyCode(keyCode));
-//            }
+            if (keyState.contains(keyCode)) keyState.remove(keyCode);
         }
     }
 
@@ -62,7 +75,7 @@ public class AI {
     public final void tapKey(int keyCode) {
         if (!isKeyLocked(keyCode)) {
             if (!player.keys.isPressed(keyCode)) {
-                player.keys.press(keyCode);
+                pressKey(keyCode);
             }
         }
     }
@@ -71,9 +84,9 @@ public class AI {
     public final void toggleKey(int keyCode) {
         if (!isKeyLocked(keyCode)) {
             if (player.keys.isPressed(keyCode)) {
-                player.keys.release(keyCode);
+                releaseKey(keyCode);
             } else {
-                player.keys.press(keyCode);
+                pressKey(keyCode);
             }
         }
     }

@@ -393,7 +393,10 @@ public class Player extends GameObject implements Hittable {
             }
         }
 
-        if (ai != null) ai.update();
+        if (ai != null && !(ai instanceof ReplayAI)) {
+            ai.update();
+            ai.updateKeys();
+        }
 
         if (stunned > 0) {
             if (hasAction()) resetAction();
