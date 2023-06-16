@@ -29,6 +29,8 @@ public class Player extends GameObject implements Hittable {
     public boolean usedMacro;
     private boolean assCharged;
 
+    public boolean ignoreSlowdowns;
+
     public InputState keys;
     public Fighter fighter;
     public int damage;
