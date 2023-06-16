@@ -404,7 +404,33 @@ public class Battle {
         } else {
             if (slowdownDuration > 0) {
                 slowdownDuration--;
-                if (Game.game.window.getTick() % slowdown != 0) return false;
+                if (Game.game.window.getTick() % slowdown != 0) {
+                    for (Player player : players) {
+                        if (player.ignoreSlowdowns) {
+                            player.preUpdate();
+
+                            for (Attack attack : attacks) {
+                                if (attack.owner == player) {
+                                    attack.preUpdate();
+                                }
+                            }
+                        }
+                    }
+                    for (Player player : players) {
+                        if (player.ignoreSlowdowns) {
+                            player.lateUpdate();
+
+                            for (Attack attack : attacks) {
+                                if (attack.owner == player) {
+                                    attack.lateUpdate();
+                                }
+                            }
+
+                            player.keys.update();
+                        }
+                    }
+                    return false;
+                }
             } else {
                 zoomOnFreeze = false;
             }
@@ -512,7 +538,8 @@ public class Battle {
     public void postUpdate() {
         if (!paused && currentDialogue == null) {
             for (Player player : players) {
-                player.physicsUpdate(freezeFrames > 0 ? 0 : slowdownDuration > 0 ? 1f / slowdown : 1f);
+                if (player.ignoreSlowdowns) player.physicsUpdate(freezeFrames > 0 ? 0 : 1);
+                else player.physicsUpdate(freezeFrames > 0 ? 0 : slowdownDuration > 0 ? 1f / slowdown : 1f);
             }
         }
 

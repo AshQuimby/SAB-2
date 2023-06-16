@@ -1,6 +1,5 @@
 package sab.game.fighter;
 
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.seagull_engine.GameObject;
 import com.seagull_engine.Seagraphics;
@@ -11,16 +10,18 @@ import sab.game.ai.AI;
 import sab.game.ai.BaseAI;
 import sab.game.animation.Animation;
 import sab.game.attack.Attack;
-import sab.game.attack.matthew.MatthewSlash;
-import sab.game.attack.matthew.MegaCounterSlash;
-import sab.game.attack.matthew.PogoSword;
-import sab.game.attack.matthew.UpwardsSlash;
+import sab.game.attack.matthew.*;
 import sab.game.particle.Particle;
 import sab.net.Keys;
 import sab.util.Utils;
 import sab.util.SABRandom;
 
 public class Matthew extends FighterType {
+    private static final int FULL_SLOWDOWN_DURATION = 480;
+    private static final int FULL_SLOWDOWN_STRENGTH = 3;
+
+    private static final int PARTIAL_SLOWDOWN_DURATION = 120;
+    private static final int PARTIAL_SLOWDOWN_STRENGTH = 2;
 
     private Animation swingAnimation;
     private Animation bigSwingAnimation;
@@ -28,6 +29,8 @@ public class Matthew extends FighterType {
     private Animation failedParryAnimation;
     private Animation verticalThrustAnimation;
     private int counterCharge;
+    private int slowdownTimeTime;
+    private boolean usedDashSlash;
 
     @Override
     public void setDefaults(Fighter fighter) {
@@ -130,8 +133,14 @@ public class Matthew extends FighterType {
 
     @Override
     public void sideAttack(Fighter fighter, Player player) {
-        swingAnimation.reset();
-        player.startAttack(new MatthewSlash(), swingAnimation, 4, 12, false);
+        if (slowdownTimeTime > 0 && !usedDashSlash) {
+            verticalThrustAnimation.reset();
+            player.startAttack(new DashSlash(), verticalThrustAnimation, 4, 12, true);
+            usedDashSlash = true;
+        } else {
+            swingAnimation.reset();
+            player.startAttack(new MatthewSlash(), swingAnimation, 4, 12, false);
+        }
     }
 
     @Override
@@ -156,6 +165,16 @@ public class Matthew extends FighterType {
             player.velocity.x = 0;
             player.velocity.y = 0;
         }
+
+        if (slowdownTimeTime > 0) {
+            if (slowdownTimeTime <= PARTIAL_SLOWDOWN_DURATION) {
+                player.battle.slowdown(PARTIAL_SLOWDOWN_STRENGTH, PARTIAL_SLOWDOWN_STRENGTH);
+            } else {
+                player.battle.slowdown(FULL_SLOWDOWN_STRENGTH, FULL_SLOWDOWN_STRENGTH);
+            }
+            slowdownTimeTime--;
+            player.ignoreSlowdowns = true;
+        } else player.ignoreSlowdowns = false;
     }
 
     @Override
@@ -189,5 +208,17 @@ public class Matthew extends FighterType {
     @Override
     public void renderUI(Fighter fighter, Player player, Seagraphics g) {
         g.usefulDraw(g.imageProvider.getImage("matthew_ui.png"), player.getId() == 0 ? -256 - 56 - 12 : 256 + 4, -256, 64, 48, counterCharge == 0 ? 0 : (counterCharge + 2 * player.costume), 7, 0, false, false);
+    }
+
+    @Override
+    public boolean finalAss(Fighter fighter, Player player) {
+        slowdownTimeTime = FULL_SLOWDOWN_DURATION + PARTIAL_SLOWDOWN_DURATION;
+        usedDashSlash = false;
+        return true;
+    }
+
+    @Override
+    public void onKill(Fighter fighter, Player player) {
+        slowdownTimeTime = 0;
     }
 }
