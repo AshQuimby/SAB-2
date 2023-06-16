@@ -17,7 +17,6 @@ public class JohnSlam extends MeleeAttackType {
     @Override
     public void setDefaults(Attack attack) {
         attack.imageName = "none.png";
-        attack.basedOffCostume = true;
         attack.life = -1;
         attack.velocity = new Vector2();
         attack.hitbox.width = 72;

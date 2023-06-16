@@ -81,7 +81,7 @@ public class Utils {
     }
 
     public static Vector2 randomParticleVelocity(float magnitude) {
-        return new Vector2(magnitude, 0).rotateDeg(SABRandom.random(0, 360));
+        return new Vector2(magnitude, 0).rotateDeg(SABRandom.random(0, 360)).scl(SABRandom.random());
     }
 
     public static String appendCostumeToIdentifier(String base, int costume, String fileFormat) {

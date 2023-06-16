@@ -10,10 +10,9 @@ import sab.game.SABSounds;
 import sab.game.ai.AI;
 import sab.game.ai.BaseAI;
 import sab.game.animation.Animation;
-import sab.game.attack.john.DownPunch;
-import sab.game.attack.john.JohnPunch;
-import sab.game.attack.john.JohnSlam;
-import sab.game.attack.john.JohnSuck;
+import sab.game.attack.Attack;
+import sab.game.attack.john.*;
+import sab.game.particle.Particle;
 import sab.game.screen.VictoryScreen;
 import sab.net.Keys;
 import sab.util.SABRandom;
@@ -25,6 +24,7 @@ public class John extends FighterType {
     private Animation johnWalkAnimation;
     private Animation downPunchAnimation;
     private boolean justWon;
+    private int ballTransformTime;
 
     @Override
     public void setDefaults(Fighter fighter) {
@@ -118,6 +118,23 @@ public class John extends FighterType {
         } else {
             fighter.walkAnimation = johnWalkAnimation;
         }
+
+        if (ballTransformTime > 0) {
+            ballTransformTime--;
+            if (ballTransformTime > 60) {
+                if (ballTransformTime % 16 == 0) SABSounds.playSound("swish.mp3");
+                player.frame = 12;
+            } else {
+                if (ballTransformTime % 8 == 0) SABSounds.playSound("swish.mp3");
+                player.frame = 13;
+            }
+            Vector2 particleSpawnPos = player.getCenter().add(new Vector2(128 * player.direction, 0).rotateDeg(SABRandom.random(-30f, 30f)));
+            Vector2 particleVelocity = player.getCenter().sub(particleSpawnPos).scl(0.05f);
+            player.battle.addParticle(new Particle(particleSpawnPos, particleVelocity, 24, 24, "smoke.png"));
+            if (ballTransformTime == 0) {
+                player.battle.createAttack(new JohnBall(), player, null);
+            }
+        }
     }
 
     @Override
@@ -158,6 +175,14 @@ public class John extends FighterType {
                 player.startAttack(new DownPunch(), downPunchAnimation, 6, 6, false);
             }
         }
+    }
+
+    @Override
+    public boolean finalAss(Fighter fighter, Player player) {
+        player.stun(120);
+        player.setIFrames(120);
+        ballTransformTime = 120;
+        return true;
     }
 
     @Override

@@ -39,6 +39,7 @@ public class Attack extends DamageSource {
         this.updatesPerTick = updatesPerTick;
         this.owner = owner;
         this.originalOwner = owner;
+        collisionDirection = Direction.NONE;
     }
 
     public Attack(AttackType type, Player player) {
@@ -61,6 +62,7 @@ public class Attack extends DamageSource {
         canHit = true;
         this.type = type;
         type.setDefaults(this);
+        collisionDirection = Direction.NONE;
         if (basedOffCostume) {
             if (owner.costume > 0) {
                 imageName = Utils.applyCostumeToFilename(imageName, owner.costume, "png");

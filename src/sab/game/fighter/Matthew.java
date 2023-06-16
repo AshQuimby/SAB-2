@@ -188,6 +188,6 @@ public class Matthew extends FighterType {
 
     @Override
     public void renderUI(Fighter fighter, Player player, Seagraphics g) {
-        g.usefulDraw(g.imageProvider.getImage("matthew_ui.png"), player.getId() == 0 ? -256 - 56 - 12 : 256 + 4, -256, 64, 48, counterCharge == 0 ? 0 : (counterCharge + 2 * player.costume), 7, 0, false, false);
+        g.usefulDraw(g.imageProvider.getImage("matthew_ui.png"), player.getId() == 0 ? -256 - 56 - 12 : 256 + 4, -256, 64, 48, counterCharge == 0 ? 0 : (counterCharge + 3 * player.costume), 10, 0, false, false);
     }
 }

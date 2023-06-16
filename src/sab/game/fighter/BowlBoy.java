@@ -124,7 +124,7 @@ public class BowlBoy extends FighterType {
         freefallNormalAnimation = new Animation(new int[]{ 3 }, 4, true);
         exUseAnimation = new Animation(8, 12, 6, true);
         fighter.freefallAnimation = freefallNormalAnimation;
-        fighter.costumes = 3;
+        fighter.costumes = 2;
     }
 
     public int getCardCount() {

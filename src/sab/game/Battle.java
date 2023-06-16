@@ -16,6 +16,7 @@ import sab.dialogue.Dialogue;
 import sab.game.ai.BaseAI;
 import sab.game.ass_ball.AssBall;
 import sab.game.attack.Attack;
+import sab.game.attack.AttackType;
 import sab.game.fighter.Chain;
 import sab.game.fighter.Fighter;
 import sab.game.fighter.Marvin;
@@ -164,6 +165,11 @@ public class Battle {
     public void addAttack(Attack attack, int[] data) {
         addGameObject(attack);
         attack.onSpawn(data);
+    }
+
+    // A slightly neater version of addAttack()
+    public void createAttack(AttackType type, Player owner, int[] data) {
+        addAttack(new Attack(type, owner), data);
     }
 
     // Do NOT call this method from a particle
