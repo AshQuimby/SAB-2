@@ -160,6 +160,9 @@ public class Battle {
 
     public void addGameObject(GameObject gameObject) {
         newGameObjects.add(gameObject);
+        int id = ++nextId;
+        gameObjectsById.put(id, gameObject);
+        idsByGameObject.put(gameObject, id);
     }
 
     public void addAttack(Attack attack, int[] data) {
@@ -330,9 +333,6 @@ public class Battle {
     public void addNewGameObjects() {
         for (GameObject newGameObject : newGameObjects) {
             gameObjects.add(newGameObject);
-            int id = ++nextId;
-            gameObjectsById.put(id, newGameObject);
-            idsByGameObject.put(newGameObject, id);
 
             boolean misc = true;
 

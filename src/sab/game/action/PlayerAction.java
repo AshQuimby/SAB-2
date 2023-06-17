@@ -63,9 +63,9 @@ public class PlayerAction {
         delay--;
         if (delay == 0) {
             if (!usedAttack && attack != null) {
+                player.battle.addGameObject(attack);
                 attack.onSpawn(data);
                 attack.drawRect.setCenter(attack.hitbox.getCenter(new Vector2()));
-                player.battle.addGameObject(attack);
                 usedAttack = true;
             }
         }
