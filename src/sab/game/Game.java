@@ -10,6 +10,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.seagull_engine.Messenger;
 import com.seagull_engine.Seagraphics;
 
+import com.seagull_engine.Time;
 import com.seagull_engine.graphics.SpriteShader;
 import sab.game.attack.AttackType;
 import sab.game.fighter.*;
@@ -213,7 +214,8 @@ public class Game extends Messenger {
     
     // Updates every tick
     @Override
-    public void update() {
+    public void fixedUpdate() {
+        System.out.println(Time.getDeltaTime());
         checkControllerKeys();
         screen = screen.update();
         controllerManager.update();
