@@ -44,6 +44,8 @@ public class ChaosOrbit extends BowlBoyShot {
             if (attack.owner.frame == 10) {
                 attack.velocity = new Vector2(12, 0).setAngleDeg(attack.rotation);
                 orbitDestabilized = true;
+                attack.life = 120;
+                pierce = 1;
             }
             attack.direction = attack.owner.direction;
             attack.hitbox.setCenter(attack.owner.getCenter().add(new Vector2(0, 52).rotateDeg(circlePosition * 90 + attack.life * 20 * attack.direction)));

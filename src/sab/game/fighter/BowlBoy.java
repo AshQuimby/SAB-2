@@ -33,7 +33,7 @@ public class BowlBoy extends FighterType {
     private int showBulletIcon;
     private int chargeShotCharge;
     private int spinTime;
-    private int superMeter;
+    private float superMeter;
     private Animation freefallSpinAnimation;
     private Animation freefallNormalAnimation;
     private Animation exUseAnimation;
@@ -128,7 +128,7 @@ public class BowlBoy extends FighterType {
     }
 
     public int getCardCount() {
-        return superMeter / 10;
+        return (int) superMeter / 10;
     }
 
     @Override
@@ -260,8 +260,8 @@ public class BowlBoy extends FighterType {
 
     @Override
     public void hitObject(Fighter fighter, Player player, Attack attack, GameObject hit) {
-        if (superMeter < 50 && !(attack.type instanceof RecoverBump)) {
-            superMeter++;
+        if (superMeter < 50 && attack.type instanceof BowlBoyShot) {
+            superMeter += ((BowlBoyShot) attack.type).superMeterValue;
         }
     }
 
