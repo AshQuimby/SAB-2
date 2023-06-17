@@ -10,7 +10,7 @@ import sab.game.attack.Attack;
 import sab.game.attack.AttackType;
 import sab.game.particle.Particle;
 
-public class Peashot extends AttackType {
+public class Peashot extends BowlBoyShot {
     @Override
     public void setDefaults(Attack attack) {
         attack.imageName = "peashot.png";
@@ -24,6 +24,7 @@ public class Peashot extends AttackType {
         attack.hitCooldown = 20;
         attack.collideWithStage = true;
         attack.staticKnockback = true;
+        superMeterValue = 1;
     }
 
     @Override

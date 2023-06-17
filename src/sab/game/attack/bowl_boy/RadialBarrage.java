@@ -5,7 +5,7 @@ import com.seagull_engine.GameObject;
 import sab.game.attack.Attack;
 import sab.game.attack.AttackType;
 
-public class RadialBarrage extends AttackType {
+public class RadialBarrage extends BowlBoyShot {
     @Override
     public void setDefaults(Attack attack) {
         attack.imageName = "radial_barrage.png";
@@ -19,6 +19,7 @@ public class RadialBarrage extends AttackType {
         attack.directional = false;
         attack.hitCooldown = 30;
         attack.reflectable = false;
+        superMeterValue = 0;
     }
 
     @Override

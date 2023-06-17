@@ -6,7 +6,7 @@ import sab.game.Direction;
 import sab.game.attack.Attack;
 import sab.game.attack.AttackType;
 
-public class Spread extends AttackType {
+public class Spread extends BowlBoyShot {
     @Override
     public void setDefaults(Attack attack) {
         attack.imageName = "spread.png";
@@ -19,6 +19,7 @@ public class Spread extends AttackType {
         attack.hitCooldown = 20;
         attack.collideWithStage = true;
         attack.staticKnockback = true;
+        superMeterValue = 0.5f;
     }
 
     @Override

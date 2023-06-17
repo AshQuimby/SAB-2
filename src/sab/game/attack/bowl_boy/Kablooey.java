@@ -7,7 +7,7 @@ import sab.game.Direction;
 import sab.game.attack.Attack;
 import sab.game.attack.AttackType;
 
-public class Kablooey extends AttackType {
+public class Kablooey extends BowlBoyShot {
     private int bounces;
     @Override
     public void setDefaults(Attack attack) {
@@ -22,6 +22,7 @@ public class Kablooey extends AttackType {
         attack.directional = true;
         attack.hitCooldown = 30;
         attack.collideWithStage = true;
+        superMeterValue = 0;
     }
 
     @Override

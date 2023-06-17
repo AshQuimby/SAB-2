@@ -6,7 +6,7 @@ import sab.game.Direction;
 import sab.game.attack.Attack;
 import sab.game.attack.AttackType;
 
-public class EightWay extends AttackType {
+public class EightWay extends BowlBoyShot {
     @Override
     public void setDefaults(Attack attack) {
         attack.imageName = "eight_way.png";
@@ -19,6 +19,7 @@ public class EightWay extends AttackType {
         attack.frameCount = 0;
         attack.directional = true;
         attack.hitCooldown = 30;
+        superMeterValue = 0;
     }
 
     @Override

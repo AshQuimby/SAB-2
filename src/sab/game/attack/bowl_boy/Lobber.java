@@ -7,7 +7,7 @@ import sab.game.Player;
 import sab.game.attack.Attack;
 import sab.game.attack.AttackType;
 
-public class Lobber extends AttackType {
+public class Lobber extends BowlBoyShot {
     private int bounces;
     @Override
     public void setDefaults(Attack attack) {

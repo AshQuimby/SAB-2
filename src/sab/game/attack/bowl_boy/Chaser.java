@@ -7,12 +7,12 @@ import sab.game.Player;
 import sab.game.attack.Attack;
 import sab.game.attack.AttackType;
 
-public class Chaser extends AttackType {
+public class Chaser extends BowlBoyShot {
     private Player target;
     @Override
     public void setDefaults(Attack attack) {
         attack.imageName = "chaser.png";
-        attack.life = 150;
+        attack.life = 105;
         attack.hitbox.width = 12;
         attack.hitbox.height = 12;
         attack.drawRect.width = 20;
@@ -21,6 +21,7 @@ public class Chaser extends AttackType {
         attack.hitCooldown = 20;
         attack.collideWithStage = true;
         attack.staticKnockback = true;
+        superMeterValue = 0.25f;
     }
 
     @Override

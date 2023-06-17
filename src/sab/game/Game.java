@@ -215,7 +215,6 @@ public class Game extends Messenger {
     // Updates every tick
     @Override
     public void fixedUpdate() {
-        System.out.println(Time.getDeltaTime());
         checkControllerKeys();
         screen = screen.update();
         controllerManager.update();

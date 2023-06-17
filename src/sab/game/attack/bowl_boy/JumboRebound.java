@@ -4,7 +4,7 @@ import com.badlogic.gdx.math.Vector2;
 import sab.game.attack.Attack;
 import sab.game.attack.AttackType;
 
-public class JumboRebound extends AttackType {
+public class JumboRebound extends BowlBoyShot {
     private Vector2 target;
     @Override
     public void setDefaults(Attack attack) {
@@ -18,6 +18,7 @@ public class JumboRebound extends AttackType {
         attack.frameCount = 0;
         attack.directional = true;
         attack.hitCooldown = 30;
+        superMeterValue = 0;
     }
 
     @Override

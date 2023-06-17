@@ -7,7 +7,7 @@ import sab.game.Player;
 import sab.game.attack.Attack;
 import sab.game.attack.AttackType;
 
-public class StrongCharge extends AttackType {
+public class StrongCharge extends BowlBoyShot {
     @Override
     public void setDefaults(Attack attack) {
         attack.imageName = "strong_charge.png";
@@ -20,6 +20,7 @@ public class StrongCharge extends AttackType {
         attack.hitCooldown = 20;
         attack.frameCount = 8;
         attack.collideWithStage = true;
+        superMeterValue = 5;
     }
 
     @Override

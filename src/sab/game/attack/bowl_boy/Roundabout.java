@@ -7,7 +7,7 @@ import sab.game.Player;
 import sab.game.attack.Attack;
 import sab.game.attack.AttackType;
 
-public class Roundabout extends AttackType {
+public class Roundabout extends BowlBoyShot {
     @Override
     public void setDefaults(Attack attack) {
         attack.imageName = "roundabout.png";
@@ -21,6 +21,7 @@ public class Roundabout extends AttackType {
         attack.hitCooldown = 20;
         attack.staticKnockback = true;
         attack.collideWithStage = true;
+        superMeterValue = 2;
     }
 
     @Override

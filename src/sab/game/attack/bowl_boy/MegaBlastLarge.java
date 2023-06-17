@@ -6,7 +6,7 @@ import sab.game.Direction;
 import sab.game.attack.Attack;
 import sab.game.attack.AttackType;
 
-public class MegaBlastLarge extends AttackType {
+public class MegaBlastLarge extends BowlBoyShot {
     @Override
     public void setDefaults(Attack attack) {
         attack.imageName = "mega_blast_large.png";
@@ -21,6 +21,7 @@ public class MegaBlastLarge extends AttackType {
         attack.hitCooldown = 20;
         attack.collideWithStage = true;
         attack.staticKnockback = false;
+        superMeterValue = 0;
     }
 
     @Override
