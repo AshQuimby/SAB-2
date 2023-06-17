@@ -219,6 +219,14 @@ public class Player extends GameObject implements Hittable {
         extraJumpsUsed = fighter.airJumps;
     }
 
+    public void removeLedgeGrabs() {
+        ledgeGrabs = 0;
+    }
+
+    public void resetLedgeGrabs() {
+        ledgeGrabs = 5;
+    }
+
     public void startAnimation(int delay, Animation animation, int endLag, boolean important) {
         currentAction = new PlayerAction(delay, animation, important, endLag);
     }
@@ -314,6 +322,10 @@ public class Player extends GameObject implements Hittable {
             battle.shakeCamera(16);
             hide();
         }
+    }
+
+    public void onEndBattle() {
+        fighter.onEndBattle(this);
     }
 
     public boolean usingAnimation(Animation animation) {

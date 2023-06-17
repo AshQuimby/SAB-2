@@ -52,7 +52,7 @@ public class ShadowPlunge extends MeleeAttackType {
         if (attack.life % 3 == 0) {
             Vector2 particlePosition = attack.getCenter().add(SABRandom.random(-8f, 8f), SABRandom.random(-8f, 8f));
             Vector2 particleVelocity = new Vector2(SABRandom.random(-3f, 3f), SABRandom.random(1f, 4f));
-            Particle particle = new Particle(particlePosition, particleVelocity, 32, 32, 6, 5, particleVelocity.x > 0 ? 1 : -1, "shadowling.png");
+            Particle particle = new Particle(particlePosition, particleVelocity, 32, 32, 7, 5, particleVelocity.x > 0 ? 1 : -1, "shadowling.png");
             attack.owner.battle.addParticle(particle);
         }
 
@@ -65,7 +65,7 @@ public class ShadowPlunge extends MeleeAttackType {
         for (int i = 0; i < 12; i++) {
             Vector2 particlePosition = new Vector2(SABRandom.random(attack.owner.hitbox.x, attack.owner.hitbox.x + attack.owner.hitbox.width), attack.owner.hitbox.y);
             Vector2 particleVelocity = new Vector2(SABRandom.random(-7f, 7f), SABRandom.random(-2f, 3f));
-            Particle particle = new Particle(particlePosition, particleVelocity, 32, 32, 6, 5, particleVelocity.x > 0 ? 1 : -1, "shadowling.png");
+            Particle particle = new Particle(particlePosition, particleVelocity, 32, 32, 7, 5, particleVelocity.x > 0 ? 1 : -1, "shadowling.png");
             attack.owner.battle.addParticle(particle);
         }
         attack.getBattle().shakeCamera(8);

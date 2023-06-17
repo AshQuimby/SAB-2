@@ -168,6 +168,11 @@ public class Fighter implements Cloneable {
     public void onKill(Player player) {
         type.onKill(this, player);
     }
+
+    public void onEndBattle(Player player) {
+        type.onEndBattle(this, player);
+    }
+
     public void onEndAction(PlayerAction action, Player player) {
         type.onEndAction(action, this, player);
     }
