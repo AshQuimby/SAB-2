@@ -30,7 +30,6 @@ public class Matthew extends FighterType {
     private Animation verticalThrustAnimation;
     private int counterCharge;
     private int slowdownTimeTime;
-    private boolean usedDashSlash;
 
     @Override
     public void setDefaults(Fighter fighter) {
@@ -120,8 +119,12 @@ public class Matthew extends FighterType {
 
     @Override
     public void neutralAttack(Fighter fighter, Player player) {
-        if (counterCharge == 2) {
-            counterCharge = 1;
+        if (slowdownTimeTime > 0 && counterCharge == 3) {
+            verticalThrustAnimation.reset();
+            player.startAttack(new DashSlash(), verticalThrustAnimation, 4, 12, true);
+            counterCharge = 0;
+        } else if (counterCharge >= 2) {
+            counterCharge--;
             parryAnimation.reset();
             player.startAnimation(4, parryAnimation, 24, false);
         } else {
@@ -133,14 +136,8 @@ public class Matthew extends FighterType {
 
     @Override
     public void sideAttack(Fighter fighter, Player player) {
-        if (slowdownTimeTime > 0 && !usedDashSlash) {
-            verticalThrustAnimation.reset();
-            player.startAttack(new DashSlash(), verticalThrustAnimation, 4, 12, true);
-            usedDashSlash = true;
-        } else {
-            swingAnimation.reset();
-            player.startAttack(new MatthewSlash(), swingAnimation, 4, 12, false);
-        }
+        swingAnimation.reset();
+        player.startAttack(new MatthewSlash(), swingAnimation, 4, 12, false);
     }
 
     @Override
@@ -174,13 +171,16 @@ public class Matthew extends FighterType {
             }
             slowdownTimeTime--;
             player.ignoreSlowdowns = true;
-        } else player.ignoreSlowdowns = false;
+        } else {
+            player.ignoreSlowdowns = false;
+            if (counterCharge > 2) counterCharge = 2;
+        }
     }
 
     @Override
     public void hitObject(Fighter fighter, Player player, Attack attack, GameObject hit) {
         if (!(attack.type instanceof MegaCounterSlash)) {
-            if (counterCharge < 2) counterCharge++;
+            if (counterCharge < (slowdownTimeTime > 0 ? 3 : 2)) counterCharge++;
         }
     }
 
@@ -213,7 +213,6 @@ public class Matthew extends FighterType {
     @Override
     public boolean finalAss(Fighter fighter, Player player) {
         slowdownTimeTime = FULL_SLOWDOWN_DURATION + PARTIAL_SLOWDOWN_DURATION;
-        usedDashSlash = false;
         return true;
     }
 
