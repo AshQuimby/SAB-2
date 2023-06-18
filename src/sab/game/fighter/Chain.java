@@ -69,9 +69,9 @@ public class Chain extends FighterType {
                     } else {
                         useSideAttack();
                     }
-                } else if (isDirectlyBelow(target.hitbox) && Math.abs(center.y - targetPosition.y) > 32 && SABRandom.random() * 20 < difficulty) {
+                } else if (((isDirectlyBelow(target.hitbox) && Math.abs(center.y - targetPosition.y) > 32) || isDirectlyBelow(target.hitbox)) && SABRandom.random() * 20 < difficulty) {
                     useDownAttack();
-                } else {
+                } else if (isDirectlyBelow(target.hitbox)) {
                     useUpAttack();
                 }
             }

@@ -69,7 +69,7 @@ public class John extends FighterType {
                     if (horizontalDistance <= 80) pressKey(Keys.ATTACK);
                 }
 
-                if (isDirectlyHorizontal(target.hitbox) && isFacing(targetPosition.x)) {
+                if (isFacing(targetPosition.x)) {
                     int ticksUntilInRange = 0;
                     for (int i = 16; i <= 28; i++) {
                         float predictedX = center.x + player.velocity.x * i / 2f;
