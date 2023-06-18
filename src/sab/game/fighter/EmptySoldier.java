@@ -93,7 +93,7 @@ public class EmptySoldier extends FighterType {
         fighter.walkAnimation = new Animation(0, 3, 20, false);
 
         shadowMonarch = true;
-        shadowMonarchTime = 10000;
+        shadowMonarchTime = 1200;
     }
 
     @Override
