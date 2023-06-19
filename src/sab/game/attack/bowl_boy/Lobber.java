@@ -21,6 +21,7 @@ public class Lobber extends BowlBoyShot {
         attack.hitCooldown = 20;
         attack.collideWithStage = true;
         bounces = 0;
+        superMeterValue = 5;
     }
 
     @Override
