@@ -82,13 +82,15 @@ public class John extends FighterType {
                         }
                     }
 
-                    if (ticksUntilInRange >= 16) {
+                    if (ticksUntilInRange >= 16 && SABRandom.random() * 25 < difficulty) {
                         useSideAttack();
-                    } else if (SABRandom.random() * 25 < difficulty) {
-                        useUpAttack();
+                    } else if (player.touchingStage && isDirectlyHorizontal(target.hitbox) && (Math.abs(center.x - targetPosition.x) < 120 || !target.touchingStage)) {
+                        useDownAttack();
                     }
-                } else if (isDirectlyAbove(target.hitbox) && SABRandom.random() * 20 < difficulty) {
+                } else if (isDirectlyAbove(target.hitbox) && SABRandom.random() * 20 < difficulty && !target.hasAction()) {
                     useDownAttack();
+                } else if (SABRandom.random() * 25 < difficulty) {
+                    useUpAttack();
                 }
             }
         };
