@@ -141,7 +141,7 @@ public class EmptySoldier extends FighterType {
             } else if (player.getCenter().x > player.battle.getStage().getStageEdge(Direction.RIGHT)) {
                 player.hitbox.x -= player.battle.getStage().getSafeBlastZone().width;
             }
-            if (!player.hasAction()) {
+            if (player.isReady()) {
                 if (player.keys.isPressed(Keys.UP)) {
                     player.velocity.y += 1.46f;
                 }

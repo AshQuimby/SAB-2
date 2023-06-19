@@ -2,18 +2,21 @@ package sab.game.attack.john;
 
 import com.badlogic.gdx.math.Vector2;
 import jdk.jshell.execution.Util;
+import sab.game.CollisionResolver;
 import sab.game.Direction;
 import sab.game.SABSounds;
 import sab.game.attack.Attack;
 import sab.game.attack.AttackType;
 import sab.game.particle.Particle;
 import sab.net.Keys;
+import sab.util.SABRandom;
 import sab.util.Utils;
 
 public class JohnBall extends AttackType {
     @Override
     public void setDefaults(Attack attack) {
         attack.imageName = "john_ball.png";
+        attack.basedOffCostume = true;
         attack.life = 900;
         attack.frameCount = 4;
         attack.velocity = new Vector2();
@@ -50,9 +53,16 @@ public class JohnBall extends AttackType {
             attack.velocity.y = 24;
         }
 
+        for (Attack other : attack.getBattle().getAttacks()) {
+            if (other != attack && other.hitbox.overlaps(attack.hitbox)) {
+                attack.collisionDirection = CollisionResolver.moveWithCollisions(attack, attack.velocity.limit(1), other);
+                SABSounds.playSound("john_bounce.mp3");
+            }
+        }
+
         attack.knockback = new Vector2(12 * attack.direction, attack.velocity.y / 2);
 
-        attack.frame = Math.abs(-attack.life / 2 % 4);
+        attack.frame = Math.abs(3 - attack.life / 2 % 4);
 
         attack.velocity.x += 0.6f * attack.direction;
         attack.velocity.y -= 0.9f;
