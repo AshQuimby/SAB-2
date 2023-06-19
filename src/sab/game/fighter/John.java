@@ -51,7 +51,7 @@ public class John extends FighterType {
         suckAnimation = new Animation(new int[] { 0, 0, 12 }, 7, true);
         punchAnimation = new Animation(new int[] { 4, 4, 5, 5, 6, 7, 7 }, 4, true);
         slamAnimation = new Animation(new int[] { 8 }, 4, true);
-        downPunchAnimation = new Animation(new int[] { 14 }, 12, true);
+        downPunchAnimation = new Animation(new int[] { 14 }, 21, true);
         swingGavelAnimation = new Animation(new int[] { 15 }, 90, true);
         fighter.freefallAnimation = new Animation(new int[] { 9 }, 1, true);
         fighter.ledgeAnimation = new Animation(new int[] { 11 }, 1, true);
@@ -174,10 +174,12 @@ public class John extends FighterType {
         if (!player.usedRecovery) {
             if (player.touchingStage) {
                 swingGavelAnimation.reset();
+                player.velocity.x *= 0.5f;
                 player.startIndefiniteAttack(new GavelSlam(), swingGavelAnimation, 1, false);
             } else {
                 downPunchAnimation.reset();
-                player.startAttack(new DownPunch(), downPunchAnimation, 6, 6, false);
+                player.velocity.y *= 0f;
+                player.startAttack(new GavelSpin(), downPunchAnimation, 6, 30, false);
             }
         }
     }

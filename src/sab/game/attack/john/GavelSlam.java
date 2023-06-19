@@ -27,7 +27,7 @@ public class GavelSlam extends MeleeAttackType {
         attack.hitbox.height = 64;
         attack.drawRect.width = 80;
         attack.drawRect.height = 80;
-        attack.damage = 14;
+        attack.damage = 18;
         attack.hitCooldown = 10;
         attack.reflectable = false;
         attack.collideWithStage = true;
@@ -89,16 +89,11 @@ public class GavelSlam extends MeleeAttackType {
     }
 
     @Override
-    public void hit(Attack attack, GameObject hit) {
-    }
-
-    @Override
     public void render(Attack attack, Seagraphics g) {
     }
 
     @Override
     public void lateRender(Attack attack, Seagraphics g) {
         super.render(attack, g);
-        g.resetShader();
     }
 }
