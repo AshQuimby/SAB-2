@@ -3,6 +3,7 @@ package sab.game.attack.bowl_boy;
 import com.badlogic.gdx.math.Vector2;
 import com.seagull_engine.GameObject;
 import sab.game.Player;
+import sab.game.SABSounds;
 import sab.game.animation.Animation;
 import sab.game.attack.Attack;
 import sab.game.attack.MeleeAttackType;
@@ -53,5 +54,6 @@ public class SuperLaserMilk extends MeleeAttackType {
     public void onSpawn(Attack attack, int[] data) {
         super.onSpawn(attack, data);
         attack.owner.startAnimation(0, spinAnimation, 100000, true);
+        SABSounds.playSound("slurp.mp3");
     }
 }

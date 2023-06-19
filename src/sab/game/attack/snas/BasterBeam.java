@@ -35,8 +35,8 @@ public class BasterBeam extends AttackType {
         attack.resize(40 + Math.abs(data[1]) * 360, 40 + Math.abs(data[0]) * 360);
         attack.hitbox.x += (attack.hitbox.width / 2 - 20) * data[1];
         attack.hitbox.y += (attack.hitbox.height / 2 - 20) * data[0];
-        attack.damage += Math.round(data[2] / 30f) + 1;
-        attack.knockback = new Vector2(5 * data[1], 5 * data[0] + 2).scl(data[2] / 30f + 1);
+        attack.damage += Math.round(data[2] / 30f) + Math.min(1, 1 * attack.life % 3);
+        attack.knockback = new Vector2(5 * data[1], 5 * data[0] + 2).scl(data[2] / 45f + 1);
         attack.staticKnockback = true;
 
         horizontal = data[0] != 0;
