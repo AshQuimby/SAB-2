@@ -3,6 +3,7 @@ package sab.game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.controllers.*;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.PixmapIO;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -98,7 +99,7 @@ public class Game extends Messenger {
     public void load() {
         shaders = new HashMap<>();
         shaders.put("enchanted_baguette", new SpriteShader("shaders/default.vsh", "shaders/enchanted_baguette.fsh"));
-        
+
         Controllers.addListener(controllerManager);
         Settings.loadSettings();
         Mod baseGame = new Mod("Super Ass Brothers: Remasstered", "sab", "1.0", "Base game content");
@@ -111,7 +112,7 @@ public class Game extends Messenger {
         }
         addMod(baseGame);
         loadMods();
-        
+
         for (Mod mod : Game.game.mods.values()) {
             fighters.addAll(mod.fighters);
             stages.addAll(mod.stages);
@@ -200,6 +201,15 @@ public class Game extends Messenger {
             window.getImages().loadFolder("assets/images");
         }
         screen = screen.keyPressed(keyCode);
+    }
+
+    @Override
+    public void renderLoading(Seagraphics g) {
+        System.out.println("gagagool");
+        forceloadFont("assets/fonts/SAB_font.ttf");
+        forceloadImage("assets/images/attacks/john/john_ball_alt_2.png");
+        g.drawText("Loading...", g.imageProvider.getFont("SAB_font.ttf"), 0, 0, 1, Color.WHITE, 1);
+        g.usefulDraw(g.imageProvider.getImage("john_ball_alt_2.png"), window.resolutionX / 2 - 64, window.resolutionY / 2 - 64, 128, 128, window.getTick() / 4 % 4, 4, 0, false, false);
     }
 
     public void goFullscreened() {
