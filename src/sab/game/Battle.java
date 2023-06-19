@@ -769,7 +769,9 @@ public class Battle {
         g.drawText(player2.damage + "%", Game.getDefaultFont(), 256 - 128 + 116, -256 + 48, Game.getDefaultFontScale(), Color.WHITE, 1);
 
         for (Player player : players) {
-            player.fighter.renderUI(player, g);
+            if (player.getId() != -1) {
+                player.fighter.renderUI(player, g);
+            }
         }
 
         if (parryFlash > 0) {
