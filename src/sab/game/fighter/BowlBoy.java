@@ -24,6 +24,12 @@ import sab.util.SABRandom;
 import java.security.Key;
 
 public class BowlBoy extends FighterType {
+    private static final int PEASHOT = 0;
+    private static final int SPREAD = 1;
+    private static final int CHASER = 2;
+    private static final int LOBBER = 3;
+    private static final int CHARGE = 4;
+    private static final int ROUNDABOUT = 5;
 
     private Vector2 gunHandPosition;
     private boolean gunMode;
@@ -41,6 +47,8 @@ public class BowlBoy extends FighterType {
     @Override
     public AI getAI(Player player, int difficulty) {
         return new BaseAI(player, difficulty, 100) {
+            private int targetShotType;
+
             @Override
             protected void recover(Platform targetPlatform, Ledge targetLedge) {
                 float x = player.hitbox.x + player.hitbox.width / 2;
@@ -65,9 +73,16 @@ public class BowlBoy extends FighterType {
             public void attack(Vector2 center, Player target, Vector2 targetPosition) {
                 BowlBoy bowlBoy = (BowlBoy) player.fighter.type;
                 int cards = bowlBoy.getCardCount();
+                int shotType = bowlBoy.bulletIndex;
 
-                if (bowlBoy.chargingShot && SABRandom.random() * 20 < difficulty) {
+                if (bowlBoy.chargingShot && SABRandom.random() * 20 < difficulty && isDirectlyHorizontal(target.hitbox) && isFacing(targetPosition.x)) {
                     releaseKey(Keys.ATTACK);
+                    return;
+                }
+
+                if (shotType != targetShotType && !player.usedRecovery && mashCooldown == 0) {
+                    useDownAttack();
+                    setMashCooldown();
                     return;
                 }
 
@@ -80,8 +95,18 @@ public class BowlBoy extends FighterType {
                     }
                 }
 
-                if (SABRandom.random() * 60 < 2f) {
-                    useDownAttack();
+                float horizontalDistance = Math.abs(center.x - targetPosition.x);
+                if (isDirectlyHorizontal(target.hitbox)) {
+                    if (isFacing(targetPosition.x)) {
+                        if (horizontalDistance < 128 && cards < 3) targetShotType = SPREAD;
+                        else if (target.damage > 100) targetShotType = CHARGE;
+                        else if (!target.touchingStage) targetShotType = LOBBER;
+                        else targetShotType = PEASHOT;
+                    } else {
+                        targetShotType = ROUNDABOUT;
+                    }
+                } else {
+                    targetShotType = CHASER;
                 }
             }
         };

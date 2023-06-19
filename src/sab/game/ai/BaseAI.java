@@ -13,7 +13,7 @@ import sab.net.Keys;
 import sab.util.SABRandom;
 
 public class BaseAI extends AI {
-    private int mashCooldown;
+    protected int mashCooldown;
     protected float preferredHorizontalDistance;
     private boolean movingToCenter;
     private boolean dontChase;
@@ -29,10 +29,14 @@ public class BaseAI extends AI {
         super(player, difficulty);
     }
 
+    protected void setMashCooldown() {
+        mashCooldown = 30 - difficulty * 3;
+    }
+
     protected void frozen() {
         if (mashCooldown == 0) {
             pressKey(Keys.ATTACK);
-            mashCooldown = 30 - difficulty * 3;
+            setMashCooldown();
         }
     }
 
