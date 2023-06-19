@@ -7,15 +7,13 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.PixmapIO;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.math.MathUtils;
 import com.seagull_engine.Messenger;
 import com.seagull_engine.Seagraphics;
 
-import com.seagull_engine.Time;
 import com.seagull_engine.graphics.SpriteShader;
 import sab.game.attack.AttackType;
 import sab.game.fighter.*;
-import sab.game.screen.CharacterSelectScreen;
+import sab.game.screen.battle_adjacent.CharacterSelectScreen;
 import sab.game.screen.extras.JukeboxScreen;
 import sab.game.screen.ModErrorScreen;
 import sab.game.screen.TitleScreen;
@@ -26,14 +24,12 @@ import sab.screen.Screen;
 import sab.util.Utils;
 import sab.util.SABRandom;
 
-import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.nio.ByteBuffer;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.sql.Date;
 import java.util.*;
 import java.util.List;
 import java.util.zip.Deflater;
@@ -82,7 +78,7 @@ public class Game extends Messenger {
         if (fontId.equals("SAB_font")) {
             return 0.16f;
         } else {
-            return 0.32f;
+            return 0.24f;
         }
     }
 

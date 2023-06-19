@@ -6,6 +6,8 @@ import com.seagull_engine.Seagraphics;
 import sab.error.SabError;
 import sab.game.*;
 import sab.game.fighter.Fighter;
+import sab.game.screen.battle_adjacent.CharacterSelectScreen;
+import sab.game.screen.battle_adjacent.VictoryScreen;
 import sab.game.screen.error.ErrorScreen;
 import sab.game.stage.LastLocation;
 import sab.game.stage.Stage;

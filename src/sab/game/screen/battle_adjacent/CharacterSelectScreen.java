@@ -1,4 +1,4 @@
-package sab.game.screen;
+package sab.game.screen.battle_adjacent;
 
 import java.io.File;
 import java.io.IOException;
@@ -20,6 +20,9 @@ import sab.game.SABSounds;
 import sab.game.fighter.Fighter;
 import sab.game.fighter.FighterType;
 import sab.game.fighter.Random;
+import sab.game.screen.NetScreen;
+import sab.game.screen.TitleScreen;
+import sab.game.screen.battle_adjacent.StageSelectScreen;
 import sab.game.screen.error.ErrorScreen;
 import sab.modloader.ModLoader;
 import sab.net.client.Client;

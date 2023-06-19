@@ -3,7 +3,6 @@ package sab.game.fighter;
 import com.badlogic.gdx.math.Vector2;
 import com.seagull_engine.GameObject;
 import com.seagull_engine.Seagraphics;
-import sab.game.DamageSource;
 import sab.game.Direction;
 import sab.game.Game;
 import sab.game.Player;
@@ -13,13 +12,9 @@ import sab.game.animation.Animation;
 import sab.game.attack.Attack;
 import sab.game.attack.empty_soldier.*;
 import sab.game.particle.Particle;
-import sab.game.screen.VictoryScreen;
-import sab.net.Connection;
 import sab.net.Keys;
 import sab.util.Utils;
 import sab.util.SABRandom;
-
-import java.io.IOException;
 
 public class EmptySoldier extends FighterType {
     private int spirit;

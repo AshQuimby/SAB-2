@@ -1,7 +1,6 @@
 package sab.game.fighter;
 
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.math.MathUtils;
 import com.seagull_engine.GameObject;
 import com.seagull_engine.Seagraphics;
 import sab.game.DamageSource;
@@ -10,7 +9,7 @@ import sab.game.action.PlayerAction;
 import sab.game.ai.AI;
 import sab.game.ai.BaseAI;
 import sab.game.attack.Attack;
-import sab.game.screen.VictoryScreen;
+import sab.game.screen.battle_adjacent.VictoryScreen;
 import sab.util.SABRandom;
 
 public abstract class FighterType {

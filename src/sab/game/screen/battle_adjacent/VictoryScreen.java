@@ -1,4 +1,4 @@
-package sab.game.screen;
+package sab.game.screen.battle_adjacent;
 
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;

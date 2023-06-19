@@ -1,4 +1,4 @@
-package sab.game.screen;
+package sab.game.screen.battle_adjacent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +12,8 @@ import sab.game.Battle;
 import sab.game.Game;
 import sab.game.SABSounds;
 import sab.game.fighter.Fighter;
+import sab.game.screen.BattleScreen;
+import sab.game.screen.NetScreen;
 import sab.game.screen.error.ErrorScreen;
 import sab.game.stage.Stage;
 import sab.game.stage.StageType;
@@ -30,9 +32,7 @@ public class StageSelectScreen extends NetScreen {
     private final int player1Costume, player2Costume;
     private final Fighter player1, player2;
     private final int player1Type, player2Type;
-
     private boolean disconnected;
-
     private boolean starting;
 
     public StageSelectScreen(Fighter player1, Fighter player2, int player1Costume, int player2Costume, int player1Type, int player2Type) {
@@ -148,7 +148,7 @@ public class StageSelectScreen extends NetScreen {
         stages.get(stageIndex).renderDetails(g);
         stages.get(stageIndex).renderPlatforms(g);
         g.usefulTintDraw(g.imageProvider.getImage("pixel.png"), -1280 / 2, -720 / 2, 1280 , 720, 0, 1, 0, false, false, new Color(0, 0, 0, 0.5f));
-        g.drawText(stages.get(stageIndex).name, Game.getDefaultFont(), 0, 256, 2, Color.WHITE, 0);
+        g.drawText(stages.get(stageIndex).name, Game.getDefaultFont(), 0, 256 + 32, 2 * Game.getDefaultFontScale(), Color.WHITE, 0);
     }
 
     @Override

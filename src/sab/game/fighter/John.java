@@ -10,10 +10,9 @@ import sab.game.SABSounds;
 import sab.game.ai.AI;
 import sab.game.ai.BaseAI;
 import sab.game.animation.Animation;
-import sab.game.attack.Attack;
 import sab.game.attack.john.*;
 import sab.game.particle.Particle;
-import sab.game.screen.VictoryScreen;
+import sab.game.screen.battle_adjacent.VictoryScreen;
 import sab.net.Keys;
 import sab.util.SABRandom;
 

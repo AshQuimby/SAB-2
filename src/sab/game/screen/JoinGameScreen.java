@@ -8,6 +8,7 @@ import sab.error.SabError;
 import sab.game.Game;
 import sab.game.SABSounds;
 import sab.game.Settings;
+import sab.game.screen.battle_adjacent.CharacterSelectScreen;
 import sab.game.screen.error.ErrorScreen;
 import sab.net.client.Client;
 import sab.net.packet.*;

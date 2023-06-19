@@ -123,7 +123,7 @@ public class BowlBoy extends FighterType {
         fighter.renderHeight = 64;
         fighter.imageOffsetX = 2;
         fighter.imageOffsetY = 9;
-        fighter.frames = 21;
+        fighter.frames = 25;
         fighter.jumpHeight = 160;
         fighter.friction = .15f;
         fighter.acceleration = 0.3f;
