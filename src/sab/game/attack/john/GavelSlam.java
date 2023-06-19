@@ -20,6 +20,7 @@ public class GavelSlam extends MeleeAttackType {
     @Override
     public void setDefaults(Attack attack) {
         attack.imageName = "gavel_with_arm.png";
+        attack.basedOffCostume = true;
         attack.life = 30;
         attack.frameCount = 1;
         attack.velocity = new Vector2();
