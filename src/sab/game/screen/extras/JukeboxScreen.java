@@ -60,7 +60,7 @@ public class JukeboxScreen extends ScreenAdapter {
         addSong("wavezone.mp3", "Wavezone", "Beat Thorn", 144, "hyperspace_background.png");
         addSong("first_tough_enemy.mp3", "First Tough Enemy", "a_viper/AshQuimby", 145, "warzone_night_background.png");
         addSong("wings_of_glory.mp3", "Wings of Glory", "a_viper", 130, "error_background.png");
-        addSong("credits.mp3", "The Chill H", "AshQuimby", 155, "warzone_night_background.png");
+        addSong("credits.mp3", "The Chill H", "AshQuimby", 75, "warzone_night_background.png");
         addSong("genetically_engineered_bad.mp3", "Genetically Engineered Bad", "AshQuimby", 120, "no_ducks.png");
         addSong("walouis_sax_solo.mp3", "Walouis' Sax Solo", "Beat Thorn", 80, "warzone_background.png");
         addSong("walouis_sax_solo_alt.mp3", "Walouis' Second Sax Solo", "AshQuimby/a_viper", 80, "warzone_night_background.png");
