@@ -17,7 +17,7 @@ public class MeleeAttackType extends AttackType {
 
     @Override
     public void onSpawn(sab.game.attack.Attack attack, int[] data) {
-        moveToPlayer(attack);
+        if (offset != null) moveToPlayer(attack);
     }
 
     @Override
@@ -25,10 +25,10 @@ public class MeleeAttackType extends AttackType {
         if (killWhenPlayerStuck && attack.owner.isStuck()) {
             attack.alive = false;
         }
+        if (offset != null) moveToPlayer(attack);
     }
 
     @Override
     public void lateUpdate(Attack attack) {
-        moveToPlayer(attack);
     }
 }
