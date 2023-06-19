@@ -36,7 +36,6 @@ public class GavelSpin extends MeleeAttackType {
     public void onSpawn(Attack attack, int[] data) {
         attack.knockback = new Vector2(attack.owner.direction * 9, 4);
         attack.direction = attack.owner.direction;
-        attack.rotation = 60 * attack.direction;
     }
 
     @Override
@@ -46,7 +45,7 @@ public class GavelSpin extends MeleeAttackType {
             attack.alive = false;
         }
         attack.owner.velocity.y *= 0.8f;
-        attack.rotation = attack.life / 15f * 360 * attack.direction + 180;
+        attack.rotation = attack.life / 15f * 360 * attack.direction;
         attack.owner.rotation = attack.rotation - 180;
         attack.hitbox.setCenter(attack.owner.getCenter().add(MathUtils.sinDeg(-attack.rotation) * 40, MathUtils.cosDeg(-attack.rotation) * 40));
         attack.knockback.setAngleDeg(attack.rotation + 90);
