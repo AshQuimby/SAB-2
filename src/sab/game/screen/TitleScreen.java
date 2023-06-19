@@ -30,7 +30,7 @@ public class TitleScreen extends SelectorScreen {
         g.useStaticCamera();
 
         for (int i = 0; i < options.length; i++) {
-            Utils.drawButton(g, 0, -i * 52 - 24, options[i], 1.5f * Game.getDefaultFontScale(), selectorIndex == i);
+            Utils.drawButton(g, 0, -i * 52 + 4, options[i], 1.5f * Game.getDefaultFontScale(), selectorIndex == i);
         }
     }
 
