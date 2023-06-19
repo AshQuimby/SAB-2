@@ -19,6 +19,7 @@ public class Attack extends DamageSource {
     public int hitCooldown;
     public boolean directional;
     public boolean collideWithStage;
+    public boolean autoSyncDrawRectToHitbox;
     public Direction collisionDirection;
     public final Player originalOwner;
     public boolean basedOffCostume;
@@ -61,6 +62,7 @@ public class Attack extends DamageSource {
         updatesPerTick = 1;
         canHit = true;
         this.type = type;
+        autoSyncDrawRectToHitbox = true;
         type.setDefaults(this);
         collisionDirection = Direction.NONE;
         if (basedOffCostume) {
@@ -190,7 +192,7 @@ public class Attack extends DamageSource {
 
     @Override
     public void render(Seagraphics g) {
-        drawRect.setCenter(getCenter());
+        if (autoSyncDrawRectToHitbox) drawRect.setCenter(getCenter());
         type.render(this, g);
     }
 

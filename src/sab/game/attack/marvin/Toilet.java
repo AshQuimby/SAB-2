@@ -28,6 +28,7 @@ public class Toilet extends AttackType {
         attack.hitCooldown = 60;
         attack.reflectable = false;
         attack.collideWithStage = true;
+        attack.autoSyncDrawRectToHitbox = false;
     }
 
     @Override
