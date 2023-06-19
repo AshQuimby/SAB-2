@@ -177,6 +177,7 @@ public class UnnamedDuck extends FighterType {
         items.add(new BigGun(), 1);
         items.add(new Jerrycan(), 1);
         items.add(new Molotov(), 1);
+        items.add(new DuckBomb(), 1);
     }
 
     @Override
