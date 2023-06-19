@@ -323,6 +323,12 @@ public class BowlBoy extends FighterType {
     }
 
     @Override
+    public boolean finalAss(Fighter fighter, Player player) {
+        player.startAttack(new SuperLaserMilk(), null, 0, 0, true);
+        return true;
+    }
+
+    @Override
     public void onSuccessfulParry(Fighter fighter, Player player, DamageSource parried) {
         if (getCardCount() < 5) superMeter = superMeter + 10 - superMeter % 10;
     }
