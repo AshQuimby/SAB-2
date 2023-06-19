@@ -564,8 +564,7 @@ public class Battle {
 
     public void endBattle() {
         for (Player player : players) {
-//            TODO: Add this to players when I come around to it
-//            player.onEndBattle();
+            player.onEndBattle();
         }
         SABRandom.disposeBattleRandom();
     }

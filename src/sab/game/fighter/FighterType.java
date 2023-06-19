@@ -95,6 +95,9 @@ public abstract class FighterType {
 
     }
 
+    public void onEndBattle(Fighter fighter, Player player) {
+    }
+
     public void hitObject(Fighter fighter, Player player, Attack attack, GameObject hit) {
     }
 

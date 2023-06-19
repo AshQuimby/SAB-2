@@ -23,8 +23,12 @@ public class AngrySoul extends AttackType {
 
     @Override
     public void onSpawn(Attack attack, int[] data) {
-        attack.hitbox.setCenter(attack.owner.hitbox.getCenter(new Vector2()).add(attack.owner.direction * (attack.hitbox.width / 2), 0));
-        attack.direction = attack.owner.direction;
+        attack.hitbox.setCenter(new Vector2(
+                Float.intBitsToFloat(data[0]),
+                Float.intBitsToFloat(data[1])
+        ));
+        attack.direction = data[2];
+        attack.hitbox.x += attack.direction * attack.hitbox.width / 2;
         attack.velocity = new Vector2(12 * attack.direction, 0);
         attack.knockback = new Vector2(8 * attack.direction, 3);
     }
