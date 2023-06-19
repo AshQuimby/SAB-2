@@ -90,6 +90,7 @@ public class Zombie extends AttackType implements Hittable {
     @Override
     public boolean onHit(DamageSource source) {
         attack.life -= source.damage;
+        if (attack.life <= 0) attack.alive = false;
         attack.velocity.add(source.knockback);
         hurtTime = 30;
         SABSounds.playSound("hit.mp3");

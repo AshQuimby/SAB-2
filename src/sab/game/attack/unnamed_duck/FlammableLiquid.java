@@ -25,7 +25,7 @@ public class FlammableLiquid extends AttackType {
         attack.hitbox.height = 8;
         attack.drawRect.width = 16;
         attack.drawRect.height = 8;
-        attack.damage = 3;
+        attack.damage = 1;
         attack.directional = true;
         attack.collideWithStage = true;
         attack.canHit = false;
@@ -66,6 +66,8 @@ public class FlammableLiquid extends AttackType {
 
     @Override
     public void hit(sab.game.attack.Attack attack, GameObject hit) {
+        attack.life -= 60;
+        if (attack.life <= 0) attack.alive = false;
     }
 
     @Override
@@ -79,6 +81,12 @@ public class FlammableLiquid extends AttackType {
         attack.knockback = new Vector2(0, 1);
         onFire = data[4] == 1;
         Color.abgr8888ToColor(color, data[5]);
+        if (data.length >= 7) {
+            attack.damage = data[6];
+        }
+        if (data.length >= 8) {
+            attack.life = data[7];
+        }
     }
 
     @Override

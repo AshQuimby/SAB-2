@@ -66,7 +66,8 @@ public class ThrownMolotov extends AttackType {
                     Float.floatToIntBits(velocity.x),
                     Float.floatToIntBits(velocity.y),
                     1,
-                    Color.WHITE.toIntBits()
+                    Color.WHITE.toIntBits(),
+                    2
             });
         }
     }
