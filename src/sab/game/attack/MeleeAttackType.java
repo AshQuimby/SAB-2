@@ -1,13 +1,14 @@
 package sab.game.attack;
 
 import com.badlogic.gdx.math.Vector2;
+import com.seagull_engine.Seagraphics;
 
 public class MeleeAttackType extends AttackType {
     protected Vector2 offset;
     protected boolean usePlayerDirection;
     protected boolean killWhenPlayerStuck = true;
 
-    protected void moveToPlayer(sab.game.attack.Attack attack) {
+    protected final void moveToPlayer(sab.game.attack.Attack attack) {
         if (usePlayerDirection) attack.direction = attack.owner.direction;
         attack.hitbox.setCenter(attack.owner.getCenter());
         attack.hitbox.x += offset.x * attack.owner.direction;
@@ -24,6 +25,10 @@ public class MeleeAttackType extends AttackType {
         if (killWhenPlayerStuck && attack.owner.isStuck()) {
             attack.alive = false;
         }
+    }
+
+    @Override
+    public void lateUpdate(Attack attack) {
         moveToPlayer(attack);
     }
 }

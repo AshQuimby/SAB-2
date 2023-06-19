@@ -190,7 +190,13 @@ public class Attack extends DamageSource {
 
     @Override
     public void render(Seagraphics g) {
+        drawRect.setCenter(getCenter());
         type.render(this, g);
+    }
+
+    @Override
+    public void lateUpdate() {
+        type.lateUpdate(this);
     }
 
     public void lateRender(Seagraphics g) {

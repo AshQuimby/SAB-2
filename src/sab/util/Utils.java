@@ -110,21 +110,23 @@ public class Utils {
 
     public static void drawButton(Seagraphics g, float x, float y, String text, float textSize, boolean highlighted, int anchor) {
         Rectangle textBounds = g.getTextBounds(text, g.imageProvider.getFont(Settings.getDefaultFont()), x, y, textSize, anchor);
-        textBounds.width -= 16;
-        textBounds.height -= 16;
+        textBounds.height -= 1;
+        float a = textSize / Game.getDefaultFontScale() * 16;
+        textBounds.width -= a;
+        textBounds.height -= a;
         Texture image = g.imageProvider.getImage("button_patch" + (highlighted ? "_highlighted" : "") + ".png");
 
-        Game.game.window.batch.draw(image, textBounds.x - 16, textBounds.y - 16, 16, 16, 0, 0, .4f, .4f);
-        Game.game.window.batch.draw(image, textBounds.x + textBounds.width, textBounds.y - 16, 16, 16, .6f, 0, 1, .4f);
-        Game.game.window.batch.draw(image, textBounds.x - 16, textBounds.y + textBounds.height, 16, 16, 0, .6f, .4f, 1);
-        Game.game.window.batch.draw(image, textBounds.x + textBounds.width, textBounds.y + textBounds.height, 16, 16, .6f, .6f, 1, 1);
+        Game.game.window.batch.draw(image, textBounds.x - a, textBounds.y - a, a, a, 0, 0, .4f, .4f);
+        Game.game.window.batch.draw(image, textBounds.x + textBounds.width, textBounds.y - a, a, a, .6f, 0, 1, .4f);
+        Game.game.window.batch.draw(image, textBounds.x - a, textBounds.y + textBounds.height, a, a, 0, .6f, .4f, 1);
+        Game.game.window.batch.draw(image, textBounds.x + textBounds.width, textBounds.y + textBounds.height, a, a, .6f, .6f, 1, 1);
 
-        Game.game.window.batch.draw(image, textBounds.x - 16, textBounds.y, 16, textBounds.height, 0, .4f, .4f, .6f);
-        Game.game.window.batch.draw(image, textBounds.x + textBounds.width, textBounds.y, 16, textBounds.height, .6f, .4f, 1f, .6f);
-        Game.game.window.batch.draw(image, textBounds.x, textBounds.y - 16, textBounds.width, 16, .4f, 0f, .6f, .4f);
-        Game.game.window.batch.draw(image, textBounds.x, textBounds.y + textBounds.height, textBounds.width, 16, .4f, .6f, .6f, 1f);
+        Game.game.window.batch.draw(image, textBounds.x - a, textBounds.y, a, textBounds.height, 0, .4f, .4f, .6f);
+        Game.game.window.batch.draw(image, textBounds.x + textBounds.width, textBounds.y, a, textBounds.height, .6f, .4f, 1f, .6f);
+        Game.game.window.batch.draw(image, textBounds.x, textBounds.y - a, textBounds.width, a, .4f, 0f, .6f, .4f);
+        Game.game.window.batch.draw(image, textBounds.x, textBounds.y + textBounds.height, textBounds.width, a, .4f, .6f, .6f, 1f);
 
         Game.game.window.batch.draw(image, textBounds.x, textBounds.y, textBounds.width, textBounds.height, .4f, .4f, .6f, .6f);
-        g.drawText(text, g.imageProvider.getFont(Settings.getDefaultFont()), textBounds.x + textBounds.width / 2, textBounds.y + textBounds.height * 1.5f, textSize, highlighted ? Color.WHITE : Color.LIGHT_GRAY, 0);
+        g.drawText(text, g.imageProvider.getFont(Settings.getDefaultFont()), textBounds.x + textBounds.width / 2, textBounds.y + textBounds.height * 3.5f + 2, textSize, highlighted ? Color.WHITE : Color.LIGHT_GRAY, 0);
     }
 }

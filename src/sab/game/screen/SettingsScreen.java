@@ -90,7 +90,6 @@ public class SettingsScreen extends SelectorScreen {
         if (inSubSelection) {
             SABSounds.playSound(SABSounds.BLIP);
             subSelectionIndex = (subSelectionIndex - 1) % subSelection[selectorIndex].length;
-            System.out.println(-1 % 4);
         } else {
 //            super.decrementSelection();
         }
@@ -285,14 +284,10 @@ public class SettingsScreen extends SelectorScreen {
             }
         }
 
-
-        bounds = g.getTextBounds(setting, Game.getDefaultFont(), 0, 0, textSize * Game.getDefaultFontScale(), 0);
-
         //g.usefulTintDraw(g.imageProvider.getImage("pixel.png"), bounds.x - 4, bounds.y + 4, (int) bounds.width + 9, (int) -bounds.height - 9, 1, 0, 0, false, false,
         //        new Color(0, 0, 0, 0.5f));
 
         //g.drawText(setting, Game.getDefaultFont(),  0, 0, textSize * Game.getDefaultFontScale(), Color.WHITE, 0);
         Utils.drawButton(g, 0, 0, setting, 1.25f * Game.getDefaultFontScale(), true);
-
     }
 }

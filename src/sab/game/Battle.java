@@ -444,6 +444,8 @@ public class Battle {
         updateCameraEffects();
         battleTick++;
 
+        addNewGameObjects();
+
         if (hasAssBalls) {
             assBallSpawnTime--;
             if (assBallSpawnTime <= 0) {
@@ -461,8 +463,6 @@ public class Battle {
         //     if (player1.keys.isJustPressed(Keys.DOWN) || player2.keys.isJustPressed(Keys.DOWN)) pauseMenuIndex++;
         //     return;
         // }
-
-        addNewGameObjects();
 
         List<Particle> deadParticles = new ArrayList<>();
         for (Particle particle : particles) {
@@ -526,6 +526,10 @@ public class Battle {
                     deadGameObjects.add(assBall);
                 }
             }
+        }
+
+        for (GameObject gameObject : gameObjects) {
+            gameObject.lateUpdate();
         }
 
         stage.update();
@@ -786,7 +790,7 @@ public class Battle {
 
         if (gameOver()) {
             g.usefulTintDraw(g.imageProvider.getImage("pixel.png"), -1280 / 2, -720 / 2, 1280, 720, 0, 1, 0, false, false, new Color(0, 0, 0, 1 - ((121f - endGameTimer) / 120)));
-            g.drawText("GAME END", Game.getDefaultFont(), 0, 0, 2.5f - ((121f - endGameTimer) / 120) / 2 * Game.getDefaultFontScale(), Color.WHITE, 0);
+            g.drawText("GAME END", Game.getDefaultFont(), 0, 0, (2.5f - ((121f - endGameTimer) / 120) / 2) * Game.getDefaultFontScale(), Color.WHITE, 0);
         }
 
         if (paused && !pauseOverlayHidden) {

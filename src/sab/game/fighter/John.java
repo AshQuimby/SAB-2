@@ -22,6 +22,7 @@ public class John extends FighterType {
     private Animation slamAnimation;
     private Animation johnWalkAnimation;
     private Animation downPunchAnimation;
+    private Animation swingGavelAnimation;
     private boolean justWon;
     private int ballTransformTime;
 
@@ -35,7 +36,7 @@ public class John extends FighterType {
         fighter.renderHeight = 76;
         fighter.imageOffsetX = 0;
         fighter.imageOffsetY = 4;
-        fighter.frames = 15;
+        fighter.frames = 16;
         fighter.jumpHeight = 160;
         fighter.friction = .2f;
         fighter.acceleration = 0.2f;
@@ -45,15 +46,17 @@ public class John extends FighterType {
         fighter.airDodgeSpeed = 5;
 
         fighter.description = "American attorney John Joseph has a spotless legal record. Despite this, he finds it tough to get work after he was cursed and turned into a pink sphere for all eternity. In this state he worked exclusively his upper body so much that his legs atrophied to the point of being vestigial.";
-        fighter.debut = "John Joseph's Nightmare World";
+        fighter.debut = "John Joseph: Chief Prosecutor";
         fighter.walkAnimation = new Animation(0, 3, 12, true);
-        suckAnimation = new Animation(new int[] {0, 0, 12}, 7, true);
-        punchAnimation = new Animation(new int[] {4, 4, 5, 5, 6, 7, 7}, 4, true);
-        slamAnimation = new Animation(new int[] {8}, 4, true);
-        downPunchAnimation = new Animation(new int[] {14}, 12, true);
-        fighter.freefallAnimation = new Animation(new int[] {9}, 1, true);
-        fighter.ledgeAnimation = new Animation(new int[] {11}, 1, true);
-        fighter.knockbackAnimation = new Animation(new int[] {10}, 1, true);
+        suckAnimation = new Animation(new int[] { 0, 0, 12 }, 7, true);
+        punchAnimation = new Animation(new int[] { 4, 4, 5, 5, 6, 7, 7 }, 4, true);
+        slamAnimation = new Animation(new int[] { 8 }, 4, true);
+        downPunchAnimation = new Animation(new int[] { 14 }, 12, true);
+        swingGavelAnimation = new Animation(new int[] { 15 }, 90, true);
+        fighter.freefallAnimation = new Animation(new int[] { 9 }, 1, true);
+        fighter.ledgeAnimation = new Animation(new int[] { 11 }, 1, true);
+        fighter.knockbackAnimation = new Animation(new int[] { 10 }, 1, true);
+        fighter.airDodgeAnimation = new Animation(new int[] { 10 }, 1, true);
         fighter.costumes = 4;
         justWon = true;
     }
@@ -168,7 +171,8 @@ public class John extends FighterType {
     public void downAttack(Fighter fighter, Player player) {
         if (!player.usedRecovery) {
             if (player.touchingStage) {
-                sideAttack(fighter, player);
+                swingGavelAnimation.reset();
+                player.startIndefiniteAttack(new GavelSlam(), swingGavelAnimation, 1, false);
             } else {
                 downPunchAnimation.reset();
                 player.startAttack(new DownPunch(), downPunchAnimation, 6, 6, false);
