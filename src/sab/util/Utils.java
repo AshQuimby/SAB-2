@@ -110,8 +110,8 @@ public class Utils {
 
     public static void drawButton(Seagraphics g, float x, float y, String text, float textSize, boolean highlighted, int anchor) {
         Rectangle textBounds = g.getTextBounds(text, g.imageProvider.getFont(Settings.getDefaultFont()), x, y, textSize, anchor);
-        textBounds.width = ((int) (textBounds.width * 4)) / 4 - 16;
-        textBounds.height = ((int) (textBounds.height * 4)) / 4 - 16;
+        textBounds.width -= 16;
+        textBounds.height -= 16;
         Texture image = g.imageProvider.getImage("button_patch" + (highlighted ? "_highlighted" : "") + ".png");
 
         Game.game.window.batch.draw(image, textBounds.x - 16, textBounds.y - 16, 16, 16, 0, 0, .4f, .4f);
