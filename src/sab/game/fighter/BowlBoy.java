@@ -51,8 +51,9 @@ public class BowlBoy extends FighterType {
 
             @Override
             protected void recover(Platform targetPlatform, Ledge targetLedge) {
+                if (targetPlatform == null && targetLedge == null) return; // Guess I'll just die then
                 float x = player.hitbox.x + player.hitbox.width / 2;
-                float ledgeX = targetLedge.grabBox.x + targetLedge.grabBox.width / 2;
+                float ledgeX = targetLedge == null ? targetPlatform.hitbox.x + targetPlatform.hitbox.width / 2 : targetLedge.grabBox.x + targetLedge.grabBox.width / 2;
 
                 if (player.velocity.y <= 0) {
                     pressKey(Keys.UP);
