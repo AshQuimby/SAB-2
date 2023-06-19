@@ -80,9 +80,9 @@ public class Game extends Messenger {
     public static float getDefaultFontScale() {
         String fontId = Settings.getDefaultFont();
         if (fontId.equals("SAB_font")) {
-            return 0.15f;
+            return 0.16f;
         } else {
-            return 0.3f;
+            return 0.32f;
         }
     }
 
