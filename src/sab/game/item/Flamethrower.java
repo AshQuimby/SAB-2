@@ -32,7 +32,7 @@ public class Flamethrower extends Item {
         drawRect = new Rectangle(hitbox);
         swing = new Animation(1, 6, 2, true);
         animation = new Animation(new int[]{0}, 1, true);
-        uses = 120;
+        uses = 90;
         firing = false;
     }
 
