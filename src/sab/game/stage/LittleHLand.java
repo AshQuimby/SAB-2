@@ -23,7 +23,7 @@ public class LittleHLand extends StageType {
         player = new Player(new Fighter(new Marvin()), 0, 0, 100000, stage.getBattle());
 
         for (int i = -1; i <= 1; i++) {
-            placeRandomPlatform(stage, new Vector2(384 * i, -64 + SABRandom.random(-128, 64)));
+            placeRandomPlatform(stage, new Vector2(384 * i, -128 + SABRandom.random(-128, 64)));
         }
 
         placeRandomPlatform(stage, new Vector2(0, SABRandom.random(128, 256)));
@@ -94,13 +94,12 @@ public class LittleHLand extends StageType {
 
         @Override
         public void successfulHit(Attack attack, GameObject hit) {
+            attack.knockback = hit.getCenter().sub(attack.getCenter()).nor().scl(6);
             if (hit instanceof Player) {
                 if (((Player) hit).damage > 200) {
                     ((Player) hit).kill(1);
                     attack.knockback.scl(0);
                 }
-            } else {
-                attack.knockback = hit.getCenter().sub(attack.getCenter()).nor().scl(6);
             }
         }
     }
