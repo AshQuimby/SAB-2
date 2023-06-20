@@ -82,25 +82,6 @@ public class WeightedCollection<E> implements Collection<E> {
         return getFromValue(value);
     }
 
-    public E get(long seed) {
-        double totalWeight = 0;
-        for (double weight : weights) {
-            totalWeight += weight;
-        }
-        double value = new Random(seed).nextDouble(0, totalWeight);
-        return getFromValue(value);
-    }
-
-    public E get(Random random) {
-        double totalWeight = 0;
-        for (double weight : weights) {
-            totalWeight += weight;
-        }
-
-        double value = random.nextDouble(0, totalWeight);
-        return getFromValue(value);
-    }
-
     public E getFromValue(double value) {
         double totalWeight = 0;
         if (elements.size() == 1) return elements.get(0);
