@@ -21,6 +21,8 @@ public class SuperLaserMilk extends MeleeAttackType {
         attack.life = 100;
         attack.hitCooldown = 2;
         attack.damage = 1;
+        attack.reflectable = false;
+        attack.parryable = false;
         usePlayerDirection = true;
         offset = new Vector2(145 * 2 + 28, 12);
 

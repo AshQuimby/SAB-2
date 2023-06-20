@@ -178,6 +178,8 @@ public class UnnamedDuck extends FighterType {
         items.add(new Jerrycan(), 1);
         items.add(new Molotov(), 1);
         items.add(new DuckBomb(), 1);
+        items.add(new Axe(), 1);
+        items.add(new Plane(), 1);
         items.add(new IceCube(), 1);
         items.add(new Flamethrower(), 1);
         items.add(new RubbishLid(), 100);
