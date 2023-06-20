@@ -173,16 +173,16 @@ public class UnnamedDuck extends FighterType {
     public void initializeItemsList() {
         items = new WeightedCollection<>();
         items.add(new Rake(), 1);
-        items.add(new Knife(), 1);
+        items.add(new Knife(), 1.5f);
         items.add(new BigGun(), 1);
-        items.add(new Jerrycan(), 1);
+        items.add(new Jerrycan(), 0.5f);
         items.add(new Molotov(), 1);
         items.add(new DuckBomb(), 1);
         items.add(new Axe(), 1);
-        items.add(new Plane(), 1);
+        items.add(new Plane(), 1.5f);
         items.add(new IceCube(), 1);
-        items.add(new Flamethrower(), 1);
-        items.add(new RubbishLid(), 100);
+        items.add(new Flamethrower(), 0.25f);
+        items.add(new RubbishLid(), 1);
     }
 
     @Override
