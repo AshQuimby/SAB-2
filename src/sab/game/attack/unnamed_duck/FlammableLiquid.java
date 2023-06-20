@@ -15,11 +15,14 @@ import sab.util.SABRandom;
 public class FlammableLiquid extends AttackType {
     public Color color;
     public boolean onFire;
+    private float gravity;
+    private int startLife;
 
     @Override
     public void setDefaults(sab.game.attack.Attack attack) {
         attack.imageName = "flammable_liquid.png";
         attack.life = 500;
+        startLife = 500;
         attack.frameCount = 2;
         attack.hitbox.width = 8;
         attack.hitbox.height = 8;
@@ -33,11 +36,12 @@ public class FlammableLiquid extends AttackType {
         attack.reflectable = false;
         attack.parryable = false;
         color = new Color(1, 1, 1, 1);
+        gravity = 1;
     }
 
     @Override
     public void update(sab.game.attack.Attack attack) {
-        attack.velocity.y -= 1;
+        attack.velocity.y -= gravity;
         attack.rotation = MathUtils.atan2(attack.velocity.y, attack.velocity.x) * MathUtils.radiansToDegrees;
 
         if (attack.collisionDirection == Direction.DOWN) {
@@ -48,7 +52,7 @@ public class FlammableLiquid extends AttackType {
         if (onFire) {
             attack.canHit = true;
             if (SABRandom.random() < .1f) {
-                if (attack.life >= 60) attack.owner.battle.addParticle(new Particle(Utils.randomPointInRect(attack.drawRect), new Vector2(SABRandom.random(-1f, 1f), SABRandom.random(.2f, 2f)), 16, 16, 0, "fire.png"));
+                if (attack.life >= startLife / 8.3f) attack.owner.battle.addParticle(new Particle(Utils.randomPointInRect(attack.drawRect), new Vector2(SABRandom.random(-1f, 1f), SABRandom.random(.2f, 2f)), 16, 16, 0, "fire.png"));
                 else attack.owner.battle.addParticle(new Particle(Utils.randomPointInRect(attack.drawRect), new Vector2(SABRandom.random(-1f, 1f), SABRandom.random(.2f, 2f)), 16, 16, 0, "smoke.png"));
             }
         } else {
@@ -86,6 +90,13 @@ public class FlammableLiquid extends AttackType {
         }
         if (data.length >= 8) {
             attack.life = data[7];
+            startLife = attack.life;
+        }
+        if (data.length >= 9) {
+            gravity = data[8] / 100f;
+        }
+        if (data.length >= 10) {
+            attack.knockback = new Vector2(8 * attack.owner.direction, 2);
         }
     }
 

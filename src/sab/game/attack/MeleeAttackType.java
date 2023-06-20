@@ -13,6 +13,7 @@ public class MeleeAttackType extends AttackType {
         attack.hitbox.setCenter(attack.owner.getCenter());
         attack.hitbox.x += offset.x * attack.owner.direction;
         attack.hitbox.y += offset.y;
+        attack.reflectable = false;
     }
 
     @Override

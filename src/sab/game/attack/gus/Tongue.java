@@ -49,7 +49,7 @@ public class Tongue extends AttackType {
     public void successfulHit(Attack attack, GameObject hit) {
         if (hit.hitbox.contains(tipper)) {
             SABSounds.playSound("tongue_splat.mp3");
-            attack.knockback = new Vector2(7 * attack.direction, 5);
+            attack.knockback = new Vector2(9 * attack.direction, 6);
         }
     }
 
