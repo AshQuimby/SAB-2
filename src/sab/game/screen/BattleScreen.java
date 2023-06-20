@@ -322,7 +322,7 @@ public class BattleScreen extends NetScreen {
                 return new CharacterSelectScreen(client);
             }
             battle.endBattle();
-            if (currentReplay != null) currentReplay.saveReplay();
+            if (currentReplay != null && Settings.getDebugMode()) currentReplay.saveReplay();
             System.out.println("Battle inputs detected: " + numInputs);
             System.out.println("Replay inputs detected: " + Replay.inputsDetected);
             return new VictoryScreen(battle.winner, battle.loser, battle.getStage().background);
