@@ -16,9 +16,7 @@ import sab.util.SABRandom;
 import java.security.Key;
 
 public class Flamethrower extends Item {
-    private Animation swing;
     private boolean firing;
-    private Animation animation;
 
     @Override
     public void setDefaults() {
@@ -30,15 +28,13 @@ public class Flamethrower extends Item {
         hitbox.width = 120;
         hitbox.height = 24;
         drawRect = new Rectangle(hitbox);
-        swing = new Animation(1, 6, 2, true);
-        animation = new Animation(new int[]{0}, 1, true);
         uses = 90;
         firing = false;
     }
 
     @Override
     public void updateHeld(Player holder) {
-        frame = animation.step();
+        if (holder.battle.getBattleTick() % 4 == 0 && ++frame >= 4) frame = 0;
 
         if (holder.isReady() && firing && holder.keys.isPressed(Keys.ATTACK)) onUse(holder);
         else firing = false;

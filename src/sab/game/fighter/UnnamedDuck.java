@@ -180,6 +180,7 @@ public class UnnamedDuck extends FighterType {
         items.add(new DuckBomb(), 1);
         items.add(new IceCube(), 1);
         items.add(new Flamethrower(), 1);
+        items.add(new RubbishLid(), 100);
     }
 
     @Override
