@@ -86,6 +86,18 @@ public class Battle {
 
     public Battle(long seed, Fighter fighter1, Fighter fighter2, int[] costumes, Stage stage, int player1Type, int player2Type, int lives, boolean hasAssBalls, boolean hasStageHazards) {
         SABRandom.createNewBattleRandom(seed);
+
+        gameObjects = new ArrayList<>();
+        hittableGameObjects = new ArrayList<>();
+        attacks = new ArrayList<>();
+        miscGameObjects = new ArrayList<>();
+        newGameObjects = new ArrayList<>();
+        particles = new ArrayList<>();
+        deadGameObjects = new ArrayList<>();
+        assBalls = new ArrayList<>();
+        gameObjectsById = new HashMap<>();
+        idsByGameObject = new HashMap<>();
+
         Game.controllerManager.setInGameState(true);
         this.stage = stage;
         stage.setBattle(this);
@@ -117,16 +129,6 @@ public class Battle {
         winner = null;
         loser = null;
 
-        gameObjects = new ArrayList<>();
-        hittableGameObjects = new ArrayList<>();
-        attacks = new ArrayList<>();
-        miscGameObjects = new ArrayList<>();
-        newGameObjects = new ArrayList<>();
-        particles = new ArrayList<>();
-        deadGameObjects = new ArrayList<>();
-        assBalls = new ArrayList<>();
-        gameObjectsById = new HashMap<>();
-        idsByGameObject = new HashMap<>();
         nextId = 0;
 
         assBallSpawnTime = SABRandom.random(1500, 3000);
@@ -238,18 +240,18 @@ public class Battle {
         return platforms;
     }
 
-    public List<GameObject> getSolidStageObjects() {
-        List<GameObject> platforms = new ArrayList<>();
+    public List<StageObject> getSolidStageObjects() {
+        List<StageObject> platforms = new ArrayList<>();
         for (StageObject stageObject : stage.getStageObjects()) {
             if (stageObject.isSolid()) platforms.add(stageObject);
         }
         return platforms;
     }
 
-    public List<GameObject> getPassablePlatforms() {
-        List<GameObject> platforms = new ArrayList<>();
-        for (GameObject stageObject : stage.getStageObjects()) {
-            if (stageObject instanceof PassablePlatform) platforms.add(stageObject);
+    public List<PassablePlatform> getPassablePlatforms() {
+        List<PassablePlatform> platforms = new ArrayList<>();
+        for (StageObject stageObject : stage.getStageObjects()) {
+            if (stageObject instanceof PassablePlatform) platforms.add((PassablePlatform) stageObject);
         }
         return platforms;
     }

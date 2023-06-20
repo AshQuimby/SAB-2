@@ -12,7 +12,7 @@ public class CollisionResolver {
         return moveWithCollisions(a, velocity, List.of(b));
     }
 
-    public static Direction moveWithCollisions(GameObject gameObject, Vector2 velocity, List<GameObject> colliders) {
+    public static Direction moveWithCollisions(GameObject gameObject, Vector2 velocity, List<? extends GameObject> colliders) {
         Rectangle a = gameObject.hitbox;
 
         Direction collisionDirection = Direction.NONE;

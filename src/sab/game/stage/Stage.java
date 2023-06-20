@@ -16,8 +16,8 @@ public class Stage {
     public String background;
     public String music;
     public float maxZoomOut;
-    public int player1SpawnX;
-    public int player2SpawnX;
+    public float player1SpawnX;
+    public float player2SpawnX;
 
     protected List<StageObject> stageObjects;
     protected List<Ledge> ledges;
@@ -47,6 +47,15 @@ public class Stage {
         this.type = type;
     }
 
+    public void reset() {
+        if (battle.getGameObjects() != null) {
+            battle.getGameObjects().removeAll(stageObjects);
+            battle.getGameObjects().removeAll(ledges);
+        }
+        stageObjects.clear();
+        ledges.clear();
+    }
+
     public void update() {
         type.update(battle, this);
         List<StageObject> deadStageObjects = new ArrayList<>();
@@ -68,6 +77,7 @@ public class Stage {
     }
 
     public void init() {
+        reset();
         type.init(this);
     }
 

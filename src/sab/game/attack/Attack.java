@@ -44,6 +44,7 @@ public class Attack extends DamageSource {
     }
 
     public Attack(AttackType type, Player player) {
+        imageName = "none.png";
         alive = false;
         life = 120;
         hitbox = new Rectangle();

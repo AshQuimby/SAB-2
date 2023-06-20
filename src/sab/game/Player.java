@@ -19,6 +19,8 @@ import sab.game.fighter.Fighter;
 import sab.game.item.Item;
 import sab.game.particle.Particle;
 import sab.game.stage.Ledge;
+import sab.game.stage.PassablePlatform;
+import sab.game.stage.StageObject;
 import sab.net.Keys;
 import sab.replay.ReplayAI;
 import sab.util.SABRandom;
@@ -73,6 +75,7 @@ public class Player extends GameObject implements Hittable {
     private boolean usedAirDodge;
     private int airDodging;
     private Vector2 airDodge;
+    private float surfaceFriction;
 
     public Player(Fighter fighter) {
         this.fighter = fighter;
@@ -94,7 +97,7 @@ public class Player extends GameObject implements Hittable {
         this.fighter = fighter;
 
         hitbox = new Rectangle(0, 0, fighter.hitboxWidth, fighter.hitboxHeight);
-        hitbox.setCenter(new Vector2(id == 0 ? battle.getStage().player1SpawnX : battle.getStage().player2SpawnX, battle.getStage().getSafeBlastZone().height / 2 + Math.max(respawnTime, 120) - 512 - hitbox.height));
+        hitbox.setCenter(new Vector2(id == 0 ? battle.getStage().player1SpawnX : battle.getStage().player2SpawnX, battle.getStage().getSafeBlastZone().height));
         move(new Vector2(0, -4000));
         drawRect = new Rectangle(0, 0, fighter.renderWidth, fighter.renderHeight);
 
@@ -161,15 +164,39 @@ public class Player extends GameObject implements Hittable {
             Vector2 step = movement.cpy().limit(1);
             movement.sub(step);
 
-            collisionDirection = CollisionResolver.moveWithCollisions(this, step, battle.getSolidStageObjects());
+            List<StageObject> solidStageObjects = battle.getSolidStageObjects();
+
+            boolean collided = false;
+
+            hitbox.x += step.x;
+            for (StageObject collider : solidStageObjects) {
+                Direction tryDirection = CollisionResolver.resolveX(this, step.x, collider.hitbox);
+                if (tryDirection != Direction.NONE) {
+                    collisionDirection = tryDirection;
+                    collided = true;
+                }
+            }
+
+            hitbox.y += step.y;
+            for (StageObject collider : solidStageObjects) {
+                Direction tryDirection = CollisionResolver.resolveY(this, step.y, collider.hitbox);
+                if (tryDirection != Direction.NONE) {
+                    surfaceFriction = collider.friction;
+                    collisionDirection = tryDirection;
+                    collided = true;
+                }
+            }
+
+            if (!collided) collisionDirection = Direction.NONE;
 
             if (!keys.isPressed(Keys.DOWN)) {
-                List<GameObject> passablePlatforms = battle.getPassablePlatforms();
-                for (GameObject platform : passablePlatforms) {
+                List<PassablePlatform> passablePlatforms = battle.getPassablePlatforms();
+                for (PassablePlatform platform : passablePlatforms) {
                     if (velocity.y <= 0 && hitbox.y > platform.hitbox.y + platform.hitbox.height - 12) {
                         Direction tryDirection = CollisionResolver.resolveY(this, step.y, platform.hitbox);
-                        if (tryDirection != Direction.NONE) {
+                        if (tryDirection.isNotNone()) {
                             collisionDirection = tryDirection;
+                            surfaceFriction = platform.friction;
                         }
                     }
                 }
@@ -397,7 +424,7 @@ public class Player extends GameObject implements Hittable {
         if (respawnTime > 0) {
             respawnTime--;
             invulnerable = true;
-            hitbox.setCenter(new Vector2(128 * (id == 0 ? -1 : 1), battle.getStage().getSafeBlastZone().height / 2 + Math.max(respawnTime * 2, 120) - 280 + hitbox.height / 2));
+            hitbox.setCenter(new Vector2(id == 0 ? battle.getStage().player1SpawnX : battle.getStage().player2SpawnX, battle.getStage().getSafeBlastZone().height / 2 + Math.max(respawnTime * 2, 120) - 280 + hitbox.height / 2));
             frame = 0;
             if ((keys.isPressed(Keys.RIGHT) || keys.isPressed(Keys.LEFT) || keys.isPressed(Keys.DOWN) || keys.isPressed(Keys.UP)) && respawnTime < 100 || respawnTime == 0) {
                 respawnTime = 0;
@@ -727,7 +754,7 @@ public class Player extends GameObject implements Hittable {
             velocity.y -= 0.96f;
             applyForce(velocity.cpy().scl(-fighter.friction));
             if (touchingStage && (!(keys.isPressed(Keys.LEFT) ^ keys.isPressed(Keys.RIGHT)) || charging)) {
-                velocity.x *= 0.3f;
+                velocity.x *= surfaceFriction;
             }
         }
     }

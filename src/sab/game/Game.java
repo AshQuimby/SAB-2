@@ -75,11 +75,12 @@ public class Game extends Messenger {
 
     public static float getDefaultFontScale() {
         String fontId = Settings.getDefaultFont();
-        if (fontId.equals("SAB_font")) {
-            return 0.16f;
-        } else {
+        if (fontId.equals("arial")) {
+            return 0.28f;
+        } else if (fontId.equals("comic_snas")) {
             return 0.24f;
         }
+        return 0.16f;
     }
 
     public Screen getScreen() {
@@ -93,6 +94,11 @@ public class Game extends Messenger {
     // Initial load tasks (like from Among Us)
     @Override
     public void load() {
+        window.imageProvider.loadFont("assets/fonts/SAB_font.ttf", 100);
+        window.imageProvider.loadFont("assets/fonts/arial.ttf", 100);
+        window.imageProvider.loadFont("assets/fonts/comic_snas.ttf", 100);
+        window.imageProvider.loadFont("assets/fonts/minecraft.ttf", 137);
+        window.imageProvider.loadFont("assets/fonts/shitfont23.ttf", 225);
         shaders = new HashMap<>();
         shaders.put("enchanted_baguette", new SpriteShader("shaders/default.vsh", "shaders/enchanted_baguette.fsh"));
 
@@ -102,7 +108,7 @@ public class Game extends Messenger {
         try {
             baseGame.addFighters((Class<? extends FighterType>[]) new Class<?>[]{Marvin.class, Chain.class, Walouis.class, Gus.class, EmperorEvil.class, Snas.class, Stephane.class, UnnamedDuck.class, Matthew.class, EmptySoldier.class, John.class, BowlBoy.class, BigSeagull.class });
 //            baseGame.addFighters((Class<? extends FighterType>[]) new Class<?>[]{Marvin.class, Chain.class   });
-            baseGame.addStages((Class<? extends StageType>[]) new Class<?>[]{LastLocation.class, Warzone.class, DesertBridge.class, ThumbabasLair.class, OurSports.class, COBS.class, Hyperspace.class, Boxtopia.class, HellTwoBoogaloo.class });
+            baseGame.addStages((Class<? extends StageType>[]) new Class<?>[]{LastLocation.class, Warzone.class, DesertBridge.class, ThumbabasLair.class, OurSports.class, COBS.class, Hyperspace.class, Boxtopia.class, LittleHLand.class, HellTwoBoogaloo.class });
         } catch (Exception e) {
             throw new RuntimeException("Like actually what the hell, how did you break this. You should not be able to break this unless your brain cell count reached the long limit.");
         }
@@ -201,9 +207,6 @@ public class Game extends Messenger {
 
     @Override
     public void renderLoading(Seagraphics g) {
-        System.out.println("gagagool");
-        forceloadFont("assets/fonts/SAB_font.ttf");
-        forceloadImage("assets/images/attacks/john/john_ball_alt_2.png");
         g.drawText("Loading...", g.imageProvider.getFont("SAB_font.ttf"), 0, 0, 1, Color.WHITE, 1);
         g.usefulDraw(g.imageProvider.getImage("john_ball_alt_2.png"), window.resolutionX / 2 - 64, window.resolutionY / 2 - 64, 128, 128, window.getTick() / 4 % 4, 4, 0, false, false);
     }

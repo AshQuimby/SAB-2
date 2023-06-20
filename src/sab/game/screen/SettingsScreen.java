@@ -103,11 +103,21 @@ public class SettingsScreen extends SelectorScreen {
                     if (selectorIndex == 2 && subSelectionIndex == 4) {
                         switch (settings.get(key)) {
                             case "SAB_font" :
-                                settings.replace(key, "comic_snas");
+                                settings.replace(key, "shitfont23");
                                 break;
                             case "comic_snas" :
                                 settings.replace(key, "SAB_font");
                                 break;
+                            case "arial" :
+                                settings.replace(key, "comic_snas");
+                                break;
+                            case "minecraft" :
+                                settings.replace(key, "arial");
+                                break;
+                            case "shitfont23" :
+                                settings.replace(key, "minecraft");
+                                break;
+
                         }
                     } else {
                         settings.replace(key, "true");
@@ -154,6 +164,15 @@ public class SettingsScreen extends SelectorScreen {
                                 settings.replace(key, "comic_snas");
                                 break;
                             case "comic_snas" :
+                                settings.replace(key, "arial");
+                                break;
+                            case "arial" :
+                                settings.replace(key, "minecraft");
+                                break;
+                            case "minecraft" :
+                                settings.replace(key, "shitfont23");
+                                break;
+                            case "shitfont23" :
                                 settings.replace(key, "SAB_font");
                                 break;
                         }
@@ -260,6 +279,12 @@ public class SettingsScreen extends SelectorScreen {
                         break;
                     case "comic_snas" :
                         setting = "Comic Snas";
+                        break;
+                    case "minecraft" :
+                        setting = "Block Break";
+                        break;
+                    case "shitfont23" :
+                        setting = "Shitfont 23";
                         break;
                 }
             } else {

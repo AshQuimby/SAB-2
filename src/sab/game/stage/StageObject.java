@@ -11,6 +11,7 @@ public class StageObject extends GameObject {
     protected boolean updates;
     public sab.game.stage.Stage stage;
     public boolean alive;
+    public float friction;
 
     public StageObject(float x, float y, float width, float height, String imageName, sab.game.stage.Stage stage) {
         velocity = new Vector2();
@@ -20,6 +21,7 @@ public class StageObject extends GameObject {
         drawRect = new Rectangle(x, y, width, height);
         hitbox = new Rectangle(drawRect);
         this.stage = stage;
+        friction = 0.3f;
         alive = true;
     }
 
