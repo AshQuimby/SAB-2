@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.seagull_engine.Messenger;
 import com.seagull_engine.Seagraphics;
 
+import com.seagull_engine.graphics.ParallaxBackground;
 import com.seagull_engine.graphics.SpriteShader;
 import sab.game.attack.AttackType;
 import sab.game.fighter.*;
@@ -43,7 +44,7 @@ public class Game extends Messenger {
     public final List<Class<? extends StageType>> stages;
     public final HashMap<String, Class<? extends AttackType>> attacks;
     public final CharacterSelectScreen globalCharacterSelectScreen;
-    public static String titleBackground;
+    public static ParallaxBackground titleBackground;
     private List<String> modErrors;
     private Screen screen;
     private boolean fullscreen;
@@ -54,7 +55,6 @@ public class Game extends Messenger {
 
     public Game() {
         mods = new HashMap<>();
-        selectNewTitleScreen();
         fighters = new ArrayList<>();
         stages = new ArrayList<>();
         attacks = new HashMap<>();
@@ -94,6 +94,7 @@ public class Game extends Messenger {
     // Initial load tasks (like from Among Us)
     @Override
     public void load() {
+        selectNewTitleScreen();
         window.imageProvider.loadFont("assets/fonts/SAB_font.ttf", 100);
         window.imageProvider.loadFont("assets/fonts/arial.ttf", 100);
         window.imageProvider.loadFont("assets/fonts/comic_snas.ttf", 100);
@@ -141,17 +142,21 @@ public class Game extends Messenger {
     // Randomly selects a title screen background
     public static void selectNewTitleScreen() {
         if (Utils.christmas()) {
-            titleBackground = "title_screen_background_christmas.png";
+            titleBackground = new ParallaxBackground(Gdx.files.internal("assets/backgrounds/title_screen/christmas"));
+            titleBackground.parallaxMultiplier = 0.5f;
+            titleBackground.ambientSpeedMultiplier = 2f;
         } else {
             switch (SABRandom.random(3)) {
                 case 0 -> {
-                    titleBackground = "title_screen_background.png";
+                    titleBackground = new ParallaxBackground(Gdx.files.internal("assets/backgrounds/title_screen/last_location"));
+                    titleBackground.parallaxMultiplier = 2f;
                 }
                 case 1 -> {
-                    titleBackground = "title_screen_background_alt_1.png";
+                    titleBackground = new ParallaxBackground(Gdx.files.internal("assets/backgrounds/title_screen/warzone"));
+                    titleBackground.ambientSpeedMultiplier = 4f;
                 }
                 case 2 -> {
-                    titleBackground = "title_screen_background_alt_2.png";
+                    titleBackground = new ParallaxBackground(Gdx.files.internal("assets/backgrounds/title_screen/icy_slab"));
                 }
             }
         }
@@ -201,6 +206,7 @@ public class Game extends Messenger {
             pixmap.dispose();
         } else if (keyCode == Input.Keys.F3) {
             window.getImages().loadFolder("assets/images");
+            selectNewTitleScreen();
         }
         screen = screen.keyPressed(keyCode);
     }

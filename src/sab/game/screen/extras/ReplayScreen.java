@@ -34,7 +34,6 @@ public class ReplayScreen extends SelectorScreen {
         g.getDynamicCamera().targetPosition = new Vector2(0, -(selectorIndex - 3) * 10).add(64 * MathUtils.sin(.004f * Game.game.window.getTick()), 0);
         g.getDynamicCamera().targetZoom = 0.9f;
         g.getDynamicCamera().updateSeagullCamera(16);
-        g.scalableDraw(g.imageProvider.getImage(Game.titleBackground), -Game.game.window.resolutionX / 2, -Game.game.window.resolutionY / 2, Game.game.window.resolutionX, Game.game.window.resolutionY);
         TitleScreen.drawTitle(g);
         g.useStaticCamera();
 

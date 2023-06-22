@@ -1,13 +1,16 @@
 package sab.game.screen.extras;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.seagull_engine.Seagraphics;
 
+import com.seagull_engine.graphics.ParallaxBackground;
 import sab.game.Game;
 import sab.game.SABSounds;
+import sab.game.Settings;
 import sab.game.screen.*;
 import sab.replay.Replay;
 import sab.screen.Screen;
@@ -16,7 +19,7 @@ import sab.util.Utils;
 public class ExtrasScreen extends SelectorScreen {
     
     public ExtrasScreen() {
-        super(new String[] {"Fighters", "Credits", "Jukebox", "Mods", "Replays", "Back"});
+        super(Settings.getDebugMode() ? new String[] {"Fighters", "Credits", "Jukebox", "Mods", "Replays", "Back"} : new String[] {"Fighters", "Credits", "Jukebox", "Mods", "Back"});
     }
     
     @Override
@@ -25,9 +28,10 @@ public class ExtrasScreen extends SelectorScreen {
         g.getDynamicCamera().targetPosition = new Vector2(0, -(selectorIndex - 3) * 10).add(64 * MathUtils.sin(.004f * Game.game.window.getTick()), 0);
         g.getDynamicCamera().targetZoom = 0.9f;
         g.getDynamicCamera().updateSeagullCamera(16);
-        g.scalableDraw(g.imageProvider.getImage(Game.titleBackground), -Game.game.window.resolutionX / 2, -Game.game.window.resolutionY / 2, Game.game.window.resolutionX, Game.game.window.resolutionY);
+
+        Game.titleBackground.render(g);
+
         TitleScreen.drawTitle(g);
-        g.useStaticCamera();
 
         //g.usefulTintDraw(g.imageProvider.getImage("pixel.png"), -400 / 2, -Game.game.window.resolutionY / 2, 400, 350, 0, 1, 0, false, false, new Color(0, 0, 0, 0.5f));
 

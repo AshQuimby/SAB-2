@@ -7,6 +7,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.seagull_engine.Seagraphics;
 
+import com.seagull_engine.graphics.ParallaxBackground;
 import sab.game.Game;
 import sab.game.SABSounds;
 import sab.game.screen.extras.ExtrasScreen;
@@ -22,12 +23,13 @@ public class TitleScreen extends SelectorScreen {
     @Override
     public void render(Seagraphics g) {
         g.useDynamicCamera();
-        g.getDynamicCamera().targetPosition = new Vector2(0, -(selectorIndex - 3) * 10).add(64 * MathUtils.sin(.004f * Game.game.window.getTick()), 0);
+        g.getDynamicCamera().targetPosition = new Vector2(0, -(selectorIndex - 3) * 10).add(Game.game.window.getTick() * 4, 0);
         g.getDynamicCamera().targetZoom = 0.9f;
         g.getDynamicCamera().updateSeagullCamera(16);
-        g.scalableDraw(g.imageProvider.getImage(Game.titleBackground), -Game.game.window.resolutionX / 2, -Game.game.window.resolutionY / 2, Game.game.window.resolutionX, Game.game.window.resolutionY);
+
+        Game.titleBackground.render(g);
+
         drawTitle(g);
-        g.useStaticCamera();
 
         for (int i = 0; i < options.length; i++) {
             Utils.drawButton(g, 0, -i * 52 + 4, options[i], 1.5f * Game.getDefaultFontScale(), selectorIndex == i);

@@ -53,7 +53,7 @@ public class Platform extends StageObject {
     }
 
     public void createLedges(Stage stage) {
-        createLedges(8, 16, hitbox.height, stage);
+        createLedges(hitbox.height / 2 + 12, 16, hitbox.height, stage);
     }
 
     @Override

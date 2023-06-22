@@ -26,10 +26,11 @@ public class LittleHLand extends StageType {
             placeRandomPlatform(stage, new Vector2(384 * i, -128 + SABRandom.random(-128, 64)));
         }
 
+        stage.player2SpawnX = stage.getStageObjects().get(stage.getStageObjects().size() - 1).getCenter().x;
+
         placeRandomPlatform(stage, new Vector2(0, SABRandom.random(128, 256)));
 
         stage.player1SpawnX = stage.getStageObjects().get(0).getCenter().x;
-        stage.player2SpawnX = stage.getStageObjects().get(stage.getStageObjects().size() - 1).getCenter().x;
     }
 
     public void placeRandomPlatform(Stage stage, Vector2 position) {
@@ -37,7 +38,7 @@ public class LittleHLand extends StageType {
             case 0 :
                 Platform icePlatform = new Platform(position.x - 192 / 2, position.y, 192, 64, "ice_platform.png", stage);
                 icePlatform.friction = 1f;
-                icePlatform.createLedges(48, 12, 64, stage);
+                icePlatform.createLedges(stage);
                 stage.addStageObject(icePlatform);
                 break;
             case 1 :
@@ -46,10 +47,10 @@ public class LittleHLand extends StageType {
                 break;
             case 2 :
                 Platform tundraPlatform = new Platform(position.x - 96 / 2 - 96, position.y + 32, 96, 64, "tundra_platform.png", stage);
-                tundraPlatform.createLedges(48, 12, 64, stage);
+                tundraPlatform.createLedges(stage);
                 stage.addStageObject(tundraPlatform);
                 tundraPlatform = new Platform(position.x - 96 / 2 + 96, position.y - 32, 96, 64, "tundra_platform.png", stage);
-                tundraPlatform.createLedges(48, 12, 64, stage);
+                tundraPlatform.createLedges(stage);
                 stage.addStageObject(tundraPlatform);
                 break;
             case 3 :
@@ -72,7 +73,7 @@ public class LittleHLand extends StageType {
                 break;
             default :
                 Platform grassPlatform = new Platform(position.x- 224 / 2, position.y, 224, 64, "grass_platform.png", stage);
-                grassPlatform.createLedges(48, 12, 64, stage);
+                grassPlatform.createLedges(stage);
                 stage.addStageObject(grassPlatform);
                 break;
         }
