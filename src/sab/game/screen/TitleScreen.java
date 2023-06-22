@@ -23,7 +23,8 @@ public class TitleScreen extends SelectorScreen {
     @Override
     public void render(Seagraphics g) {
         g.useDynamicCamera();
-        g.getDynamicCamera().targetPosition = new Vector2(0, -(selectorIndex - 3) * 10).add(Game.game.window.getTick() * 4, 0);
+        g.getDynamicCamera().targetPosition.y = (selectorIndex - options.length) * -10;
+        g.getDynamicCamera().position.x = Game.game.window.getTick() * 4;
         g.getDynamicCamera().targetZoom = 0.9f;
         g.getDynamicCamera().updateSeagullCamera(16);
 
