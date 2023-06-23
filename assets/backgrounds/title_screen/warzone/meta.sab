@@ -1,0 +1,6 @@
+@front_static assets\backgrounds\title_screen\warzone\front_static.png
+@outmost assets\backgrounds\title_screen\warzone\outmost.png
+@middle assets\backgrounds\title_screen\warzone\middle.png
+@ambient_far assets\backgrounds\title_screen\warzone\ambient_far.png
+@far assets\backgrounds\title_screen\warzone\far.png
+@back assets\backgrounds\title_screen\warzone\back.png

@@ -1,6 +1,9 @@
 package sab.game.stage;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
+import com.seagull_engine.graphics.ParallaxBackground;
 
 public class Warzone extends StageType {
     private sab.game.stage.Platform platform;
@@ -10,6 +13,7 @@ public class Warzone extends StageType {
         stage.name = "Warzone";
         platform = new Platform(-512 / 2, -128, 512, 56, "warzone.png", stage);
         stage.background = "warzone_background.png";
+        stage.parallaxBackground = new ParallaxBackground(Gdx.files.internal("assets/backgrounds/stage/warzone"));
         stage.music = "invasion.mp3";
         stage.id = "warzone";
         stage.addStageObject(platform);

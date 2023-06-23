@@ -149,7 +149,7 @@ public class Game extends Messenger {
             switch (SABRandom.random(3)) {
                 case 0 -> {
                     titleBackground = new ParallaxBackground(Gdx.files.internal("assets/backgrounds/title_screen/last_location"));
-                    titleBackground.parallaxMultiplier = 2f;
+                    titleBackground.parallaxMultiplier = 1f;
                 }
                 case 1 -> {
                     titleBackground = new ParallaxBackground(Gdx.files.internal("assets/backgrounds/title_screen/warzone"));

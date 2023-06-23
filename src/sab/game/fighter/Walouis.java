@@ -127,7 +127,7 @@ public class Walouis extends FighterType {
             playingSaxFor--;
         }
         if (playingSaxFor == 740) {
-            if (SABRandom.randomBoolean(0.75f)) SABSounds.playSound("walouis_sax_solo.mp3");
+            if (SABRandom.randomBoolean(0.9f)) SABSounds.playSound("walouis_sax_solo.mp3");
             else SABSounds.playSound("walouis_sax_solo_alt.mp3");
         }
     }

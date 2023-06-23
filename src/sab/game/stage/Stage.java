@@ -7,6 +7,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.seagull_engine.Seagraphics;
 
+import com.seagull_engine.graphics.ParallaxBackground;
 import org.lwjgl.system.NonnullDefault;
 import sab.game.*;
 
@@ -30,6 +31,7 @@ public class Stage {
 
     protected Battle battle;
     public StageType type;
+    public ParallaxBackground parallaxBackground;
 
     public Stage(StageType type) {
         id = "stage";
@@ -160,6 +162,7 @@ public class Stage {
 
     public void renderBackground(Seagraphics g) {
         type.renderBackground(this, g);
+        if (parallaxBackground != null) parallaxBackground.render(g);
     }
 
     public void renderOverlay(Seagraphics g) {

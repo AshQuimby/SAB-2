@@ -1,10 +1,12 @@
 package sab.game.stage;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.seagull_engine.Seagraphics;
 
+import com.seagull_engine.graphics.ParallaxBackground;
 import sab.game.*;
 import sab.game.particle.Particle;
 import sab.util.SABRandom;
@@ -21,6 +23,9 @@ public class OurSports extends StageType {
         stage.background = "our_sports_background.png";
         stage.id = "our_sports";
         stage.music = "our_sports.mp3";
+
+        stage.parallaxBackground = new ParallaxBackground(Gdx.files.internal("assets/backgrounds/stage/our_sports"));
+
         stormy = false;
         stormTime = 0;
         lightning = 0;
@@ -67,6 +72,7 @@ public class OurSports extends StageType {
         if ((battle.getPlayer(0).getLives() <= 1 || battle.getPlayer(1).getLives() <= 1) && !stormy) {
             stormy = true;
             stage.background = "our_sports_stormy_background.png";
+            stage.parallaxBackground = new ParallaxBackground(Gdx.files.internal("assets/backgrounds/stage/our_sports_stormy"));
             SABSounds.playMusic("our_sports_alt.mp3", true  );
         }
 
@@ -75,7 +81,7 @@ public class OurSports extends StageType {
                 lightning--;
             }
             if (stormTime % 2 == 0) {
-                battle.addParticle(new Particle(0, new Vector2(SABRandom.random(stage.getUnsafeBlastZone().x, stage.getUnsafeBlastZone().x + stage.getUnsafeBlastZone().width + Game.game.window.resolutionX/2), stage.getSafeBlastZone().height), new Vector2(-15, -15), 25, 25, 0, "rain.png"));
+                battle.addParticle(new Particle(0, new Vector2(SABRandom.random(stage.getUnsafeBlastZone().x, stage.getUnsafeBlastZone().x + stage.getUnsafeBlastZone().width + Game.game.window.resolutionX/2), stage.getSafeBlastZone().height), new Vector2(-15, -15), 32, 32, 0, "rain.png"));
             }
             if (stormTime % 600 == 0) {
                 lightning = 60;

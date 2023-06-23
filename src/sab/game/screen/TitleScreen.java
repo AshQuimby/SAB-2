@@ -29,6 +29,7 @@ public class TitleScreen extends SelectorScreen {
         g.getDynamicCamera().updateSeagullCamera(16);
 
         Game.titleBackground.render(g);
+        g.useStaticCamera();
 
         drawTitle(g);
 
