@@ -27,9 +27,6 @@ public class LittleHLand extends StageType {
         }
 
         stage.player2SpawnX = stage.getStageObjects().get(stage.getStageObjects().size() - 1).getCenter().x;
-
-        placeRandomPlatform(stage, new Vector2(0, SABRandom.random(128, 256)));
-
         stage.player1SpawnX = stage.getStageObjects().get(0).getCenter().x;
     }
 

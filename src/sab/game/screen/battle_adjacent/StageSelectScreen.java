@@ -145,6 +145,7 @@ public class StageSelectScreen extends NetScreen {
     @Override
     public void render(Seagraphics g) {
         g.scalableDraw(g.imageProvider.getImage(stages.get(stageIndex).background), -1280 / 2, -720 / 2, 1280 , 720);
+        stages.get(stageIndex).renderBackground(g);
         stages.get(stageIndex).renderDetails(g);
         stages.get(stageIndex).renderPlatforms(g);
         g.usefulTintDraw(g.imageProvider.getImage("pixel.png"), -1280 / 2, -720 / 2, 1280 , 720, 0, 1, 0, false, false, new Color(0, 0, 0, 0.5f));

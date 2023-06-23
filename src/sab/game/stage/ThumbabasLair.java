@@ -1,6 +1,8 @@
 package sab.game.stage;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Rectangle;
+import com.seagull_engine.graphics.ParallaxBackground;
 import sab.game.Game;
 
 public class ThumbabasLair extends StageType {
@@ -8,6 +10,8 @@ public class ThumbabasLair extends StageType {
     public void init(Stage stage) {
         stage.name = "Thumbaba's Lair";
         stage.background = "thumbabas_lair_background.png";
+        stage.parallaxBackground = new ParallaxBackground(Gdx.files.internal("assets/backgrounds/stage/thumbabas_lair"));
+        stage.parallaxBackground.ambientSpeedMultiplier = 0.01f;
         stage.music = "thumbabas_lair.mp3";
     
         Rectangle platform1 = new Rectangle(0, 0, 136, 20);
