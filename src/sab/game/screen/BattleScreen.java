@@ -1,6 +1,9 @@
 package sab.game.screen;
 
 import com.badlogic.gdx.Input;
+import com.sab_format.SabData;
+import com.sab_format.SabParsingException;
+import com.sab_format.SabReader;
 import com.seagull_engine.Seagraphics;
 
 import sab.error.SabError;
@@ -19,7 +22,6 @@ import sab.net.packet.PlayerStatePacket;
 import sab.net.server.Server;
 import sab.replay.Replay;
 import sab.screen.*;
-import sab.util.SabReader;
 import sab.util.Utils;
 
 import java.io.File;
@@ -36,19 +38,20 @@ public class BattleScreen extends NetScreen {
     private int numInputs;
 
     // For replays
-    public BattleScreen(File replay) {
+    public BattleScreen(File replay) throws SabParsingException {
         super();
-        long seed = Long.parseLong(SabReader.readProperty("seed", replay));
 
-        Fighter player1 = new Fighter(Game.game.fighterFromString(SabReader.readProperty("player1Fighter", replay)));
+        SabData data = SabReader.read(replay);
 
-        Fighter player2 = new Fighter(Game.game.fighterFromString(SabReader.readProperty("player2Fighter", replay)));
+        long seed = data.getValue("seed").asInt(); // FIXME: SAB files need longs
+        Fighter player1 = new Fighter(Game.game.fighterFromString(data.getValue("player1Fighter").getRawValue()));
+        Fighter player2 = new Fighter(Game.game.fighterFromString(data.getValue("player2Fighter").getRawValue()));
 
         int[] costumes = new int[2];
-        costumes[0] = Integer.parseInt(SabReader.readProperty("player1Costume", replay));
-        costumes[1] = Integer.parseInt(SabReader.readProperty("player2Costume", replay));
+        costumes[0] = data.getValue("player1Costume").asInt();
+        costumes[1] = data.getValue("player2Costume").asInt();
 
-        int lives = Integer.parseInt(SabReader.readProperty("lives", replay));
+        int lives = data.getValue("lives").asInt();
 //        int player1Type = Integer.parseInt(SABReader.readProperty("player1AI", replay));
 //        int player2Type = Integer.parseInt(SABReader.readProperty("player2AI", replay));
 //        if (player2Type == 0) player2Type = -1;
@@ -56,12 +59,12 @@ public class BattleScreen extends NetScreen {
         int player1Type = -1;
         int player2Type = -1;
 
-        boolean assBalls = Boolean.parseBoolean(SabReader.readProperty("assBalls", replay));
-        boolean stageHazards = Boolean.parseBoolean(SabReader.readProperty("stageHazards", replay));
+        boolean assBalls = data.getValue("assBalls").asBool();
+        boolean stageHazards = data.getValue("stageHazards").asBool();
 
         battle = new Battle(seed, player1, player2, costumes, new Stage(new LastLocation()), player1Type, player2Type, lives, assBalls, stageHazards);
         playingReplay = new Replay();
-        playingReplay.fromSABEncodedMap(SabReader.read(replay));
+        playingReplay.fromSabData(data);
         playingReplay.tickReplay(battle, 0);
     }
 

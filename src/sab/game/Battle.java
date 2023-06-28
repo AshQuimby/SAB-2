@@ -212,7 +212,7 @@ public class Battle {
     }
 
     public void shakeCamera(int intensity) {
-        if (Boolean.parseBoolean(Settings.toHashMap().get("screen_shake"))) {
+        if (Settings.getScreenShake()) {
             if (intensity > cameraShake) cameraShake = intensity;
             for (PlayerController playerController : Game.game.controllerManager.getControllers()) {
                 playerController.startVibration(cameraShake, Math.min(10, cameraShake) / 10f);

@@ -1,6 +1,5 @@
 package sab.game;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.badlogic.gdx.math.Rectangle;

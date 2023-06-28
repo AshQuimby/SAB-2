@@ -6,11 +6,11 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
+import com.sab_format.*;
 import com.seagull_engine.Seagraphics;
 
 import sab.error.SabError;
@@ -30,7 +30,6 @@ import sab.net.packet.Packet;
 import sab.net.packet.ScreenTransitionPacket;
 import sab.net.server.Server;
 import sab.screen.Screen;
-import sab.util.SabReader;
 import sab.util.Utils;
 import sab.util.SabRandom;
 
@@ -296,7 +295,52 @@ public class CharacterSelectScreen extends NetScreen {
         disconnected = true;
     }
 
+    private void upgradeLegacyTimesPlayed() {
+        Path legacyPath = Paths.get("../saves/timesplayed.sab");
+        File legacyFile = legacyPath.toFile();
+
+        if (legacyFile.exists()) {
+            try {
+                SabData legacyData = SabReader.read(legacyFile);
+
+                Path path = Paths.get("../saves/times_played.sab");
+                File file = path.toFile();
+
+                if (file.exists()) {
+                    try {
+                        SabData data = SabReader.read(file);
+                        for (String fighter : legacyData.getValues().keySet()) {
+                            SabValue legacyValue = legacyData.getValue(fighter);
+                            SabValue value = data.getValue(fighter);
+                            try {
+                                int timesPlayed = legacyValue == null ? 0 : legacyValue.asInt();
+                                timesPlayed += value == null ? 0 : value.asInt();
+                                data.insertValue(fighter, SabValue.fromInt(timesPlayed));
+                            } catch (NumberFormatException e) {
+                                data.insertValue(fighter, SabValue.fromInt(0));
+                            }
+                        }
+
+                        SabWriter.write(file, data);
+                        legacyFile.delete();
+                    } catch (SabParsingException e) {
+                        System.out.println("Error parsing legacy times played file: " + e.getLocalizedMessage());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    legacyFile.renameTo(path.toFile());
+                    return;
+                }
+            } catch (SabParsingException e) {
+                System.out.println("Error parsing legacy times played file: " + e.getLocalizedMessage());
+            }
+        }
+    }
+
     private void updateTimesPlayed() {
+        upgradeLegacyTimesPlayed();
+
         Path path = Paths.get("../saves/times_played.sab");
         try {
             Files.createDirectories(path.getParent());
@@ -316,37 +360,101 @@ public class CharacterSelectScreen extends NetScreen {
             }
         }
 
-        file = new File("../saves/times_played.sab");
-        HashMap<String, String> timesPlayed = SabReader.read(file);
+        SabData data = null;
+        try {
+            data = SabReader.read(file);
+        } catch (SabParsingException e) {
+            System.out.println("Error parsing times played file: " + e.getLocalizedMessage());
+            try {
+                SabWriter.write(file, new SabData());
+            } catch (IOException ignored) {
+            }
+        }
+
+        if (data == null) data = new SabData();
 
         String id1 = player1.availableFighters.get(player1.index).id;
         String id2 = player2.availableFighters.get(player2.index).id;
-        timesPlayed.put(id1, String.valueOf(Integer.parseInt(timesPlayed.getOrDefault(id1, "0")) + 1));
-        timesPlayed.put(id2, String.valueOf(Integer.parseInt(timesPlayed.getOrDefault(id2, "0")) + 1));
+        SabValue player1Value = data.getValue(id1);
+        SabValue player2Value = data.getValue(id2);
 
-        File legacyFile = new File("../saves/timesplayed.sab");
-        if (legacyFile.exists()) {
-            HashMap<String, String> legacyTimesPlayed = SabReader.read(legacyFile);
-            for (String fighter : legacyTimesPlayed.keySet()) {
-                String amount = legacyTimesPlayed.get(fighter);
-                try {
-                    Integer.parseInt(amount);
-                } catch (NumberFormatException e) {
-                    System.out.println("Error parsing legacy times played value for " + fighter);
-                    System.out.println("Could not parse " + amount);
-                    continue;
-                }
-                timesPlayed.put(fighter, String.valueOf(Integer.parseInt(timesPlayed.getOrDefault(fighter, "0")) + Integer.parseInt(amount)));
+        int p1TimesPlayed = 0;
+        int p2TimesPlayed = 0;
+
+        if (player1Value != null) {
+            try {
+                p1TimesPlayed = player1Value.asInt();
+            } catch (NumberFormatException ignored) {
             }
-            legacyFile.delete();
+        }
+        if (player2Value != null) {
+            try {
+                p2TimesPlayed = player2Value.asInt();
+            } catch (NumberFormatException ignored) {
+            }
         }
 
+        data.insertValue(id1, SabValue.fromInt(p1TimesPlayed + 1));
+        data.insertValue(id2, SabValue.fromInt(p2TimesPlayed + 1));
+
         try {
-            SabReader.write(timesPlayed, file);
+            SabWriter.write(file, data);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
+//    private void updateTimesPlayed() {
+//        Path path = Paths.get("../saves/times_played.sab");
+//        try {
+//            Files.createDirectories(path.getParent());
+//        } catch (IOException ignored) {
+//            // Directory already exists
+//        }
+//
+//        File file = path.toFile();
+//        if (!file.exists()) {
+//            try {
+//                if (!file.createNewFile()) {
+//                    return;
+//                }
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//                return;
+//            }
+//        }
+//
+//        file = new File("../saves/times_played.sab");
+//        HashMap<String, String> timesPlayed = SabReader.read(file);
+//
+//        String id1 = player1.availableFighters.get(player1.index).id;
+//        String id2 = player2.availableFighters.get(player2.index).id;
+//        timesPlayed.put(id1, String.valueOf(Integer.parseInt(timesPlayed.getOrDefault(id1, "0")) + 1));
+//        timesPlayed.put(id2, String.valueOf(Integer.parseInt(timesPlayed.getOrDefault(id2, "0")) + 1));
+//
+//        File legacyFile = new File("../saves/timesplayed.sab");
+//        if (legacyFile.exists()) {
+//            HashMap<String, String> legacyTimesPlayed = SabReader.read(legacyFile);
+//            for (String fighter : legacyTimesPlayed.keySet()) {
+//                String amount = legacyTimesPlayed.get(fighter);
+//                try {
+//                    Integer.parseInt(amount);
+//                } catch (NumberFormatException e) {
+//                    System.out.println("Error parsing legacy times played value for " + fighter);
+//                    System.out.println("Could not parse " + amount);
+//                    continue;
+//                }
+//                timesPlayed.put(fighter, String.valueOf(Integer.parseInt(timesPlayed.getOrDefault(fighter, "0")) + Integer.parseInt(amount)));
+//            }
+//            legacyFile.delete();
+//        }
+//
+//        try {
+//            SabReader.write(timesPlayed, file);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//    }
 
     @Override
     public void render(Seagraphics g) {

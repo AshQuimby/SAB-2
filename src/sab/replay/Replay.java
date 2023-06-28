@@ -2,11 +2,13 @@ package sab.replay;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.sab_format.SabData;
+import com.sab_format.SabValue;
+import com.sab_format.SabWriter;
 import sab.game.Battle;
 import sab.game.Player;
 import sab.game.stage.Stage;
 import sab.net.Keys;
-import sab.util.SabReader;
 
 import java.io.File;
 import java.io.IOException;
@@ -87,12 +89,12 @@ public class Replay {
         return map;
     }
 
-    public void fromSABEncodedMap(HashMap<String, String> data) {
+    public void fromSabData(SabData data) {
         int inputs = 0;
-        for (String key : data.keySet()) {
+        for (String key : data.getValues().keySet()) {
             if (!(key.endsWith("R") || key.endsWith("P"))) continue;
 
-            String[] values = data.get(key).split(" ");
+            String[] values = data.getValue(key).getRawValue().split(" ");
             int tick = Integer.parseInt(key.substring(0, key.length() - 1));
             if (key.endsWith("P")) {
                 for (String value : values) {
@@ -123,7 +125,10 @@ public class Replay {
         String replayPath = "../saves/replays/" + Calendar.getInstance().getTime().toString().replace(":", "-").replace(" ", "-") + ".sab";
 
         try {
-            SabReader.createFile(replayPath, getSABEncodedMap());
+            Map<String, String> values = getSABEncodedMap();
+            SabData data = new SabData();
+            values.keySet().forEach((String key) -> data.insertValue(key, new SabValue(values.get(key))));
+            SabWriter.write(new File(replayPath), data);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

@@ -4,6 +4,9 @@ import java.util.HashMap;
 
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.Rectangle;
+import com.sab_format.SabData;
+import com.sab_format.SabReader;
+import com.sab_format.SabValue;
 import com.seagull_engine.Seagraphics;
 
 import sab.game.SabSounds;
@@ -13,7 +16,7 @@ import sab.screen.Screen;
 import sab.util.Utils;
 
 public class SettingsScreen extends SelectorScreen {
-    private HashMap<String, String> settings;
+    private SabData settings;
     private String[][] subSelection;
     private String[][] subSelectionSettingIds;
     private int subSelectionIndex;
@@ -32,7 +35,7 @@ public class SettingsScreen extends SelectorScreen {
                 new String[] { "master_volume", "music_volume", "sfx_volume" },
                 new String[] { "fullscreen", "static_camera", "screen_shake", "draw_player_arrows", "font" },
         };
-        settings = Settings.toHashMap();
+        settings = Settings.toSabData();
 
     }
 
@@ -99,29 +102,29 @@ public class SettingsScreen extends SelectorScreen {
                 String key = subSelectionSettingIds[selectorIndex][subSelectionIndex];
                 if (selectorIndex == 0 || selectorIndex == 2) {
                     if (selectorIndex == 2 && subSelectionIndex == 4) {
-                        switch (settings.get(key)) {
+                        switch (settings.getValue(key).getRawValue()) {
                             case "SAB_font" :
-                                settings.replace(key, "shitfont23");
+                                settings.insertValue(key, new SabValue("shitfont23"));
                                 break;
                             case "comic_snas" :
-                                settings.replace(key, "SAB_font");
+                                settings.insertValue(key, new SabValue("SAB_font"));
                                 break;
                             case "arial" :
-                                settings.replace(key, "comic_snas");
+                                settings.insertValue(key, new SabValue("comic_snas"));
                                 break;
                             case "minecraft" :
-                                settings.replace(key, "arial");
+                                settings.insertValue(key, new SabValue("arial"));
                                 break;
                             case "shitfont23" :
-                                settings.replace(key, "minecraft");
+                                settings.insertValue(key, new SabValue("minecraft"));
                                 break;
 
                         }
                     } else {
-                        settings.replace(key, "true");
+                        settings.insertValue(key, new SabValue("true"));
                     }
                 } else {
-                    settings.replace(key, "" + Math.min(Float.parseFloat(settings.get(key)) + 0.05f, 1));
+                    settings.insertValue(key, new SabValue("" + Math.min(settings.getValue(key).asFloat() + .05f, 1)));
                 }
                 SabSounds.playSound(SabSounds.BLIP);
             }
@@ -157,28 +160,28 @@ public class SettingsScreen extends SelectorScreen {
                 String key = subSelectionSettingIds[selectorIndex][subSelectionIndex];
                 if (selectorIndex == 0 || selectorIndex == 2) {
                     if (selectorIndex == 2 && subSelectionIndex == 4) {
-                        switch (settings.get(key)) {
+                        switch (settings.getValue(key).getRawValue()) {
                             case "SAB_font" :
-                                settings.replace(key, "comic_snas");
+                                settings.insertValue(key,  new SabValue("comic_snas"));
                                 break;
                             case "comic_snas" :
-                                settings.replace(key, "arial");
+                                settings.insertValue(key, new SabValue("arial"));
                                 break;
                             case "arial" :
-                                settings.replace(key, "minecraft");
+                                settings.insertValue(key, new SabValue("minecraft"));
                                 break;
                             case "minecraft" :
-                                settings.replace(key, "shitfont23");
+                                settings.insertValue(key, new SabValue("shitfont23"));
                                 break;
                             case "shitfont23" :
-                                settings.replace(key, "SAB_font");
+                                settings.insertValue(key, new SabValue("SAB_font"));
                                 break;
                         }
                     } else {
-                        settings.replace(key, "false");
+                        settings.insertValue(key, SabValue.fromBool(false));
                     }
                 } else {
-                    settings.replace(key, "" + Math.max(Float.parseFloat(settings.get(key)) - 0.05f, 0));
+                    settings.insertValue(key, new SabValue("" + Math.max(settings.getValue(key).asFloat() - 0.05f, 0)));
                 }
                 SabSounds.playSound(SabSounds.BLIP);
             }
@@ -223,7 +226,7 @@ public class SettingsScreen extends SelectorScreen {
 
     @Override
     protected Screen onBack() {
-        Settings.fromHashMap(settings);
+        Settings.fromSabData(settings);
         SabSounds.soundEngine.setCurrentMusicVolume(Settings.getMusicVolume() * Settings.getMasterVolume());
         Settings.writeFile();
         if (Settings.getFullscreen()) {
@@ -264,11 +267,11 @@ public class SettingsScreen extends SelectorScreen {
         if (selectorIndex >= subSelectionSettingIds.length || subSelectionIndex >= subSelectionSettingIds[selectorIndex].length) {
             setting = "Save Settings";
         } else {
-            setting = settings.get(subSelectionSettingIds[selectorIndex][subSelectionIndex]);
+            setting = settings.getValue(subSelectionSettingIds[selectorIndex][subSelectionIndex]).getRawValue();
             if (selectorIndex == 1) {
                 setting = Math.round(Float.parseFloat(setting) * 100) + "%";
             } else if (selectorIndex == 2 && subSelectionIndex == 4) {
-                switch (settings.get("font")) {
+                switch (settings.getValue("font").getRawValue()) {
                     case "SAB_font" :
                         setting = "SAB Font";
                         break;

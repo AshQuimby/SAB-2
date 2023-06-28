@@ -2,6 +2,7 @@ package sab.game;
 
 import com.seagull_engine.SeagullSounds;
 
+
 public class SabSounds {
     public static final SeagullSounds soundEngine = Game.game.window.soundEngine;
 

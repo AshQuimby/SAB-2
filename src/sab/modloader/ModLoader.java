@@ -10,17 +10,20 @@ import java.net.URLClassLoader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.jar.JarInputStream;
 
+import com.sab_format.SabData;
+import com.sab_format.SabParsingException;
+import com.sab_format.SabReader;
 import sab.game.Game;
 import sab.game.attack.AttackType;
 import sab.game.fighter.FighterType;
 import sab.game.screen.extras.JukeboxScreen;
 import sab.game.stage.StageType;
-import sab.util.SabReader;
 
 public final class ModLoader {
 	
@@ -40,11 +43,17 @@ public final class ModLoader {
                 + "resources/" + fileName;
 
         Files.copy(settingsReader, Paths.get(path));
-        Map<String, String> settings = SabReader.read(Paths.get(path).toFile());
-        Files.delete(Paths.get(path));
-
-        jar.close();
-        return settings;
+        try {
+            SabData data = SabReader.read(Paths.get(path).toFile());
+            Map<String, String> settings = new HashMap<>();
+            for (String key : data.getValues().keySet()) settings.put(key, data.getValue(key).getRawValue());
+            Files.delete(Paths.get(path));
+            jar.close();
+            return settings;
+        } catch (SabParsingException e) {
+            jar.close();
+            throw new IOException("Error parsing mod.sab: " + e.getLocalizedMessage());
+        }
     }
 
     // Attempts to load an entire mod from a file object

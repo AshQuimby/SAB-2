@@ -1,11 +1,9 @@
 package sab.game;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.HashMap;
+import com.sab_format.*;
 
-import sab.util.SabReader;
+import java.io.File;
+import java.io.IOException;
 
 public class Settings {
     private static boolean staticCamera;
@@ -23,17 +21,17 @@ public class Settings {
     private static String font;
 
     public static void loadSettings() {
-        HashMap<String, String> settings = null;
+        SabData settings = null;
 
         try {
             settings = SabReader.read(new File("../settings.sab"));
-        } catch (RuntimeException e) {
+        } catch (SabParsingException e) {
             readError();
             loadSettings();
         }
 
         try {
-            fromHashMap(settings);
+            fromSabData(settings);
         } catch (NullPointerException e) {
             loadSettings();
         }
@@ -73,50 +71,50 @@ public class Settings {
 
     public static void writeFile() {
         try {
-            SabReader.write(toHashMap(), new File("../settings.sab"));
-        } catch (FileNotFoundException e) {
-        } catch (IOException e) {
+            SabWriter.write(new File("../settings.sab"), toSabData());
+        } catch (IOException ignored) {
         }
     }
 
-    public static HashMap<String, String> toHashMap() {
-        HashMap<String, String> settings = new HashMap<String, String>();
-        settings.put("static_camera", Boolean.toString(staticCamera));
-        settings.put("screen_shake", Boolean.toString(screenShake));
-        settings.put("fullscreen", Boolean.toString(fullscreen));
-        settings.put("ass_balls", Boolean.toString(assBalls));
-        settings.put("stage_hazards", Boolean.toString(stageHazards));
-        settings.put("anticipation", Boolean.toString(anticipation));
-        settings.put("debug_mode", Boolean.toString(debugMode));
-        settings.put("draw_player_arrows", Boolean.toString(drawPlayerArrows));
-        settings.put("master_volume", Float.toString(masterVolume));
-        settings.put("sfx_volume", Float.toString(sfxVolume));
-        settings.put("music_volume", Float.toString(musicVolume));
-        settings.put("hosting_port", Integer.toString(hostingPort));
-        settings.put("font", font);
-        return settings;
+    public static SabData toSabData() {
+        SabData data = new SabData();
+        data.insertValue("static_camera", SabValue.fromBool(staticCamera));
+        data.insertValue("screen_shake", SabValue.fromBool(screenShake));
+        data.insertValue("fullscreen", SabValue.fromBool(fullscreen));
+        data.insertValue("ass_balls", SabValue.fromBool(assBalls));
+        data.insertValue("stage_hazards", SabValue.fromBool(stageHazards));
+        data.insertValue("anticipation", SabValue.fromBool(anticipation));
+        data.insertValue("debug_mode", SabValue.fromBool(debugMode));
+        data.insertValue("draw_player_arrows", SabValue.fromBool(drawPlayerArrows));
+        data.insertValue("master_volume", SabValue.fromFloat(masterVolume));
+        data.insertValue("sfx_volume", SabValue.fromFloat(sfxVolume));
+        data.insertValue("music_volume", SabValue.fromFloat(musicVolume));
+        data.insertValue("hosting_port", SabValue.fromInt(hostingPort));
+        data.insertValue("font", new SabValue(font));
+        return data;
     }
 
-    public static void fromHashMap(HashMap<String, String> settings) {
+    public static void fromSabData(SabData settings) {
         try {
-            staticCamera = Boolean.parseBoolean(settings.get("static_camera"));
-            screenShake = Boolean.parseBoolean(settings.get("screen_shake"));
-            fullscreen = Boolean.parseBoolean(settings.get("fullscreen"));
-            assBalls = Boolean.parseBoolean(settings.get("ass_balls"));
-            stageHazards = Boolean.parseBoolean(settings.get("stage_hazards"));
-            anticipation = Boolean.parseBoolean(settings.get("anticipation"));
-            debugMode = Boolean.parseBoolean(settings.get("debug_mode"));
-            drawPlayerArrows = Boolean.parseBoolean(settings.get("draw_player_arrows"));
-            masterVolume = Float.parseFloat(settings.get("master_volume"));
-            sfxVolume = Float.parseFloat(settings.get("sfx_volume"));
-            musicVolume = Float.parseFloat(settings.get("music_volume"));
-            hostingPort = Integer.parseInt(settings.get("hosting_port"));
-            font = settings.get("font");
+            staticCamera = settings.getValue("static_camera").asBool();
+            screenShake = settings.getValue("screen_shake").asBool();
+            fullscreen = settings.getValue("fullscreen").asBool();
+            assBalls = settings.getValue("ass_balls").asBool();
+            stageHazards = settings.getValue("stage_hazards").asBool();
+            anticipation = settings.getValue("anticipation").asBool();
+            debugMode = settings.getValue("debug_mode").asBool();
+            drawPlayerArrows = settings.getValue("draw_player_arrows").asBool();
+            masterVolume = settings.getValue("master_volume").asFloat();
+            sfxVolume = settings.getValue("sfx_volume").asFloat();
+            musicVolume = settings.getValue("music_volume").asFloat();
+            hostingPort = settings.getValue("hosting_port").asInt();
+            font = settings.getValue("font").getRawValue();
+
             if (font == null) {
                 font = "SAB_font";
                 writeFile();
             }
-        } catch (Exception e) {
+        } catch (NumberFormatException e) {
             defaultSettings();
             writeFile();
             loadSettings();

@@ -2,11 +2,14 @@ package sab.game.screen.extras;
 
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.sab_format.SabParsingException;
 import com.seagull_engine.Seagraphics;
 
+import sab.error.SabError;
 import sab.game.Game;
 import sab.game.SabSounds;
 import sab.game.screen.*;
+import sab.game.screen.error.ErrorScreen;
 import sab.screen.Screen;
 import sab.util.Utils;
 
@@ -55,7 +58,11 @@ public class ReplayScreen extends SelectorScreen {
             return onBack();
         } else {
             File[] replays = new File("../saves/replays").listFiles();
-            return new BattleScreen(replays[selection]);
+            try {
+                return new BattleScreen(replays[selection]);
+            } catch (SabParsingException e) {
+                return new ErrorScreen(new SabError("Error parsing replay file", e.getLocalizedMessage()));
+            }
         }
     }
 

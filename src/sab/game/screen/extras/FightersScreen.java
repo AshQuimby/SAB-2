@@ -7,6 +7,9 @@ import java.util.List;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Rectangle;
+import com.sab_format.SabData;
+import com.sab_format.SabParsingException;
+import com.sab_format.SabReader;
 import com.seagull_engine.Seagraphics;
 
 import sab.game.Game;
@@ -16,17 +19,22 @@ import sab.game.fighter.FighterType;
 import sab.modloader.ModLoader;
 import sab.screen.Screen;
 import sab.screen.ScreenAdapter;
-import sab.util.SabReader;
 import sab.util.Utils;
 
 public class FightersScreen extends ScreenAdapter {
     private int characterIndex;
     private List<Fighter> fighters = new ArrayList<>();
+    private SabData timesPlayed;
 
     public FightersScreen() {
         characterIndex = 0;
         for (Class<? extends FighterType> fighter : Game.game.fighters) {
             fighters.add(new Fighter(ModLoader.getFighterType(fighter)));
+        }
+
+        try {
+            timesPlayed = SabReader.read(new File("../saves/times_played.sab"));
+        } catch (SabParsingException ignored) {
         }
     }
 
@@ -40,7 +48,7 @@ public class FightersScreen extends ScreenAdapter {
 
         g.drawText(fighters.get(characterIndex).name, Game.getDefaultFont(), 0, Game.game.window.resolutionY / 2 - 64, 3 * Game.getDefaultFontScale(), Color.WHITE, 0);
 
-        String timesPlayed = SabReader.readProperty(fighters.get(characterIndex).id, new File("../saves/times_played.sab"));
+        String timesPlayed = this.timesPlayed == null ? "Couldn't load data :(" : this.timesPlayed.getValue(fighters.get(characterIndex).id).getRawValue();
         if (timesPlayed == null) {
             timesPlayed = "Why haven't you played me yet :(";
         } else {

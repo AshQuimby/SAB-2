@@ -2,6 +2,7 @@ package sab.game.screen;
 
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
+import com.sab_format.*;
 import com.seagull_engine.Seagraphics;
 
 import sab.error.SabError;
@@ -14,7 +15,6 @@ import sab.net.client.Client;
 import sab.net.packet.*;
 import sab.screen.Screen;
 import sab.screen.ScreenAdapter;
-import sab.util.SabReader;
 import sab.util.Utils;
 
 import java.io.File;
@@ -59,12 +59,17 @@ public class JoinGameScreen extends ScreenAdapter {
         }
 
         file = new File("../saves/servers.sab");
-        HashMap<String, String> servers = SabReader.read(file);
+        SabData servers;
+        try {
+            servers = SabReader.read(file);
+        } catch (SabParsingException e) {
+            return;
+        }
 
-        String mostRecent = servers.get("most_recent");
+        SabValue mostRecent = servers.getValue("most_recent");
         if (mostRecent != null) {
-            hostIp = mostRecent;
-            hostPort = servers.get(mostRecent);
+            hostIp = mostRecent.getRawValue();
+            hostPort = servers.getValue(mostRecent.getRawValue()).getRawValue();
         } else {
             hostIp = "localhost";
             hostPort = Integer.toString(Settings.getHostingPort());
@@ -73,13 +78,17 @@ public class JoinGameScreen extends ScreenAdapter {
 
     private void join() {
         File serversFile = new File("../saves/servers.sab");
-        HashMap<String, String> servers = SabReader.read(serversFile);
-        servers.put("most_recent", hostIp);
-        servers.put(hostIp, hostPort);
+        SabData servers;
         try {
-            SabReader.write(servers, serversFile);
-        } catch (IOException e) {
-            e.printStackTrace();
+            servers = SabReader.read(serversFile);
+        } catch (SabParsingException e) {
+            return;
+        }
+        servers.insertValue("most_recent", new SabValue(hostIp));
+        servers.insertValue(hostIp, new SabValue(hostPort));
+        try {
+            SabWriter.write(serversFile, servers);
+        } catch (IOException ignored) {
         }
 
         Thread connect = new Thread(
