@@ -9,7 +9,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
-
 public class SabReader {
     public static HashMap<String, String> read(File file) {
         HashMap<String, String> contents = new HashMap<>();

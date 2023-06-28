@@ -66,7 +66,7 @@ public class LittleHLand extends StageType {
                 stage.addStageObject(infectedPlatform);
                 break;
             default :
-                Platform grassPlatform = new Platform(position.x- 224 / 2, position.y, 224, 64, "grass_platform.png", stage);
+                Platform grassPlatform = new Platform(position.x- 224 / 2, position.y, 352, 64, "grass_platform.png", stage);
                 grassPlatform.createLedges(stage);
                 stage.addStageObject(grassPlatform);
                 break;

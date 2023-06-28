@@ -7,6 +7,6 @@ public class LocalGame {
     // Launch the application
     public static void main(String[] args) {
         // SeagullEngine so we do less work
-        SeagullEngine.hatch("Super Ass Brothers: Remasstered", "assets/", "assets/images/ui/icon.png", false, new Vector2(1280, 720), 60, false, Game.game);
+        SeagullEngine.hatch("Super Ass Brothers: Remasstered", "assets/", "images/ui/icon.png", false, new Vector2(1280, 720), 60, false, Game.game);
     }
 }

@@ -94,12 +94,17 @@ public class Game extends Messenger {
     // Initial load tasks (like from Among Us)
     @Override
     public void load() {
+
+        System.out.println(Gdx.files.internal("test.txt").exists());
+        System.out.println(Gdx.files.internal("images").exists());
+        System.out.println(Gdx.files.internal("images").isDirectory());
+
         selectNewTitleScreen();
-        window.imageProvider.loadFont("assets/fonts/SAB_font.ttf", 100);
-        window.imageProvider.loadFont("assets/fonts/arial.ttf", 100);
-        window.imageProvider.loadFont("assets/fonts/comic_snas.ttf", 100);
-        window.imageProvider.loadFont("assets/fonts/minecraft.ttf", 137);
-        window.imageProvider.loadFont("assets/fonts/shitfont23.ttf", 225);
+        window.imageProvider.loadFont("fonts/SAB_font.ttf", 100);
+        window.imageProvider.loadFont("fonts/arial.ttf", 100);
+        window.imageProvider.loadFont("fonts/comic_snas.ttf", 100);
+        window.imageProvider.loadFont("fonts/minecraft.ttf", 137);
+        window.imageProvider.loadFont("fonts/shitfont23.ttf", 225);
         shaders = new HashMap<>();
         shaders.put("enchanted_baguette", new SpriteShader("shaders/default.vsh", "shaders/enchanted_baguette.fsh"));
 
@@ -148,15 +153,15 @@ public class Game extends Messenger {
         } else {
             switch (SabRandom.random(3)) {
                 case 0 -> {
-                    titleBackground = new ParallaxBackground(Gdx.files.internal("assets/backgrounds/title_screen/last_location"));
+                    titleBackground = new ParallaxBackground("assets/backgrounds/title_screen/last_location");
                     titleBackground.parallaxMultiplier = 1f;
                 }
                 case 1 -> {
-                    titleBackground = new ParallaxBackground(Gdx.files.internal("assets/backgrounds/title_screen/warzone"));
+                    titleBackground = new ParallaxBackground("assets/backgrounds/title_screen/warzone");
                     titleBackground.ambientSpeedMultiplier = 4f;
                 }
                 case 2 -> {
-                    titleBackground = new ParallaxBackground(Gdx.files.internal("assets/backgrounds/title_screen/icy_slab"));
+                    titleBackground = new ParallaxBackground("assets/backgrounds/title_screen/icy_slab");
                 }
             }
         }
