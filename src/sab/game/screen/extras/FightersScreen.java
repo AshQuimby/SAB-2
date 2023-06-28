@@ -10,13 +10,13 @@ import com.badlogic.gdx.math.Rectangle;
 import com.seagull_engine.Seagraphics;
 
 import sab.game.Game;
-import sab.game.SABSounds;
+import sab.game.SabSounds;
 import sab.game.fighter.Fighter;
 import sab.game.fighter.FighterType;
 import sab.modloader.ModLoader;
 import sab.screen.Screen;
 import sab.screen.ScreenAdapter;
-import sab.util.SABReader;
+import sab.util.SabReader;
 import sab.util.Utils;
 
 public class FightersScreen extends ScreenAdapter {
@@ -40,7 +40,7 @@ public class FightersScreen extends ScreenAdapter {
 
         g.drawText(fighters.get(characterIndex).name, Game.getDefaultFont(), 0, Game.game.window.resolutionY / 2 - 64, 3 * Game.getDefaultFontScale(), Color.WHITE, 0);
 
-        String timesPlayed = SABReader.readProperty(fighters.get(characterIndex).id, new File("../saves/times_played.sab"));
+        String timesPlayed = SabReader.readProperty(fighters.get(characterIndex).id, new File("../saves/times_played.sab"));
         if (timesPlayed == null) {
             timesPlayed = "Why haven't you played me yet :(";
         } else {
@@ -75,13 +75,13 @@ public class FightersScreen extends ScreenAdapter {
     public Screen keyPressed(int keyCode) {
 
         if (keyCode == Input.Keys.RIGHT) {
-            SABSounds.playSound(SABSounds.BLIP);
+            SabSounds.playSound(SabSounds.BLIP);
             characterIndex = Utils.loop(characterIndex, 1, fighters.size(), 0);
         } else if (keyCode == Input.Keys.LEFT) {
-            SABSounds.playSound(SABSounds.BLIP);
+            SabSounds.playSound(SabSounds.BLIP);
             characterIndex = Utils.loop(characterIndex, -1, fighters.size(), 0);
         } else if (keyCode == Input.Keys.ESCAPE) {
-            SABSounds.playSound(SABSounds.BLIP);
+            SabSounds.playSound(SabSounds.BLIP);
             return new ExtrasScreen();
         }
         

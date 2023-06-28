@@ -1,9 +1,8 @@
 package sab.game;
 
-import com.badlogic.gdx.audio.Sound;
 import com.seagull_engine.SeagullSounds;
 
-public class SABSounds {
+public class SabSounds {
     public static final SeagullSounds soundEngine = Game.game.window.soundEngine;
 
     public static final String BLIP = "blip.mp3";

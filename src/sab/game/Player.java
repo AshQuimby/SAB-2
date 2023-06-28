@@ -1,9 +1,7 @@
 package sab.game;
 
-import java.security.Key;
 import java.util.List;
 
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.seagull_engine.GameObject;
@@ -23,7 +21,7 @@ import sab.game.stage.PassablePlatform;
 import sab.game.stage.StageObject;
 import sab.net.Keys;
 import sab.replay.ReplayAI;
-import sab.util.SABRandom;
+import sab.util.SabRandom;
 
 public class Player extends GameObject implements Hittable {
     public final Battle battle;
@@ -314,7 +312,7 @@ public class Player extends GameObject implements Hittable {
     public void kill(int livesCost) {
         fighter.onKill(this);
         for (int i = 0; i < 16; i++) {
-            battle.addParticle(new Particle(hitbox.getCenter(new Vector2()), hitbox.getCenter(new Vector2()).scl(-0.025f * SABRandom.random(0.125f, 1f)).rotateDeg(SABRandom.random(-2.5f, 2.5f)), 128, 128, "twinkle.png"));
+            battle.addParticle(new Particle(hitbox.getCenter(new Vector2()), hitbox.getCenter(new Vector2()).scl(-0.025f * SabRandom.random(0.125f, 1f)).rotateDeg(SabRandom.random(-2.5f, 2.5f)), 128, 128, "twinkle.png"));
         }
         battle.shakeCamera(6);
         rotation = 0;
@@ -332,7 +330,7 @@ public class Player extends GameObject implements Hittable {
         if (assCharged) battle.spawnAssBall();
         assCharged = false;
         battle.getPlayer(1 - id).gameStats.gotKill();
-        SABSounds.playSound("death.mp3");
+        SabSounds.playSound("death.mp3");
         lives -= livesCost;
         damage = 0;
         if (heldItem != null) heldItem.toss(this);
@@ -568,11 +566,11 @@ public class Player extends GameObject implements Hittable {
         if (keys.isJustPressed(Keys.UP)) {
             if (touchingStage) {
                 velocity.y = getJumpVelocity();
-                SABSounds.playSound("jump.mp3");
+                SabSounds.playSound("jump.mp3");
                 fighter.onJump(this, false);
             } else if (extraJumpsUsed < fighter.airJumps && velocity.y < getJumpVelocity() * fighter.doubleJumpMultiplier) {
                 velocity.y = getJumpVelocity() * fighter.doubleJumpMultiplier;
-                SABSounds.playSound("double_jump.mp3");
+                SabSounds.playSound("double_jump.mp3");
                 extraJumpsUsed++;
                 battle.addParticle(new Particle(getCenter().sub(0, hitbox.height / 2), new Vector2(), 56, 16, 3, 3, direction, "double_jump.png"));
                 fighter.onJump(this, true);
@@ -805,7 +803,7 @@ public class Player extends GameObject implements Hittable {
             fighter.onSuccessfulParry(this, source);
             parryTime = -20;
             setIFrames(10);
-            battle.addParticle(new Particle(getCenter().add(4 * direction, hitbox.height / 3), new Vector2(1 * SABRandom.random(), 0).rotateDeg(SABRandom.random() * 360), 64, 64, 0, "twinkle.png"));
+            battle.addParticle(new Particle(getCenter().add(4 * direction, hitbox.height / 3), new Vector2(1 * SabRandom.random(), 0).rotateDeg(SabRandom.random() * 360), 64, 64, 0, "twinkle.png"));
             return false;
         }
         return fighter.onHit(this, source) && !invulnerable;
@@ -835,7 +833,7 @@ public class Player extends GameObject implements Hittable {
         battle.shakeCamera(3);
         battle.freezeFrame((int) Math.round((source.damage - 10) / 30f), 2, 1, false);
 
-        SABSounds.playSound("hit.mp3");
+        SabSounds.playSound("hit.mp3");
         Vector2 newKnockback = source.knockback.cpy();
         if (!source.staticKnockback) {
             newKnockback.scl(3.25f).scl(damage / 100f + 1f);
@@ -900,8 +898,8 @@ public class Player extends GameObject implements Hittable {
                 preRender(g);
                 if (assCharged) {
                     g.usefulDraw(g.imageProvider.getImage("glow.png"), drawRect.x - 16, drawRect.y - 16, (int) drawRect.width + 32, (int) drawRect.height + 32, 0, 1, 0, false, false);
-                    drawRect.x += SABRandom.random(-4f, 4f);
-                    drawRect.y += SABRandom.random(-4f, 4f);
+                    drawRect.x += SabRandom.random(-4f, 4f);
+                    drawRect.y += SabRandom.random(-4f, 4f);
                 }
                 fighter.render(this, g);
                 drawRect.setCenter(getCenter().add(fighter.imageOffsetX * direction, fighter.imageOffsetY).add(drawRectOffset));

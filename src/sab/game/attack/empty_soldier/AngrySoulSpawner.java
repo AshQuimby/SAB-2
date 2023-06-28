@@ -4,9 +4,8 @@ import com.badlogic.gdx.math.Vector2;
 import com.seagull_engine.Seagraphics;
 import sab.game.attack.Attack;
 import sab.game.attack.AttackType;
-import sab.game.attack.john.JohnBall;
 import sab.game.particle.Particle;
-import sab.util.SABRandom;
+import sab.util.SabRandom;
 
 public class AngrySoulSpawner extends AttackType {
     @Override
@@ -20,7 +19,7 @@ public class AngrySoulSpawner extends AttackType {
 
     @Override
     public void update(Attack attack) {
-        Vector2 particleSpawnPos = attack.getCenter().add(new Vector2(SABRandom.random(-24, 24), SABRandom.random(-24, 24)));
+        Vector2 particleSpawnPos = attack.getCenter().add(new Vector2(SabRandom.random(-24, 24), SabRandom.random(-24, 24)));
         Vector2 particleVelocity = attack.getCenter().sub(particleSpawnPos).scl(0.025f);
         attack.getBattle().addParticle(new Particle(particleSpawnPos, particleVelocity, 16, 16, "spirit_bubble.png"));
     }
@@ -42,6 +41,6 @@ public class AngrySoulSpawner extends AttackType {
     @Override
     public void onSpawn(Attack attack, int[] data) {
         attack.direction = attack.owner.direction;
-        attack.hitbox.setCenter(attack.owner.getCenter().add(attack.direction * -70 - SABRandom.random(0f, 72f) * attack.direction, SABRandom.random(-80f, 80f)));
+        attack.hitbox.setCenter(attack.owner.getCenter().add(attack.direction * -70 - SabRandom.random(0f, 72f) * attack.direction, SabRandom.random(-80f, 80f)));
     }
 }

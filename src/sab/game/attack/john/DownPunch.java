@@ -2,7 +2,7 @@ package sab.game.attack.john;
 
 import com.badlogic.gdx.math.Vector2;
 import com.seagull_engine.GameObject;
-import sab.game.SABSounds;
+import sab.game.SabSounds;
 import sab.game.attack.Attack;
 import sab.game.attack.MeleeAttackType;
 
@@ -35,7 +35,7 @@ public class DownPunch extends MeleeAttackType {
     @Override
     public void successfulHit(Attack attack, GameObject hit) {
         attack.owner.battle.shakeCamera(5);
-        SABSounds.playSound("crunch.mp3");
+        SabSounds.playSound("crunch.mp3");
     }
 
     @Override

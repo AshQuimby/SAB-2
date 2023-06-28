@@ -1,13 +1,12 @@
 package sab.game.fighter;
 
 
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
 import sab.game.Game;
 import sab.game.Player;
-import sab.game.SABSounds;
+import sab.game.SabSounds;
 import sab.game.ai.AI;
 import sab.game.ai.BaseAI;
 import sab.game.animation.Animation;
@@ -16,13 +15,13 @@ import sab.game.attack.walouis.*;
 import sab.game.particle.Particle;
 import sab.net.Keys;
 import sab.util.Utils;
-import sab.util.SABRandom;
+import sab.util.SabRandom;
 
 public class Walouis extends FighterType {
     static {
         // Allows us to play this song internally as a sound despite being in the music folder
-        SABSounds.soundEngine.loadSound("music/misc/walouis_sax_solo.mp3");
-        SABSounds.soundEngine.loadSound("music/misc/walouis_sax_solo_alt.mp3");
+        SabSounds.soundEngine.loadSound("music/misc/walouis_sax_solo.mp3");
+        SabSounds.soundEngine.loadSound("music/misc/walouis_sax_solo_alt.mp3");
     }
     private Animation throwAnimation;
     private int playingSaxFor;
@@ -73,7 +72,7 @@ public class Walouis extends FighterType {
                     }
                 }
 
-                if (SABRandom.random() < .1f) {
+                if (SabRandom.random() < .1f) {
                     Rectangle futureTargetHitbox = new Rectangle(target.hitbox);
                     Vector2 futureTargetVelocity = target.velocity.cpy();
                     int ticksUntilCollision = 0;
@@ -97,7 +96,7 @@ public class Walouis extends FighterType {
 
                 if (isDirectlyHorizontal(target.hitbox) && isFacing(targetPosition.x)) {
                     float horizontalDistance = Math.abs(center.x - targetPosition.x);
-                    if (horizontalDistance > 275 && SABRandom.random() * 25 < difficulty) {
+                    if (horizontalDistance > 275 && SabRandom.random() * 25 < difficulty) {
                         useDownAttack();
                     } else if (horizontalDistance < 150) {
                         useNeutralAttack();
@@ -127,8 +126,8 @@ public class Walouis extends FighterType {
             playingSaxFor--;
         }
         if (playingSaxFor == 740) {
-            if (SABRandom.randomBoolean(0.9f)) SABSounds.playSound("walouis_sax_solo.mp3");
-            else SABSounds.playSound("walouis_sax_solo_alt.mp3");
+            if (SabRandom.randomBoolean(0.9f)) SabSounds.playSound("walouis_sax_solo.mp3");
+            else SabSounds.playSound("walouis_sax_solo_alt.mp3");
         }
     }
 
@@ -152,7 +151,7 @@ public class Walouis extends FighterType {
             player.startAttack(new Note(), fighter.freefallAnimation, 1, 1, false, new int[]{0});
             player.usedRecovery = true;
             player.removeJumps();
-            SABSounds.playSound("wagh.mp3");
+            SabSounds.playSound("wagh.mp3");
         }
     }
 
@@ -171,8 +170,8 @@ public class Walouis extends FighterType {
             // 740 is sax time, 150 is the saxophone animation
             playingSaxFor = 740 + 150;
             player.battle.addAttack(new Attack(new Saxophone(), player), null);
-            SABSounds.pauseMusic();
-            SABSounds.playSound("spotlight.mp3");
+            SabSounds.pauseMusic();
+            SabSounds.playSound("spotlight.mp3");
             return true;
         }
         return false;
@@ -180,7 +179,7 @@ public class Walouis extends FighterType {
 
     @Override
     public void charging(Fighter fighter, Player player, int charge) {
-        if (Game.game.window.getTick() % 4 == 0) player.battle.addParticle(new Particle(Utils.randomPointInRect(player.hitbox), new Vector2(1, 0).rotateDeg(SABRandom.random() * 360), 24, 24, "fire.png"));
+        if (Game.game.window.getTick() % 4 == 0) player.battle.addParticle(new Particle(Utils.randomPointInRect(player.hitbox), new Vector2(1, 0).rotateDeg(SabRandom.random() * 360), 24, 24, "fire.png"));
         player.velocity.y *= 0.85f;
         player.velocity.x *= 0.95f;
     }

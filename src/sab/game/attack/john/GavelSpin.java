@@ -2,17 +2,9 @@ package sab.game.attack.john;
 
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
-import com.seagull_engine.GameObject;
 
-import com.seagull_engine.Seagraphics;
-import com.seagull_engine.graphics.SpriteShader;
-import sab.game.Direction;
-import sab.game.Game;
-import sab.game.SABSounds;
 import sab.game.attack.Attack;
-import sab.game.attack.AttackType;
 import sab.game.attack.MeleeAttackType;
-import sab.game.attack.john.JohnStar;
 
 public class GavelSpin extends MeleeAttackType {
     @Override

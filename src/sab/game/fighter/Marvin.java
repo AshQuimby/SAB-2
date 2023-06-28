@@ -13,7 +13,7 @@ import sab.game.attack.Attack;
 import sab.game.attack.marvin.*;
 import sab.game.particle.Particle;
 import sab.net.Keys;
-import sab.util.SABRandom;
+import sab.util.SabRandom;
 import sab.util.Utils;
 
 public class Marvin extends FighterType {
@@ -59,12 +59,12 @@ public class Marvin extends FighterType {
 
             @Override
             public void attack(Vector2 center, Player target, Vector2 targetPosition) {
-                if (player.getCharge() > SABRandom.random() * 50 + 10) {
+                if (player.getCharge() > SabRandom.random() * 50 + 10) {
                     releaseKey(Keys.ATTACK);
                     return;
                 }
 
-                if (SABRandom.random() * 25 > difficulty) return;
+                if (SabRandom.random() * 25 > difficulty) return;
 
                 if (isDirectlyHorizontal(target.hitbox) && isFacing(targetPosition.x)) {
                     float horizontalDistance = Math.abs(center.x - targetPosition.x);
@@ -72,13 +72,13 @@ public class Marvin extends FighterType {
                     if (horizontalDistance <= WRENCH_DISTANCE) {
                         useSideAttack();
                     } else {
-                        if (target.damage >= FROSTBALL_DAMAGE_REQUIRED && SABRandom.random() * 20 - (target.damage / 30f) < difficulty) {
+                        if (target.damage >= FROSTBALL_DAMAGE_REQUIRED && SabRandom.random() * 20 - (target.damage / 30f) < difficulty) {
                             useDownAttack();
                         } else {
                             useNeutralAttack();
                         }
                     }
-                } else if ((isDirectlyAbove(target.hitbox) || isDirectlyBelow(target.hitbox) && Math.abs(center.y - targetPosition.y) > 32) && SABRandom.random() * 20 < difficulty) {
+                } else if ((isDirectlyAbove(target.hitbox) || isDirectlyBelow(target.hitbox) && Math.abs(center.y - targetPosition.y) > 32) && SabRandom.random() * 20 < difficulty) {
                     useUpAttack();
                 }
             }
@@ -175,7 +175,7 @@ public class Marvin extends FighterType {
     @Override
     public int getRandomCostume(Fighter fighter) {
         if (Utils.aprilFools()) {
-            if (SABRandom.randomBoolean(0.25f)) {
+            if (SabRandom.randomBoolean(0.25f)) {
                 return 1929;
             }
         }

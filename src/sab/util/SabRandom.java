@@ -3,7 +3,7 @@ package sab.util;
 
 import com.badlogic.gdx.math.RandomXS128;
 
-public class SABRandom {
+public class SabRandom {
     static {
         gameRandom = new RandomXS128(System.currentTimeMillis());
     }

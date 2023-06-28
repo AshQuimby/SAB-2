@@ -1,6 +1,5 @@
 package sab.game.attack.stephane;
 
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 
 import com.seagull_engine.GameObject;
@@ -9,7 +8,7 @@ import sab.game.animation.Animation;
 import sab.game.attack.Attack;
 import sab.game.attack.AttackType;
 import sab.game.particle.Particle;
-import sab.util.SABRandom;
+import sab.util.SabRandom;
 
 public class Creeper extends AttackType implements Hittable {
     private Attack attack;
@@ -60,10 +59,10 @@ public class Creeper extends AttackType implements Hittable {
         if (exploded) {
             attack.alive = false;
             for (int i = 0; i < 6 ; i++) {
-                attack.owner.battle.addParticle(new Particle(attack.hitbox.getCenter(new Vector2()), new Vector2(4 * SABRandom.random(), 0).rotateDeg(SABRandom.random() * 360), 64, 64, 0, "fire.png"));
-                attack.owner.battle.addParticle(new Particle(attack.hitbox.getCenter(new Vector2()), new Vector2(4 * SABRandom.random(), 0).rotateDeg(SABRandom.random() * 360), 96, 96, 0, "smoke.png"));
+                attack.owner.battle.addParticle(new Particle(attack.hitbox.getCenter(new Vector2()), new Vector2(4 * SabRandom.random(), 0).rotateDeg(SabRandom.random() * 360), 64, 64, 0, "fire.png"));
+                attack.owner.battle.addParticle(new Particle(attack.hitbox.getCenter(new Vector2()), new Vector2(4 * SabRandom.random(), 0).rotateDeg(SabRandom.random() * 360), 96, 96, 0, "smoke.png"));
             }
-            SABSounds.playSound("explosion.mp3");
+            SabSounds.playSound("explosion.mp3");
             attack.getBattle().shakeCamera(7);
             return;
         }
@@ -131,7 +130,7 @@ public class Creeper extends AttackType implements Hittable {
         if (attack.life <= 0) attack.alive = false;
         attack.velocity.add(source.knockback);
         hurtTime = 30;
-        SABSounds.playSound("hit.mp3");
+        SabSounds.playSound("hit.mp3");
         return true;
     }
 

@@ -4,7 +4,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.seagull_engine.GameObject;
 
-import sab.game.SABSounds;
+import sab.game.SabSounds;
 import sab.game.attack.Attack;
 import sab.game.attack.AttackType;
 
@@ -48,7 +48,7 @@ public class Tongue extends AttackType {
     @Override
     public void successfulHit(Attack attack, GameObject hit) {
         if (hit.hitbox.contains(tipper)) {
-            SABSounds.playSound("tongue_splat.mp3");
+            SabSounds.playSound("tongue_splat.mp3");
             attack.knockback = new Vector2(9 * attack.direction, 6);
         }
     }
@@ -57,6 +57,6 @@ public class Tongue extends AttackType {
     public void onSpawn(Attack attack, int[] data) {
         attack.hitbox.setCenter(attack.owner.hitbox.getCenter(new Vector2()).add(32 * attack.owner.direction, 4));
         attack.knockback = new Vector2(-3 * attack.owner.direction, 4);
-        SABSounds.playSound("tongue_spit.mp3");
+        SabSounds.playSound("tongue_spit.mp3");
     }
 }

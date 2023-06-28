@@ -10,7 +10,7 @@ import java.util.Map;
 import java.util.Scanner;
 
 
-public class SABReader {
+public class SabReader {
     public static HashMap<String, String> read(File file) {
         HashMap<String, String> contents = new HashMap<>();
         Scanner scanner = null;

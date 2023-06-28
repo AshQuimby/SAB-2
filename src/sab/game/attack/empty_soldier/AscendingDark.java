@@ -1,6 +1,5 @@
 package sab.game.attack.empty_soldier;
 
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.seagull_engine.Seagraphics;
 
@@ -9,7 +8,7 @@ import sab.game.attack.AttackType;
 import sab.game.particle.Particle;
 import sab.net.Keys;
 import sab.util.Utils;
-import sab.util.SABRandom;
+import sab.util.SabRandom;
 
 public class AscendingDark extends AttackType {
     @Override
@@ -52,7 +51,7 @@ public class AscendingDark extends AttackType {
         attack.knockback.set(attack.owner.velocity.cpy().nor().scl(12));
 
         Vector2 particlePosition = Utils.randomPointInRect(attack.hitbox);
-        Vector2 particleVelocity = new Vector2(SABRandom.random(-3f, 3f), -SABRandom.random(1f, 4f));
+        Vector2 particleVelocity = new Vector2(SabRandom.random(-3f, 3f), -SabRandom.random(1f, 4f));
         Particle particle = new Particle(particlePosition, particleVelocity, 32, 32, 7, 5, particleVelocity.x > 0 ? 1 : -1, "shadowling.png");
         attack.owner.battle.addParticle(particle);
     }

@@ -4,8 +4,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
 import sab.game.Player;
-import sab.game.SABSounds;
-import sab.game.animation.Animation;
+import sab.game.SabSounds;
 import sab.game.attack.Attack;
 import sab.game.attack.unnamed_duck.DuckItem;
 
@@ -34,7 +33,7 @@ public class RubbishLid extends Item {
                     attack.velocity.x *= -1;
                     attack.knockback.x *= -1;
                     attack.owner = holder;
-                    SABSounds.playSound("shield_bounce.mp3");
+                    SabSounds.playSound("shield_bounce.mp3");
                 }
             }
             if (useTime == 0) uses--;

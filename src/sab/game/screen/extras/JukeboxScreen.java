@@ -5,17 +5,14 @@ import java.util.List;
 
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Vector2;
 import com.seagull_engine.Seagraphics;
 
-import sab.game.CollisionResolver;
 import sab.game.Game;
-import sab.game.SABSounds;
+import sab.game.SabSounds;
 import sab.screen.Screen;
 import sab.screen.ScreenAdapter;
 import sab.util.Utils;
-import sab.util.SABRandom;
+import sab.util.SabRandom;
 
 public class JukeboxScreen extends ScreenAdapter {
     private static List<String> songIDs = new ArrayList<>();
@@ -127,7 +124,7 @@ public class JukeboxScreen extends ScreenAdapter {
     }
 
     private void createRaveLights() {
-        int numLights = SABRandom.random(4, 6);
+        int numLights = SabRandom.random(4, 6);
         for (int i = 0; i < numLights; i++) {
             raveLights.add(new RaveLight());
         }
@@ -140,46 +137,46 @@ public class JukeboxScreen extends ScreenAdapter {
                 if (!paused) createRaveLights();
             }
             case Input.Keys.RIGHT -> {
-                SABSounds.playSound(SABSounds.BLIP);
+                SabSounds.playSound(SabSounds.BLIP);
                 songIndex = Utils.loop(songIndex, 1, songNames.size(), 0);
             }
             case Input.Keys.LEFT -> {
-                SABSounds.playSound(SABSounds.BLIP);
+                SabSounds.playSound(SabSounds.BLIP);
                 songIndex = Utils.loop(songIndex, -1, songNames.size(), 0);
             }
             case Input.Keys.UP -> {
-                SABSounds.playSound(SABSounds.BLIP);
+                SabSounds.playSound(SabSounds.BLIP);
                 widgetIndex = Utils.loop(widgetIndex, 1, 3, 0);
             }
             case Input.Keys.DOWN -> {
-                SABSounds.playSound(SABSounds.BLIP);
+                SabSounds.playSound(SabSounds.BLIP);
                 widgetIndex = Utils.loop(widgetIndex, -1, 3, 0);
             }
             case Input.Keys.ENTER -> {
-                SABSounds.playSound(SABSounds.BLIP);
+                SabSounds.playSound(SabSounds.BLIP);
                 switch (widgetIndex) {
                     case 0 -> {
                         if (playing != songIndex) {
-                            SABSounds.playMusic(songIDs.get(songIndex), looping);
+                            SabSounds.playMusic(songIDs.get(songIndex), looping);
                             playing = songIndex;
                             currentDanceRate = (60/7f) / songTempos.get(playing) * 60f;
                             raveLights.clear();
                             paused = false;
                         } else if (!paused) {
-                            SABSounds.pauseMusic();
+                            SabSounds.pauseMusic();
                             johnFrameTimer = 0;
                             johnFrame = 0;
                             currentDanceRate = (60/7f) / songTempos.get(playing) * 60f;
                             raveLights.clear();
                             paused = true;
                         } else {
-                            SABSounds.unpauseMusic();
+                            SabSounds.unpauseMusic();
                             paused = false;
                             raveLights.clear();
                         }
                     }
                     case 1 -> {
-                        SABSounds.stopMusic();
+                        SabSounds.stopMusic();
                         playing = -1;
                         raveLights.clear();
                         paused = true;
@@ -187,12 +184,12 @@ public class JukeboxScreen extends ScreenAdapter {
                     case 2 -> {
                         loopAnimationTimer = 0;
                         looping = !looping;
-                        SABSounds.setLooping(looping);
+                        SabSounds.setLooping(looping);
                     }
                 }
             }
             case Input.Keys.ESCAPE -> {
-                SABSounds.playSound(SABSounds.BLIP);
+                SabSounds.playSound(SabSounds.BLIP);
                 return new ExtrasScreen();
             }
         }
@@ -210,24 +207,24 @@ public class JukeboxScreen extends ScreenAdapter {
         RaveLight() {
             ArrayList<Float> colors = new ArrayList<>();
             colors.add(1f);
-            colors.add(SABRandom.random() * 0.75f + 0.25f);
+            colors.add(SabRandom.random() * 0.75f + 0.25f);
             colors.add(0.25f);
             float[] rgb = new float[3];
             for (int i = 0; i < 3; i++) {
-                int colorIndex = SABRandom.random(colors.size() - 1);
+                int colorIndex = SabRandom.random(colors.size() - 1);
                 rgb[i] = colors.get(colorIndex);
                 colors.remove(colorIndex);
             }
             color = new Color(rgb[0], rgb[1], rgb[2], 0.25f);
 
-            rotation = SABRandom.random(0, 360);
-            rotationSpeed = SABRandom.random(-2f, 2f    );
-            x = SABRandom.random(-Game.game.window.resolutionX / 8, Game.game.window.resolutionX / 8);
+            rotation = SabRandom.random(0, 360);
+            rotationSpeed = SabRandom.random(-2f, 2f    );
+            x = SabRandom.random(-Game.game.window.resolutionX / 8, Game.game.window.resolutionX / 8);
         }
 
         void render(Seagraphics g) {
             rotation += (int) (rotationSpeed);
-            rotationSpeed += SABRandom.random(-0.005f, 0.005f) * songTempos.get(playing);
+            rotationSpeed += SabRandom.random(-0.005f, 0.005f) * songTempos.get(playing);
             rotationSpeed = Math.max(-6, Math.min(6, rotationSpeed));
             g.usefulTintDraw(g.imageProvider.getImage("rave_light.png"), x, -Game.game.window.resolutionY + 32, 256, 2560, 0, 1, (int) rotation, false, false, color);
         }

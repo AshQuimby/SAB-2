@@ -1,13 +1,11 @@
 package sab.game.attack.john;
 
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.seagull_engine.GameObject;
 import com.seagull_engine.Seagraphics;
 import sab.game.Direction;
-import sab.game.SABSounds;
+import sab.game.SabSounds;
 import sab.game.attack.Attack;
-import sab.game.attack.AttackType;
 import sab.game.attack.MeleeAttackType;
 import sab.net.Keys;
 
@@ -53,7 +51,7 @@ public class JohnSlam extends MeleeAttackType {
                 attack.hitbox.width = 168;
                 moveToPlayer(attack);
                 attack.clearHitObjects();
-                SABSounds.playSound("crash.mp3");
+                SabSounds.playSound("crash.mp3");
                 attack.owner.battle.shakeCamera(12);
             } else {
                 if (jumpTime > 0) {
@@ -95,7 +93,7 @@ public class JohnSlam extends MeleeAttackType {
             attack.knockback = new Vector2(0, -8);
             attack.staticKnockback = false;
         }
-        SABSounds.playSound("crunch.mp3");
+        SabSounds.playSound("crunch.mp3");
     }
 
     @Override

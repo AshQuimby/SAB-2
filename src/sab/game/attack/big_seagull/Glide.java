@@ -1,6 +1,5 @@
 package sab.game.attack.big_seagull;
 
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.seagull_engine.Seagraphics;
 
@@ -9,7 +8,7 @@ import sab.game.attack.AttackType;
 import sab.game.particle.Particle;
 import sab.net.Keys;
 import sab.util.Utils;
-import sab.util.SABRandom;
+import sab.util.SabRandom;
 
 public class Glide extends AttackType {
     @Override
@@ -38,7 +37,7 @@ public class Glide extends AttackType {
         attack.owner.rotation = attack.rotation;
         attack.owner.frame = 15;
         if (attack.life % 3 == 0) {
-            attack.owner.battle.addParticle(new Particle(Utils.randomPointInRect(attack.owner.hitbox), new Vector2(SABRandom.random(-0.5f, 0.5f), SABRandom.random(-0.5f, 0.5f)), 40, 56, 3, "feather.png"));
+            attack.owner.battle.addParticle(new Particle(Utils.randomPointInRect(attack.owner.hitbox), new Vector2(SabRandom.random(-0.5f, 0.5f), SabRandom.random(-0.5f, 0.5f)), 40, 56, 3, "feather.png"));
         }
         if (attack.owner.keys.isJustPressed(Keys.ATTACK)) {
             attack.alive = false;

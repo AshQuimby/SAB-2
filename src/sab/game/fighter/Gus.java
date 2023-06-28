@@ -1,22 +1,20 @@
 package sab.game.fighter;
 
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.seagull_engine.GameObject;
 import sab.game.DamageSource;
 import sab.game.Player;
-import sab.game.SABSounds;
+import sab.game.SabSounds;
 import sab.game.action.PlayerAction;
 import sab.game.ai.AI;
 import sab.game.ai.BaseAI;
 import sab.game.animation.Animation;
 import sab.game.attack.Attack;
-import sab.game.attack.emperor_evil.Banana;
 import sab.game.attack.gus.*;
 import sab.game.stage.Ledge;
 import sab.game.stage.Platform;
 import sab.net.Keys;
-import sab.util.SABRandom;
+import sab.util.SabRandom;
 
 public class Gus extends FighterType {
     private Animation shootAnimation;
@@ -136,7 +134,7 @@ public class Gus extends FighterType {
 
     private void impact(Player player) {
         player.battle.shakeCamera(6);
-        SABSounds.playSound("john_step.mp3");
+        SabSounds.playSound("john_step.mp3");
     }
 
     @Override
@@ -231,7 +229,7 @@ public class Gus extends FighterType {
                     }
                 }
 
-                if (SABRandom.random() * 15 > difficulty) return;
+                if (SabRandom.random() * 15 > difficulty) return;
                 if (isDirectlyHorizontal(target.hitbox) && isFacing(targetPosition.x)) {
                     float horizontalDistance = Math.abs(center.x - targetPosition.x);
 
@@ -288,7 +286,7 @@ public class Gus extends FighterType {
                     }
                 } else {
                     if (amongUsManBreathTimer == 120) {
-                        switch (SABRandom.random(2)) {
+                        switch (SabRandom.random(2)) {
                             case 0 :
                                 fighter.idleAnimation = workOutAnimation;
                                 workOutAnimation.reset();

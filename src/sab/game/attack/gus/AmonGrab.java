@@ -1,16 +1,13 @@
 package sab.game.attack.gus;
 
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.seagull_engine.GameObject;
 import com.seagull_engine.Seagraphics;
-import sab.game.DamageSource;
 import sab.game.Player;
-import sab.game.SABSounds;
+import sab.game.SabSounds;
 import sab.game.animation.Animation;
 import sab.game.attack.Attack;
 import sab.game.attack.MeleeAttackType;
-import sab.net.Keys;
 
 public class AmonGrab extends MeleeAttackType {
     private int suplexTime;
@@ -59,7 +56,7 @@ public class AmonGrab extends MeleeAttackType {
             }
             if (attack.life == 2) {
                 attack.damage = 24;
-                SABSounds.playSound("impostor_kill.mp3");
+                SabSounds.playSound("impostor_kill.mp3");
                 attack.knockback = new Vector2(16 * attack.owner.direction * -1, 8);
                 attack.clearHitObjects();
                 attack.canHit = true;

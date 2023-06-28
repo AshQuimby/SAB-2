@@ -1,15 +1,14 @@
 package sab.game.attack.unnamed_duck;
 
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.seagull_engine.GameObject;
 import sab.game.Direction;
-import sab.game.SABSounds;
+import sab.game.SabSounds;
 import sab.game.attack.Attack;
 import sab.game.attack.AttackType;
-import sab.util.SABRandom;
+import sab.util.SabRandom;
 
 public class ThrownMolotov extends AttackType {
     @Override
@@ -29,7 +28,7 @@ public class ThrownMolotov extends AttackType {
     @Override
     public void update(Attack attack) {
         if (attack.collisionDirection == Direction.DOWN) {
-            SABSounds.playSound("crash.mp3");
+            SabSounds.playSound("crash.mp3");
             attack.alive = false;
         }
 
@@ -43,7 +42,7 @@ public class ThrownMolotov extends AttackType {
 
     @Override
     public void hit(sab.game.attack.Attack attack, GameObject hit) {
-        SABSounds.playSound("crash.mp3");
+        SabSounds.playSound("crash.mp3");
         attack.alive = false;
     }
 
@@ -58,7 +57,7 @@ public class ThrownMolotov extends AttackType {
     public void onKill(Attack attack) {
         for (int i = 0; i < 10; i++) {
             Vector2 spawnPosition = attack.getCenter();
-            Vector2 velocity = new Vector2(SABRandom.random(-7f, 7f), SABRandom.random(3f, 5f)).add(attack.velocity.x / 5, 0);
+            Vector2 velocity = new Vector2(SabRandom.random(-7f, 7f), SabRandom.random(3f, 5f)).add(attack.velocity.x / 5, 0);
 
             attack.getBattle().addAttack(new Attack(new FlammableLiquid(), attack.owner), new int[] {
                     Float.floatToIntBits(spawnPosition.x),

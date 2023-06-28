@@ -3,11 +3,9 @@ package sab.game.attack.matthew;
 import com.badlogic.gdx.math.Vector2;
 import com.seagull_engine.GameObject;
 import com.seagull_engine.Seagraphics;
-import sab.game.SABSounds;
+import sab.game.SabSounds;
 import sab.game.attack.Attack;
 import sab.game.attack.MeleeAttackType;
-import sab.game.particle.Particle;
-import sab.util.Utils;
 
 public class DashSlash extends MeleeAttackType {
     private Vector2 startPosition;
@@ -55,7 +53,7 @@ public class DashSlash extends MeleeAttackType {
     public void onSpawn(Attack attack, int[] data) {
         super.onSpawn(attack, data);
         attack.knockback = new Vector2(20 * attack.owner.direction, 2);
-        SABSounds.playSound("swish.mp3");
+        SabSounds.playSound("swish.mp3");
         startPosition = attack.owner.getCenter();
     }
 

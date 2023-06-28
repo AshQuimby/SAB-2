@@ -4,7 +4,7 @@ import com.badlogic.gdx.math.Vector2;
 
 import com.seagull_engine.Seagraphics;
 import sab.game.Direction;
-import sab.game.SABSounds;
+import sab.game.SabSounds;
 import sab.game.attack.Attack;
 import sab.game.attack.MeleeAttackType;
 import sab.net.Keys;
@@ -49,7 +49,7 @@ public class GlasterBaster extends MeleeAttackType {
             if (attack.owner.getUsedCharge() > 0) {
                 fired = true;
                 attack.owner.battle.addAttack(new Attack(new BasterBeam(), attack.owner), new int[]{ basterDirection == Direction.UP ? 1 : basterDirection == Direction.DOWN ? -1 : 0, basterDirection == Direction.RIGHT ? 1 : basterDirection == Direction.LEFT ? -1 : 0, attack.owner.getUsedCharge()});
-                SABSounds.playSound("glaster_baster.mp3");
+                SabSounds.playSound("glaster_baster.mp3");
                 attack.life = 15;
             }
 

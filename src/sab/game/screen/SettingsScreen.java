@@ -1,14 +1,12 @@
 package sab.game.screen;
 
 import java.util.HashMap;
-import java.util.Set;
 
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Rectangle;
 import com.seagull_engine.Seagraphics;
 
-import sab.game.SABSounds;
+import sab.game.SabSounds;
 import sab.game.Settings;
 import sab.game.Game;
 import sab.screen.Screen;
@@ -59,15 +57,15 @@ public class SettingsScreen extends SelectorScreen {
 
         else if (keyCode == Input.Keys.ENTER) {
             if (selectorIndex == 3 || subSelectionIndex == subSelectionSettingIds[selectorIndex].length) {
-                SABSounds.playSound(SABSounds.SELECT);
+                SabSounds.playSound(SabSounds.SELECT);
                 return onBack();
             } else {
                 if (inSubSelection) {
                     exitSubSelection();
-                    SABSounds.playSound("deselect.mp3");
+                    SabSounds.playSound("deselect.mp3");
                 } else {
                     enterSubSelection();
-                    SABSounds.playSound("select.mp3");
+                    SabSounds.playSound("select.mp3");
                 }
             }
         }
@@ -78,7 +76,7 @@ public class SettingsScreen extends SelectorScreen {
     @Override
     public void incrementSelection() {
         if (inSubSelection) {
-            SABSounds.playSound(SABSounds.BLIP);
+            SabSounds.playSound(SabSounds.BLIP);
             subSelectionIndex = (subSelectionIndex + 1) % subSelection[selectorIndex].length;
         } else {
 //            super.incrementSelection();
@@ -88,7 +86,7 @@ public class SettingsScreen extends SelectorScreen {
     @Override
     public void decrementSelection() {
         if (inSubSelection) {
-            SABSounds.playSound(SABSounds.BLIP);
+            SabSounds.playSound(SabSounds.BLIP);
             subSelectionIndex = (subSelectionIndex - 1) % subSelection[selectorIndex].length;
         } else {
 //            super.decrementSelection();
@@ -125,7 +123,7 @@ public class SettingsScreen extends SelectorScreen {
                 } else {
                     settings.replace(key, "" + Math.min(Float.parseFloat(settings.get(key)) + 0.05f, 1));
                 }
-                SABSounds.playSound(SABSounds.BLIP);
+                SabSounds.playSound(SabSounds.BLIP);
             }
         } else {
             super.incrementSelection();
@@ -182,7 +180,7 @@ public class SettingsScreen extends SelectorScreen {
                 } else {
                     settings.replace(key, "" + Math.max(Float.parseFloat(settings.get(key)) - 0.05f, 0));
                 }
-                SABSounds.playSound(SABSounds.BLIP);
+                SabSounds.playSound(SabSounds.BLIP);
             }
         } else {
             super.decrementSelection();
@@ -226,7 +224,7 @@ public class SettingsScreen extends SelectorScreen {
     @Override
     protected Screen onBack() {
         Settings.fromHashMap(settings);
-        SABSounds.soundEngine.setCurrentMusicVolume(Settings.getMusicVolume() * Settings.getMasterVolume());
+        SabSounds.soundEngine.setCurrentMusicVolume(Settings.getMusicVolume() * Settings.getMasterVolume());
         Settings.writeFile();
         if (Settings.getFullscreen()) {
             Game.game.goFullscreened();

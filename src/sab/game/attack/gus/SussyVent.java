@@ -3,7 +3,7 @@ package sab.game.attack.gus;
 import com.badlogic.gdx.math.Vector2;
 import com.seagull_engine.GameObject;
 
-import sab.game.SABSounds;
+import sab.game.SabSounds;
 import sab.game.attack.Attack;
 import sab.game.attack.AttackType;
 import sab.game.fighter.Gus;
@@ -75,7 +75,7 @@ public class SussyVent extends AttackType {
                 attack.velocity.scl(.8f);
             }
         } else {
-            if (attack.life == 10) SABSounds.playSound("vent_open.mp3");
+            if (attack.life == 10) SabSounds.playSound("vent_open.mp3");
             attack.velocity.set(0, 0);
             if (bigManMode) attack.owner.velocity.y = 14;
             else attack.owner.velocity.y = 5;
@@ -83,10 +83,10 @@ public class SussyVent extends AttackType {
             if (transitionVent) {
                 Gus gus = (Gus) attack.owner.fighter.type;
                 if (bigManMode) {
-                    SABSounds.playSound("role_reveal.mp3");
+                    SabSounds.playSound("role_reveal.mp3");
                     gus.setAmongUsManDefaults(attack.owner.fighter, attack.owner);
                 } else {
-                    SABSounds.playSound("emergency_meeting.mp3");
+                    SabSounds.playSound("emergency_meeting.mp3");
                     gus.setGusDefaults(attack.owner.fighter);
                 }
                 transitionVent = false;
@@ -106,7 +106,7 @@ public class SussyVent extends AttackType {
 
     @Override
     public void onSpawn(Attack attack, int[] data) {
-        SABSounds.playSound("vent_open.mp3");
+        SabSounds.playSound("vent_open.mp3");
         attack.hitbox.setCenter(attack.owner.hitbox.getCenter(new Vector2()));
         attack.owner.velocity.x = 0;
         if (data != null) {

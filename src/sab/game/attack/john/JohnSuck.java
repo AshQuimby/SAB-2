@@ -1,18 +1,15 @@
 package sab.game.attack.john;
 
-import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.seagull_engine.GameObject;
 import com.seagull_engine.Seagraphics;
 import sab.game.Player;
-import sab.game.SABSounds;
 import sab.game.animation.Animation;
 import sab.game.attack.Attack;
 import sab.game.attack.MeleeAttackType;
 import sab.game.particle.Particle;
 import sab.net.Keys;
-import sab.util.SABRandom;
+import sab.util.SabRandom;
 
 public class JohnSuck extends MeleeAttackType {
     private Player trappedPlayer;
@@ -51,7 +48,7 @@ public class JohnSuck extends MeleeAttackType {
             trappedPlayer.velocity.scl(0);
             attack.owner.drawRectOffset = new Vector2();
             for (int i = 0; i < 8 ; i++) {
-                attack.owner.battle.addParticle(new Particle(attack.hitbox.getCenter(new Vector2()), new Vector2(4 * SABRandom.random(), 0).rotateDeg(SABRandom.random() * 360), 32, 32, 0, "smoke.png"));
+                attack.owner.battle.addParticle(new Particle(attack.hitbox.getCenter(new Vector2()), new Vector2(4 * SabRandom.random(), 0).rotateDeg(SabRandom.random() * 360), 32, 32, 0, "smoke.png"));
             }
             trappedPlayer = null;
         }
@@ -75,7 +72,7 @@ public class JohnSuck extends MeleeAttackType {
             attack.owner.occupy(1);
             attack.owner.velocity.x *= 0.96f;
             attack.owner.velocity.y *= 0.96f;
-            attack.owner.drawRectOffset = new Vector2(SABRandom.random(-2f, 2f), SABRandom.random(-2f, 2f));
+            attack.owner.drawRectOffset = new Vector2(SabRandom.random(-2f, 2f), SabRandom.random(-2f, 2f));
             if (spit) {
                 trappedPlayer.invulnerable = false;
                 trappedPlayer.reveal();
@@ -116,7 +113,7 @@ public class JohnSuck extends MeleeAttackType {
             attack.knockback = new Vector2();
             attack.hitCooldown = 1000;
             for (int i = 0; i < 8 ; i++) {
-                attack.owner.battle.addParticle(new Particle(attack.hitbox.getCenter(new Vector2()), new Vector2(4 * SABRandom.random(), 0).rotateDeg(SABRandom.random() * 360), 32, 32, 0, "smoke.png"));
+                attack.owner.battle.addParticle(new Particle(attack.hitbox.getCenter(new Vector2()), new Vector2(4 * SabRandom.random(), 0).rotateDeg(SabRandom.random() * 360), 32, 32, 0, "smoke.png"));
             }
         }
     }

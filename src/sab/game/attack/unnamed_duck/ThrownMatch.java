@@ -1,15 +1,14 @@
 package sab.game.attack.unnamed_duck;
 
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import sab.game.Direction;
-import sab.game.SABSounds;
+import sab.game.SabSounds;
 import sab.game.attack.Attack;
 import sab.game.attack.AttackType;
 import sab.game.particle.Particle;
 import sab.util.Utils;
-import sab.util.SABRandom;
+import sab.util.SabRandom;
 
 public class ThrownMatch extends AttackType {
     @Override
@@ -32,7 +31,7 @@ public class ThrownMatch extends AttackType {
             if (otherAttack.type instanceof FlammableLiquid droplet && !droplet.onFire) {
                 if (attack.getCenter().dst2(otherAttack.getCenter()) < 32 * 32) {
                     droplet.onFire = true;
-                    SABSounds.playSound("explosion.mp3");
+                    SabSounds.playSound("explosion.mp3");
                     break;
                 }
             }
@@ -44,7 +43,7 @@ public class ThrownMatch extends AttackType {
         attack.velocity.y -= .96f;
         attack.rotation -= attack.velocity.x;
 
-        attack.owner.battle.addParticle(new Particle(Utils.randomPointInRect(attack.drawRect), new Vector2(2 * SABRandom.random(), 0).rotateDeg(SABRandom.random() * 360), 8, 8, 0, "fire.png"));
+        attack.owner.battle.addParticle(new Particle(Utils.randomPointInRect(attack.drawRect), new Vector2(2 * SabRandom.random(), 0).rotateDeg(SabRandom.random() * 360), 8, 8, 0, "fire.png"));
     }
 
     @Override

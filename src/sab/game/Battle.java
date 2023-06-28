@@ -1,11 +1,9 @@
 package sab.game;
 
-import java.sql.Time;
 import java.util.*;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.seagull_engine.GameObject;
@@ -13,7 +11,6 @@ import com.seagull_engine.Seagraphics;
 import com.seagull_engine.graphics.SeagullCamera;
 
 import sab.dialogue.Dialogue;
-import sab.game.ai.BaseAI;
 import sab.game.ass_ball.AssBall;
 import sab.game.attack.Attack;
 import sab.game.attack.AttackType;
@@ -30,8 +27,7 @@ import sab.game.stage.StageObject;
 import sab.net.Keys;
 import sab.net.VoidFunction;
 import sab.replay.ReplayAI;
-import sab.util.Utils;
-import sab.util.SABRandom;
+import sab.util.SabRandom;
 
 public class Battle {
     private long seed;
@@ -85,7 +81,7 @@ public class Battle {
     private VoidFunction<Particle> spawnParticleCallback;
 
     public Battle(long seed, Fighter fighter1, Fighter fighter2, int[] costumes, Stage stage, int player1Type, int player2Type, int lives, boolean hasAssBalls, boolean hasStageHazards) {
-        SABRandom.createNewBattleRandom(seed);
+        SabRandom.createNewBattleRandom(seed);
 
         gameObjects = new ArrayList<>();
         hittableGameObjects = new ArrayList<>();
@@ -131,7 +127,7 @@ public class Battle {
 
         nextId = 0;
 
-        assBallSpawnTime = SABRandom.random(1500, 3000);
+        assBallSpawnTime = SabRandom.random(1500, 3000);
 
         drawHitboxes = false;
         battleTick = 0;
@@ -316,8 +312,8 @@ public class Battle {
             float effectiveCameraShake = Math.min(cameraShake / 2f, 6);
 
             if (effectiveCameraShake > 0) {
-                float shakeX = SABRandom.random(-effectiveCameraShake * effectiveCameraShake / 2f, effectiveCameraShake * effectiveCameraShake / 2f);
-                float shakeY = SABRandom.random(-effectiveCameraShake * effectiveCameraShake / 2f, effectiveCameraShake * effectiveCameraShake / 2f);
+                float shakeX = SabRandom.random(-effectiveCameraShake * effectiveCameraShake / 2f, effectiveCameraShake * effectiveCameraShake / 2f);
+                float shakeY = SabRandom.random(-effectiveCameraShake * effectiveCameraShake / 2f, effectiveCameraShake * effectiveCameraShake / 2f);
 
                 cameraShakeVector = new Vector2(shakeX, shakeY);
             }
@@ -452,7 +448,7 @@ public class Battle {
             assBallSpawnTime--;
             if (assBallSpawnTime <= 0) {
                 spawnAssBall();
-                assBallSpawnTime = SABRandom.random(3000, 6000);
+                assBallSpawnTime = SabRandom.random(3000, 6000);
             }
         }
 
@@ -572,11 +568,11 @@ public class Battle {
         for (Player player : players) {
             player.onEndBattle();
         }
-        SABRandom.disposeBattleRandom();
+        SabRandom.disposeBattleRandom();
     }
 
     public void onSuccessfulParry() {
-        SABSounds.playSound("parry.mp3");
+        SabSounds.playSound("parry.mp3");
         parryFlash = 15;
     }
 
@@ -625,8 +621,8 @@ public class Battle {
             winner.costume = 0;
             loser = player2;
         }
-        SABSounds.playSound("final_death.mp3");
-        SABSounds.stopMusic();
+        SabSounds.playSound("final_death.mp3");
+        SabSounds.stopMusic();
         this.winner = winner;
         this.loser = loser;
         endGameTimer = 1;
@@ -637,7 +633,7 @@ public class Battle {
         freezeFrame(15, 4, 60, true);
         screenShatter = 90;
         shakeCamera(8);
-        SABSounds.playSound("shatter.mp3");
+        SabSounds.playSound("shatter.mp3");
     }
 
     public void triggerPauseMenu() {

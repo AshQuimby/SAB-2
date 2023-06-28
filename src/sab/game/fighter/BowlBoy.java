@@ -1,14 +1,13 @@
 package sab.game.fighter;
 
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.seagull_engine.GameObject;
 import com.seagull_engine.Seagraphics;
 import sab.game.DamageSource;
 import sab.game.Game;
 import sab.game.Player;
-import sab.game.SABSounds;
+import sab.game.SabSounds;
 import sab.game.ai.AI;
 import sab.game.ai.BaseAI;
 import sab.game.animation.Animation;
@@ -18,10 +17,7 @@ import sab.game.particle.Particle;
 import sab.game.stage.Ledge;
 import sab.game.stage.Platform;
 import sab.net.Keys;
-import sab.util.Utils;
-import sab.util.SABRandom;
-
-import java.security.Key;
+import sab.util.SabRandom;
 
 public class BowlBoy extends FighterType {
     private static final int PEASHOT = 0;
@@ -76,7 +72,7 @@ public class BowlBoy extends FighterType {
                 int cards = bowlBoy.getCardCount();
                 int shotType = bowlBoy.bulletIndex;
 
-                if (bowlBoy.chargingShot && SABRandom.random() * 20 < difficulty && isDirectlyHorizontal(target.hitbox) && isFacing(targetPosition.x)) {
+                if (bowlBoy.chargingShot && SabRandom.random() * 20 < difficulty && isDirectlyHorizontal(target.hitbox) && isFacing(targetPosition.x)) {
                     releaseKey(Keys.ATTACK);
                     return;
                 }
@@ -191,7 +187,7 @@ public class BowlBoy extends FighterType {
                         player.battle.addAttack(new Attack(new WeakCharge(), player), new int[]{(int) gunHandPosition.x, (int) gunHandPosition.y});
                         shootRecoil = 15;
                     }
-                    SABSounds.playSound("bowl_boy_shooty.mp3");
+                    SabSounds.playSound("bowl_boy_shooty.mp3");
                     chargeShotCharge = 0;
                     chargingShot = false;
                 }
@@ -210,13 +206,13 @@ public class BowlBoy extends FighterType {
         if (gunMode) {
             if (chargingShot) {
                 if (chargeShotCharge == 30) {
-                    SABSounds.playSound("charge_shot_charged.mp3");
+                    SabSounds.playSound("charge_shot_charged.mp3");
                 }
                 chargeShotCharge++;
-                if (Game.game.window.getTick() % (chargeShotCharge > 30 ? 3 : 9) == 0) player.battle.addParticle(new Particle(player.getCenter().add(gunHandPosition), new Vector2(1, 0).rotateDeg(SABRandom.random(360)), 8, 8, "charge_shot_dust.png"));
+                if (Game.game.window.getTick() % (chargeShotCharge > 30 ? 3 : 9) == 0) player.battle.addParticle(new Particle(player.getCenter().add(gunHandPosition), new Vector2(1, 0).rotateDeg(SabRandom.random(360)), 8, 8, "charge_shot_dust.png"));
             }  else if (shootRecoil <= 0) {
                 shootRecoil = shootBullet(fighter, player);
-                if (!chargingShot) SABSounds.playSound("bowl_boy_shooty.mp3");
+                if (!chargingShot) SabSounds.playSound("bowl_boy_shooty.mp3");
                 player.occupy(shootRecoil);
             }
         }
@@ -305,8 +301,8 @@ public class BowlBoy extends FighterType {
             player.velocity.y = 16;
             player.velocity.x = 20 * player.direction;
             player.usedRecovery = true;
-            SABSounds.playSound("parry.mp3");
-            SABSounds.playSound("jump.mp3");
+            SabSounds.playSound("parry.mp3");
+            SabSounds.playSound("jump.mp3");
             spinTime = 45;
             player.battle.addAttack(new Attack(new RecoverBump(), player), null);
         }

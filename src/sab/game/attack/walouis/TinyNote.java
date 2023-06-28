@@ -2,16 +2,15 @@ package sab.game.attack.walouis;
 
 import java.util.Random;
 
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.seagull_engine.GameObject;
 
 import sab.game.Direction;
 import sab.game.Player;
-import sab.game.SABSounds;
+import sab.game.SabSounds;
 import sab.game.attack.Attack;
 import sab.game.attack.AttackType;
-import sab.util.SABRandom;
+import sab.util.SabRandom;
 
 public class TinyNote extends AttackType {
 
@@ -54,8 +53,8 @@ public class TinyNote extends AttackType {
     public void onSpawn(Attack attack, int[] data) {
         attack.owner.frame = 11;
         attack.hitbox.setCenter(attack.owner.hitbox.getCenter(new Vector2()).add(8 * attack.owner.direction, -8));
-        attack.velocity = new Vector2(8 * attack.owner.direction, 0).rotateDeg((SABRandom.random() -0.5f) * 12);
+        attack.velocity = new Vector2(8 * attack.owner.direction, 0).rotateDeg((SabRandom.random() -0.5f) * 12);
         attack.knockback = new Vector2(0, 0);
-        SABSounds.playSound("wagh.mp3");
+        SabSounds.playSound("wagh.mp3");
     }
 }

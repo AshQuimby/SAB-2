@@ -3,15 +3,9 @@ package sab.game.attack.unnamed_duck;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.seagull_engine.GameObject;
-import sab.game.Direction;
-import sab.game.Game;
 import sab.game.Player;
-import sab.game.SABSounds;
 import sab.game.attack.Attack;
 import sab.game.attack.AttackType;
-import sab.game.particle.Particle;
-import sab.util.SABRandom;
-import sab.util.Utils;
 
 public class ThrownIceCube extends AttackType {
     @Override

@@ -2,18 +2,13 @@ package sab.game.item;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector2;
 
 import sab.game.Player;
-import sab.game.SABSounds;
-import sab.game.animation.Animation;
+import sab.game.SabSounds;
 import sab.game.attack.Attack;
-import sab.game.attack.unnamed_duck.DuckItem;
 import sab.game.attack.unnamed_duck.FlammableLiquid;
 import sab.net.Keys;
-import sab.util.SABRandom;
-
-import java.security.Key;
+import sab.util.SabRandom;
 
 public class Flamethrower extends Item {
     private boolean firing;
@@ -46,13 +41,13 @@ public class Flamethrower extends Item {
         if (!firing) {
             firing = true;
         } else {
-            SABSounds.playSound("fire.mp3");
+            SabSounds.playSound("fire.mp3");
             FlammableLiquid flames = new FlammableLiquid();
             holder.battle.addAttack(new Attack(flames, holder), new int[]{
                     Float.floatToIntBits(getCenter().x + 48 * holder.direction),
                     Float.floatToIntBits(getCenter().y + 8),
-                    Float.floatToIntBits(24 * holder.direction * SABRandom.random(0.5f, 1.2f)),
-                    Float.floatToIntBits(0.5f * holder.direction * SABRandom.random(-1f, 1f)),
+                    Float.floatToIntBits(24 * holder.direction * SabRandom.random(0.5f, 1.2f)),
+                    Float.floatToIntBits(0.5f * holder.direction * SabRandom.random(-1f, 1f)),
                     0,
                     Color.ORANGE.toIntBits(),
                     1,

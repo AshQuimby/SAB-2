@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.seagull_engine.Seagraphics;
-import sab.game.SABSounds;
+import sab.game.SabSounds;
 import sab.game.attack.Attack;
 import sab.game.attack.AttackType;
 import sab.util.Utils;
@@ -42,7 +42,7 @@ public class Saxophone extends AttackType {
 
     @Override
     public void onKill(Attack attack) {
-        SABSounds.unpauseMusic();
+        SabSounds.unpauseMusic();
         attack.owner.velocity.scl(0);
     }
 

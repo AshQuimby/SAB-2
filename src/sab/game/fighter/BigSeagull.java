@@ -2,7 +2,7 @@ package sab.game.fighter;
 
 import com.badlogic.gdx.math.Vector2;
 import sab.game.Player;
-import sab.game.SABSounds;
+import sab.game.SabSounds;
 import sab.game.ai.AI;
 import sab.game.ai.BaseAI;
 import sab.game.animation.Animation;
@@ -13,7 +13,7 @@ import sab.game.attack.big_seagull.FeatherDart;
 import sab.game.attack.big_seagull.Gust;
 import sab.game.stage.Platform;
 import sab.net.Keys;
-import sab.util.SABRandom;
+import sab.util.SabRandom;
 
 public class BigSeagull extends FighterType {
     private Animation hoverAnimation;
@@ -92,11 +92,11 @@ public class BigSeagull extends FighterType {
                     }
                 }
 
-                if (isDirectlyHorizontal(target.hitbox) && SABRandom.random() * 20 < difficulty && isFacing(targetPosition.x)) {
-                    if (target.damage > 30 && SABRandom.random() * 100 + target.damage > 170) {
+                if (isDirectlyHorizontal(target.hitbox) && SabRandom.random() * 20 < difficulty && isFacing(targetPosition.x)) {
+                    if (target.damage > 30 && SabRandom.random() * 100 + target.damage > 170) {
                         useNeutralAttack();
                     } else {
-                        if (SABRandom.random() < .2) {
+                        if (SabRandom.random() < .2) {
                             useDownAttack();
                         } else {
                             useSideAttack(player.direction);
@@ -138,7 +138,7 @@ public class BigSeagull extends FighterType {
     public void neutralAttack(sab.game.fighter.Fighter fighter, Player player) {
         gustAnimation.reset();
         player.startAttack(new Gust(), gustAnimation, 1, 24, false);
-        SABSounds.playSound("gust.mp3");
+        SabSounds.playSound("gust.mp3");
     }
 
     @Override
@@ -153,7 +153,7 @@ public class BigSeagull extends FighterType {
             hoverAnimation.reset();
             player.startAttack(new Glide(), hoverAnimation, 4, 180, true);
             player.velocity.y = 12;
-            SABSounds.playSound("gust.mp3");
+            SabSounds.playSound("gust.mp3");
             player.usedRecovery = true;
         }
     }

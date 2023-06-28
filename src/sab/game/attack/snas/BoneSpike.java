@@ -4,7 +4,6 @@ import com.badlogic.gdx.math.Vector2;
 
 import sab.game.CollisionResolver;
 import sab.game.Direction;
-import sab.game.SABSounds;
 import sab.game.attack.Attack;
 import sab.game.attack.AttackType;
 

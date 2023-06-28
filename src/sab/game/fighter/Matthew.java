@@ -5,7 +5,7 @@ import com.seagull_engine.GameObject;
 import com.seagull_engine.Seagraphics;
 import sab.game.DamageSource;
 import sab.game.Player;
-import sab.game.SABSounds;
+import sab.game.SabSounds;
 import sab.game.ai.AI;
 import sab.game.ai.BaseAI;
 import sab.game.animation.Animation;
@@ -14,7 +14,7 @@ import sab.game.attack.matthew.*;
 import sab.game.particle.Particle;
 import sab.net.Keys;
 import sab.util.Utils;
-import sab.util.SABRandom;
+import sab.util.SabRandom;
 
 public class Matthew extends FighterType {
     private static final int FULL_SLOWDOWN_DURATION = 480;
@@ -80,7 +80,7 @@ public class Matthew extends FighterType {
 
             @Override
             public void attack(Vector2 center, Player target, Vector2 targetPosition) {
-                if (SABRandom.random() * 25 > difficulty) return;
+                if (SabRandom.random() * 25 > difficulty) return;
 
                 if (isDirectlyHorizontal(target.hitbox) && isFacing(targetPosition.x)) {
                     float horizontalDistance = Math.abs(center.x - targetPosition.x);
@@ -88,7 +88,7 @@ public class Matthew extends FighterType {
                     if (horizontalDistance <= SLASH_DISTANCE) {
                         useSideAttack();
                     }
-                } else if ((isDirectlyBelow(target.hitbox) && Math.abs(center.y - targetPosition.y) > 32) && SABRandom.random() * 20 < difficulty) {
+                } else if ((isDirectlyBelow(target.hitbox) && Math.abs(center.y - targetPosition.y) > 32) && SabRandom.random() * 20 < difficulty) {
                     useUpAttack();
                 } else if (isDirectlyAbove(target.hitbox)) {
                     useDownAttack();
@@ -105,7 +105,7 @@ public class Matthew extends FighterType {
                     else useDownAttack();
                 }
 
-                if (matthew.counterCharge == 2 && (SABRandom.random(difficulty + 2) > 2 || difficulty >= 5)) {
+                if (matthew.counterCharge == 2 && (SabRandom.random(difficulty + 2) > 2 || difficulty >= 5)) {
                     Attack nearestThreat = getNearestEnemyAttack();
                     if (nearestThreat != null) {
                         if (getFutureCollision(nearestThreat, 24) != null) {
@@ -189,7 +189,7 @@ public class Matthew extends FighterType {
         if (source.parryable && player.getAnimation() != null && player.getAnimation().getFrame() == 14) {
             source.owner.stun(32);
             bigSwingAnimation.reset();
-            SABSounds.playSound("mega_counter.mp3");
+            SabSounds.playSound("mega_counter.mp3");
             player.battle.freezeFrame(10, 3, 45, true);
             player.frame = 12;
             counterCharge = 0;

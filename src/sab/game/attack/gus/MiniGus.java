@@ -1,6 +1,5 @@
 package sab.game.attack.gus;
 
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 
 import sab.game.Direction;
@@ -9,7 +8,7 @@ import sab.game.animation.Animation;
 import sab.game.attack.Attack;
 import sab.game.attack.AttackType;
 import sab.game.particle.Particle;
-import sab.util.SABRandom;
+import sab.util.SabRandom;
 
 public class MiniGus extends AttackType {
     private Animation walkAnimation;
@@ -83,7 +82,7 @@ public class MiniGus extends AttackType {
     public void onKill(Attack attack) {
         for (int i = 0; i < 5; i++) {
             attack.owner.battle.addParticle(new Particle(attack.hitbox.getCenter(new Vector2()).add(0, -12),
-                    new Vector2(SABRandom.random(-1f, 1f), SABRandom.random(0f,
+                    new Vector2(SabRandom.random(-1f, 1f), SabRandom.random(0f,
                             1f)), 16, 16, 14,
                     "smoke.png"));
         }

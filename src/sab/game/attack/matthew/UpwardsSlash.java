@@ -3,7 +3,7 @@ package sab.game.attack.matthew;
 import com.badlogic.gdx.math.Vector2;
 import com.seagull_engine.GameObject;
 import com.seagull_engine.Seagraphics;
-import sab.game.SABSounds;
+import sab.game.SabSounds;
 import sab.game.attack.Attack;
 import sab.game.attack.MeleeAttackType;
 
@@ -43,7 +43,7 @@ public class UpwardsSlash extends MeleeAttackType {
     public void onSpawn(Attack attack, int[] data) {
         super.onSpawn(attack, data);
         attack.knockback = new Vector2(0, 8);
-        SABSounds.playSound("swish.mp3");
+        SabSounds.playSound("swish.mp3");
     }
 
     @Override

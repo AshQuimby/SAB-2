@@ -93,7 +93,7 @@ public class Zombie extends AttackType implements Hittable {
         if (attack.life <= 0) attack.alive = false;
         attack.velocity.add(source.knockback);
         hurtTime = 30;
-        SABSounds.playSound("hit.mp3");
+        SabSounds.playSound("hit.mp3");
         return true;
     }
 

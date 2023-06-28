@@ -1,16 +1,13 @@
 package sab.game.stage;
 
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.seagull_engine.GameObject;
-import sab.game.Battle;
-import sab.game.Game;
 import sab.game.Player;
 import sab.game.attack.Attack;
 import sab.game.attack.AttackType;
 import sab.game.fighter.Fighter;
 import sab.game.fighter.Marvin;
-import sab.util.SABRandom;
+import sab.util.SabRandom;
 
 public class LittleHLand extends StageType {
     private Player player;
@@ -23,7 +20,7 @@ public class LittleHLand extends StageType {
         player = new Player(new Fighter(new Marvin()), 0, 0, 100000, stage.getBattle());
 
         for (int i = -1; i <= 1; i++) {
-            placeRandomPlatform(stage, new Vector2(384 * i, -128 + SABRandom.random(-128, 64)));
+            placeRandomPlatform(stage, new Vector2(384 * i, -128 + SabRandom.random(-128, 64)));
         }
 
         stage.player2SpawnX = stage.getStageObjects().get(stage.getStageObjects().size() - 1).getCenter().x;
@@ -31,7 +28,7 @@ public class LittleHLand extends StageType {
     }
 
     public void placeRandomPlatform(Stage stage, Vector2 position) {
-        switch (SABRandom.random(0, 6)) {
+        switch (SabRandom.random(0, 6)) {
             case 0 :
                 Platform icePlatform = new Platform(position.x - 192 / 2, position.y, 192, 64, "ice_platform.png", stage);
                 icePlatform.friction = 1f;

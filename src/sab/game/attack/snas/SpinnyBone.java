@@ -1,15 +1,14 @@
 package sab.game.attack.snas;
 
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.seagull_engine.GameObject;
 
 import sab.game.Direction;
-import sab.game.SABSounds;
+import sab.game.SabSounds;
 import sab.game.attack.Attack;
 import sab.game.attack.AttackType;
 import sab.game.particle.Particle;
-import sab.util.SABRandom;
+import sab.util.SabRandom;
 
 public class SpinnyBone extends AttackType {
     @Override
@@ -62,7 +61,7 @@ public class SpinnyBone extends AttackType {
     @Override
     public void onKill(sab.game.attack.Attack attack) {
         for (int i = 0; i < 4 ; i++) {
-            attack.owner.battle.addParticle(new Particle(1, attack.hitbox.getCenter(new Vector2()), new Vector2(4 * SABRandom.random(), SABRandom.random(0.5f, 0.5f)).rotateDeg(SABRandom.random() * 360), 24, 24, 2, "bone_particle.png"));
+            attack.owner.battle.addParticle(new Particle(1, attack.hitbox.getCenter(new Vector2()), new Vector2(4 * SabRandom.random(), SabRandom.random(0.5f, 0.5f)).rotateDeg(SabRandom.random() * 360), 24, 24, 2, "bone_particle.png"));
         }
     }
 
@@ -72,6 +71,6 @@ public class SpinnyBone extends AttackType {
         attack.velocity = new Vector2(4 * attack.owner.direction, 8);
         attack.knockback = new Vector2(0, 8);
         attack.direction = attack.owner.direction;
-        SABSounds.playSound("snas.mp3");
+        SabSounds.playSound("snas.mp3");
     }
 }

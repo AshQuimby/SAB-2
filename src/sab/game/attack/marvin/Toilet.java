@@ -1,15 +1,14 @@
 package sab.game.attack.marvin;
 
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.seagull_engine.GameObject;
 
 import sab.game.Direction;
-import sab.game.SABSounds;
+import sab.game.SabSounds;
 import sab.game.attack.Attack;
 import sab.game.attack.AttackType;
 import sab.game.particle.Particle;
-import sab.util.SABRandom;
+import sab.util.SabRandom;
 
 public class Toilet extends AttackType {
     private boolean playerLaunched;
@@ -51,7 +50,7 @@ public class Toilet extends AttackType {
         if (playerLaunched) {
             attack.velocity.y -= 0.25f;
             if (attack.life % 8 == 0) {
-                attack.owner.battle.addParticle(new Particle(attack.drawRect.getCenter(new Vector2()).add(0, 12), new Vector2(2 * (SABRandom.random() - 0.5f), 5 * (SABRandom.random() + 0.5f)), 32, 48, "water.png"));
+                attack.owner.battle.addParticle(new Particle(attack.drawRect.getCenter(new Vector2()).add(0, 12), new Vector2(2 * (SabRandom.random() - 0.5f), 5 * (SabRandom.random() + 0.5f)), 32, 48, "water.png"));
             }
         } else {
             attack.velocity.y -= 0.015f;
@@ -66,7 +65,7 @@ public class Toilet extends AttackType {
         attack.hitbox.setCenter(attack.owner.hitbox.getCenter(new Vector2()));
         attack.velocity = new Vector2(0, -1);
         attack.knockback = new Vector2(0, -6.5f);
-        SABSounds.playSound("toilet.mp3");
+        SabSounds.playSound("toilet.mp3");
     }
 
     @Override

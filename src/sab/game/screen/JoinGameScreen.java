@@ -6,7 +6,7 @@ import com.seagull_engine.Seagraphics;
 
 import sab.error.SabError;
 import sab.game.Game;
-import sab.game.SABSounds;
+import sab.game.SabSounds;
 import sab.game.Settings;
 import sab.game.screen.battle_adjacent.CharacterSelectScreen;
 import sab.game.screen.error.ErrorScreen;
@@ -14,7 +14,7 @@ import sab.net.client.Client;
 import sab.net.packet.*;
 import sab.screen.Screen;
 import sab.screen.ScreenAdapter;
-import sab.util.SABReader;
+import sab.util.SabReader;
 import sab.util.Utils;
 
 import java.io.File;
@@ -59,7 +59,7 @@ public class JoinGameScreen extends ScreenAdapter {
         }
 
         file = new File("../saves/servers.sab");
-        HashMap<String, String> servers = SABReader.read(file);
+        HashMap<String, String> servers = SabReader.read(file);
 
         String mostRecent = servers.get("most_recent");
         if (mostRecent != null) {
@@ -73,11 +73,11 @@ public class JoinGameScreen extends ScreenAdapter {
 
     private void join() {
         File serversFile = new File("../saves/servers.sab");
-        HashMap<String, String> servers = SABReader.read(serversFile);
+        HashMap<String, String> servers = SabReader.read(serversFile);
         servers.put("most_recent", hostIp);
         servers.put(hostIp, hostPort);
         try {
-            SABReader.write(servers, serversFile);
+            SabReader.write(servers, serversFile);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -106,24 +106,24 @@ public class JoinGameScreen extends ScreenAdapter {
         if (keyCode == Input.Keys.DOWN) {
             cursorFlashTimer = 0;
             selection = Utils.loop(selection, 1, 2, 0);
-            SABSounds.playSound(SABSounds.BLIP);
+            SabSounds.playSound(SabSounds.BLIP);
         } else if (keyCode == Input.Keys.UP) {
             cursorFlashTimer = 0;
             selection = Utils.loop(selection, -1, 2, 0);
-            SABSounds.playSound(SABSounds.BLIP);
+            SabSounds.playSound(SabSounds.BLIP);
         } else if (keyCode == Input.Keys.BACKSPACE) {
             if (selection == 0 && hostIp.length() > 0) hostIp = hostIp.substring(0, hostIp.length() - 1);
             if (selection == 1 && hostPort.length() > 0) hostPort = hostPort.substring(0, hostPort.length() - 1);
-            if (selection == 0 || selection == 1) SABSounds.playSound(SABSounds.BLIP);
+            if (selection == 0 || selection == 1) SabSounds.playSound(SabSounds.BLIP);
         } else if (Input.Keys.toString(keyCode).length() == 1) {
             char key = Input.Keys.toString(keyCode).toCharArray()[0];
             if (selection == 0) {
                 hostIp += Character.toLowerCase(key);
-                SABSounds.playSound(SABSounds.BLIP);
+                SabSounds.playSound(SabSounds.BLIP);
             } else if (selection == 1 && hostPort.length() < 5) {
                 if (Character.isDigit(key)) {
                     hostPort += key;
-                    SABSounds.playSound(SABSounds.BLIP);
+                    SabSounds.playSound(SabSounds.BLIP);
                 }
             }
         } else if (keyCode == Input.Keys.ESCAPE) {
@@ -140,7 +140,7 @@ public class JoinGameScreen extends ScreenAdapter {
                 return new TitleScreen(false);
             }
         } else if (keyCode == Input.Keys.ENTER && !joining) {
-            SABSounds.playSound(SABSounds.SELECT);
+            SabSounds.playSound(SabSounds.SELECT);
             join();
         }
 

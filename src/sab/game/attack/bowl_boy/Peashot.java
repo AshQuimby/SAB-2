@@ -1,14 +1,9 @@
 package sab.game.attack.bowl_boy;
 
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.seagull_engine.GameObject;
-import sab.game.CollisionResolver;
 import sab.game.Direction;
-import sab.game.SABSounds;
 import sab.game.attack.Attack;
-import sab.game.attack.AttackType;
-import sab.game.particle.Particle;
 
 public class Peashot extends BowlBoyShot {
     @Override

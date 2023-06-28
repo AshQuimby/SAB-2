@@ -1,10 +1,9 @@
 package sab.game.attack.empty_soldier;
 
 import com.badlogic.gdx.math.Vector2;
-import com.seagull_engine.Seagraphics;
 import sab.game.attack.Attack;
 import sab.game.attack.AttackType;
-import sab.util.SABRandom;
+import sab.util.SabRandom;
 
 public class ShadowTentacle extends AttackType {
     private float angularVelocity;
@@ -25,7 +24,7 @@ public class ShadowTentacle extends AttackType {
 
     @Override
     public void update(Attack attack) {
-        angularVelocity += SABRandom.random(-1f, 1f);
+        angularVelocity += SabRandom.random(-1f, 1f);
         attack.rotation += angularVelocity;
         if (attack.rotation > 135) attack.rotation = 135;
         else if (attack.rotation < 45) attack.rotation = 45;
@@ -36,7 +35,7 @@ public class ShadowTentacle extends AttackType {
     public void onSpawn(Attack attack, int[] data) {
         attack.hitbox.setCenter(new Vector2(Float.intBitsToFloat(data[0]), Float.intBitsToFloat(data[1]) - 24));
         attack.getBattle().createAttack(new ShadowTentacleSegment(), attack.owner, new int[] {
-                attack.getBattle().getIdByGameObject(attack), 10, SABRandom.randomBoolean(.5f) ? 1 : -1
+                attack.getBattle().getIdByGameObject(attack), 10, SabRandom.randomBoolean(.5f) ? 1 : -1
         });
     }
 }

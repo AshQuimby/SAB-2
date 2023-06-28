@@ -16,13 +16,12 @@ import com.seagull_engine.Seagraphics;
 import sab.error.SabError;
 import sab.game.Game;
 import sab.game.Player;
-import sab.game.SABSounds;
+import sab.game.SabSounds;
 import sab.game.fighter.Fighter;
 import sab.game.fighter.FighterType;
 import sab.game.fighter.Random;
 import sab.game.screen.NetScreen;
 import sab.game.screen.TitleScreen;
-import sab.game.screen.battle_adjacent.StageSelectScreen;
 import sab.game.screen.error.ErrorScreen;
 import sab.modloader.ModLoader;
 import sab.net.client.Client;
@@ -31,9 +30,9 @@ import sab.net.packet.Packet;
 import sab.net.packet.ScreenTransitionPacket;
 import sab.net.server.Server;
 import sab.screen.Screen;
-import sab.util.SABReader;
+import sab.util.SabReader;
 import sab.util.Utils;
-import sab.util.SABRandom;
+import sab.util.SabRandom;
 
 public class CharacterSelectScreen extends NetScreen {
     protected static class CharacterSelection {
@@ -59,7 +58,7 @@ public class CharacterSelectScreen extends NetScreen {
             this.index = index;
             this.costume = costume;
 
-            sus = availableFighters.get(index).id.equals("gus") && costume == 2 && SABRandom.random() <= .01;
+            sus = availableFighters.get(index).id.equals("gus") && costume == 2 && SabRandom.random() <= .01;
         }
 
         public void updateAvailableFighters() {
@@ -145,7 +144,7 @@ public class CharacterSelectScreen extends NetScreen {
         selection.costume = 0;
         if (selection.costume >= selection.availableFighters.get(selection.index).costumes) selection.costume = selection.availableFighters.get(selection.index).costumes - 1;
         if (selection.costume == otherSelection.costume && selection.index == otherSelection.index) selection.costume = Utils.loop(selection.costume, 1, otherSelection.availableFighters.get(otherSelection.index).costumes, 0);
-        SABSounds.playSound(SABSounds.BLIP);
+        SabSounds.playSound(SabSounds.BLIP);
 
         if (host && selection == player1) {
             server.send(0, new CharacterSelectPacket(selection.index, selection.costume, selection.ready));
@@ -158,7 +157,7 @@ public class CharacterSelectScreen extends NetScreen {
         int newCostume = Utils.loop(selection.costume, increment, selection.availableFighters.get(selection.index).costumes, 0);
         if (newCostume == otherSelection.costume && selection.index == otherSelection.index) newCostume = Utils.loop(newCostume, increment, selection.availableFighters.get(selection.index).costumes, 0);
         selection.setSelection(selection.index, newCostume);
-        SABSounds.playSound(SABSounds.BLIP);
+        SabSounds.playSound(SabSounds.BLIP);
 
         if (host && selection == player1) {
             server.send(0, new CharacterSelectPacket(selection.index, selection.costume, selection.ready));
@@ -205,17 +204,17 @@ public class CharacterSelectScreen extends NetScreen {
                     player2.availableFighters.get(player2.index).walkAnimation.reset();
                     Fighter p1Fighter = player1.availableFighters.get(player1.index).copy();
                     if (p1Fighter.type instanceof Random) {
-                        p1Fighter = player1.availableFighters.get(SABRandom.random(player1.availableFighters.size() - 2));
+                        p1Fighter = player1.availableFighters.get(SabRandom.random(player1.availableFighters.size() - 2));
                         player1.costume = p1Fighter.getRandomCostume();
                     }
                     Fighter p2Fighter = player2.availableFighters.get(player2.index).copy();
                     if (p2Fighter.type instanceof Random) {
-                        p2Fighter = player2.availableFighters.get(SABRandom.random(player2.availableFighters.size() - 2));
+                        p2Fighter = player2.availableFighters.get(SabRandom.random(player2.availableFighters.size() - 2));
                         player2.costume = p2Fighter.getRandomCostume();
                     }
                     updateTimesPlayed();
                     updateCharacterList = true;
-                    SABSounds.playSound(SABSounds.BLIP);
+                    SabSounds.playSound(SabSounds.BLIP);
                     if (host) {
                         server.send(0, new ScreenTransitionPacket());
                         return new StageSelectScreen(
@@ -238,13 +237,13 @@ public class CharacterSelectScreen extends NetScreen {
             }
             case Input.Keys.F -> {
                 player1.ready = !player1.ready;
-                if (player1.ready) SABSounds.playSound(SABSounds.SELECT); else SABSounds.playSound("deselect.mp3");
+                if (player1.ready) SabSounds.playSound(SabSounds.SELECT); else SabSounds.playSound("deselect.mp3");
 
                 if (host) server.send(0, new CharacterSelectPacket(player1.index, player1.costume, player1.ready));
             }
             case Input.Keys.M -> {
                 player2.ready = !player2.ready;
-                if (player2.ready) SABSounds.playSound(SABSounds.SELECT); else SABSounds.playSound("deselect.mp3");
+                if (player2.ready) SabSounds.playSound(SabSounds.SELECT); else SabSounds.playSound("deselect.mp3");
 
                 if (!local) client.send(new CharacterSelectPacket(player2.index, player2.costume, player2.ready));
             }
@@ -265,13 +264,13 @@ public class CharacterSelectScreen extends NetScreen {
         if (p instanceof CharacterSelectPacket csp) {
             player1.setSelection(csp.character, csp.costume);
 
-            if (player1.ready && !csp.ready) SABSounds.playSound("deselect.mp3");
-            else if (!player1.ready && csp.ready) SABSounds.playSound(SABSounds.SELECT);
-            else SABSounds.playSound(SABSounds.BLIP);
+            if (player1.ready && !csp.ready) SabSounds.playSound("deselect.mp3");
+            else if (!player1.ready && csp.ready) SabSounds.playSound(SabSounds.SELECT);
+            else SabSounds.playSound(SabSounds.BLIP);
             player1.ready = csp.ready;
         } else if (p instanceof ScreenTransitionPacket stp) {
             starting = true;
-            SABSounds.playSound(SABSounds.BLIP);
+            SabSounds.playSound(SabSounds.BLIP);
         }
     }
 
@@ -280,9 +279,9 @@ public class CharacterSelectScreen extends NetScreen {
         if (p instanceof CharacterSelectPacket csp) {
             player2.setSelection(csp.character, csp.costume);
 
-            if (player2.ready && !csp.ready) SABSounds.playSound("deselect.mp3");
-            else if (!player2.ready && csp.ready) SABSounds.playSound(SABSounds.SELECT);
-            else SABSounds.playSound(SABSounds.BLIP);
+            if (player2.ready && !csp.ready) SabSounds.playSound("deselect.mp3");
+            else if (!player2.ready && csp.ready) SabSounds.playSound(SabSounds.SELECT);
+            else SabSounds.playSound(SabSounds.BLIP);
             player2.ready = csp.ready;
         }
     }
@@ -318,7 +317,7 @@ public class CharacterSelectScreen extends NetScreen {
         }
 
         file = new File("../saves/times_played.sab");
-        HashMap<String, String> timesPlayed = SABReader.read(file);
+        HashMap<String, String> timesPlayed = SabReader.read(file);
 
         String id1 = player1.availableFighters.get(player1.index).id;
         String id2 = player2.availableFighters.get(player2.index).id;
@@ -327,7 +326,7 @@ public class CharacterSelectScreen extends NetScreen {
 
         File legacyFile = new File("../saves/timesplayed.sab");
         if (legacyFile.exists()) {
-            HashMap<String, String> legacyTimesPlayed = SABReader.read(legacyFile);
+            HashMap<String, String> legacyTimesPlayed = SabReader.read(legacyFile);
             for (String fighter : legacyTimesPlayed.keySet()) {
                 String amount = legacyTimesPlayed.get(fighter);
                 try {
@@ -343,7 +342,7 @@ public class CharacterSelectScreen extends NetScreen {
         }
 
         try {
-            SABReader.write(timesPlayed, file);
+            SabReader.write(timesPlayed, file);
         } catch (IOException e) {
             e.printStackTrace();
         }

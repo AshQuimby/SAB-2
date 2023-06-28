@@ -19,7 +19,7 @@ import sab.net.packet.PlayerStatePacket;
 import sab.net.server.Server;
 import sab.replay.Replay;
 import sab.screen.*;
-import sab.util.SABReader;
+import sab.util.SabReader;
 import sab.util.Utils;
 
 import java.io.File;
@@ -38,17 +38,17 @@ public class BattleScreen extends NetScreen {
     // For replays
     public BattleScreen(File replay) {
         super();
-        long seed = Long.parseLong(SABReader.readProperty("seed", replay));
+        long seed = Long.parseLong(SabReader.readProperty("seed", replay));
 
-        Fighter player1 = new Fighter(Game.game.fighterFromString(SABReader.readProperty("player1Fighter", replay)));
+        Fighter player1 = new Fighter(Game.game.fighterFromString(SabReader.readProperty("player1Fighter", replay)));
 
-        Fighter player2 = new Fighter(Game.game.fighterFromString(SABReader.readProperty("player2Fighter", replay)));
+        Fighter player2 = new Fighter(Game.game.fighterFromString(SabReader.readProperty("player2Fighter", replay)));
 
         int[] costumes = new int[2];
-        costumes[0] = Integer.parseInt(SABReader.readProperty("player1Costume", replay));
-        costumes[1] = Integer.parseInt(SABReader.readProperty("player2Costume", replay));
+        costumes[0] = Integer.parseInt(SabReader.readProperty("player1Costume", replay));
+        costumes[1] = Integer.parseInt(SabReader.readProperty("player2Costume", replay));
 
-        int lives = Integer.parseInt(SABReader.readProperty("lives", replay));
+        int lives = Integer.parseInt(SabReader.readProperty("lives", replay));
 //        int player1Type = Integer.parseInt(SABReader.readProperty("player1AI", replay));
 //        int player2Type = Integer.parseInt(SABReader.readProperty("player2AI", replay));
 //        if (player2Type == 0) player2Type = -1;
@@ -56,12 +56,12 @@ public class BattleScreen extends NetScreen {
         int player1Type = -1;
         int player2Type = -1;
 
-        boolean assBalls = Boolean.parseBoolean(SABReader.readProperty("assBalls", replay));
-        boolean stageHazards = Boolean.parseBoolean(SABReader.readProperty("stageHazards", replay));
+        boolean assBalls = Boolean.parseBoolean(SabReader.readProperty("assBalls", replay));
+        boolean stageHazards = Boolean.parseBoolean(SabReader.readProperty("stageHazards", replay));
 
         battle = new Battle(seed, player1, player2, costumes, new Stage(new LastLocation()), player1Type, player2Type, lives, assBalls, stageHazards);
         playingReplay = new Replay();
-        playingReplay.fromSABEncodedMap(SABReader.read(replay));
+        playingReplay.fromSABEncodedMap(SabReader.read(replay));
         playingReplay.tickReplay(battle, 0);
     }
 
@@ -69,7 +69,7 @@ public class BattleScreen extends NetScreen {
         super();
         long seed = System.currentTimeMillis();
         battle = new Battle(seed, player1, player2, costumes, stage, player1Type, player2Type, lives, Settings.getAssBalls(), Settings.getStageHazards());
-        SABSounds.playMusic(battle.getStage().music, true);
+        SabSounds.playMusic(battle.getStage().music, true);
         currentReplay = new Replay(seed, battle.getPlayer(0), battle.getPlayer(1), player1Type, player2Type, stage, lives, Settings.getAssBalls(), Settings.getStageHazards());
     }
 
@@ -77,7 +77,7 @@ public class BattleScreen extends NetScreen {
         super(server);
         long seed = System.currentTimeMillis();
         battle = new Battle(seed, player1, player2, costumes, stage, 0, 0, lives, Settings.getAssBalls(), Settings.getStageHazards());
-        SABSounds.playMusic(battle.getStage().music, true);
+        SabSounds.playMusic(battle.getStage().music, true);
         currentReplay = new Replay(seed, battle.getPlayer(0), battle.getPlayer(1), 0, 0, stage, lives, Settings.getAssBalls(), Settings.getStageHazards());
     }
 
@@ -85,7 +85,7 @@ public class BattleScreen extends NetScreen {
         super(client);
         long seed = System.currentTimeMillis();
         battle = new Battle(seed, player1, player2, costumes, stage, 0, 0, lives, Settings.getAssBalls(), Settings.getStageHazards());
-        SABSounds.playMusic(battle.getStage().music, true);
+        SabSounds.playMusic(battle.getStage().music, true);
         currentReplay = new Replay(seed, battle.getPlayer(0), battle.getPlayer(1), 0, 0, stage, lives, Settings.getAssBalls(), Settings.getStageHazards());
     }
 

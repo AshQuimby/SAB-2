@@ -1,15 +1,13 @@
 package sab.game.attack.john;
 
 import com.badlogic.gdx.math.Vector2;
-import jdk.jshell.execution.Util;
 import sab.game.CollisionResolver;
 import sab.game.Direction;
-import sab.game.SABSounds;
+import sab.game.SabSounds;
 import sab.game.attack.Attack;
 import sab.game.attack.AttackType;
 import sab.game.particle.Particle;
 import sab.net.Keys;
-import sab.util.SABRandom;
 import sab.util.Utils;
 
 public class JohnBall extends AttackType {
@@ -56,7 +54,7 @@ public class JohnBall extends AttackType {
         for (Attack other : attack.getBattle().getAttacks()) {
             if (other != attack && other.hitbox.overlaps(attack.hitbox)) {
                 attack.collisionDirection = CollisionResolver.moveWithCollisions(attack, attack.velocity.limit(1), other);
-                SABSounds.playSound("john_bounce.mp3");
+                SabSounds.playSound("john_bounce.mp3");
             }
         }
 
@@ -68,13 +66,13 @@ public class JohnBall extends AttackType {
         attack.velocity.y -= 0.9f;
 
         if (attack.collisionDirection.isHorizontal()) {
-            SABSounds.playSound("crash.mp3");
+            SabSounds.playSound("crash.mp3");
             attack.getBattle().shakeCamera(9);
             attack.velocity.x *= -1.1f;
             attack.direction *= -1;
         }
         if (attack.collisionDirection.isVertical()) {
-            SABSounds.playSound("crash.mp3");
+            SabSounds.playSound("crash.mp3");
             attack.getBattle().shakeCamera(9);
             attack.velocity.y *= -1.2f;
         }

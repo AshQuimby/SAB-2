@@ -10,7 +10,7 @@ import com.seagull_engine.Seagraphics;
 import sab.error.SabError;
 import sab.game.Battle;
 import sab.game.Game;
-import sab.game.SABSounds;
+import sab.game.SabSounds;
 import sab.game.fighter.Fighter;
 import sab.game.screen.BattleScreen;
 import sab.game.screen.NetScreen;
@@ -178,7 +178,7 @@ public class StageSelectScreen extends NetScreen {
             return new BattleScreen(player1, player2, new int[] {player1Costume, player2Costume}, stages.get(stageIndex), player1Type, player2Type, 3);
         }
         if (keyCode == Input.Keys.ESCAPE) return Game.game.globalCharacterSelectScreen;
-        SABSounds.playSound(SABSounds.BLIP);
+        SabSounds.playSound(SabSounds.BLIP);
         return this;
     }
 }

@@ -6,7 +6,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.seagull_engine.Seagraphics;
 import sab.dialogue.Dialogues;
 import sab.game.Game;
-import sab.game.SABSounds;
+import sab.game.SabSounds;
 import sab.game.fighter.*;
 import sab.game.stage.*;
 import sab.screen.Screen;
@@ -47,15 +47,15 @@ public class CampaignScreen extends ScreenAdapter {
         if (keyCode == Input.Keys.LEFT || keyCode == Input.Keys.A) {
             selection = getRelativeSelection(-1);
             animationTimer = -30;
-            SABSounds.playSound(SABSounds.BLIP);
+            SabSounds.playSound(SabSounds.BLIP);
         }
         if (keyCode == Input.Keys.RIGHT || keyCode == Input.Keys.D) {
             selection = getRelativeSelection(1);
             animationTimer = 30;
-            SABSounds.playSound(SABSounds.BLIP);
+            SabSounds.playSound(SabSounds.BLIP);
         }
         if (keyCode == Input.Keys.ENTER) {
-            SABSounds.playSound(SABSounds.SELECT);
+            SabSounds.playSound(SabSounds.SELECT);
             BattleScreen battleScreen = new BattleScreen(new Fighter(new Marvin()), levels[selection].opponent, new int[] {0, 0}, levels[selection].stage, 0, levels[selection].difficulty, 3);
             battleScreen.battle.setDialogue(Dialogues.getDialogue("chain_greeting.dlg"));
             return battleScreen;

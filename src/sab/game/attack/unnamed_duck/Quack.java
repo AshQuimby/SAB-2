@@ -2,7 +2,7 @@ package sab.game.attack.unnamed_duck;
 
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import sab.game.SABSounds;
+import sab.game.SabSounds;
 import sab.game.attack.Attack;
 import sab.game.attack.MeleeAttackType;
 
@@ -25,7 +25,7 @@ public class Quack extends MeleeAttackType {
         attack.direction = attack.owner.direction;
         attack.hitbox.setCenter(attack.owner.getCenter().add(new Vector2(32 * attack.direction, 16)));
         attack.knockback = new Vector2(5 * attack.direction, 3);
-        SABSounds.playSound("quack.mp3");
+        SabSounds.playSound("quack.mp3");
     }
 
     @Override

@@ -3,7 +3,7 @@ package sab.game.attack.gus;
 import com.badlogic.gdx.math.Vector2;
 import com.seagull_engine.GameObject;
 import com.seagull_engine.Seagraphics;
-import sab.game.SABSounds;
+import sab.game.SabSounds;
 import sab.game.attack.Attack;
 import sab.game.attack.MeleeAttackType;
 
@@ -32,8 +32,8 @@ public class VentSlap extends MeleeAttackType {
         super.update(attack);
         attack.frame = attack.owner.frame;
         if (previousFrame != attack.frame) {
-            if (attack.frame == 42) SABSounds.playSound("vent_open.mp3");
-            else if (attack.frame == 45) SABSounds.playSound("vent_close.mp3");
+            if (attack.frame == 42) SabSounds.playSound("vent_open.mp3");
+            else if (attack.frame == 45) SabSounds.playSound("vent_close.mp3");
         }
         attack.canHit = attack.frame == 42 || attack.frame == 45;
         if (attack.frame == 45) {
@@ -50,7 +50,7 @@ public class VentSlap extends MeleeAttackType {
     @Override
     public void successfulHit(Attack attack, GameObject hit) {
         attack.owner.battle.shakeCamera(8);
-        SABSounds.playSound("crunch.mp3");
+        SabSounds.playSound("crunch.mp3");
     }
 
     @Override

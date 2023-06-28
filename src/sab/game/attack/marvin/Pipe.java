@@ -1,15 +1,11 @@
 package sab.game.attack.marvin;
 
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.Vector2;
 import com.seagull_engine.GameObject;
-import sab.game.Direction;
-import sab.game.SABSounds;
+import sab.game.SabSounds;
 import sab.game.attack.Attack;
 import sab.game.attack.AttackType;
 import sab.net.Keys;
-
-import java.security.Key;
 
 public class Pipe extends AttackType {
     private boolean head; // (?!)
@@ -47,7 +43,7 @@ public class Pipe extends AttackType {
             attack.hitbox.y = data[3];
         }
         attack.knockback = new Vector2(-12, 0);
-        SABSounds.playSound("crunch.mp3");
+        SabSounds.playSound("crunch.mp3");
     }
 
     @Override

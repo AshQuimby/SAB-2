@@ -1,4 +1,4 @@
-@front_static assets\backgrounds\title_screen\last_location\front_static.png
-@outmost assets\backgrounds\title_screen\last_location\outmost.png
-@far assets\backgrounds\title_screen\last_location\far.png
-@back assets\backgrounds\title_screen\last_location\back.png
+@front_static assets/backgrounds/title_screen/last_location/front_static.png
+@outmost assets/backgrounds/title_screen/last_location/outmost.png
+@far assets/backgrounds/title_screen/last_location/far.png
+@back assets/backgrounds/title_screen/last_location/back.png

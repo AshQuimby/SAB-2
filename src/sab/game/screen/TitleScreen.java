@@ -1,15 +1,11 @@
 package sab.game.screen;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector2;
 import com.seagull_engine.Seagraphics;
 
-import com.seagull_engine.graphics.ParallaxBackground;
 import sab.game.Game;
-import sab.game.SABSounds;
+import sab.game.SabSounds;
 import sab.game.screen.extras.ExtrasScreen;
 import sab.screen.Screen;
 import sab.util.Utils;
@@ -17,7 +13,7 @@ import sab.util.Utils;
 public class TitleScreen extends SelectorScreen {
     public TitleScreen(boolean playMusic) {
         super(new String[] {"Play", "Host", "Join", "Campaign", "Settings", "Extras", "Quit"});
-        if (playMusic) SABSounds.playMusic("lobby_music.mp3", true);
+        if (playMusic) SabSounds.playMusic("lobby_music.mp3", true);
     }
 
     @Override
@@ -48,7 +44,7 @@ public class TitleScreen extends SelectorScreen {
 
     @Override
     public Screen onSelect(int selection) {
-        SABSounds.playSound(SABSounds.SELECT);
+        SabSounds.playSound(SabSounds.SELECT);
         
         switch(selection) {
             case 0 : {

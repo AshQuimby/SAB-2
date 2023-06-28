@@ -1,14 +1,13 @@
 package sab.game.attack.empty_soldier;
 
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.seagull_engine.GameObject;
 import sab.game.Player;
-import sab.game.SABSounds;
+import sab.game.SabSounds;
 import sab.game.attack.Attack;
 import sab.game.attack.MeleeAttackType;
 import sab.game.particle.Particle;
-import sab.util.SABRandom;
+import sab.util.SabRandom;
 
 public class ShadowPlunge extends MeleeAttackType {
     private boolean hitGround;
@@ -50,8 +49,8 @@ public class ShadowPlunge extends MeleeAttackType {
         }
 
         if (attack.life % 3 == 0) {
-            Vector2 particlePosition = attack.getCenter().add(SABRandom.random(-8f, 8f), SABRandom.random(-8f, 8f));
-            Vector2 particleVelocity = new Vector2(SABRandom.random(-3f, 3f), SABRandom.random(1f, 4f));
+            Vector2 particlePosition = attack.getCenter().add(SabRandom.random(-8f, 8f), SabRandom.random(-8f, 8f));
+            Vector2 particleVelocity = new Vector2(SabRandom.random(-3f, 3f), SabRandom.random(1f, 4f));
             Particle particle = new Particle(particlePosition, particleVelocity, 32, 32, 7, 5, particleVelocity.x > 0 ? 1 : -1, "shadowling.png");
             attack.owner.battle.addParticle(particle);
         }
@@ -63,13 +62,13 @@ public class ShadowPlunge extends MeleeAttackType {
 
     private void shadowExplosion(Attack attack) {
         for (int i = 0; i < 12; i++) {
-            Vector2 particlePosition = new Vector2(SABRandom.random(attack.owner.hitbox.x, attack.owner.hitbox.x + attack.owner.hitbox.width), attack.owner.hitbox.y);
-            Vector2 particleVelocity = new Vector2(SABRandom.random(-7f, 7f), SABRandom.random(-2f, 3f));
+            Vector2 particlePosition = new Vector2(SabRandom.random(attack.owner.hitbox.x, attack.owner.hitbox.x + attack.owner.hitbox.width), attack.owner.hitbox.y);
+            Vector2 particleVelocity = new Vector2(SabRandom.random(-7f, 7f), SabRandom.random(-2f, 3f));
             Particle particle = new Particle(particlePosition, particleVelocity, 32, 32, 7, 5, particleVelocity.x > 0 ? 1 : -1, "shadowling.png");
             attack.owner.battle.addParticle(particle);
         }
         attack.getBattle().shakeCamera(8);
-        SABSounds.playSound("crash.mp3");
+        SabSounds.playSound("crash.mp3");
     }
 
     @Override

@@ -13,7 +13,7 @@ import sab.game.attack.marvin.Frostball;
 import sab.game.attack.unnamed_duck.DuckItem;
 import sab.game.fighter.Fighter;
 import sab.game.fighter.Marvin;
-import sab.util.SABRandom;
+import sab.util.SabRandom;
 
 public class HellTwoBoogaloo extends StageType {
 
@@ -103,7 +103,7 @@ public class HellTwoBoogaloo extends StageType {
     @Override
     public void update(Battle battle, Stage stage) {
         if (Game.game.window.getTick() % 10 == 0) {
-            player.hitbox.x = SABRandom.random(stage.safeBlastZone.width - stage.safeBlastZone.width / 2 + 128);
+            player.hitbox.x = SabRandom.random(stage.safeBlastZone.width - stage.safeBlastZone.width / 2 + 128);
             if (Game.game.window.getTick() % 360 == 0) {
                 battle.addAttack(new Attack(new Frostball(), player), new int[]{ 320 });
             }

@@ -1,14 +1,13 @@
 package sab.game.attack.emperor_evil;
 
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.seagull_engine.Seagraphics;
 
-import sab.game.SABSounds;
+import sab.game.SabSounds;
 import sab.game.attack.Attack;
 import sab.game.attack.MeleeAttackType;
 import sab.game.particle.Particle;
-import sab.util.SABRandom;
+import sab.util.SabRandom;
 
 public class ExplosiveBarrel extends MeleeAttackType {
 
@@ -48,8 +47,8 @@ public class ExplosiveBarrel extends MeleeAttackType {
     public void onKill(Attack attack) {
         attack.owner.rotation = 0;
         for (int i = 0; i < 6 ; i++) {
-            attack.owner.battle.addParticle(new Particle(attack.hitbox.getCenter(new Vector2()), new Vector2(4 * SABRandom.random(), 0).rotateDeg(SABRandom.random() * 360), 64, 64, 0, "fire.png"));
-            attack.owner.battle.addParticle(new Particle(attack.hitbox.getCenter(new Vector2()), new Vector2(4 * SABRandom.random(), 0).rotateDeg(SABRandom.random() * 360), 96, 96, 0, "smoke.png"));
+            attack.owner.battle.addParticle(new Particle(attack.hitbox.getCenter(new Vector2()), new Vector2(4 * SabRandom.random(), 0).rotateDeg(SabRandom.random() * 360), 64, 64, 0, "fire.png"));
+            attack.owner.battle.addParticle(new Particle(attack.hitbox.getCenter(new Vector2()), new Vector2(4 * SabRandom.random(), 0).rotateDeg(SabRandom.random() * 360), 96, 96, 0, "smoke.png"));
         }
         for (int i = 0; i < 4; i++) {
             attack.owner.battle.addAttack(new Attack(new Banana(), attack.owner), null);
@@ -58,8 +57,8 @@ public class ExplosiveBarrel extends MeleeAttackType {
         attack.owner.velocity.y = 32;
         attack.owner.usedRecovery = true;
         attack.owner.removeJumps();
-        attack.owner.battle.addParticle(new Particle(1, attack.owner.hitbox.getCenter(new Vector2()), new Vector2(SABRandom.random(-2f, 2f), 5), 64, 80, 1, "barrel.png"));
-        SABSounds.playSound("explosion.mp3");
+        attack.owner.battle.addParticle(new Particle(1, attack.owner.hitbox.getCenter(new Vector2()), new Vector2(SabRandom.random(-2f, 2f), 5), 64, 80, 1, "barrel.png"));
+        SabSounds.playSound("explosion.mp3");
     }
     
     @Override

@@ -23,7 +23,7 @@ import sab.modloader.Mod;
 import sab.modloader.ModLoader;
 import sab.screen.Screen;
 import sab.util.Utils;
-import sab.util.SABRandom;
+import sab.util.SabRandom;
 
 import java.io.File;
 import java.io.IOException;
@@ -146,7 +146,7 @@ public class Game extends Messenger {
             titleBackground.parallaxMultiplier = 0.5f;
             titleBackground.ambientSpeedMultiplier = 2f;
         } else {
-            switch (SABRandom.random(3)) {
+            switch (SabRandom.random(3)) {
                 case 0 -> {
                     titleBackground = new ParallaxBackground(Gdx.files.internal("assets/backgrounds/title_screen/last_location"));
                     titleBackground.parallaxMultiplier = 1f;

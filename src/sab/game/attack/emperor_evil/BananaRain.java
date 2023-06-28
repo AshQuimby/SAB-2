@@ -2,17 +2,11 @@ package sab.game.attack.emperor_evil;
 
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
-import com.seagull_engine.GameObject;
 import com.seagull_engine.Seagraphics;
-import org.lwjgl.system.MathUtil;
-import sab.game.CollisionResolver;
 import sab.game.Direction;
-import sab.game.SABSounds;
 import sab.game.attack.Attack;
 import sab.game.attack.AttackType;
-import sab.game.particle.Particle;
-import sab.net.Keys;
-import sab.util.SABRandom;
+import sab.util.SabRandom;
 
 public class BananaRain extends AttackType {
     private static final int cloudTransitionTime = 120;
@@ -40,7 +34,7 @@ public class BananaRain extends AttackType {
         if (attack.life == cloudTransitionTime) {
             attack.velocity.y = 352 / 32f;
         }
-        if (attack.life % 10 == 0 && attack.life < 820 - cloudTransitionTime && attack.life > cloudTransitionTime) attack.getBattle().addAttack(new Attack(new Banana(), attack.owner), new int[] { (int) SABRandom.random(attack.getStage().getSafeBlastZone().x, (int) attack.getStage().getStageEdge(Direction.RIGHT)) });
+        if (attack.life % 10 == 0 && attack.life < 820 - cloudTransitionTime && attack.life > cloudTransitionTime) attack.getBattle().addAttack(new Attack(new Banana(), attack.owner), new int[] { (int) SabRandom.random(attack.getStage().getSafeBlastZone().x, (int) attack.getStage().getStageEdge(Direction.RIGHT)) });
     }
 
     @Override

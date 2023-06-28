@@ -5,7 +5,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.seagull_engine.GameObject;
 import com.seagull_engine.Seagraphics;
 import sab.game.Player;
-import sab.game.SABSounds;
+import sab.game.SabSounds;
 import sab.game.attack.MeleeAttackType;
 import sab.game.attack.Attack;
 
@@ -49,7 +49,7 @@ public class Claw extends MeleeAttackType {
         super.onSpawn(attack, data);
         swingDirection = data[0];
         attack.knockback = new Vector2(5 * attack.owner.direction, 4);
-        SABSounds.playSound("swish.mp3");
+        SabSounds.playSound("swish.mp3");
     }
 
     @Override

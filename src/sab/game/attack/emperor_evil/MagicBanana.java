@@ -2,7 +2,6 @@ package sab.game.attack.emperor_evil;
 
 import sab.game.attack.Attack;
 
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.seagull_engine.GameObject;
 import sab.game.Direction;
@@ -10,7 +9,7 @@ import sab.game.animation.Animation;
 import sab.game.attack.AttackType;
 import sab.game.particle.Particle;
 import sab.net.Keys;
-import sab.util.SABRandom;
+import sab.util.SabRandom;
 
 public class MagicBanana extends AttackType {
 
@@ -82,7 +81,7 @@ public class MagicBanana extends AttackType {
     @Override
     public void onKill(Attack attack) {
         for (int i = 0; i < 4 ; i++) {
-            attack.owner.battle.addParticle(new Particle(attack.hitbox.getCenter(new Vector2()), new Vector2(4 * SABRandom.random(), 0).rotateDeg(SABRandom.random() * 360), 32, 32, 0, "smoke.png"));
+            attack.owner.battle.addParticle(new Particle(attack.hitbox.getCenter(new Vector2()), new Vector2(4 * SabRandom.random(), 0).rotateDeg(SabRandom.random() * 360), 32, 32, 0, "smoke.png"));
         }
     }
 

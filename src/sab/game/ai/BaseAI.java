@@ -4,13 +4,11 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
 import sab.game.Player;
-import sab.game.ass_ball.AssBall;
 import sab.game.attack.Attack;
 import sab.game.stage.Ledge;
-import sab.game.stage.PassablePlatform;
 import sab.game.stage.Platform;
 import sab.net.Keys;
-import sab.util.SABRandom;
+import sab.util.SabRandom;
 
 public class BaseAI extends AI {
     protected int mashCooldown;
@@ -239,7 +237,7 @@ public class BaseAI extends AI {
             FutureCollision collision = getFutureCollision(nearestAttack, difficulty * 5);
 
             if (collision != null) {
-                if (collision.ticksUntil() <= 20 && SABRandom.random() * 10 < difficulty) {
+                if (collision.ticksUntil() <= 20 && SabRandom.random() * 10 < difficulty) {
                     parry(nearestAttack);
                     return;
                 }

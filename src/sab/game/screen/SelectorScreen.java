@@ -5,7 +5,7 @@ import sab.util.Utils;
 
 import com.badlogic.gdx.Input;
 
-import sab.game.SABSounds;
+import sab.game.SabSounds;
 import sab.screen.Screen;
 
 public class SelectorScreen extends ScreenAdapter {
@@ -36,17 +36,17 @@ public class SelectorScreen extends ScreenAdapter {
     }
 
     public void incrementSelection() {
-        SABSounds.playSound(SABSounds.BLIP);
+        SabSounds.playSound(SabSounds.BLIP);
         selectorIndex = Utils.loop(selectorIndex, 1, options.length, 0);
     }
 
     public void decrementSelection() {
-        SABSounds.playSound(SABSounds.BLIP);
+        SabSounds.playSound(SabSounds.BLIP);
         selectorIndex = Utils.loop(selectorIndex, -1, options.length, 0);
     }
 
     protected Screen onSelect(int selection) {
-        SABSounds.playSound(SABSounds.SELECT);
+        SabSounds.playSound(SabSounds.SELECT);
         return this;
     }
 

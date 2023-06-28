@@ -1,18 +1,11 @@
 package sab.game.screen.extras;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector2;
 import com.seagull_engine.Seagraphics;
 
-import com.seagull_engine.graphics.ParallaxBackground;
 import sab.game.Game;
-import sab.game.SABSounds;
+import sab.game.SabSounds;
 import sab.game.Settings;
 import sab.game.screen.*;
-import sab.replay.Replay;
 import sab.screen.Screen;
 import sab.util.Utils;
 
@@ -50,7 +43,7 @@ public class ExtrasScreen extends SelectorScreen {
 
     @Override
     public Screen onSelect(int selection) {
-        SABSounds.playSound(SABSounds.SELECT);
+        SabSounds.playSound(SabSounds.SELECT);
         switch(selection) {
             case 0 -> {
                 Game.game.window.camera.reset();

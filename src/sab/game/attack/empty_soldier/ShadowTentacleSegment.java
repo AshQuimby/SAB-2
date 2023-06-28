@@ -5,7 +5,6 @@ import com.badlogic.gdx.math.Vector2;
 import com.seagull_engine.GameObject;
 import sab.game.attack.Attack;
 import sab.game.attack.AttackType;
-import sab.util.SABRandom;
 
 public class ShadowTentacleSegment extends AttackType {
     private int parentId;

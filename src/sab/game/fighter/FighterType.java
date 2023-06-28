@@ -10,7 +10,7 @@ import sab.game.ai.AI;
 import sab.game.ai.BaseAI;
 import sab.game.attack.Attack;
 import sab.game.screen.battle_adjacent.VictoryScreen;
-import sab.util.SABRandom;
+import sab.util.SabRandom;
 
 public abstract class FighterType {
     public void setDefaults(Fighter fighter) {
@@ -126,7 +126,7 @@ public abstract class FighterType {
     }
 
     public int getRandomCostume(Fighter fighter) {
-        return SABRandom.random(fighter.costumes - 1);
+        return SabRandom.random(fighter.costumes - 1);
     }
 
     public String getVictorySongId(Fighter fighter, Player player) {

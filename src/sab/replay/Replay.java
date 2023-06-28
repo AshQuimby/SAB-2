@@ -6,7 +6,7 @@ import sab.game.Battle;
 import sab.game.Player;
 import sab.game.stage.Stage;
 import sab.net.Keys;
-import sab.util.SABReader;
+import sab.util.SabReader;
 
 import java.io.File;
 import java.io.IOException;
@@ -123,7 +123,7 @@ public class Replay {
         String replayPath = "../saves/replays/" + Calendar.getInstance().getTime().toString().replace(":", "-").replace(" ", "-") + ".sab";
 
         try {
-            SABReader.createFile(replayPath, getSABEncodedMap());
+            SabReader.createFile(replayPath, getSABEncodedMap());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

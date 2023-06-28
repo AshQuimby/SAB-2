@@ -2,17 +2,15 @@ package sab.game.attack.walouis;
 
 import java.util.Random;
 
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.seagull_engine.GameObject;
 
 import com.seagull_engine.Seagraphics;
-import com.sun.jdi.VMDisconnectedException;
 import sab.game.Direction;
 import sab.game.attack.Attack;
 import sab.game.attack.AttackType;
 import sab.game.particle.Particle;
-import sab.util.SABRandom;
+import sab.util.SabRandom;
 
 public class Note extends AttackType {
     @Override
@@ -53,7 +51,7 @@ public class Note extends AttackType {
     @Override
     public void onKill(Attack attack) {
         for (int i = 0; i < 8 ; i++) {
-            attack.owner.battle.addParticle(new Particle(attack.hitbox.getCenter(new Vector2()), new Vector2(4 * SABRandom.random(), 0).rotateDeg(SABRandom.random() * 360), 32, 32, 0, "note_particle.png"));
+            attack.owner.battle.addParticle(new Particle(attack.hitbox.getCenter(new Vector2()), new Vector2(4 * SabRandom.random(), 0).rotateDeg(SabRandom.random() * 360), 32, 32, 0, "note_particle.png"));
         }
     }
 

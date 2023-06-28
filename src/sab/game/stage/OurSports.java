@@ -2,14 +2,13 @@ package sab.game.stage;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.seagull_engine.Seagraphics;
 
 import com.seagull_engine.graphics.ParallaxBackground;
 import sab.game.*;
 import sab.game.particle.Particle;
-import sab.util.SABRandom;
+import sab.util.SabRandom;
 
 public class OurSports extends StageType {
     private Platform platform;
@@ -73,7 +72,7 @@ public class OurSports extends StageType {
             stormy = true;
             stage.background = "our_sports_stormy_background.png";
             stage.parallaxBackground = new ParallaxBackground(Gdx.files.internal("assets/backgrounds/stage/our_sports_stormy"));
-            SABSounds.playMusic("our_sports_alt.mp3", true  );
+            SabSounds.playMusic("our_sports_alt.mp3", true  );
         }
 
         if (stormy) {
@@ -81,12 +80,12 @@ public class OurSports extends StageType {
                 lightning--;
             }
             if (stormTime % 2 == 0) {
-                battle.addParticle(new Particle(0, new Vector2(SABRandom.random(stage.getUnsafeBlastZone().x, stage.getUnsafeBlastZone().x + stage.getUnsafeBlastZone().width + Game.game.window.resolutionX/2), stage.getSafeBlastZone().height), new Vector2(-15, -15), 32, 32, 0, "rain.png"));
+                battle.addParticle(new Particle(0, new Vector2(SabRandom.random(stage.getUnsafeBlastZone().x, stage.getUnsafeBlastZone().x + stage.getUnsafeBlastZone().width + Game.game.window.resolutionX/2), stage.getSafeBlastZone().height), new Vector2(-15, -15), 32, 32, 0, "rain.png"));
             }
             if (stormTime % 600 == 0) {
                 lightning = 60;
             }
-            if (lightning == 50) SABSounds.playSound("thunder.mp3");
+            if (lightning == 50) SabSounds.playSound("thunder.mp3");
             stormTime++;
         }
     }
@@ -102,7 +101,7 @@ public class OurSports extends StageType {
     public void onPlayerHit(Stage stage, Player player, DamageSource damageSource, boolean finalBlow) {
         if (stormy && finalBlow) {
             lightning = 30;
-            SABSounds.playSound("thunder.mp3");
+            SabSounds.playSound("thunder.mp3");
         }
     }
 }

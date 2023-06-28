@@ -7,8 +7,7 @@ import sab.game.ai.BaseAI;
 import sab.game.animation.Animation;
 import sab.game.attack.Attack;
 import sab.game.attack.chain.*;
-import sab.game.attack.marvin.Pipe;
-import sab.util.SABRandom;
+import sab.util.SabRandom;
 
 public class Chain extends FighterType {
     private Animation swingAnimation;
@@ -59,7 +58,7 @@ public class Chain extends FighterType {
 
             @Override
             public void attack(Vector2 center, Player target, Vector2 targetPosition) {
-                if (SABRandom.random() * 20 > difficulty) return;
+                if (SabRandom.random() * 20 > difficulty) return;
 
                 if (isDirectlyHorizontal(target.hitbox) && isFacing(targetPosition.x)) {
                     float horizontalDistance = Math.abs(center.x - targetPosition.x);
@@ -69,7 +68,7 @@ public class Chain extends FighterType {
                     } else {
                         useSideAttack();
                     }
-                } else if (((isDirectlyBelow(target.hitbox) && Math.abs(center.y - targetPosition.y) > 32) || isDirectlyBelow(target.hitbox)) && SABRandom.random() * 20 < difficulty) {
+                } else if (((isDirectlyBelow(target.hitbox) && Math.abs(center.y - targetPosition.y) > 32) || isDirectlyBelow(target.hitbox)) && SabRandom.random() * 20 < difficulty) {
                     useDownAttack();
                 } else if (isDirectlyBelow(target.hitbox)) {
                     useUpAttack();

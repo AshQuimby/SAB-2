@@ -2,7 +2,7 @@ package sab.game.attack.emperor_evil;
 
 import com.badlogic.gdx.math.Vector2;
 
-import sab.game.SABSounds;
+import sab.game.SabSounds;
 import sab.game.attack.MeleeAttackType;
 import sab.game.attack.Attack;
 
@@ -33,7 +33,7 @@ public class Chomp extends MeleeAttackType {
         super.update(attack);
         attack.canHit = attack.frame == 1;
         if (attack.life % 8 == 0) attack.frame++;
-        if (attack.life == 32) SABSounds.playSound("chomp.mp3");
+        if (attack.life == 32) SabSounds.playSound("chomp.mp3");
         attack.knockback = new Vector2(6 * attack.owner.direction, 4);
     }
 }

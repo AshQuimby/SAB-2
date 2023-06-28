@@ -3,14 +3,12 @@ package sab.game.attack.unnamed_duck;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.seagull_engine.GameObject;
 import com.seagull_engine.Seagraphics;
 import sab.game.Direction;
 import sab.game.Player;
-import sab.game.SABSounds;
+import sab.game.SabSounds;
 import sab.game.attack.Attack;
 import sab.game.attack.AttackType;
-import sab.game.attack.MeleeAttackType;
 
 public class MegaBell extends AttackType {
     private int bongCount;
@@ -92,7 +90,7 @@ public class MegaBell extends AttackType {
     }
 
     private void dong(Attack attack) {
-        SABSounds.playSound("burrito_bong.mp3");
+        SabSounds.playSound("burrito_bong.mp3");
         attack.getBattle().shakeCamera(8);
         for (Player player : attack.getBattle().getPlayers()) {
             if (player == attack.owner) return;

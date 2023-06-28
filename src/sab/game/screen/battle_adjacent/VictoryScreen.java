@@ -6,12 +6,10 @@ import com.seagull_engine.Seagraphics;
 
 import sab.game.Game;
 import sab.game.Player;
-import sab.game.SABSounds;
+import sab.game.SabSounds;
 import sab.game.Settings;
 import sab.screen.Screen;
 import sab.screen.ScreenAdapter;
-
-import java.util.Set;
 
 public class VictoryScreen extends ScreenAdapter {
     public int setupTimer;
@@ -23,7 +21,7 @@ public class VictoryScreen extends ScreenAdapter {
         this.winner = winner;
         this.loser = loser;
         this.background = background;
-        SABSounds.playMusic("leadup.mp3", false);
+        SabSounds.playMusic("leadup.mp3", false);
         setupTimer = -360;
         if (!Settings.getAnticipation() || Settings.getMusicVolume() == 0 || Settings.getMasterVolume() == 0) setupTimer = -60;
         Game.game.window.camera.viewportWidth = Game.game.window.resolutionX;
@@ -37,7 +35,7 @@ public class VictoryScreen extends ScreenAdapter {
         setupTimer++;
 
         if (setupTimer == 0) {
-            SABSounds.playMusic(winner.fighter.type.getVictorySongId(winner.fighter, winner), false);
+            SabSounds.playMusic(winner.fighter.type.getVictorySongId(winner.fighter, winner), false);
         }
 
         g.scalableDraw(g.imageProvider.getImage(background), -Game.game.window.resolutionX / 2, -Game.game.window.resolutionY / 2, Game.game.window.resolutionX, Game.game.window.resolutionY);
@@ -67,8 +65,8 @@ public class VictoryScreen extends ScreenAdapter {
     public Screen keyPressed(int keyCode) {
         if (keyCode == Input.Keys.ESCAPE || keyCode == Input.Keys.ENTER) {
             if (setupTimer > 0) {
-                SABSounds.playSound(SABSounds.BLIP);
-                SABSounds.playMusic("lobby_music.mp3", true);
+                SabSounds.playSound(SabSounds.BLIP);
+                SabSounds.playMusic("lobby_music.mp3", true);
                 Game.selectNewTitleScreen();
                 Game.game.globalCharacterSelectScreen.start();
                 return Game.game.globalCharacterSelectScreen;

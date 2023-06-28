@@ -1,7 +1,6 @@
 package sab.game.attack.unnamed_duck;
 
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.seagull_engine.Seagraphics;
@@ -9,7 +8,7 @@ import sab.game.attack.Attack;
 import sab.game.attack.MeleeAttackType;
 import sab.game.item.Jerrycan;
 import sab.net.Keys;
-import sab.util.SABRandom;
+import sab.util.SabRandom;
 
 public class KeroseneEmitter extends MeleeAttackType {
     private Jerrycan jerrycan;
@@ -48,7 +47,7 @@ public class KeroseneEmitter extends MeleeAttackType {
         Vector2 spawnPosition = attack.owner.getCenter();
         spawnPosition.x += (attack.owner.fighter.itemOffset.x + 24) * attack.direction;
         spawnPosition.y += attack.owner.fighter.itemOffset.y + 12;
-        Vector2 velocity = new Vector2(SABRandom.random(4f, 7f) * attack.owner.direction, SABRandom.random(3f, 5f)).add(attack.owner.velocity);
+        Vector2 velocity = new Vector2(SabRandom.random(4f, 7f) * attack.owner.direction, SabRandom.random(3f, 5f)).add(attack.owner.velocity);
 
         attack.getBattle().addAttack(new Attack(new FlammableLiquid(), attack.owner), new int[] {
                 Float.floatToIntBits(spawnPosition.x),

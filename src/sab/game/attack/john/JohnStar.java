@@ -1,17 +1,11 @@
 package sab.game.attack.john;
 
-import java.util.Random;
-
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.seagull_engine.GameObject;
 
-import sab.game.Direction;
 import sab.game.Player;
-import sab.game.SABSounds;
 import sab.game.attack.Attack;
 import sab.game.attack.AttackType;
-import sab.util.SABRandom;
 
 public class JohnStar extends AttackType {
 

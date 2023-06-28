@@ -1,16 +1,12 @@
 package sab.game.screen.extras;
 
-import com.badlogic.gdx.Files;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.seagull_engine.Seagraphics;
 
 import sab.game.Game;
-import sab.game.SABSounds;
+import sab.game.SabSounds;
 import sab.game.screen.*;
-import sab.replay.Replay;
 import sab.screen.Screen;
 import sab.util.Utils;
 
@@ -54,7 +50,7 @@ public class ReplayScreen extends SelectorScreen {
 
     @Override
     public Screen onSelect(int selection) {
-        SABSounds.playSound(SABSounds.SELECT);
+        SabSounds.playSound(SabSounds.SELECT);
         if (selection == options.length - 1) {
             return onBack();
         } else {

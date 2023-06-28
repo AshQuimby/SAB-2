@@ -4,11 +4,8 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.seagull_engine.GameObject;
 import com.seagull_engine.Seagraphics;
-import sab.game.Hittable;
 import sab.game.Player;
-import sab.game.SABSounds;
 import sab.game.attack.Attack;
-import sab.game.attack.AttackType;
 import sab.game.attack.MeleeAttackType;
 import sab.net.Keys;
 

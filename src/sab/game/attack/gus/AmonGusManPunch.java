@@ -3,7 +3,7 @@ package sab.game.attack.gus;
 import com.badlogic.gdx.math.Vector2;
 import com.seagull_engine.GameObject;
 import com.seagull_engine.Seagraphics;
-import sab.game.SABSounds;
+import sab.game.SabSounds;
 import sab.game.attack.Attack;
 import sab.game.attack.MeleeAttackType;
 
@@ -33,7 +33,7 @@ public class AmonGusManPunch extends MeleeAttackType {
     @Override
     public void successfulHit(Attack attack, GameObject hit) {
         attack.owner.battle.shakeCamera(5);
-        SABSounds.playSound("crunch.mp3");
+        SabSounds.playSound("crunch.mp3");
     }
 
     @Override
@@ -41,7 +41,7 @@ public class AmonGusManPunch extends MeleeAttackType {
         super.onSpawn(attack, data);
         attack.knockback = new Vector2(14 * attack.owner.direction, 8);
         attack.owner.battle.shakeCamera(5);
-        SABSounds.playSound("john_step.mp3");
+        SabSounds.playSound("john_step.mp3");
         if (data != null) attack.getBattle().addAttack(new Attack(new ProjectileGus(), attack.owner), new int[] { (int) attack.getCenter().x, (int) attack.getCenter().y });
     }
 

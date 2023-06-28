@@ -20,7 +20,7 @@ import sab.game.attack.AttackType;
 import sab.game.fighter.FighterType;
 import sab.game.screen.extras.JukeboxScreen;
 import sab.game.stage.StageType;
-import sab.util.SABReader;
+import sab.util.SabReader;
 
 public final class ModLoader {
 	
@@ -40,7 +40,7 @@ public final class ModLoader {
                 + "resources/" + fileName;
 
         Files.copy(settingsReader, Paths.get(path));
-        Map<String, String> settings = SABReader.read(Paths.get(path).toFile());
+        Map<String, String> settings = SabReader.read(Paths.get(path).toFile());
         Files.delete(Paths.get(path));
 
         jar.close();

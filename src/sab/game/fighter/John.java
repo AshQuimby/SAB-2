@@ -6,7 +6,7 @@ import com.seagull_engine.Seagraphics;
 
 import sab.game.Game;
 import sab.game.Player;
-import sab.game.SABSounds;
+import sab.game.SabSounds;
 import sab.game.ai.AI;
 import sab.game.ai.BaseAI;
 import sab.game.animation.Animation;
@@ -14,7 +14,7 @@ import sab.game.attack.john.*;
 import sab.game.particle.Particle;
 import sab.game.screen.battle_adjacent.VictoryScreen;
 import sab.net.Keys;
-import sab.util.SABRandom;
+import sab.util.SabRandom;
 
 public class John extends FighterType {
     private Animation suckAnimation;
@@ -82,14 +82,14 @@ public class John extends FighterType {
                         }
                     }
 
-                    if (ticksUntilInRange >= 16 && SABRandom.random() * 25 < difficulty) {
+                    if (ticksUntilInRange >= 16 && SabRandom.random() * 25 < difficulty) {
                         useSideAttack();
                     } else if (player.touchingStage && isDirectlyHorizontal(target.hitbox) && (Math.abs(center.x - targetPosition.x) < 120 || !target.touchingStage)) {
                         useDownAttack();
                     }
-                } else if (isDirectlyAbove(target.hitbox) && SABRandom.random() * 20 < difficulty && !target.hasAction()) {
+                } else if (isDirectlyAbove(target.hitbox) && SabRandom.random() * 20 < difficulty && !target.hasAction()) {
                     useDownAttack();
-                } else if (SABRandom.random() * 25 < difficulty) {
+                } else if (SabRandom.random() * 25 < difficulty) {
                     useUpAttack();
                 }
             }
@@ -104,7 +104,7 @@ public class John extends FighterType {
             public void onFrameChange(int newFrame) {
                 if (newFrame % 2 == 0) {
                     player.battle.shakeCamera(3);
-                    SABSounds.playSound("john_step.mp3");
+                    SabSounds.playSound("john_step.mp3");
                 }
             }
         };
@@ -126,13 +126,13 @@ public class John extends FighterType {
         if (ballTransformTime > 0) {
             ballTransformTime--;
             if (ballTransformTime > 60) {
-                if (ballTransformTime % 16 == 0) SABSounds.playSound("swish.mp3");
+                if (ballTransformTime % 16 == 0) SabSounds.playSound("swish.mp3");
                 player.frame = 12;
             } else {
-                if (ballTransformTime % 8 == 0) SABSounds.playSound("swish.mp3");
+                if (ballTransformTime % 8 == 0) SabSounds.playSound("swish.mp3");
                 player.frame = 13;
             }
-            Vector2 particleSpawnPos = player.getCenter().add(new Vector2(128 * player.direction, 0).rotateDeg(SABRandom.random(-30f, 30f)));
+            Vector2 particleSpawnPos = player.getCenter().add(new Vector2(128 * player.direction, 0).rotateDeg(SabRandom.random(-30f, 30f)));
             Vector2 particleVelocity = player.getCenter().sub(particleSpawnPos).scl(0.05f);
             player.battle.addParticle(new Particle(particleSpawnPos, particleVelocity, 24, 24, "smoke.png"));
             if (ballTransformTime == 0) {
@@ -205,8 +205,8 @@ public class John extends FighterType {
             if (justWon) {
                 screen.setupTimer = 0;
                 screen.update();
-                SABSounds.stopMusic();
-                SABSounds.playMusic(getVictorySongId(fighter, player), false);
+                SabSounds.stopMusic();
+                SabSounds.playMusic(getVictorySongId(fighter, player), false);
             }
             if (screen.setupTimer < 252) {
                 g.usefulTintDraw(g.imageProvider.getImage("pixel.png"), -Game.game.window.resolutionX / 2, -Game.game.window.resolutionY / 2, Game.game.window.resolutionX, Game.game.window.resolutionY, 0, 1, 0, false, false, Color.BLACK);

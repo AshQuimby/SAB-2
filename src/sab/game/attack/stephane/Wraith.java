@@ -1,7 +1,6 @@
 package sab.game.attack.stephane;
 
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 
 import com.seagull_engine.Seagraphics;
@@ -84,7 +83,7 @@ public class Wraith extends AttackType implements Hittable {
         if (attack.life <= 0) attack.alive = false;
         attack.velocity.add(source.knockback);
         hurtTime = 30;
-        SABSounds.playSound("hit.mp3");
+        SabSounds.playSound("hit.mp3");
         return true;
     }
 

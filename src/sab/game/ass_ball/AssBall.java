@@ -1,7 +1,6 @@
 package sab.game.ass_ball;
 
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.seagull_engine.GameObject;
@@ -9,7 +8,7 @@ import com.seagull_engine.Seagraphics;
 import sab.game.*;
 import sab.game.particle.Particle;
 import sab.util.Utils;
-import sab.util.SABRandom;
+import sab.util.SabRandom;
 
 public class AssBall extends GameObject implements Hittable {
     private Color color;
@@ -48,9 +47,9 @@ public class AssBall extends GameObject implements Hittable {
     public void kill() {
         if (!killed) {
             for (int i = 0; i < 15; i++) {
-                battle.addParticle(new Particle(getCenter(), new Vector2(4 * SABRandom.random(), 0).rotateDeg(SABRandom.random() * 360), 96, 96, 0, "twinkle.png"));
+                battle.addParticle(new Particle(getCenter(), new Vector2(4 * SabRandom.random(), 0).rotateDeg(SabRandom.random() * 360), 96, 96, 0, "twinkle.png"));
             }
-            SABSounds.playSound("shatter.mp3");
+            SabSounds.playSound("shatter.mp3");
             lastPlayerToHit.grantFinalAss();
             killed = true;
         }
@@ -69,7 +68,7 @@ public class AssBall extends GameObject implements Hittable {
             if (health <= 0) {
                 kill();
             } else {
-                SABSounds.playSound("hit.mp3");
+                SabSounds.playSound("hit.mp3");
             }
             return true;
         }

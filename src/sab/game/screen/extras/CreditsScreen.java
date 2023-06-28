@@ -14,8 +14,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.seagull_engine.Seagraphics;
 
 import sab.game.Game;
-import sab.game.SABSounds;
-import sab.game.screen.extras.ExtrasScreen;
+import sab.game.SabSounds;
 import sab.screen.Screen;
 import sab.screen.ScreenAdapter;
 
@@ -26,7 +25,7 @@ public class CreditsScreen extends ScreenAdapter {
     private boolean speedUp;
 
     public CreditsScreen() {
-        SABSounds.playMusic("credits.mp3", false);
+        SabSounds.playMusic("credits.mp3", false);
         speedUp = false;
         text = new ArrayList<>();
         sizes = new ArrayList<>();

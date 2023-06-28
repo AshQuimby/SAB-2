@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Random;
 
 public class WeightedCollection<E> implements Collection<E> {
 
@@ -67,7 +66,7 @@ public class WeightedCollection<E> implements Collection<E> {
         for (double weight : weights) {
             totalWeight += weight;
         }
-        double value = SABRandom.random() * totalWeight;
+        double value = SabRandom.random() * totalWeight;
         E element = getFromValue(value);
         remove(element);
         return element;
@@ -78,7 +77,7 @@ public class WeightedCollection<E> implements Collection<E> {
         for (double weight : weights) {
             totalWeight += weight;
         }
-        double value = SABRandom.random() * totalWeight;
+        double value = SabRandom.random() * totalWeight;
         return getFromValue(value);
     }
 

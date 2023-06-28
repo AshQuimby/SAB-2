@@ -1,6 +1,5 @@
 package sab.game.attack.chain;
 
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.seagull_engine.GameObject;
 import com.seagull_engine.Seagraphics;
@@ -10,7 +9,7 @@ import sab.game.attack.Attack;
 import sab.game.attack.AttackType;
 import sab.game.particle.Particle;
 import sab.util.Utils;
-import sab.util.SABRandom;
+import sab.util.SabRandom;
 
 public class FallingKnife extends AttackType {
     private boolean onGround;
@@ -75,7 +74,7 @@ public class FallingKnife extends AttackType {
     public void onKill(Attack attack) {
         for (int i = 0; i < 5; i++) {
             attack.owner.battle.addParticle(
-                    new Particle(attack.hitbox.getCenter(new Vector2()), new Vector2(SABRandom.random(-2f, 2f), SABRandom.random(1f, 3f)), 32, 32, 30, "smoke.png"));
+                    new Particle(attack.hitbox.getCenter(new Vector2()), new Vector2(SabRandom.random(-2f, 2f), SabRandom.random(1f, 3f)), 32, 32, 30, "smoke.png"));
         }
     }
 

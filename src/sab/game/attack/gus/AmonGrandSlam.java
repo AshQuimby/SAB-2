@@ -3,9 +3,8 @@ package sab.game.attack.gus;
 import com.badlogic.gdx.math.Vector2;
 import com.seagull_engine.GameObject;
 import com.seagull_engine.Seagraphics;
-import sab.game.Direction;
 import sab.game.Player;
-import sab.game.SABSounds;
+import sab.game.SabSounds;
 import sab.game.animation.Animation;
 import sab.game.attack.Attack;
 import sab.game.attack.MeleeAttackType;
@@ -82,7 +81,7 @@ public class AmonGrandSlam extends MeleeAttackType {
             if (attack.owner.touchingStage) {
                 attack.owner.startAnimation(1, landAnimation, 24, false);
                 attack.getBattle().shakeCamera(12);
-                SABSounds.playSound("crash.mp3");
+                SabSounds.playSound("crash.mp3");
                 attack.owner.rotation = 0;
                 attack.owner.velocity.scl(0);
                 attack.getBattle().addParticle(new Particle(new Vector2(attack.owner.getCenter().x, attack.owner.getCenter().y + attack.owner.hitbox.height / 2 + 8), new Vector2(), 200, 32, 5, 6, -1, "amon_gus_landing.png"));

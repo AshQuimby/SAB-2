@@ -2,7 +2,7 @@ package sab.game.attack.matthew;
 
 import com.badlogic.gdx.math.Vector2;
 import com.seagull_engine.GameObject;
-import sab.game.SABSounds;
+import sab.game.SabSounds;
 import sab.game.attack.Attack;
 import sab.game.attack.MeleeAttackType;
 
@@ -41,6 +41,6 @@ public class MatthewSlash extends MeleeAttackType {
     public void onSpawn(Attack attack, int[] data) {
         super.onSpawn(attack, data);
         attack.knockback = new Vector2(8 * attack.owner.direction, 2);
-        SABSounds.playSound("swish.mp3");
+        SabSounds.playSound("swish.mp3");
     }
 }

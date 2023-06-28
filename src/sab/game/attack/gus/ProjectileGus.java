@@ -1,15 +1,11 @@
 package sab.game.attack.gus;
 
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.seagull_engine.GameObject;
 import sab.game.Direction;
-import sab.game.Player;
-import sab.game.animation.Animation;
 import sab.game.attack.Attack;
 import sab.game.attack.AttackType;
-import sab.game.particle.Particle;
-import sab.util.SABRandom;
+import sab.util.SabRandom;
 
 public class ProjectileGus extends AttackType {
     @Override
@@ -34,7 +30,7 @@ public class ProjectileGus extends AttackType {
     @Override
     public void onSpawn(Attack attack, int[] data) {
         attack.hitbox.setCenter(data[0], data[1]);
-        attack.velocity = new Vector2(24 * attack.direction, 4 * SABRandom.random(-1f, 1f));
+        attack.velocity = new Vector2(24 * attack.direction, 4 * SabRandom.random(-1f, 1f));
         attack.knockback = new Vector2(4 * attack.direction, 2);
     }
 

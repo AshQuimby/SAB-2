@@ -1,15 +1,11 @@
 package sab.game.attack.unnamed_duck;
 
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.seagull_engine.GameObject;
 import sab.game.Direction;
-import sab.game.SABSounds;
 import sab.game.attack.Attack;
 import sab.game.attack.AttackType;
-import sab.util.SABRandom;
 
 public class ThrownAxe extends AttackType {
     @Override

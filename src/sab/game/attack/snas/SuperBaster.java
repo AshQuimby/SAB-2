@@ -6,12 +6,10 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.seagull_engine.GameObject;
 import com.seagull_engine.Seagraphics;
-import sab.game.Direction;
 import sab.game.Player;
-import sab.game.SABSounds;
+import sab.game.SabSounds;
 import sab.game.attack.Attack;
 import sab.game.attack.MeleeAttackType;
-import sab.net.Keys;
 import sab.util.Utils;
 
 public class SuperBaster extends MeleeAttackType {
@@ -67,7 +65,7 @@ public class SuperBaster extends MeleeAttackType {
             if (attack.life < -120) {
                 fired = true;
                 attack.life = 30;
-                SABSounds.playSound("glaster_baster.mp3");
+                SabSounds.playSound("glaster_baster.mp3");
             }
         } else {
             attack.frame = 1;

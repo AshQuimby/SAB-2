@@ -1,22 +1,20 @@
 package sab.game.fighter;
 
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 
 import com.seagull_engine.Seagraphics;
 import sab.game.Game;
 import sab.game.Player;
-import sab.game.SABSounds;
+import sab.game.SabSounds;
 import sab.game.ai.AI;
 import sab.game.ai.BaseAI;
 import sab.game.animation.Animation;
 import sab.game.attack.Attack;
 import sab.game.attack.unnamed_duck.*;
-import sab.game.attack.walouis.Saxophone;
 import sab.game.item.*;
 import sab.game.particle.Particle;
 import sab.util.WeightedCollection;
-import sab.util.SABRandom;
+import sab.util.SabRandom;
 
 public class UnnamedDuck extends FighterType {
     private Animation quackAnimation;
@@ -69,15 +67,15 @@ public class UnnamedDuck extends FighterType {
 
                     if (horizontalDistance <= 60) {
                         useNeutralAttack();
-                    } else if (player.hasItem() && SABRandom.random() * 20 < difficulty) {
+                    } else if (player.hasItem() && SabRandom.random() * 20 < difficulty) {
                         useSideAttack();
                     }
-                } else if (isDirectlyBelow(target.hitbox) && Math.abs(center.y - targetPosition.y) > 32 && SABRandom.random() * 20 < difficulty) {
+                } else if (isDirectlyBelow(target.hitbox) && Math.abs(center.y - targetPosition.y) > 32 && SabRandom.random() * 20 < difficulty) {
                     useUpAttack();
                 }
 
                 UnnamedDuck duck = (UnnamedDuck) player.fighter.type;
-                if (!player.hasItem() && duck.itemCoolDown == 0 && SABRandom.random() * 60 < .8f) {
+                if (!player.hasItem() && duck.itemCoolDown == 0 && SabRandom.random() * 60 < .8f) {
                     useDownAttack();
                 }
             }
@@ -119,7 +117,7 @@ public class UnnamedDuck extends FighterType {
             if (duckSign != null) duckSign.alive = false;
             duckSign = player.startAttack(new DuckSign(), new Animation(new int[]{ 7 }, 1, true), 1, 4, true);
             player.usedRecovery = true;
-            SABSounds.playSound("sign.mp3");
+            SabSounds.playSound("sign.mp3");
         }
     }
 
@@ -132,9 +130,9 @@ public class UnnamedDuck extends FighterType {
             } else {
                 if (itemCoolDown > 0) {
                     for (int i = 0; i < 4 ; i++) {
-                        player.battle.addParticle(new Particle(player.getCenter().add(new Vector2(fighter.itemOffset.x * player.direction, fighter.itemOffset.y)), new Vector2(4 * SABRandom.random(), 0).rotateDeg(SABRandom.random() * 360), 32, 32, 0, "smoke.png"));
+                        player.battle.addParticle(new Particle(player.getCenter().add(new Vector2(fighter.itemOffset.x * player.direction, fighter.itemOffset.y)), new Vector2(4 * SabRandom.random(), 0).rotateDeg(SabRandom.random() * 360), 32, 32, 0, "smoke.png"));
                     }
-                    SABSounds.playSound("sign.mp3");
+                    SabSounds.playSound("sign.mp3");
                 } else {
                     Item foundItem = getItem();
                     foundItem.setDefaults();

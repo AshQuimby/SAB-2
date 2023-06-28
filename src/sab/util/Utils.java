@@ -9,7 +9,6 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import sab.game.Game;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.seagull_engine.Seagraphics;
@@ -77,11 +76,11 @@ public class Utils {
     }
 
     public static Vector2 randomPointInRect(Rectangle rect) {
-        return new Vector2(SABRandom.random(rect.x, rect.x + rect.width), SABRandom.random(rect.y, rect.y + rect.height));
+        return new Vector2(SabRandom.random(rect.x, rect.x + rect.width), SabRandom.random(rect.y, rect.y + rect.height));
     }
 
     public static Vector2 randomParticleVelocity(float magnitude) {
-        return new Vector2(magnitude, 0).rotateDeg(SABRandom.random(0, 360)).scl(SABRandom.random());
+        return new Vector2(magnitude, 0).rotateDeg(SabRandom.random(0, 360)).scl(SabRandom.random());
     }
 
     public static String appendCostumeToIdentifier(String base, int costume, String fileFormat) {
