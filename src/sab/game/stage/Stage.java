@@ -22,6 +22,7 @@ public class Stage {
 
     protected List<StageObject> stageObjects;
     protected List<Ledge> ledges;
+    protected List<Slope> slopes;
 
     // Players can be outside this blast zone safely when not taking knockback
     protected Rectangle safeBlastZone;
@@ -40,6 +41,7 @@ public class Stage {
         music = "last_location.mp3";
         stageObjects = new ArrayList<>();
         ledges = new ArrayList<>();
+        slopes = new ArrayList<>();
         maxZoomOut = 1;
 
         safeBlastZone = new Rectangle(-Game.game.window.resolutionX / 2 - 64, -Game.game.window.resolutionY / 2 - 64, Game.game.window.resolutionX + 128, Game.game.window.resolutionY + 128);
@@ -101,6 +103,10 @@ public class Stage {
         return ledges;
     }
 
+    public List<Slope> getSlopes() {
+        return slopes;
+    }
+
     public Rectangle getSafeBlastZone() {
         return new Rectangle(safeBlastZone);
     }
@@ -119,6 +125,10 @@ public class Stage {
 
     public void addLedge(Ledge ledge) {
         ledges.add(ledge);
+    }
+
+    public void addSlope(Slope slope) {
+        slopes.add(slope);
     }
 
     public float getStageEdge(Direction side) {

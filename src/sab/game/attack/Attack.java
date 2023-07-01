@@ -8,6 +8,7 @@ import com.seagull_engine.GameObject;
 import com.seagull_engine.Seagraphics;
 
 import sab.game.*;
+import sab.game.stage.Slope;
 import sab.game.stage.Stage;
 import sab.util.Utils;
 
@@ -87,6 +88,29 @@ public class Attack extends DamageSource {
                     if (previousPosition.y > gameObject.hitbox.y + gameObject.hitbox.height) {
                         tryDirection = CollisionResolver.resolveY(this, step.y, gameObject.hitbox);
                         if (tryDirection != Direction.NONE) collisionDirection = tryDirection;
+                    }
+                }
+            }
+        }
+
+        for (Slope slope : getBattle().getStage().getSlopes()) {
+            float m = slope.getSlope();
+            if (hitbox.overlaps(slope.bounds)) {
+                float y = slope.getYIntersection(hitbox.x);
+                if (y >= hitbox.y && y <= hitbox.y + hitbox.height) {
+                    if (slope.outerDirection == -1) {
+                        hitbox.y = m > 0 ? y : y - hitbox.height;
+                    } else {
+                        hitbox.y = m > 0 ? y - hitbox.height : y;
+                    }
+                }
+
+                y = slope.getYIntersection(hitbox.x + hitbox.width);
+                if (y >= hitbox.y && y <= hitbox.y + hitbox.height) {
+                    if (slope.outerDirection == -1) {
+                        hitbox.y = m > 0 ? y : y - hitbox.height;
+                    } else {
+                        hitbox.y = m > 0 ? y - hitbox.height : y;
                     }
                 }
             }

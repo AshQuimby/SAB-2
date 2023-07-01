@@ -18,12 +18,7 @@ import sab.game.fighter.Chain;
 import sab.game.fighter.Fighter;
 import sab.game.fighter.Marvin;
 import sab.game.particle.Particle;
-import sab.game.stage.LastLocation;
-import sab.game.stage.Ledge;
-import sab.game.stage.PassablePlatform;
-import sab.game.stage.Platform;
-import sab.game.stage.Stage;
-import sab.game.stage.StageObject;
+import sab.game.stage.*;
 import sab.net.Keys;
 import sab.net.VoidFunction;
 import sab.replay.ReplayAI;
@@ -747,10 +742,20 @@ public class Battle {
             attack.lateRender(g);
         }
 
-        for (Ledge ledge : stage.getLedges()) {
-            if (drawHitboxes) {
+        if (drawHitboxes) {
+            for (Ledge ledge : stage.getLedges()) {
                 g.shapeRenderer.setColor(new Color(0, 1, 1, 1));
                 g.shapeRenderer.rect(ledge.grabBox.x, ledge.grabBox.y, ledge.grabBox.width, ledge.grabBox.height);
+            }
+
+            for (Slope slope : stage.getSlopes()) {
+                g.shapeRenderer.setColor(1, 1, 0, 1);
+                g.shapeRenderer.rect(slope.bounds.x, slope.bounds.y, slope.bounds.width, slope.bounds.height);
+                g.shapeRenderer.setColor(0, 1, 0, 1);
+                g.shapeRenderer.line(slope.start, slope.end);
+                g.shapeRenderer.setColor(1, 0, 0, 1);
+                Vector2 midPoint = slope.start.cpy().add(slope.end).scl(.5f);
+                g.shapeRenderer.line(midPoint.x, midPoint.y, midPoint.x + slope.outerDirection * 10, midPoint.y);
             }
         }
 

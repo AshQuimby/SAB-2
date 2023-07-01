@@ -47,13 +47,15 @@ public class Platform extends StageObject {
         this.stage = stage;
     }
 
-    public void createLedges(float yOffset, float width, float height, Stage stage) {
+    public Platform createLedges(float yOffset, float width, float height, Stage stage) {
         stage.addLedge(new Ledge(this, new Vector2(-hitbox.width / 2 - width, -yOffset), width, height, 1));
         stage.addLedge(new Ledge(this, new Vector2(hitbox.width / 2, -yOffset), width, height, -1));
+        return this;
     }
 
-    public void createLedges(Stage stage) {
+    public Platform createLedges(Stage stage) {
         createLedges(hitbox.height / 2 + 12, 16, hitbox.height, stage);
+        return this;
     }
 
     @Override
