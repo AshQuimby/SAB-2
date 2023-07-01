@@ -131,6 +131,8 @@ public class GreatShipEjective extends StageType {
 
         stage.descendingRespawnPlatforms = false;
 
+        StageObject walls = new StageObject(-684 * 2, -450 * 2, 684 * 4, 450 * 4, "great_ship_ejective_walls.png", stage);
+        stage.addStageObject(walls);
         StageObject ship = new StageObject(-684 * 2, -450 * 2, 684 * 4, 450 * 4, "great_ship_ejective.png", stage);
         stage.addStageObject(ship);
 
