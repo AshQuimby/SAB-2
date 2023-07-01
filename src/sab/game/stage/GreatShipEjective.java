@@ -44,7 +44,7 @@ public class GreatShipEjective extends StageType {
             10, 53, 410, 350,
             16, 34, 410, 260,
             62, 450, 0, 0,
-            //684, 2, 0, 0,
+            684, 2, 0, 0,
             386, 34, 0, 416,
             274, 34, 410, 416,
             6, 450, 678, 0,
@@ -122,6 +122,14 @@ public class GreatShipEjective extends StageType {
         stage.unsafeBlastZone.setSize(684 * 4 + 256, 450 * 4 + 256);
         stage.unsafeBlastZone.setCenter(new Vector2(0, 0));
         stage.maxZoomOut = 2f;
+
+        // (208, 172), (492, 165)
+        stage.player1SpawnX = 208 * 4 - 684 * 2;
+        stage.player1SpawnY = (450 - 172) * 4 - 450 * 2;
+        stage.player2SpawnX = 492 * 4 - 684 * 2;
+        stage.player2SpawnY = (450 - 165) * 4 - 450 * 2;
+
+        stage.descendingRespawnPlatforms = false;
 
         StageObject ship = new StageObject(-684 * 2, -450 * 2, 684 * 4, 450 * 4, "great_ship_ejective.png", stage);
         stage.addStageObject(ship);

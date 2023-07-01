@@ -97,8 +97,9 @@ public class Player extends GameObject implements Hittable {
         this.fighter = fighter;
 
         hitbox = new Rectangle(0, 0, fighter.hitboxWidth, fighter.hitboxHeight);
-        hitbox.setCenter(new Vector2(id == 0 ? battle.getStage().player1SpawnX : battle.getStage().player2SpawnX, battle.getStage().getSafeBlastZone().height));
-        move(new Vector2(0, -4000));
+        hitbox.setCenter(new Vector2(id == 0 ? battle.getStage().player1SpawnX : battle.getStage().player2SpawnX,
+                id == 0 ? battle.getStage().player1SpawnY : battle.getStage().player2SpawnY));
+        if (battle.getStage().projectPlayerSpawns) move(new Vector2(0, -4000));
         drawRect = new Rectangle(0, 0, fighter.renderWidth, fighter.renderHeight);
 
         direction = 1;
@@ -471,7 +472,10 @@ public class Player extends GameObject implements Hittable {
         if (respawnTime > 0) {
             respawnTime--;
             invulnerable = true;
-            hitbox.setCenter(new Vector2(id == 0 ? battle.getStage().player1SpawnX : battle.getStage().player2SpawnX, battle.getStage().getSafeBlastZone().height / 2 + Math.max(respawnTime * 2, 120) - 280 + hitbox.height / 2));
+            float respawnX = id == 0 ? battle.getStage().player1SpawnX : battle.getStage().player2SpawnX;
+            float respawnY = id == 0 ? battle.getStage().player1SpawnY : battle.getStage().player2SpawnY;
+            hitbox.setCenter(new Vector2(respawnX,
+                    respawnY + (battle.getStage().descendingRespawnPlatforms ? Math.max(respawnTime * 2, 120) - 280 + hitbox.height / 2 : 0)));
             frame = 0;
             if ((keys.isPressed(Keys.RIGHT) || keys.isPressed(Keys.LEFT) || keys.isPressed(Keys.DOWN) || keys.isPressed(Keys.UP)) && respawnTime < 100 || respawnTime == 0) {
                 respawnTime = 0;

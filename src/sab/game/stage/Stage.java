@@ -19,6 +19,10 @@ public class Stage {
     public float maxZoomOut;
     public float player1SpawnX;
     public float player2SpawnX;
+    public float player1SpawnY;
+    public float player2SpawnY;
+    public boolean projectPlayerSpawns;
+    public boolean descendingRespawnPlatforms;
 
     protected List<StageObject> stageObjects;
     protected List<Ledge> ledges;
@@ -48,6 +52,10 @@ public class Stage {
         unsafeBlastZone = new Rectangle(-Game.game.window.resolutionX / 2 - 128, -Game.game.window.resolutionY / 2 - 128, Game.game.window.resolutionX + 256, Game.game.window.resolutionY + 256);
         player1SpawnX = -128;
         player2SpawnX = 128;
+        player1SpawnY = safeBlastZone.y + safeBlastZone.height;
+        player2SpawnY = safeBlastZone.y + safeBlastZone.height;
+        projectPlayerSpawns = true;
+        descendingRespawnPlatforms = true;
         this.type = type;
     }
 
