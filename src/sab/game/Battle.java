@@ -262,13 +262,14 @@ public class Battle {
             camera.targetPosition = (player1.takingKnockback()) ? player1.getCenter() : player2.getCenter();
         } else {
             float playerDist = player1.getCenter().dst(player2.getCenter());
-            if (assBalls.size() > 0) {
+                // TODO: Make camera following ass balls a setting
+//            if (assBalls.size() > 0) {
+//                camera.targetPosition = player1.getCenter().cpy().add(player2.getCenter()).scl(0.5f);
+//                camera.targetPosition = camera.targetPosition.add(assBalls.get(0).getCenter()).scl(0.5f);
+//                playerDist = (playerDist + camera.getPosition().dst(assBalls.get(0).getCenter())) / 2;
+//            } else {
                 camera.targetPosition = player1.getCenter().cpy().add(player2.getCenter()).scl(0.5f);
-                camera.targetPosition = camera.targetPosition.add(assBalls.get(0).getCenter()).scl(0.5f);
-                playerDist = (playerDist + camera.getPosition().dst(assBalls.get(0).getCenter())) / 2;
-            } else {
-                camera.targetPosition = player1.getCenter().cpy().add(player2.getCenter()).scl(0.5f);
-            }
+//            }
 
             camera.targetZoom = playerDist / 256;
             camera.targetZoom = Math.max(Math.min(stage.maxZoomOut, camera.targetZoom), slowdownDuration > 0 ? 0.5f : 0.75f);

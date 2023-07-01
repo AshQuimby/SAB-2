@@ -24,6 +24,8 @@ public class ExtrasScreen extends SelectorScreen {
 
         Game.titleBackground.render(g);
 
+        g.useStaticCamera();
+
         TitleScreen.drawTitle(g);
 
         //g.usefulTintDraw(g.imageProvider.getImage("pixel.png"), -400 / 2, -Game.game.window.resolutionY / 2, 400, 350, 0, 1, 0, false, false, new Color(0, 0, 0, 0.5f));

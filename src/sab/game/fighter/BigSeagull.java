@@ -11,6 +11,8 @@ import sab.game.attack.big_seagull.Glide;
 import sab.game.attack.big_seagull.Peck;
 import sab.game.attack.big_seagull.FeatherDart;
 import sab.game.attack.big_seagull.Gust;
+import sab.game.attack.big_seagull.god_seagull.GodSeagull;
+import sab.game.attack.emperor_evil.BananaRain;
 import sab.game.stage.Platform;
 import sab.net.Keys;
 import sab.util.SabRandom;
@@ -162,5 +164,16 @@ public class BigSeagull extends FighterType {
     public void downAttack(Fighter fighter, Player player) {
         gustAnimation.reset();
         player.startAttack(new FeatherDart(), gustAnimation, 1, 24, false, new int[] {0});
+    }
+
+    @Override
+    public boolean finalAss(Fighter fighter, Player player) {
+        if (!player.usedRecovery) {
+            flyingAnimation.reset();
+            player.setIFrames(120);
+            player.startAttack(new GodSeagull(), flyingAnimation, 8, 32, false);
+            return true;
+        }
+        return false;
     }
 }

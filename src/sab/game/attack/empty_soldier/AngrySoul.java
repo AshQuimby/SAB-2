@@ -36,6 +36,6 @@ public class AngrySoul extends AttackType {
     @Override
     public void update(Attack attack) {
         attack.velocity.y = MathUtils.sin(attack.life * MathUtils.PI2 * .05f) * 3;
-        attack.frame = (attack.life % 16) / 4;
+        attack.frame = (attack.life / 10) % 4;
     }
 }
