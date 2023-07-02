@@ -11,7 +11,6 @@ import com.seagull_engine.Seagraphics;
 import com.seagull_engine.graphics.SeagullCamera;
 
 import sab.dialogue.Dialogue;
-import sab.game.ai.PathfindingAI;
 import sab.game.ai.pathfinding.Edge;
 import sab.game.ai.pathfinding.Node;
 import sab.game.ass_ball.AssBall;
