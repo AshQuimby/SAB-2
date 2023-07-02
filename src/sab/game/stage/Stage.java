@@ -3,6 +3,7 @@ package sab.game.stage;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.seagull_engine.Seagraphics;
@@ -10,6 +11,11 @@ import com.seagull_engine.Seagraphics;
 import com.seagull_engine.graphics.ParallaxBackground;
 import org.lwjgl.system.NonnullDefault;
 import sab.game.*;
+import sab.game.ai.pathfinding.Edge;
+import sab.game.ai.pathfinding.Graph;
+import sab.game.ai.pathfinding.Node;
+import sab.game.ai.pathfinding.NodeType;
+import sab.util.Utils;
 
 public class Stage {
     public String id;
@@ -27,6 +33,9 @@ public class Stage {
     protected List<StageObject> stageObjects;
     protected List<Ledge> ledges;
     protected List<Slope> slopes;
+
+    // Used for pathfinding
+    public Graph<Node> graph;
 
     // Players can be outside this blast zone safely when not taking knockback
     protected Rectangle safeBlastZone;
@@ -46,6 +55,7 @@ public class Stage {
         stageObjects = new ArrayList<>();
         ledges = new ArrayList<>();
         slopes = new ArrayList<>();
+        graph = new Graph<>();
         maxZoomOut = 1;
 
         safeBlastZone = new Rectangle(-Game.game.window.resolutionX / 2 - 64, -Game.game.window.resolutionY / 2 - 64, Game.game.window.resolutionX + 128, Game.game.window.resolutionY + 128);
@@ -66,6 +76,8 @@ public class Stage {
         }
         stageObjects.clear();
         ledges.clear();
+        slopes.clear();
+        graph = new Graph<>();
     }
 
     public void update() {
@@ -88,9 +100,62 @@ public class Stage {
         ledges.removeAll(deadLedges);
     }
 
+    private void generateGraph() {
+        for (Ledge ledge : ledges) {
+            graph.addNode(new Node(ledge.grabBox.getCenter(new Vector2()), NodeType.LEDGE));
+        }
+
+        for (StageObject stageObject : stageObjects) {
+            if (stageObject.isSolid() || stageObject instanceof PassablePlatform) {
+                List<Rectangle> collisionTests = new ArrayList<>();
+
+                for (StageObject other : stageObjects) {
+                    if ((other.isSolid() || other instanceof PassablePlatform) && other != stageObject) collisionTests.add(other.hitbox);
+                }
+                for (Slope slope : slopes) collisionTests.add(slope.bounds);
+
+                Vector2 left = new Vector2(stageObject.hitbox.x, stageObject.hitbox.y + stageObject.hitbox.height);
+                Vector2 right = new Vector2(stageObject.hitbox.x + stageObject.hitbox.width, stageObject.hitbox.y + stageObject.hitbox.height);
+
+                for (Rectangle test : collisionTests) {
+                    if (left != null && test.contains(left)) left = null;
+                    if (right != null && test.contains(right)) right = null;
+                    if (left == null && right == null) break;
+                }
+
+                if (left != null) graph.addNode(new Node(left.add(0, 16), NodeType.GROUND));
+                if (right != null) graph.addNode(new Node(right.add(0, 16), NodeType.GROUND));
+            }
+        }
+
+        List<Rectangle> collisionTests = new ArrayList<>(stageObjects.size() + slopes.size());
+        for (StageObject stageObject : stageObjects) {
+            if (stageObject.isSolid()) collisionTests.add(stageObject.hitbox);
+        }
+        for (Slope slope : slopes) collisionTests.add(slope.bounds);
+
+        for (Node node : graph.getNodes()) {
+            for (Node other : graph.getNodes()) {
+                if (node == other) continue;
+
+                if (!Utils.raycast(node.position, other.position, collisionTests.toArray(new Rectangle[0]))) {
+                    graph.addEdge(new Edge<>(node, other));
+                }
+            }
+        }
+    }
+
     public void init() {
         reset();
         type.init(this);
+        generateGraph();
+
+        List<Node> disconnectedNodes = new ArrayList<>();
+        for (Node node : graph.getNodes()) {
+            // Assume all connections go both ways
+            if (graph.getEdges(node).size() == 0) disconnectedNodes.add(node);
+        }
+        disconnectedNodes.forEach(graph.getNodes()::remove);
     }
 
     public Ledge grabLedge(Player player) {

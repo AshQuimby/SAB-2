@@ -11,6 +11,9 @@ import com.seagull_engine.Seagraphics;
 import com.seagull_engine.graphics.SeagullCamera;
 
 import sab.dialogue.Dialogue;
+import sab.game.ai.PathfindingAI;
+import sab.game.ai.pathfinding.Edge;
+import sab.game.ai.pathfinding.Node;
 import sab.game.ass_ball.AssBall;
 import sab.game.attack.Attack;
 import sab.game.attack.AttackType;
@@ -70,6 +73,7 @@ public class Battle {
 
     // Screen effect variables
     public boolean drawHitboxes;
+    public boolean drawPathfindingGraph;
     public boolean gameEnded;
 
     // Callbacks
@@ -757,6 +761,20 @@ public class Battle {
                 g.shapeRenderer.setColor(1, 0, 0, 1);
                 Vector2 midPoint = slope.start.cpy().add(slope.end).scl(.5f);
                 g.shapeRenderer.line(midPoint.x, midPoint.y, midPoint.x + slope.outerDirection * 10, midPoint.y);
+            }
+        }
+
+        if (drawPathfindingGraph) {
+            for (Node node : stage.graph.getNodes()) {
+                switch (node.type) {
+                    case GROUND -> g.shapeRenderer.setColor(0, 1, 0, 1);
+                    case LEDGE -> g.shapeRenderer.setColor(0, 1, 1, 1);
+                    case AIR -> g.shapeRenderer.setColor(1, 1, 1, 1);
+                }
+                g.shapeRenderer.circle(node.position.x, node.position.y, 8);
+                for (Edge<Node> edge : stage.graph.getEdges(node)) {
+                    g.shapeRenderer.line(edge.a.position, edge.b.position);
+                }
             }
         }
 

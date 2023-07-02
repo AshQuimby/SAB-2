@@ -119,19 +119,19 @@ public class Utils {
         for (Rectangle rect : hitboxes) {
             float y = rect.y;
             float x = (y - b) / m;
-            if (x > rect.x && x < rect.x + rect.width && bounds.contains(x, y)) return true;
+            if (x >= rect.x && x <= rect.x + rect.width && bounds.contains(x, y)) return true;
 
             y = rect.y + rect.height;
             x = (y - b) / m;
-            if (x > rect.x && x < rect.x + rect.width && bounds.contains(x, y)) return true;
+            if (x >= rect.x && x <= rect.x + rect.width && bounds.contains(x, y)) return true;
 
             x = rect.x;
             y = m * x + b;
-            if (y > rect.y && y < rect.y + rect.height && bounds.contains(x, y)) return true;
+            if (y >= rect.y && y <= rect.y + rect.height && bounds.contains(x, y)) return true;
 
             x = rect.x + rect.width;
             y = m * x + b;
-            if (y > rect.y && y < rect.y + rect.height && bounds.contains(x, y)) return true;
+            if (y >= rect.y && y <= rect.y + rect.height && bounds.contains(x, y)) return true;
         }
 
         return false;

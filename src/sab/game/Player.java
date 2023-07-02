@@ -215,21 +215,23 @@ public class Player extends GameObject implements Hittable {
                         float y = slope.getYIntersection(hitbox.x);
                         if (y >= hitbox.y && y <= hitbox.y + hitbox.height) {
                             if (slope.outerDirection == -1) {
+                                if (m >= 0) touchingStage = true;
                                 hitbox.y = m > 0 ? y : y - hitbox.height;
                             } else {
+                                if (m <= 0) touchingStage = true;
                                 hitbox.y = m > 0 ? y - hitbox.height : y;
                             }
-                            touchingStage = true;
                         }
 
                         y = slope.getYIntersection(hitbox.x + hitbox.width);
                         if (y >= hitbox.y && y <= hitbox.y + hitbox.height) {
                             if (slope.outerDirection == -1) {
+                                if (m >= 0) touchingStage = true;
                                 hitbox.y = m > 0 ? y : y - hitbox.height;
                             } else {
+                                if (m <= 0) touchingStage = true;
                                 hitbox.y = m > 0 ? y - hitbox.height : y;
                             }
-                            touchingStage = true;
                         }
                     }
                 }

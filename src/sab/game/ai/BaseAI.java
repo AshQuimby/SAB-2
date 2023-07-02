@@ -4,6 +4,8 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
 import sab.game.Player;
+import sab.game.ai.pathfinding.Navigator;
+import sab.game.ai.pathfinding.Node;
 import sab.game.attack.Attack;
 import sab.game.stage.Ledge;
 import sab.game.stage.Platform;
@@ -18,13 +20,16 @@ public class BaseAI extends AI {
     private int moveToCenterTime;
     private Platform platformToCenterOn;
 
+    private final Navigator navigator;
+
     public BaseAI(Player player, int difficulty, float preferredHorizontalDistance) {
-        super(player, difficulty);
+        this(player, difficulty);
         this.preferredHorizontalDistance = preferredHorizontalDistance;
     }
 
     public BaseAI(Player player, int difficulty) {
         super(player, difficulty);
+        navigator = new Navigator(player.battle.getStage());
     }
 
     protected void setMashCooldown() {
@@ -221,6 +226,38 @@ public class BaseAI extends AI {
             }
         }
         if (!dontChase) {
+            navigator.setPosition(center);
+            navigator.setGoal(targetPosition);
+            navigator.update();
+
+            boolean followingPath = false;
+            if (!navigator.hasLosToGoal()) {
+                Node node = navigator.currentNode();
+                if (node != null) {
+                    targetPosition = node.position;
+                    if (player.hitbox.contains(node.position)) {
+                        navigator.next();
+                    }
+                    followingPath = true;
+                }
+            }
+
+            if (followingPath) {
+                if (center.x + player.hitbox.width < targetPosition.x) {
+                    pressKey(Keys.RIGHT);
+                } else if (center.x - player.hitbox.width > targetPosition.x) {
+                    pressKey(Keys.LEFT);
+                }
+
+                if (player.hitbox.y < targetPosition.y && player.velocity.y <= 0) {
+                    pressKey(Keys.UP);
+                    if (player.getRemainingJumps() == 0 && !player.touchingStage) pressKey(Keys.ATTACK);
+                } else if (center.y > targetPosition.y) {
+                    pressKey(Keys.DOWN);
+                }
+                return;
+            }
+
             if (player.hitbox.x + player.hitbox.width + preferredHorizontalDistance < target.hitbox.x || (center.x < targetPosition.x && player.direction == -1)) {
                 pressKey(Keys.RIGHT);
             } else if (player.hitbox.x - preferredHorizontalDistance > target.hitbox.x + target.hitbox.width || (center.x > targetPosition.x && player.direction == 1)) {
