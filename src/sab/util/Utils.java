@@ -97,6 +97,15 @@ public class Utils {
     }
 
     public static boolean raycast(Vector2 start, Vector2 end, Rectangle... hitboxes) {
+        // Handle vertical lines
+        if (end.x - start.x == 0) {
+            float x = start.x;
+            for (Rectangle rect : hitboxes) {
+                if (rect.x < x && rect.x + rect.width > x) return true;
+            }
+            return false;
+        }
+
         if (end.x < start.x) {
             Vector2 temp = end;
             end = start;
@@ -105,7 +114,6 @@ public class Utils {
         Rectangle bounds = new Rectangle(start.x, Math.min(start.y, end.y), end.x - start.x, Math.max(start.y, end.y) - Math.min(start.y, end.y));
 
         float m = (end.y - start.y) / (end.x - start.x);
-        if (end.x - start.x == 0) m = 10000;
         float b = start.y - m * start.x;
 
         for (Rectangle rect : hitboxes) {
