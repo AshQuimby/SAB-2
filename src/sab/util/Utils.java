@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.math.MathUtils;
 import sab.game.Game;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
@@ -95,16 +96,41 @@ public class Utils {
         drawButton(g, x, y, text, textSize, highlighted, 0);
     }
 
-    public static boolean raycast(Vector2 position, float rotation, int distance, Rectangle rect) {
-        if (distance < 0) throw new IllegalArgumentException("Method raycast() cannot have negative distance.");
-        Vector2 step = new Vector2(1, 0).setAngleDeg(rotation);
-        Vector2 castPos = position.cpy();
-        while (distance > 0) {
-            castPos.add(step);
-            if (rect.contains(castPos)) return true;
-            distance--;
+    public static boolean raycast(Vector2 start, Vector2 end, Rectangle... hitboxes) {
+        if (end.x < start.x) {
+            Vector2 temp = end;
+            end = start;
+            start = temp;
         }
+        Rectangle bounds = new Rectangle(start.x, Math.min(start.y, end.y), end.x - start.x, Math.max(start.y, end.y) - Math.min(start.y, end.y));
+
+        float m = (end.y - start.y) / (end.x - start.x);
+        if (end.x - start.x == 0) m = 10000;
+        float b = start.y - m * start.x;
+
+        for (Rectangle rect : hitboxes) {
+            float y = rect.y;
+            float x = (y - b) / m;
+            if (x > rect.x && x < rect.x + rect.width && bounds.contains(x, y)) return true;
+
+            y = rect.y + rect.height;
+            x = (y - b) / m;
+            if (x > rect.x && x < rect.x + rect.width && bounds.contains(x, y)) return true;
+
+            x = rect.x;
+            y = m * x + b;
+            if (y > rect.y && y < rect.y + rect.height && bounds.contains(x, y)) return true;
+
+            x = rect.x + rect.width;
+            y = m * x + b;
+            if (y > rect.y && y < rect.y + rect.height && bounds.contains(x, y)) return true;
+        }
+
         return false;
+    }
+
+    public static boolean raycast(Vector2 position, float rotation, float distance, Rectangle... hitboxes) {
+        return raycast(position, position.cpy().add(MathUtils.cosDeg(rotation) * distance, MathUtils.sinDeg(rotation) * distance), hitboxes);
     }
 
     public static void drawButton(Seagraphics g, float x, float y, String text, float textSize, boolean highlighted, int anchor) {
