@@ -144,6 +144,8 @@ public class BattleScreen extends NetScreen {
                 battle.spawnAssBall();
             } else if (keyCode == Input.Keys.H) {
                 battle.drawHitboxes = !battle.drawHitboxes;
+            } else if (keyCode == Input.Keys.P) {
+                battle.drawPathfindingGraph = !battle.drawPathfindingGraph;
             } else if (keyCode == Input.Keys.SPACE && battle.isPaused()) {
                 battle.unpause();
                 battle.update();

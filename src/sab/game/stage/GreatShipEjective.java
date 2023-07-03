@@ -1,6 +1,9 @@
 package sab.game.stage;
 
 import com.badlogic.gdx.math.Vector2;
+import sab.game.ai.pathfinding.Graph;
+import sab.game.ai.pathfinding.Node;
+import sab.game.ai.pathfinding.NodeType;
 
 public class GreatShipEjective extends StageType {
     // width, height, x, 450 * 4 - y
@@ -12,12 +15,12 @@ public class GreatShipEjective extends StageType {
             48, 20, 510, 186,
             34, 24, 590, 210,
             20, 30, 184, 328,
-            14, 22, 120, 220,
+            16, 22, 120, 220,
             18, 12, 482, 338,
             40, 12, 410, 338,
             36, 20, 100, 142,
             16, 26, 120, 162,
-            36, 24, 98, 242,
+            38, 24, 98, 242,
             16, 48, 236, 296,
             34, 26, 590, 152,
             6, 24, 494, 350,
@@ -44,7 +47,7 @@ public class GreatShipEjective extends StageType {
             10, 53, 410, 350,
             16, 34, 410, 260,
             62, 450, 0, 0,
-            //684, 2, 0, 0,
+            684, 2, 0, 0,
             386, 34, 0, 416,
             274, 34, 410, 416,
             6, 450, 678, 0,
@@ -123,6 +126,16 @@ public class GreatShipEjective extends StageType {
         stage.unsafeBlastZone.setCenter(new Vector2(0, 0));
         stage.maxZoomOut = 2f;
 
+        // (208, 172), (492, 165)
+        stage.player1SpawnX = 208 * 4 - 684 * 2;
+        stage.player1SpawnY = (450 - 172) * 4 - 450 * 2;
+        stage.player2SpawnX = 492 * 4 - 684 * 2;
+        stage.player2SpawnY = (450 - 165) * 4 - 450 * 2;
+
+        stage.descendingRespawnPlatforms = false;
+
+        StageObject walls = new StageObject(-684 * 2, -450 * 2, 684 * 4, 450 * 4, "great_ship_ejective_walls.png", stage);
+        stage.addStageObject(walls);
         StageObject ship = new StageObject(-684 * 2, -450 * 2, 684 * 4, 450 * 4, "great_ship_ejective.png", stage);
         stage.addStageObject(ship);
 
@@ -148,5 +161,19 @@ public class GreatShipEjective extends StageType {
         stage.addStageObject(new Platform(64, 300, 112, 32, "sussy_table.png", stage).createLedges(stage));
         stage.addStageObject(new Platform(280f, 500, 112, 32, "sussy_table.png", stage).createLedges(stage));
         stage.addStageObject(new Platform(0, 600, 112, 32, "sussy_table.png", stage).createLedges(stage));
+        stage.addStageObject(new PassablePlatform(252 * 4 - 684 * 2, (450 - 113) * 4 - 450 * 2 - 12, 128, 12, "industrial_platform.png", stage));
+        stage.addStageObject(new PassablePlatform(252 * 4 - 684 * 2, (450 - 113) * 4 - 450 * 2 - 12 - 200, 128, 12, "industrial_platform.png", stage));
+        stage.addStageObject(new PassablePlatform(136 * 4 - 684 * 2, (450 - 184) * 4 - 450 * 2 - 12, 128, 12, "industrial_platform.png", stage));
+        stage.addStageObject(new PassablePlatform(136 * 4 - 684 * 2, (450 - 243) * 4 - 450 * 2 - 12, 128, 12, "industrial_platform.png", stage));
+        stage.addStageObject(new PassablePlatform(370 * 4 - 684 * 2, (450 - 302) * 4 - 450 * 2 - 12, 128, 12, "industrial_platform.png", stage));
+        stage.addStageObject(new PassablePlatform(524 * 4 - 684 * 2, (450 - 243) * 4 - 450 * 2 - 12, 128, 12, "industrial_platform.png", stage));
+        stage.addStageObject(new PassablePlatform(524 * 4 - 684 * 2, (450 - 303) * 4 - 450 * 2 - 12, 128, 12, "industrial_platform.png", stage));
+
+        // Some nodes need to be added manually
+        stage.graph.addNode(new Node(new Vector2(-400, -574), NodeType.AIR));
+        stage.graph.addNode(new Node(new Vector2(-345, -574), NodeType.AIR));
+        stage.graph.addNode(new Node(new Vector2(494, -459), NodeType.AIR));
+        stage.graph.addNode(new Node(new Vector2(494, -734), NodeType.AIR));
+        stage.graph.addNode(new Node(new Vector2(726, 533), NodeType.AIR));
     }
 }
