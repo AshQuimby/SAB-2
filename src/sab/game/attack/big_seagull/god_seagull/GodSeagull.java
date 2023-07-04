@@ -17,6 +17,7 @@ public class GodSeagull extends AttackType implements Deity {
     private float godRotationSpeed;
     private float godRotation;
     private int idleTime;
+    private int bulletsShot;
     private Vector2 godSeagullTarget;
     @Override
     public void setDefaults(Attack attack) {
@@ -49,6 +50,18 @@ public class GodSeagull extends AttackType implements Deity {
 
         if (idleTime > 0) {
             idleTime--;
+            if (idleTime == 60) {
+                if ((bulletsShot + 1) % 3 == 0) {
+                    if ((bulletsShot + 1) % 6 == 0) {
+                        createAttack(new GodLaser(), new int[]{(int) godSeagullPos.x, (int) godSeagullPos.y, (int) attack.getNearestOpponent(-1).getCenter().sub(godSeagullPos).angleDeg() }, attack.owner);
+                    } else {
+                        createAttack(new GodEye(), new int[]{(int) godSeagullPos.x, (int) godSeagullPos.y}, attack.owner);
+                    }
+                } else {
+                    createAttack(new GodBolt(), new int[]{(int) godSeagullPos.x, (int) godSeagullPos.y}, attack.owner);
+                }
+                bulletsShot++;
+            }
             if (idleTime == 0) {
                 godSeagullTarget = Utils.randomPointInRect(attack.getStage().getSafeBlastZone()).scl(0.8f);
             }
@@ -77,7 +90,7 @@ public class GodSeagull extends AttackType implements Deity {
         int godFrame = 5 - attack.life / 4 % 6;
         godRotation = 0;
         for (int i = 0; i < 3; i++) {
-            float wingRotation = MathUtils.sinDeg(attack.life / 2f + i * 120f) * 8f;
+            float wingRotation = MathUtils.sinDeg(attack.life / 1.5f + i * 120f) * 8f;
             g.usefulDraw(g.imageProvider.getImage("golden_wing.png"), godSeagullPos.x + 64 - 1360 + 680 - (i == 1 ? 128 : 0), godSeagullPos.y + 64 * (i - 1) - 680, 1360, 1360, 0, 1, 45 * i + wingRotation, false, false);
             g.usefulDraw(g.imageProvider.getImage("golden_wing.png"), godSeagullPos.x - 64 - 680 + (i == 1 ? 128 : 0), godSeagullPos.y + 64 * (i - 1) - 680, 1360, 1360, 0, 1, -45 * i - wingRotation, true, false);
         }
