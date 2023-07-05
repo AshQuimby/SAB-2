@@ -1,5 +1,6 @@
 package sab.game.fighter;
 
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.seagull_engine.GameObject;
 import sab.game.DamageSource;
@@ -155,6 +156,39 @@ public class Gus extends FighterType {
     @Override
     public AI getAI(Player player, int difficulty) {
         return new BaseAI(player, difficulty, 100) {
+            @Override
+            protected void navigateTo(Vector2 position) {
+                boolean vented = false;
+                Rectangle ventHitbox = null;
+                for (Attack attack : player.battle.getAttacks()) {
+                    if (attack.owner == player && attack.alive && attack.type instanceof SussyVent) {
+                        vented = true;
+                        ventHitbox = attack.hitbox;
+                        break;
+                    }
+                }
+
+                if (vented) {
+                    if (ventHitbox.y < position.y) pressKey(Keys.UP);
+                    else if (ventHitbox.y > position.y) pressKey(Keys.DOWN);
+                    if (ventHitbox.x < position.x) pressKey(Keys.RIGHT);
+                    else if (ventHitbox.x + ventHitbox.width > position.y) pressKey(Keys.LEFT);
+                } else {
+                    if (player.hitbox.x <= position.x) {
+                        pressKey(Keys.RIGHT);
+                    } else if (player.hitbox.x + player.hitbox.width >= position.x) {
+                        pressKey(Keys.LEFT);
+                    }
+
+                    if (player.hitbox.y < position.y && player.velocity.y <= 0) {
+                        pressKey(Keys.UP);
+                        if (player.getRemainingJumps() == 0 && !player.touchingStage && !player.hasAction()) pressKey(Keys.ATTACK);
+                    } else if (player.hitbox.y > position.y) {
+                        pressKey(Keys.DOWN);
+                    }
+                }
+            }
+
             @Override
             protected void recover(Platform targetPlatform, Ledge targetLedge) {
                 Vector2 center = player.hitbox.getCenter(new Vector2());

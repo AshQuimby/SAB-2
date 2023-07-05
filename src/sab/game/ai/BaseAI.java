@@ -123,6 +123,21 @@ public class BaseAI extends AI {
         return null;
     }
 
+    protected void navigateTo(Vector2 position) {
+        if (player.hitbox.x <= position.x) {
+            pressKey(Keys.RIGHT);
+        } else if (player.hitbox.x + player.hitbox.width >= position.x) {
+            pressKey(Keys.LEFT);
+        }
+
+        if (player.hitbox.y < position.y && player.velocity.y <= 0) {
+            pressKey(Keys.UP);
+            if (player.getRemainingJumps() == 0 && !player.touchingStage) pressKey(Keys.ATTACK);
+        } else if (player.hitbox.y > position.y) {
+            pressKey(Keys.DOWN);
+        }
+    }
+
     protected void attack(Vector2 center, Player target, Vector2 targetCenter) {
 
     }
@@ -243,18 +258,7 @@ public class BaseAI extends AI {
             }
 
             if (followingPath) {
-                if (center.x + player.hitbox.width < targetPosition.x) {
-                    pressKey(Keys.RIGHT);
-                } else if (center.x - player.hitbox.width > targetPosition.x) {
-                    pressKey(Keys.LEFT);
-                }
-
-                if (player.hitbox.y < targetPosition.y && player.velocity.y <= 0) {
-                    pressKey(Keys.UP);
-                    if (player.getRemainingJumps() == 0 && !player.touchingStage) pressKey(Keys.ATTACK);
-                } else if (center.y > targetPosition.y) {
-                    pressKey(Keys.DOWN);
-                }
+                navigateTo(targetPosition);
                 return;
             }
 
