@@ -9,6 +9,7 @@ public class Settings {
     private static boolean staticCamera;
     private static boolean fullscreen;
     private static boolean screenShake;
+    private static boolean crtEffect;
     private static float masterVolume;
     private static float sfxVolume;
     private static float musicVolume;
@@ -33,6 +34,7 @@ public class Settings {
         try {
             fromSabData(settings);
         } catch (NullPointerException e) {
+            readError();
             loadSettings();
         }
     }
@@ -49,6 +51,7 @@ public class Settings {
         musicVolume = 1f;
         staticCamera = false;
         screenShake = true;
+        crtEffect = false;
         assBalls = true;
         fullscreen = false;
         anticipation = true;
@@ -81,6 +84,7 @@ public class Settings {
         data.insertValue("static_camera", SabValue.fromBool(staticCamera));
         data.insertValue("screen_shake", SabValue.fromBool(screenShake));
         data.insertValue("fullscreen", SabValue.fromBool(fullscreen));
+        data.insertValue("crt_effect", SabValue.fromBool(crtEffect));
         data.insertValue("ass_balls", SabValue.fromBool(assBalls));
         data.insertValue("stage_hazards", SabValue.fromBool(stageHazards));
         data.insertValue("anticipation", SabValue.fromBool(anticipation));
@@ -99,6 +103,7 @@ public class Settings {
             staticCamera = settings.getValue("static_camera").asBool();
             screenShake = settings.getValue("screen_shake").asBool();
             fullscreen = settings.getValue("fullscreen").asBool();
+            crtEffect = settings.getValue("crt_effect").asBool();
             assBalls = settings.getValue("ass_balls").asBool();
             stageHazards = settings.getValue("stage_hazards").asBool();
             anticipation = settings.getValue("anticipation").asBool();
@@ -151,6 +156,10 @@ public class Settings {
 
     public static boolean getFullscreen() {
         return fullscreen;
+    }
+
+    public static boolean getCrtEffect() {
+        return crtEffect;
     }
 
     public static boolean getScreenShake() {

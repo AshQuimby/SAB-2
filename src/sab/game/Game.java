@@ -102,10 +102,11 @@ public class Game extends Messenger {
 
         window.getGraphics().addShader("enchanted_baguette", new SpriteShader("shaders/default.vsh", "shaders/enchanted_baguette.fsh"));
         window.getGraphics().addShader("crt", new SpriteShader("shaders/default.vsh", "shaders/crt.fsh"));
-        window.getGraphics().addPostEffect("crt");
 
         Controllers.addListener(controllerManager);
         Settings.loadSettings();
+        if (Settings.getCrtEffect()) window.getGraphics().addPostEffect("crt");
+
         Mod baseGame = new Mod("Super Ass Brothers: Remasstered", "sab", "1.0", "Base game content");
         try {
             baseGame.addFighters((Class<? extends FighterType>[]) new Class<?>[]{Marvin.class, Chain.class, Walouis.class, Gus.class, EmperorEvil.class, Snas.class, Stephane.class, UnnamedDuck.class, Matthew.class, EmptySoldier.class, John.class, BowlBoy.class, BigSeagull.class});
