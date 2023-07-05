@@ -69,12 +69,12 @@ public class Baguette extends AttackType {
     @Override
     public void lateRender(Attack attack, Seagraphics g) {
         if (enchanted) {
-            g.setShader(Game.game.getShader("enchanted_baguette"));
-            Game.game.getShader("enchanted_baguette").getShader().setUniformf("u_tick", Game.game.window.getTick());
+            g.setShader("enchanted_baguette");
+            g.getShader("enchanted_baguette").getShader().setUniformf("u_tick", Game.game.window.getTick());
             g.imageProvider.getImage("glint.png").bind(1);
-            Game.game.getShader("enchanted_baguette").getShader().setUniformi("u_glint", 1);
+            g.getShader("enchanted_baguette").getShader().setUniformi("u_glint", 1);
             g.imageProvider.getImage(attack.imageName).bind(0);
-            Game.game.getShader("enchanted_baguette").getShader().setUniformi("u_texture", 0);
+            g.getShader("enchanted_baguette").getShader().setUniformi("u_texture", 0);
         }
         super.render(attack, g);
         g.resetShader();

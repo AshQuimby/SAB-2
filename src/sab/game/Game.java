@@ -51,8 +51,6 @@ public class Game extends Messenger {
 
     public final Map<String, Mod> mods;
 
-    private Map<String, SpriteShader> shaders;
-
     public Game() {
         mods = new HashMap<>();
         fighters = new ArrayList<>();
@@ -86,10 +84,6 @@ public class Game extends Messenger {
     public Screen getScreen() {
         return screen;
     }
-
-    public SpriteShader getShader(String id) {
-        return shaders.get(id);
-    }
     
     // Initial load tasks (like from Among Us)
     @Override
@@ -105,8 +99,10 @@ public class Game extends Messenger {
         window.imageProvider.loadFont("fonts/comic_snas.ttf", 100);
         window.imageProvider.loadFont("fonts/minecraft.ttf", 137);
         window.imageProvider.loadFont("fonts/shitfont23.ttf", 225);
-        shaders = new HashMap<>();
-        shaders.put("enchanted_baguette", new SpriteShader("shaders/default.vsh", "shaders/enchanted_baguette.fsh"));
+
+        window.getGraphics().addShader("enchanted_baguette", new SpriteShader("shaders/default.vsh", "shaders/enchanted_baguette.fsh"));
+        window.getGraphics().addShader("crt", new SpriteShader("shaders/default.vsh", "shaders/crt.fsh"));
+        window.getGraphics().addPostEffect("crt");
 
         Controllers.addListener(controllerManager);
         Settings.loadSettings();
@@ -337,9 +333,6 @@ public class Game extends Messenger {
     @Override
     public void close() {
         screen.close();
-        for (SpriteShader shader : shaders.values()) {
-            shader.dispose();
-        }
     }
 
     // Loads mods in the mods folder

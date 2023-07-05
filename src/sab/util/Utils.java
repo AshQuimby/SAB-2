@@ -96,14 +96,17 @@ public class Utils {
         drawButton(g, x, y, text, textSize, highlighted, 0);
     }
 
-    public static boolean raycast(Vector2 start, Vector2 end, Rectangle... hitboxes) {
+    public static Vector2 getRayIntersection(Vector2 start, Vector2 end, Rectangle... hitboxes) {
         // Handle vertical lines
         if (end.x - start.x == 0) {
             float x = start.x;
             for (Rectangle rect : hitboxes) {
-                if (rect.x < x && rect.x + rect.width > x) return true;
+                float y;
+                if (Math.abs(start.y - rect.y) < Math.abs(start.y - (rect.y + rect.height))) y = rect.y;
+                else y = rect.y + rect.height;
+                if (rect.x < x && rect.x + rect.width > x) return new Vector2(x, y);
             }
-            return false;
+            return null;
         }
 
         if (end.x < start.x) {
@@ -119,22 +122,26 @@ public class Utils {
         for (Rectangle rect : hitboxes) {
             float y = rect.y;
             float x = (y - b) / m;
-            if (x >= rect.x && x <= rect.x + rect.width && bounds.contains(x, y)) return true;
+            if (x >= rect.x && x <= rect.x + rect.width && bounds.contains(x, y)) return new Vector2(x, y);
 
             y = rect.y + rect.height;
             x = (y - b) / m;
-            if (x >= rect.x && x <= rect.x + rect.width && bounds.contains(x, y)) return true;
+            if (x >= rect.x && x <= rect.x + rect.width && bounds.contains(x, y)) return new Vector2(x, y);
 
             x = rect.x;
             y = m * x + b;
-            if (y >= rect.y && y <= rect.y + rect.height && bounds.contains(x, y)) return true;
+            if (y >= rect.y && y <= rect.y + rect.height && bounds.contains(x, y)) return new Vector2(x, y);
 
             x = rect.x + rect.width;
             y = m * x + b;
-            if (y >= rect.y && y <= rect.y + rect.height && bounds.contains(x, y)) return true;
+            if (y >= rect.y && y <= rect.y + rect.height && bounds.contains(x, y)) return new Vector2(x, y);
         }
 
-        return false;
+        return null;
+    }
+
+    public static boolean raycast(Vector2 start, Vector2 end, Rectangle... hitboxes) {
+        return getRayIntersection(start, end, hitboxes) != null;
     }
 
     public static boolean raycast(Vector2 position, float rotation, float distance, Rectangle... hitboxes) {
