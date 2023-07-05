@@ -20,6 +20,8 @@ public class GodEye extends AttackType {
         attack.life = 60;
         attack.knockback = new Vector2(6, 0);
         attack.imageName = "eye_of_god.png";
+        attack.reflectable = false;
+        attack.parryable = false;
     }
 
     @Override

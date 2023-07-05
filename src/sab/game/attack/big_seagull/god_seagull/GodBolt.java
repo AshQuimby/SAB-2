@@ -18,6 +18,8 @@ public class GodBolt extends AttackType {
         attack.damage = 8;
         attack.knockback = new Vector2(6, 0);
         attack.imageName = "god_bolt.png";
+        attack.reflectable = false;
+        attack.parryable = false;
     }
 
     @Override

@@ -16,6 +16,8 @@ public class GodBoltMini extends AttackType {
         attack.damage = 6;
         attack.knockback = new Vector2(6, 0);
         attack.imageName = "mini_bolt.png";
+        attack.reflectable = false;
+        attack.parryable = false;
     }
 
     @Override

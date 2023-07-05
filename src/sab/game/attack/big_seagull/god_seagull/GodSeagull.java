@@ -18,7 +18,9 @@ public class GodSeagull extends AttackType implements Deity {
     private float godRotation;
     private int idleTime;
     private int bulletsShot;
+    private int timeLeft;
     private Vector2 godSeagullTarget;
+    private Vector2 laserTarget;
     @Override
     public void setDefaults(Attack attack) {
         attack.imageName = "none.png";
@@ -48,14 +50,24 @@ public class GodSeagull extends AttackType implements Deity {
             attack.velocity.y = 352 / 32f;
         }
 
+        godSeagullPos.add(godSeagullTarget.cpy().sub(godSeagullPos).scl(0.05f));
+
+        if (timeLeft > 0) {
+            timeLeft--;
+            if (timeLeft == 60) godSeagullTarget = new Vector2(godSeagullPos.x,  Game.game.window.resolutionY);
+            if (timeLeft == 0) attack.alive = false;
+            return;
+        }
+
         if (idleTime > 0) {
             idleTime--;
             if (idleTime == 60) {
                 if ((bulletsShot + 1) % 3 == 0) {
                     if ((bulletsShot + 1) % 6 == 0) {
-                        createAttack(new GodLaser(), new int[]{(int) godSeagullPos.x, (int) godSeagullPos.y, (int) attack.getNearestOpponent(-1).getCenter().sub(godSeagullPos).angleDeg() }, attack.owner);
+                        createAttack(new GodLaser(), new int[]{(int) godSeagullPos.x, (int) godSeagullPos.y, (int) laserTarget.sub(godSeagullPos).angleDeg() }, attack.owner);
+                        timeLeft = 120;
                     } else {
-                        createAttack(new GodEye(), new int[]{(int) godSeagullPos.x, (int) godSeagullPos.y}, attack.owner);
+                        for (int i = 0; i < 3; i++) createAttack(new GodEye(), new int[]{(int) godSeagullPos.x, (int) godSeagullPos.y}, attack.owner);
                     }
                 } else {
                     createAttack(new GodBolt(), new int[]{(int) godSeagullPos.x, (int) godSeagullPos.y}, attack.owner);
@@ -67,8 +79,8 @@ public class GodSeagull extends AttackType implements Deity {
             }
         } else {
             godRotationSpeed += (godSeagullTarget.x - godSeagullPos.x) / 100;
-            godSeagullPos.add(godSeagullTarget.cpy().sub(godSeagullPos).scl(0.05f));
             if (godSeagullPos.dst2(godSeagullTarget) < 64) {
+                laserTarget = attack.getNearestOpponent(-1).getCenter();
                 idleTime = 120;
             }
         }
@@ -81,9 +93,9 @@ public class GodSeagull extends AttackType implements Deity {
         Vector2 backgroundCloudPosition = new Vector2(-attack.life * 0.5f % 1280 - 640, attack.getStage().getStageEdge(Direction.UP));
         backgroundCloudPosition.y -= MathUtils.cos(attack.life / 40f) * 5 - 16 + 720 - 48;
 
-        // for (int i = -1; i < 2; i++) {
-        //     g.usefulDraw(g.imageProvider.getImage("dust_cloud_background.png"), backgroundCloudPosition.x + 1280 * i, backgroundCloudPosition.y, 1280, 720, 0, 1, 0, false, false);
-        // }
+        for (int i = -1; i < 2; i++) {
+             g.usefulDraw(g.imageProvider.getImage("dust_cloud_background.png"), backgroundCloudPosition.x + 1280 * i, backgroundCloudPosition.y, 1280, 720, 0, 1, 0, false, false);
+        }
 
         backgroundCloudPosition.y += attack.hitbox.y;
 
@@ -107,9 +119,9 @@ public class GodSeagull extends AttackType implements Deity {
 
         cloudPosition.y += attack.hitbox.y;
 
-//        for (int i = -1; i < 2; i++) {
-//            g.usefulDraw(g.imageProvider.getImage("dust_cloud.png"), cloudPosition.x + 1280 * i, cloudPosition.y, 1280, 720, 0, 1, 0, false, false);
-//        }
+        for (int i = -1; i < 2; i++) {
+            g.usefulDraw(g.imageProvider.getImage("dust_cloud.png"), cloudPosition.x + 1280 * i, cloudPosition.y, 1280, 720, 0, 1, 0, false, false);
+        }
     }
 
     @Override

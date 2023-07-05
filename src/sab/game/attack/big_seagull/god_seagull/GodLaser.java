@@ -20,6 +20,8 @@ public class GodLaser extends AttackType {
         attack.damage = 8;
         attack.knockback = new Vector2(6, 0);
         attack.imageName = "seagull_laser.png";
+        attack.reflectable = false;
+        attack.parryable = false;
     }
 
     @Override
@@ -30,6 +32,7 @@ public class GodLaser extends AttackType {
 
     @Override
     public void update(Attack attack) {
+        attack.rotation += (attack.getNearestOpponent(-1).getCenter().sub(attack.getCenter()).angleDeg() - attack.rotation) / 8f;
         attack.frame = Math.abs(3 - attack.life / 4 % 4);
         attack.knockback.setAngleDeg(attack.rotation);
     }

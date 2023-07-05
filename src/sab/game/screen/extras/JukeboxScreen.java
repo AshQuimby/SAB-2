@@ -211,7 +211,7 @@ public class JukeboxScreen extends ScreenAdapter {
             colors.add(0.25f);
             float[] rgb = new float[3];
             for (int i = 0; i < 3; i++) {
-                int colorIndex = SabRandom.random(colors.size() - 1);
+                int colorIndex = SabRandom.random(colors.size());
                 rgb[i] = colors.get(colorIndex);
                 colors.remove(colorIndex);
             }
