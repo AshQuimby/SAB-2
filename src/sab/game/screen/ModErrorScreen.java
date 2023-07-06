@@ -11,6 +11,7 @@ import sab.game.Game;
 import sab.game.screen.extras.ExtrasScreen;
 import sab.screen.ScreenAdapter;
 import sab.screen.Screen;
+import sab.util.Utils;
 
 public class ModErrorScreen extends ScreenAdapter {
     private final List<String> errors;
@@ -31,10 +32,12 @@ public class ModErrorScreen extends ScreenAdapter {
         float length = 0;
         for (int i = 0; i < errors.size(); i++) {
             float size;
-            if (i == 0) size = 2; else size = 0.75f;
-            Rectangle bounds = g.drawText(errors.get(i), Game.getDefaultFont(), 0, scrollDistance - length + 256, size * Game.getDefaultFontScale(), Color.WHITE, 0);
-
-            length += bounds.height + 24;
+            if (i == 0) size = 2; else size = 1f;
+            String[] text = Utils.textWrapArray(g, errors.get(i), size * Game.getDefaultFontScale(), Game.game.window.resolutionX - 256);
+            for (String string : text) {
+                Rectangle bounds = g.drawText(string, Game.getDefaultFont(), 0, scrollDistance - length + 256, size * Game.getDefaultFontScale(), Color.WHITE, 0);
+                length += bounds.height + 12 * size;
+            }
         }
 
         if (scrollDistance > length) scrollDistance = length;

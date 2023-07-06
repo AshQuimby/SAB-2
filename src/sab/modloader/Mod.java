@@ -15,15 +15,17 @@ public class Mod {
     public final String namespace;
     public final String version;
     public final String description;
+    public final String icon;
     public final List<Class<? extends FighterType>> fighters;
     public final List<Class<? extends StageType>> stages;
     public final HashMap<String, Class<? extends AttackType>> attacks;
     public ModType modType;
-    public Mod(String displayName, String namespace, String version, String description) {
+    public Mod(String displayName, String namespace, String version, String description, String icon) {
         this.displayName = displayName;
         this.namespace = namespace;
         this.version = version;
         this.description = description;
+        this.icon = icon;
         fighters = new ArrayList<Class<? extends FighterType>>();
         stages = new ArrayList<Class<? extends StageType>>();
         attacks = new HashMap<String, Class<? extends AttackType>>();

@@ -66,7 +66,7 @@ public class FightersScreen extends ScreenAdapter {
         }
         String description = "     " + fighters.get(characterIndex).description + " \n \nDebut: " + fighters.get(characterIndex).debut + "\n \nTimes Played: " + timesPlayed;
 
-        description = Utils.textWrap(g, description, 1, 460);
+        description = Utils.textWrap(g, description, Game.getDefaultFontScale(), 80);
 
         g.drawText(description, Game.getDefaultFont(), -Game.game.window.resolutionX / 2 + 32, Game.game.window.resolutionY / 2 - 220, Game.getDefaultFontScale(), Color.WHITE, -1);
 

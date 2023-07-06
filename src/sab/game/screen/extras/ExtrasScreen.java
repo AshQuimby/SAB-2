@@ -12,7 +12,7 @@ import sab.util.Utils;
 public class ExtrasScreen extends SelectorScreen {
     
     public ExtrasScreen() {
-        super(Settings.getDebugMode() ? new String[] {"Fighters", "Credits", "Jukebox", "Mods", "Replays", "Back"} : new String[] {"Fighters", "Credits", "Jukebox", "Mods", "Back"});
+        super(new String[] {"Fighters", "Credits", "Jukebox", "Mods", "Replays", "Back"});
     }
     
     @Override
@@ -61,9 +61,12 @@ public class ExtrasScreen extends SelectorScreen {
             }
 
             case 3 -> {
+                Game.game.window.camera.reset();
+                return new ModsScreen();
             }
 
             case 4 -> {
+
                 Game.game.window.camera.reset();
                 return new ReplayScreen();
             }

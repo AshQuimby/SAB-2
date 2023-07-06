@@ -101,7 +101,7 @@ public class Game extends Messenger {
         Settings.loadSettings();
         if (Settings.getCrtEffect()) window.getGraphics().addPostEffect("crt");
 
-        Mod baseGame = new Mod("Super Ass Brothers: Remasstered", "sab", "1.0", "Base game content");
+        Mod baseGame = new Mod("Super Ass Brothers: Remasstered", "N/A", "0.6.7", "Adds all the base game stages and fighters", "marvin_render.png");
         try {
             baseGame.addFighters((Class<? extends FighterType>[]) new Class<?>[]{Marvin.class, Chain.class, Walouis.class, Gus.class, EmperorEvil.class, Snas.class, Stephane.class, UnnamedDuck.class, Matthew.class, EmptySoldier.class, John.class, BowlBoy.class, BigSeagull.class});
 //            baseGame.addFighters((Class<? extends FighterType>[]) new Class<?>[]{Marvin.class, Chain.class   });

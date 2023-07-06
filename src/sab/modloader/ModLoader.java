@@ -101,9 +101,12 @@ public final class ModLoader {
         }
 
         Mod mod = new Mod(modSettings.get("display_name"), modSettings.get("namespace"),
-                modSettings.get("version"), modSettings.get("description"));
+                modSettings.get("version"), modSettings.get("description"), modSettings.get("icon"));
         System.out.println(modSettings.get("load_message"));
-
+        if (!modSettings.containsKey("icon")) {
+            Game.game.addModError("Mod " + modSettings.get("display_name") + " failed to load: mod.sab file lacks @icon property, set it to an image path, ex: example_mod:poopy_man_render.png");
+            return null;
+        }
         URL modURL = modFile.toURI().toURL();
         URL[] urls = new URL[] { modURL };
         URLClassLoader classLoader = new URLClassLoader(urls);

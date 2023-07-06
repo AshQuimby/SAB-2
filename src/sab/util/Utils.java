@@ -30,6 +30,29 @@ public class Utils {
         return textWrap(g, Game.getDefaultFont(), text, size * Game.getDefaultFontScale(), maxLength);
     }
 
+    public static String[] textWrapArray(Seagraphics g, String text, float size, int maxLength) {
+        String reader = "";
+
+        List<String> textLines = new ArrayList<>();
+
+        String[] splitText = text.split(" ");
+
+        if (splitText.length == 1) {
+            textLines.add(splitText[0]);
+        } else {
+            for (String string : splitText) {
+                reader += string + " ";
+                if (g.getTextBounds(reader, Game.getDefaultFont(), 0, 0, size, 0).width > maxLength || string.equals("\n")) {
+                    if(!(reader.equals("") || text.equals(" ")) && !string.equals("\n")) textLines.add(reader);
+                    if (!string.equals("\n")) reader = "";
+                }
+            }
+            textLines.add(reader);
+        }
+
+        return textLines.toArray(new String[textLines.size()]);
+    }
+
     public static String textWrap(Seagraphics g, BitmapFont font, String text, float size, int maxLength) {
 
         String reader = "";
@@ -43,7 +66,7 @@ public class Utils {
         } else {
             for (String string : splitText) {
                 reader += string + " ";
-                if (g.getTextBounds(reader, Game.getDefaultFont(), -Game.game.window.resolutionX / 2 + 32, Game.game.window.resolutionY / 2 - 220, size, -1).width > maxLength || string.equals("\n")) {
+                if (g.getTextBounds(reader, font, 0, 0, size, 0).width > maxLength || string.equals("\n")) {
                     if(!(reader.equals("") || text.equals(" ")) && !string.equals("\n")) textLines.add(reader);
                     if (!string.equals("\n")) reader = "";
                 }
