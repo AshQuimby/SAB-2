@@ -25,6 +25,7 @@ public class Dialogue {
         this.characterNames = characterNames;
         this.fileNames = fileNames;
         waitFor = 0;
+        lastBlock = "";
     }
 
     public String getPortrait() {
