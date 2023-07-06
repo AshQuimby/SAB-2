@@ -1,5 +1,4 @@
 ## <i>Super Ass Brothers: Remasstered</i> is here! (kinda)
-test
 ---
 
 ### Glad you could make it, friend. If you're seeing this you are one of Super Ass Brothers: Remasstered's (codenamed SAB 2) beta testers.
