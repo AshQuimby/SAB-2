@@ -22,7 +22,7 @@ public class ModdedLocalGame {
                 stringBuilder.append("/*");
             }
             System.out.println(stringBuilder);
-            ProcessBuilder builder = new ProcessBuilder("java", "-cp", "-XstartOnFirstThread", stringBuilder.toString(), "sab.game.LocalGame");
+            ProcessBuilder builder = new ProcessBuilder("java", "-XstartOnFirstThread", "-cp", stringBuilder.toString(), "sab.game.LocalGame");
             builder.directory(new File("").getCanonicalFile());
             builder.inheritIO();
             builder.start();
