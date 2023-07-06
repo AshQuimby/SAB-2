@@ -9,6 +9,14 @@ public class Animation {
     public int frame;
     public int ticksUntilNextFrame;
 
+    public static Animation createBasic(int frameLength, int... frames) {
+        return new Animation(frameLength, false, frames);
+    }
+
+    public Animation(int frameLength, boolean interruptable, int... frames) {
+        this(frames, frameLength, interruptable);
+    }
+
     public Animation(int firstFrame, int lastFrame, int frameLength, boolean interruptable) {
         if (firstFrame >= lastFrame) {
             throw new IllegalArgumentException("First frame must come after last frame");

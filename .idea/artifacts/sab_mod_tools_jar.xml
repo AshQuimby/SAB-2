@@ -1,0 +1,9 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="sab-mod-tools:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/sab_mod_tools_jar</output-path>
+    <root id="archive" name="sab_2.jar">
+      <element id="extracted-dir" path="$PROJECT_DIR$/seagull-engine.jar" path-in-jar="/" />
+      <element id="module-output" name="sab_2" />
+    </root>
+  </artifact>
+</component>

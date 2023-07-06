@@ -24,7 +24,6 @@ public class GavelSlam extends MeleeAttackType {
         attack.damage = 18;
         attack.hitCooldown = 10;
         attack.reflectable = false;
-        attack.collideWithStage = true;
         offset = new Vector2();
         killWhenPlayerStuck = true;
 
@@ -55,19 +54,16 @@ public class GavelSlam extends MeleeAttackType {
     public void update(Attack attack) {
         super.update(attack);
         attack.canHit = swingSpeed > 2;
+        updatePosition(attack);
         if (hitGround) {
-            updatePosition(attack);
-        } else if (attack.collisionDirection.isVertical()) {
+        } else if (isTouchingPlatform(attack)) {
             createAttack(new JohnStar(), null, attack.owner);
             attack.life = 10;
-            attack.collideWithStage = false;
             SabSounds.playSound("crash.mp3");
             attack.getBattle().shakeCamera(10);
             hitGround = true;
-            updatePosition(attack);
         } else {
             attack.rotation -= swingSpeed * attack.direction;
-            updatePosition(attack);
             swingSpeed += 0.25f * swingSpeed;
         }
     }

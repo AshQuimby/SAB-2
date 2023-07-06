@@ -5,6 +5,7 @@ import com.seagull_engine.Seagraphics;
 import sab.game.Game;
 import sab.game.Hittable;
 import sab.game.Player;
+import sab.game.stage.StageObject;
 
 public abstract class AttackType implements Cloneable {
     public void setDefaults(Attack attack) {
@@ -60,6 +61,21 @@ public abstract class AttackType implements Cloneable {
 
     public void onParry(Attack attack) {
         attack.alive = false;
+    }
+
+    public final int quickLoopAnimation(Attack attack, int ticksPerFrame) {
+        int frame = Math.abs(attack.frameCount - 1 - attack.life / ticksPerFrame % attack.frameCount);
+        attack.frame = frame;
+        return frame;
+    }
+
+    public final boolean isTouchingPlatform(Attack attack) {
+        for (StageObject stageObject : attack.getBattle().getSolidStageObjects()) {
+            if (stageObject.hitbox.overlaps(attack.hitbox)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public static Attack createAttack(AttackType type, int[] data, Player owner) {

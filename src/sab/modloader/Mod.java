@@ -18,7 +18,7 @@ public class Mod {
     public final List<Class<? extends FighterType>> fighters;
     public final List<Class<? extends StageType>> stages;
     public final HashMap<String, Class<? extends AttackType>> attacks;
-
+    public ModType modType;
     public Mod(String displayName, String namespace, String version, String description) {
         this.displayName = displayName;
         this.namespace = namespace;

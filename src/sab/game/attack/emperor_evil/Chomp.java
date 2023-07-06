@@ -2,11 +2,14 @@ package sab.game.attack.emperor_evil;
 
 import com.badlogic.gdx.math.Vector2;
 
+import sab.game.Player;
 import sab.game.SabSounds;
 import sab.game.attack.MeleeAttackType;
 import sab.game.attack.Attack;
+import sab.util.SabRandom;
 
 public class Chomp extends MeleeAttackType {
+    private boolean trappedPlayer;
     @Override
     public void setDefaults(Attack attack) {
         attack.imageName = "bite.png";
@@ -35,5 +38,14 @@ public class Chomp extends MeleeAttackType {
         if (attack.life % 8 == 0) attack.frame++;
         if (attack.life == 32) SabSounds.playSound("chomp.mp3");
         attack.knockback = new Vector2(6 * attack.owner.direction, 4);
+        if (!attack.canHit) {
+            if (!trappedPlayer) SabSounds.playSound("crunch.mp3");
+            Player target = attack.getNearestOpponent(-1);
+            target.frame = target.fighter.knockbackAnimation.stepLooping();
+            if (target.hitbox.overlaps(attack.hitbox)) {
+                target.stun(8);
+            }
+            trappedPlayer = true;
+        }
     }
 }

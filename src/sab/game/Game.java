@@ -21,6 +21,7 @@ import sab.game.screen.TitleScreen;
 import sab.game.stage.*;
 import sab.modloader.Mod;
 import sab.modloader.ModLoader;
+import sab.modloader.ModType;
 import sab.screen.Screen;
 import sab.util.Utils;
 import sab.util.SabRandom;
@@ -42,7 +43,6 @@ public class Game extends Messenger {
     public static Map<Integer, Boolean> controllerKeysPressed;
     public final List<Class<? extends FighterType>> fighters;
     public final List<Class<? extends StageType>> stages;
-    public final HashMap<String, Class<? extends AttackType>> attacks;
     public final CharacterSelectScreen globalCharacterSelectScreen;
     public static ParallaxBackground titleBackground;
     private List<String> modErrors;
@@ -55,7 +55,6 @@ public class Game extends Messenger {
         mods = new HashMap<>();
         fighters = new ArrayList<>();
         stages = new ArrayList<>();
-        attacks = new HashMap<>();
         controllerManager = new ControllerManager();
         globalCharacterSelectScreen = new CharacterSelectScreen();
         controllerKeysPressed = new HashMap<>();
@@ -88,11 +87,6 @@ public class Game extends Messenger {
     // Initial load tasks (like from Among Us)
     @Override
     public void load() {
-
-        System.out.println(Gdx.files.internal("test.txt").exists());
-        System.out.println(Gdx.files.internal("images").exists());
-        System.out.println(Gdx.files.internal("images").isDirectory());
-
         selectNewTitleScreen();
         window.imageProvider.loadFont("fonts/SAB_font.ttf", 100);
         window.imageProvider.loadFont("fonts/arial.ttf", 100);
@@ -115,15 +109,14 @@ public class Game extends Messenger {
         } catch (Exception e) {
             throw new RuntimeException("Like actually what the hell, how did you break this. You should not be able to break this unless your brain cell count reached the long limit.");
         }
+        baseGame.modType = new ModType();
         addMod(baseGame);
         loadMods();
 
         for (Mod mod : Game.game.mods.values()) {
             fighters.addAll(mod.fighters);
             stages.addAll(mod.stages);
-            for (String id : mod.attacks.keySet()) {
-                attacks.put(id, mod.attacks.get(id));
-            }
+            mod.modType.load();
         }
 
         screen = new TitleScreen(true);
@@ -164,11 +157,6 @@ public class Game extends Messenger {
         }
     }
 
-    // Get an AttackType from a String ID, identical to the ModLoader.getAttackType method
-    public AttackType getAttackType(String id) {
-        return ModLoader.getAttackType(attacks.get(id));
-    }
-    
     // Called when an error is detected loading mods
     public void addModError(String errorMessage) {
         modErrors.add(errorMessage);
@@ -334,6 +322,7 @@ public class Game extends Messenger {
     @Override
     public void close() {
         screen.close();
+        ModLoader.dispose();
     }
 
     // Loads mods in the mods folder
@@ -373,16 +362,16 @@ public class Game extends Messenger {
             modsFolder.delete();
         }
 
+
         try {
-            modsFolder = new File("../mods");
+            List<File> potentialMods = ModLoader.getPotentialMods(new File("../mods"), new ArrayList<>());
 
-            for (File mod : modsFolder.listFiles()) {
-                if (mod.getName().endsWith(".jar")) {
-                    Mod loadedMod = ModLoader.loadMod(mod, this);
+            for (File mod : potentialMods) {
+                if (mod.getName().equals("sab-mod-tools.jar")) continue;
+                Mod loadedMod = ModLoader.loadMod(mod, this);
 
-                    if (loadedMod != null) {
-                        addMod(loadedMod);
-                    }
+                if (loadedMod != null) {
+                    addMod(loadedMod);
                 }
             }
         } catch (IOException e) {

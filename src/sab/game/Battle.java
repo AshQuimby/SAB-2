@@ -21,6 +21,7 @@ import sab.game.fighter.Fighter;
 import sab.game.fighter.Marvin;
 import sab.game.particle.Particle;
 import sab.game.stage.*;
+import sab.modloader.Mod;
 import sab.net.Keys;
 import sab.net.VoidFunction;
 import sab.replay.ReplayAI;
@@ -69,6 +70,7 @@ public class Battle {
     public int pauseMenuIndex;
     private int battleTick;
     private int parryFlash;
+    private boolean freezeTime;
 
     // Screen effect variables
     public boolean drawHitboxes;
@@ -366,6 +368,7 @@ public class Battle {
 
     // Returns true if a tick passed, returns false if cut off
     public boolean update() {
+        freezeTime = freezeFrames > 0 || paused || (slowdownDuration > 0 && Game.game.window.getTick() % slowdown != 0);
         if (currentDialogue != null) {
             continueDialogue();
             updatePlayerKeys();
@@ -374,6 +377,10 @@ public class Battle {
 
         if (screenShatter > 0) {
             screenShatter--;
+        }
+
+        for (Mod mod : Game.game.mods.values()) {
+            if (!mod.modType.updateBattle(this, freezeTime)) freezeTime = true;
         }
 
         if (gameOver()) {
@@ -403,7 +410,6 @@ public class Battle {
             if (slowdownDuration > 0) {
                 if (Game.game.window.getTick() % slowdown == 0) updateCameraEffects();
             }
-            return false;
         } else {
             if (slowdownDuration > 0) {
                 slowdownDuration--;
@@ -437,6 +443,9 @@ public class Battle {
             } else {
                 zoomOnFreeze = false;
             }
+        }
+        if (freezeTime) {
+            return false;
         }
         updateCameraEffects();
         battleTick++;

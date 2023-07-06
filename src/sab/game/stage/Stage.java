@@ -38,10 +38,10 @@ public class Stage {
     public Graph<Node> graph;
 
     // Players can be outside this blast zone safely when not taking knockback
-    protected Rectangle safeBlastZone;
+    public Rectangle safeBlastZone;
 
     // Players cannot be below or to the right/left of this blast zone even when not taking knockback
-    protected Rectangle unsafeBlastZone;
+    public Rectangle unsafeBlastZone;
 
     protected Battle battle;
     public StageType type;

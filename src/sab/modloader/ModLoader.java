@@ -1,20 +1,19 @@
 package sab.modloader;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.nio.file.FileSystemException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.jar.JarInputStream;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 
 import com.sab_format.SabData;
 import com.sab_format.SabParsingException;
@@ -26,7 +25,9 @@ import sab.game.screen.extras.JukeboxScreen;
 import sab.game.stage.StageType;
 
 public final class ModLoader {
-	
+
+    public static List<File> fileCache = new ArrayList<>();
+
     // Loads a mod's "mod.sab" file from a mod file
     private static Map<String, String> getModSettings(File modFile) throws IOException {
         JarFile jar = new JarFile(modFile);
@@ -38,9 +39,7 @@ public final class ModLoader {
 
         InputStream settingsReader = jar.getInputStream(settingsEntry);
         String fileName = settingsEntry.getName().split("/")[settingsEntry.getName().split("/").length - 1];
-        String path = modFile.getCanonicalPath().substring(0,
-                modFile.getCanonicalPath().length() - modFile.getName().length())
-                + "resources/" + fileName;
+        String path = new File("../mods/resources/").getCanonicalPath() + "/" + fileName;
 
         Files.copy(settingsReader, Paths.get(path));
         try {
@@ -54,6 +53,24 @@ public final class ModLoader {
             jar.close();
             throw new IOException("Error parsing mod.sab: " + e.getLocalizedMessage());
         }
+    }
+
+    public static List<File> getPotentialMods(File modsFolder, List<File> directories) {
+        List<File> files = new ArrayList<>();
+        List<File[]> folders = new ArrayList<>();
+        folders.add(modsFolder.listFiles());
+        for (int i = 0; i < folders.size(); i++) {
+            File[] folder = folders.get(i);
+            for (File file : folder) {
+                if (file.isDirectory()) {
+                    folders.add(file.listFiles());
+                    directories.add(file);
+                } else if (file.getName().endsWith(".jar")) {
+                    files.add(file);
+                }
+            }
+        }
+        return files;
     }
 
     // Attempts to load an entire mod from a file object
@@ -85,6 +102,7 @@ public final class ModLoader {
 
         Mod mod = new Mod(modSettings.get("display_name"), modSettings.get("namespace"),
                 modSettings.get("version"), modSettings.get("description"));
+        System.out.println(modSettings.get("load_message"));
 
         URL modURL = modFile.toURI().toURL();
         URL[] urls = new URL[] { modURL };
@@ -102,14 +120,19 @@ public final class ModLoader {
 
             // Transfer sound/image assets in order to be loaded by the game
             String fileName = entry.getName().split("/")[entry.getName().split("/").length - 1];
-            String path = modFile.getCanonicalPath().substring(0, modFile.getCanonicalPath().length() - modFile.getName().length()) + "resources/" + fileName;
+            String path = new File("../mods/resources/").getCanonicalPath() + "/" + fileName;
 
             Path target = Paths.get(path);
             Files.copy(entryReader, target);
 
             if (entry.getName().endsWith(".png")) {
-                game.window.imageProvider.loadAbsoluteImage(path, mod.namespace
-                        + ":" + (entry.getName().split("/"))[entry.getName().split("/").length - 1]);
+                game.window.imageProvider.loadAbsoluteImage(path, mod.namespace + ":" + (entry.getName().split("/"))[entry.getName().split("/").length - 1]);
+            } else if (entry.getName().endsWith(".mp3")) {
+                if (entry.getRealName().contains("music")) {
+                    game.window.soundEngine.loadMusicAbsolute(path, mod.namespace + ":" + (entry.getName().split("/"))[entry.getName().split("/").length - 1]);
+                } else {
+                    game.window.soundEngine.loadSoundAbsolute(path, mod.namespace + ":" + (entry.getName().split("/"))[entry.getName().split("/").length - 1]);
+                }
             } else if (entry.getName().endsWith(".class") && entry.getName().startsWith(mod.namespace)) {
                 try {
                     Class<?> clazz = classLoader
@@ -127,12 +150,21 @@ public final class ModLoader {
                         String id = clazz.getSimpleName().toLowerCase();
                         mod.addAttack(mod.namespace + ":" + id, (Class<? extends AttackType>) clazz);
                     }
-                } catch (ClassNotFoundException e) {
+                    if (ModType.class.isAssignableFrom(clazz)) {
+                        // "Unsafe"
+                        mod.modType = (ModType) clazz.getConstructors()[0].newInstance();
+                        System.out.println(mod.modType.getLoadMessage());
+                    }
+                } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
             }
 
-            Files.delete(target);
+            try {
+                Files.delete(target);
+            } catch (FileSystemException e) {
+                fileCache.add(new File(path));
+            }
         }
 
         jarReader.close();
@@ -142,9 +174,51 @@ public final class ModLoader {
         return mod;
     }
 
+    public static void dispose() {
+        for (File file : fileCache) {
+            file.delete();
+        }
+    }
+
+    public static void downloadExampleMod() {
+        String source = "ignore me :3";
+        String destination = "../mods/production";
+
+        try {
+            // To be implemented
+            ZipFile zipFile = new ZipFile(source);
+            Enumeration<? extends ZipEntry> entries = zipFile.entries();
+
+            while (entries.hasMoreElements()) {
+                ZipEntry entry = entries.nextElement();
+                String entryName = entry.getName();
+                File entryDestination = new File(destination, entryName);
+
+                if (entry.isDirectory()) {
+                    entryDestination.mkdirs();
+                } else {
+                    InputStream inputStream = zipFile.getInputStream(entry);
+                    FileOutputStream outputStream = new FileOutputStream(entryDestination);
+                    byte[] buffer = new byte[1024];
+                    int length;
+
+                    while ((length = inputStream.read(buffer)) > 0) {
+                        outputStream.write(buffer, 0, length);
+                    }
+
+                    outputStream.close();
+                    inputStream.close();
+                }
+            }
+            zipFile.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     // Adds sound file to jukebox screen as a song
     // Tempo in beats per minute
-    public void addSongToJukebox(String fileName, String songName, String artist, int tempo, String background) {
+    public static void addSongToJukebox(String fileName, String songName, String artist, int tempo, String background) {
         JukeboxScreen.addSong(fileName, songName, artist, tempo, background);
     }
 
@@ -176,11 +250,5 @@ public final class ModLoader {
 				| NoSuchMethodException | SecurityException e) {
 			throw new RuntimeException(e);
 		}
-    }
-
-    // Returns an AttackType based on an all lowercase version of the class name (this is the one a modder would use)
-    // Ex: SuperCharge -> "supercharge"
-    public static AttackType getAttack(String id) {
-        return Game.game.getAttackType(id);
     }
 }
