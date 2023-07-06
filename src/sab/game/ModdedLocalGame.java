@@ -21,11 +21,19 @@ public class ModdedLocalGame {
                 stringBuilder.append(file.getPath());
                 stringBuilder.append("/*");
             }
-            System.out.println(stringBuilder);
-            ProcessBuilder builder = new ProcessBuilder("java", "-XstartOnFirstThread", "-cp", stringBuilder.toString(), "sab.game.LocalGame");
-            builder.directory(new File("").getCanonicalFile());
-            builder.inheritIO();
-            builder.start();
+
+            if (System.getProperty("os.name").startsWith("Mac")) {
+                ProcessBuilder builder = new ProcessBuilder("java", "-XstartOnFirstThread", "-cp", stringBuilder.toString(), "sab.game.LocalGame");
+                builder.directory(new File("").getCanonicalFile());
+                builder.inheritIO();
+                builder.start();
+            } else {
+                ProcessBuilder builder = new ProcessBuilder("java", "-cp", stringBuilder.toString(), "sab.game.LocalGame");
+                builder.directory(new File("").getCanonicalFile());
+                builder.inheritIO();
+                builder.start();
+            }
+
         } else {
             LocalGame.main(args);
         }
