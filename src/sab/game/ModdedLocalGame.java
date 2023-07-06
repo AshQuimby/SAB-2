@@ -21,7 +21,8 @@ public class ModdedLocalGame {
                 stringBuilder.append(file.getPath());
                 stringBuilder.append("/*");
             }
-            ProcessBuilder builder = new ProcessBuilder("java", "-cp", stringBuilder.toString(), "sab.game.LocalGame");
+            System.out.println(stringBuilder);
+            ProcessBuilder builder = new ProcessBuilder("java", "-cp", "-XstartOnFirstThread", stringBuilder.toString(), "sab.game.LocalGame");
             builder.directory(new File("").getCanonicalFile());
             builder.inheritIO();
             builder.start();
