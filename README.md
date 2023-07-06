@@ -6,7 +6,7 @@
 #### To play the game:
 - Go to https://github.com/AshQuimby/SAB-2/releases.
 - Download the most recent version.
-- Open the folder and double-click the file sharing the name of the operating system you use (currently only tested for Windows).
+- Open the folder and double-click the file telling you to click it.
 - Navigate the menus with arrow-keys, enter and escape.
 - In-game player 1 is controlled with WASD and F to attack/select, player 2 is arrow-keys and M to attack/select.
 
