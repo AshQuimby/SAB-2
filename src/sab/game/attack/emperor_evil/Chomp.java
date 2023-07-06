@@ -41,11 +41,11 @@ public class Chomp extends MeleeAttackType {
         if (!attack.canHit) {
             if (!trappedPlayer) SabSounds.playSound("crunch.mp3");
             Player target = attack.getNearestOpponent(-1);
-            target.frame = target.fighter.knockbackAnimation.stepLooping();
             if (target.hitbox.overlaps(attack.hitbox)) {
+                target.frame = target.fighter.knockbackAnimation.stepLooping();
                 target.stun(8);
+                trappedPlayer = true;
             }
-            trappedPlayer = true;
         }
     }
 }

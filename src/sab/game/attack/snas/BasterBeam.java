@@ -44,7 +44,7 @@ public class BasterBeam extends AttackType {
 
     @Override
     public void update(Attack attack) {
-        if (attack.life <= 1) attack.staticKnockback = false;
+        if (attack.life <= 4) attack.staticKnockback = false;
         attack.resize(attack.hitbox.width - (horizontal ? 2.6f : 0), attack.hitbox.height - (!horizontal ? 2.6f : 0));
     }
 
