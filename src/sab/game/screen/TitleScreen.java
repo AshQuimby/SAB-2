@@ -66,7 +66,7 @@ public class TitleScreen extends SelectorScreen {
             }
             case 4 : {
                 Game.game.window.camera.reset();
-                return new SettingsScreen();
+                return new SettingsMenuScreen();
             }
             case 5 : {
                 return new ExtrasScreen();

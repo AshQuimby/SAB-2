@@ -20,6 +20,7 @@ import sab.game.fighter.Chain;
 import sab.game.fighter.Fighter;
 import sab.game.fighter.Marvin;
 import sab.game.particle.Particle;
+import sab.game.settings.Settings;
 import sab.game.stage.*;
 import sab.modloader.Mod;
 import sab.net.Keys;
@@ -212,7 +213,7 @@ public class Battle {
     }
 
     public void shakeCamera(int intensity) {
-        if (Settings.getScreenShake()) {
+        if (Settings.screenShake.value) {
             if (intensity > cameraShake) cameraShake = intensity;
             for (PlayerController playerController : Game.game.controllerManager.getControllers()) {
                 playerController.startVibration(cameraShake, Math.min(10, cameraShake) / 10f);
@@ -255,7 +256,7 @@ public class Battle {
     public void updateCameraPosition() {
         SeagullCamera camera = Game.game.window.camera;
 
-        if (Settings.getStaticCamera()) {
+        if (Settings.staticCamera.value) {
             camera.zoom = stage.maxZoomOut;
             camera.position.set(stage.getSafeBlastZone().getCenter(new Vector2()), 0);
             return;

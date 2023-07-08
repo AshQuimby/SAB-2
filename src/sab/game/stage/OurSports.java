@@ -8,6 +8,7 @@ import com.seagull_engine.Seagraphics;
 import com.seagull_engine.graphics.ParallaxBackground;
 import sab.game.*;
 import sab.game.particle.Particle;
+import sab.game.settings.Settings;
 import sab.util.SabRandom;
 
 public class OurSports extends StageType {
@@ -32,7 +33,7 @@ public class OurSports extends StageType {
         platform = new Platform(-256 / 2, -128, 256, 24, "our_sports_platform.png", stage, new StageObjectBehaviour() {
             @Override
             public void update(StageObject stageObject, Battle battle) {
-                if (Settings.getStageHazards() && stormy) {
+                if (Settings.stageHazards.value && stormy) {
                     stageObject.velocity.y = -0.5f;
                 }
             }
@@ -45,7 +46,7 @@ public class OurSports extends StageType {
         stage.addStageObject(new StageObject(-256 / 2, -128 - Game.game.window.resolutionY + 24, 256, Game.game.window.resolutionY, "our_sports_platform_supports.png", stage, new StageObjectBehaviour() {
             @Override
             public void update(StageObject stageObject, Battle battle) {
-                if (Settings.getStageHazards() && stormy) {
+                if (Settings.stageHazards.value && stormy) {
                     stageObject.velocity.y = -1f;
                 }
             }
@@ -55,7 +56,7 @@ public class OurSports extends StageType {
         platform = new Platform(-192 / 2, -128, 192, 24, "our_sports_platform_white_ring.png", stage, new StageObjectBehaviour() {
             @Override
             public void update(StageObject stageObject, Battle battle) {
-                if (Settings.getStageHazards() && stormy) {
+                if (Settings.stageHazards.value && stormy) {
                     stageObject.velocity.y = -0.25f;
                 }
             }

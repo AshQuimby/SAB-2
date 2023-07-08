@@ -4,7 +4,6 @@ import com.seagull_engine.Seagraphics;
 
 import sab.game.Game;
 import sab.game.SabSounds;
-import sab.game.Settings;
 import sab.game.screen.*;
 import sab.screen.Screen;
 import sab.util.Utils;
