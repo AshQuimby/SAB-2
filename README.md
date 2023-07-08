@@ -26,10 +26,15 @@ To request balance changes follow the same procedure as bug reporting.
 - Better menus.
 - Jukebox screen that lets you play your favorite original songs with a little dancing John Joseph (Press 'J' while he's dancing to jam harder).
 - 16:9 aspect ratio.
+- Parallax backgrounds.
 - Fullscreen (F11 or in settings).
 - Campaign (eventually)
 - New character renders.
 - Not being made on a school-issued laptop.
+- Actual functioning mod support.
+- Improved graphics.
+- More settings.
+- To be functional net code (eventually).
 - 10x more ass-brothering potential.
 
 ---
@@ -38,7 +43,8 @@ To request balance changes follow the same procedure as bug reporting.
 Campaign is not currently complete. <br>
 Net code is not currently complete. <br>
 Not all characters have programmed AIs. <br>
-This is a passion project, do not expect us to treat it like a job.
+This is a passion project, do not expect us to treat it like a job. <br>
+Modloader is being worked on tentatively in the background. Hopefully I can get auto-updating and a better release pipeline up :/
 
 ---
 
