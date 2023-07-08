@@ -157,7 +157,7 @@ public class JukeboxScreen extends ScreenAdapter {
                 switch (widgetIndex) {
                     case 0 -> {
                         if (playing != songIndex) {
-                            SabSounds.playMusic(songIDs.get(songIndex), looping);
+                            SabSounds.playJukeboxMusic(songIDs.get(songIndex), looping);
                             playing = songIndex;
                             currentDanceRate = (60/7f) / songTempos.get(playing) * 60f;
                             raveLights.clear();

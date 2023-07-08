@@ -105,12 +105,18 @@ public class Battle {
 
         players = new ArrayList<>();
 
-        player1 = new Player(fighter1, costumes[0], 0, lives, this);
+        if (Settings.localSettings.gameMode.asRawValue().equals("health")) {
+            player1 = new Player(fighter1, costumes[0], 0, lives, this, 150);
+            player2 = new Player(fighter2, costumes[1], 1, lives, this, 150);
+        } else {
+            player1 = new Player(fighter1, costumes[0], 0, lives, this);
+            player2 = new Player(fighter2, costumes[1], 1, lives, this);
+        }
+
         player1.setAI(player1Type == 0 ? null : player1.fighter.getAI(player1, player1Type));
 
         if (player1Type == -1) player1.setAI(new ReplayAI());
 
-        player2 = new Player(fighter2, costumes[1], 1, lives, this);
         player2.setAI(player2Type == 0 ? null : player2.fighter.getAI(player2, player2Type));
 
         if (player2Type == -1) player2.setAI(new ReplayAI());
@@ -213,7 +219,7 @@ public class Battle {
     }
 
     public void shakeCamera(int intensity) {
-        if (Settings.screenShake.value) {
+        if (Settings.localSettings.screenShake.value) {
             if (intensity > cameraShake) cameraShake = intensity;
             for (PlayerController playerController : Game.game.controllerManager.getControllers()) {
                 playerController.startVibration(cameraShake, Math.min(10, cameraShake) / 10f);
@@ -256,7 +262,7 @@ public class Battle {
     public void updateCameraPosition() {
         SeagullCamera camera = Game.game.window.camera;
 
-        if (Settings.staticCamera.value) {
+        if (Settings.localSettings.staticCamera.value) {
             camera.zoom = stage.maxZoomOut;
             camera.position.set(stage.getSafeBlastZone().getCenter(new Vector2()), 0);
             return;
@@ -268,14 +274,17 @@ public class Battle {
             camera.targetPosition = (player1.takingKnockback()) ? player1.getCenter() : player2.getCenter();
         } else {
             float playerDist = player1.getCenter().dst(player2.getCenter());
-                // TODO: Make camera following ass balls a setting
-//            if (assBalls.size() > 0) {
-//                camera.targetPosition = player1.getCenter().cpy().add(player2.getCenter()).scl(0.5f);
-//                camera.targetPosition = camera.targetPosition.add(assBalls.get(0).getCenter()).scl(0.5f);
-//                playerDist = (playerDist + camera.getPosition().dst(assBalls.get(0).getCenter())) / 2;
-//            } else {
+            if (Settings.localSettings.followAssBall.value) {
+                if (assBalls.size() > 0) {
+                    camera.targetPosition = player1.getCenter().cpy().add(player2.getCenter()).scl(0.5f);
+                    camera.targetPosition = camera.targetPosition.add(assBalls.get(0).getCenter()).scl(0.25f);
+                    playerDist = (playerDist + camera.getPosition().dst(assBalls.get(0).getCenter())) / 2;
+                } else {
+                    camera.targetPosition = player1.getCenter().cpy().add(player2.getCenter()).scl(0.5f);
+                }
+            } else {
                 camera.targetPosition = player1.getCenter().cpy().add(player2.getCenter()).scl(0.5f);
-//            }
+            }
 
             camera.targetZoom = playerDist / 256;
             camera.targetZoom = Math.max(Math.min(stage.maxZoomOut, camera.targetZoom), slowdownDuration > 0 ? 0.5f : 0.75f);
@@ -303,10 +312,10 @@ public class Battle {
             badY2 = true;
         }
 
-        if (badX && badX2) camera.targetPosition.x = stage.getSafeBlastZone().x + stage.getSafeBlastZone().width / 2;
-        if (badY && badY2) camera.targetPosition.y = stage.getSafeBlastZone().y + stage.getSafeBlastZone().height / 2;
+        if (badX && badX2) camera.targetPosition.x = stage.getSafeBlastZone().getCenter(new Vector2()).x;
+        if (badY && badY2) camera.targetPosition.y = stage.getSafeBlastZone().getCenter(new Vector2()).y;
 
-        if (slowdownDuration > 0) camera.updateSeagullCamera(16 + slowdown * 2); else camera.updateSeagullCamera(8);
+        if (slowdownDuration > 0 && !paused) camera.updateSeagullCamera(16 + slowdown * 2); else camera.updateSeagullCamera(8);
     }
 
     public void updateCameraEffects() {
@@ -487,6 +496,11 @@ public class Battle {
             idsByGameObject.remove(deadGameObject);
 
             boolean misc = true;
+
+            if (deadGameObject instanceof Player) {
+                players.remove(deadGameObject);
+                misc = false;
+            }
 
             if (deadGameObject instanceof Hittable) {
                 hittableGameObjects.remove(deadGameObject);
@@ -791,23 +805,10 @@ public class Battle {
 
         g.useStaticCamera();
         stage.renderOverlay(g);
-        g.scalableDraw(g.imageProvider.getImage("in_battle_hud_p1.png"), -256, -256 - 64, 128, 128);
-
-        g.scalableDraw(g.imageProvider.getImage("in_battle_hud_p2.png"), 256 - 128, -256 - 64, 128, 128);
-
-        for (int i = 0; i < player1.getLives(); i++) {
-            g.scalableDraw(g.imageProvider.getImage("life_p1.png"), -256 + 48 + 24 * i, -256 - 12, 20, 20);
-        }
-        for (int i = 0; i < player2.getLives(); i++) {
-            g.scalableDraw(g.imageProvider.getImage("life_p2.png"), 256 - 128 + 48 + 24 * i, -256 - 12, 20, 20);
-        }
-
-        g.drawText(player1.damage + "%", Game.getDefaultFont(), -256 + 116, -256 + 48, Game.getDefaultFontScale(), Color.WHITE, 1);
-        g.drawText(player2.damage + "%", Game.getDefaultFont(), 256 - 128 + 116, -256 + 48, Game.getDefaultFontScale(), Color.WHITE, 1);
 
         for (Player player : players) {
             if (player.getId() != -1) {
-                player.fighter.renderUI(player, g);
+                player.renderUI( g);
             }
         }
 

@@ -72,25 +72,25 @@ public class BattleScreen extends NetScreen {
     public BattleScreen(Fighter player1, Fighter player2, int[] costumes, Stage stage, int player1Type, int player2Type, int lives) {
         super();
         long seed = System.currentTimeMillis();
-        battle = new Battle(seed, player1, player2, costumes, stage, player1Type, player2Type, lives, Settings.assBalls.value, Settings.stageHazards.value);
+        battle = new Battle(seed, player1, player2, costumes, stage, player1Type, player2Type, lives, Settings.localSettings.assBalls.value, Settings.localSettings.stageHazards.value);
         SabSounds.playMusic(battle.getStage().music, true);
-        currentReplay = new Replay(seed, battle.getPlayer(0), battle.getPlayer(1), player1Type, player2Type, stage, lives, Settings.assBalls.value, Settings.stageHazards.value);
+        currentReplay = new Replay(seed, battle.getPlayer(0), battle.getPlayer(1), player1Type, player2Type, stage, lives, Settings.localSettings.assBalls.value, Settings.localSettings.stageHazards.value);
     }
 
     public BattleScreen(Server server, Fighter player1, Fighter player2, int[] costumes, Stage stage, int lives) {
         super(server);
         long seed = System.currentTimeMillis();
-        battle = new Battle(seed, player1, player2, costumes, stage, 0, 0, lives, Settings.assBalls.value, Settings.stageHazards.value);
+        battle = new Battle(seed, player1, player2, costumes, stage, 0, 0, lives, Settings.localSettings.assBalls.value, Settings.localSettings.stageHazards.value);
         SabSounds.playMusic(battle.getStage().music, true);
-        currentReplay = new Replay(seed, battle.getPlayer(0), battle.getPlayer(1), 0, 0, stage, lives, Settings.assBalls.value, Settings.stageHazards.value);
+        currentReplay = new Replay(seed, battle.getPlayer(0), battle.getPlayer(1), 0, 0, stage, lives, Settings.localSettings.assBalls.value, Settings.localSettings.stageHazards.value);
     }
 
     public BattleScreen(Client client, Fighter player1, Fighter player2, int[] costumes, Stage stage, int lives) {
         super(client);
         long seed = System.currentTimeMillis();
-        battle = new Battle(seed, player1, player2, costumes, stage, 0, 0, lives, Settings.assBalls.value, Settings.stageHazards.value);
+        battle = new Battle(seed, player1, player2, costumes, stage, 0, 0, lives, Settings.localSettings.assBalls.value, Settings.localSettings.stageHazards.value);
         SabSounds.playMusic(battle.getStage().music, true);
-        currentReplay = new Replay(seed, battle.getPlayer(0), battle.getPlayer(1), 0, 0, stage, lives, Settings.assBalls.value, Settings.stageHazards.value);
+        currentReplay = new Replay(seed, battle.getPlayer(0), battle.getPlayer(1), 0, 0, stage, lives, Settings.localSettings.assBalls.value, Settings.localSettings.stageHazards.value);
     }
 
     @Override
@@ -139,7 +139,7 @@ public class BattleScreen extends NetScreen {
             else if (keyCode == Input.Keys.T) keyCode = Input.Keys.N;
         }
 
-        if (Settings.debugMode.value) {
+        if (Settings.localSettings.debugMode.value) {
             if (keyCode == Input.Keys.V) {
                 // SPAWN MASSIVE BALLS
                 battle.spawnAssBall();
@@ -328,7 +328,7 @@ public class BattleScreen extends NetScreen {
                 return new CharacterSelectScreen(client);
             }
             battle.endBattle();
-            if (currentReplay != null && Settings.debugMode.value) currentReplay.saveReplay();
+            if (currentReplay != null && Settings.localSettings.debugMode.value) currentReplay.saveReplay();
             System.out.println("Battle inputs detected: " + numInputs);
             System.out.println("Replay inputs detected: " + Replay.inputsDetected);
             return new VictoryScreen(battle.winner, battle.loser, battle.getStage().background);

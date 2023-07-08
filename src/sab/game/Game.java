@@ -64,14 +64,14 @@ public class Game extends Messenger {
     }
 
     public static BitmapFont getDefaultFont() {
-        String fontId = Settings.font.asRawValue();
+        String fontId = Settings.localSettings.font.asRawValue();
         BitmapFont font = game.window.imageProvider.getFont(fontId);
         if (font == null) return game.window.imageProvider.getFont("SAB_font");
         return font;
     }
 
     public static float getDefaultFontScale() {
-        String fontId = Settings.font.asRawValue();
+        String fontId = Settings.localSettings.font.asRawValue();
         if (fontId.equals("arial")) {
             return 0.28f;
         } else if (fontId.equals("comic_snas")) {
@@ -98,15 +98,14 @@ public class Game extends Messenger {
         window.getGraphics().addShader("crt", new SpriteShader("shaders/default.vsh", "shaders/crt.fsh"));
 
         Controllers.addListener(controllerManager);
-        Settings.load();
-        if (Settings.crtEffect.value) {
+        Settings.localSettings.load();
+        if (Settings.localSettings.crtEffect.value) {
             window.getGraphics().addPostEffect("crt");
         }
 
         Mod baseGame = new Mod("Super Ass Brothers: Remasstered", null, "0.6.7", "Adds all the base game stages and fighters", "marvin_render.png");
         try {
             baseGame.addFighters((Class<? extends FighterType>[]) new Class<?>[]{Marvin.class, Chain.class, Walouis.class, Gus.class, EmperorEvil.class, Snas.class, Stephane.class, UnnamedDuck.class, Matthew.class, EmptySoldier.class, John.class, BowlBoy.class, BigSeagull.class});
-//            baseGame.addFighters((Class<? extends FighterType>[]) new Class<?>[]{Marvin.class, Chain.class   });
             baseGame.addStages((Class<? extends StageType>[]) new Class<?>[]{LastLocation.class, Warzone.class, DesertBridge.class, ThumbabasLair.class, OurSports.class, COBS.class, Hyperspace.class, Boxtopia.class, LittleHLand.class, HellTwoBoogaloo.class, GreatShipEjective.class});
         } catch (Exception e) {
             throw new RuntimeException("Like actually what the hell, how did you break this. You should not be able to break this unless your brain cell count reached the long limit.");
@@ -127,7 +126,7 @@ public class Game extends Messenger {
             screen = new ModErrorScreen(modErrors);
         }
 
-        if (Settings.fullscreen.value) {
+        if (Settings.localSettings.fullscreen.value) {
             goFullscreened();
         }
     }

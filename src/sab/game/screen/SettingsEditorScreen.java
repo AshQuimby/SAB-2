@@ -26,10 +26,12 @@ public class SettingsEditorScreen extends ScreenAdapter {
     @Override
     public Screen keyPressed(int keyCode) {
         if (keyCode == Input.Keys.ESCAPE) {
-            Settings.save();
+            SabSounds.playSound(SabSounds.BLIP);
+            Settings.localSettings.save();
             return new SettingsMenuScreen();
         } else if (keyCode == Input.Keys.ENTER) {
             if (index == settings.length) {
+                SabSounds.playSound(SabSounds.SELECT);
                 return new SettingsMenuScreen();
             }
         } else if (keyCode == Input.Keys.UP) {
@@ -91,17 +93,17 @@ public class SettingsEditorScreen extends ScreenAdapter {
         int finalY = 0;
         for (int i = 0; i < settings.length; i++) {
             Setting<?> setting = settings[i];
-            finalY = i * -58 + 116;
-            Utils.drawButton(g, -256, finalY, setting.name + " - " + setting.display(), Game.getDefaultFontScale() * 1.5f, i == index, -1);
+            finalY = i * -58 + 192;
+            Utils.drawButton(g, 0, finalY, setting.name + " - " + setting.display(), Game.getDefaultFontScale() * 1.5f, i == index, 0);
         }
         finalY -= 58;
-        Utils.drawButton(g, -256, finalY, "Back", Game.getDefaultFontScale() * 1.5f, index == settings.length, -1);
+        Utils.drawButton(g, 0, finalY, "Back", Game.getDefaultFontScale() * 1.5f, index == settings.length, 0);
 
-        g.drawText("[!] = Restart Required", g.imageProvider.getFont(Settings.font.asRawValue()), 0, -320, Game.getDefaultFontScale(), Color.WHITE, 0);
+        g.drawText("[!] = Restart Required", g.imageProvider.getFont(Settings.localSettings.font.asRawValue()), 0, -320, Game.getDefaultFontScale(), Color.WHITE, 0);
     }
 
     @Override
     public void close() {
-        Settings.save();
+        Settings.localSettings.save();
     }
 }

@@ -56,6 +56,8 @@ public class Racket extends AttackType {
             if (attack.life % 4 == 0) attack.frame++;
         }
 
+        attack.frame = Math.min(attack.frame, attack.frameCount - 1);
+
         if (attack.frame > 5) attack.alive = false;
 
         if (attack.frame == 2) {

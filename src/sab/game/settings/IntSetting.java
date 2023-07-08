@@ -1,18 +1,17 @@
 package sab.game.settings;
 
-public class PercentageSetting extends Setting<Integer> {
-    private int increment;
-    public PercentageSetting(String id, String name, int defaultValue) {
-        this(id, name, defaultValue, 1);
-    }
-
-    public PercentageSetting(String id, String name, int defaultValue, int increment) {
+public class IntSetting extends Setting<Integer> {
+    private int minValue;
+    private int maxValue;
+    public IntSetting(String id, String name, Integer defaultValue, int minValue, int maxValue) {
         super(id, name, defaultValue);
-        this.increment = increment;
+        this.minValue = minValue;
+        this.maxValue = maxValue;
     }
 
     @Override
     public boolean isValid(String rawValue) {
+        if (rawValue == null) return false;
         try {
             int v = Integer.parseInt(rawValue);
             return v >= 0 && v <= 100;
@@ -23,12 +22,12 @@ public class PercentageSetting extends Setting<Integer> {
 
     @Override
     public String asRawValue() {
-        return Integer.toString(value);
+        return value.toString();
     }
 
     @Override
     public boolean isDiscrete() {
-        return false;
+        return true;
     }
 
     @Override
@@ -38,24 +37,16 @@ public class PercentageSetting extends Setting<Integer> {
 
     @Override
     public void next() {
-        if (value < 100) {
-            value = Math.min(100, value + increment);
-        }
+        value = Math.min(maxValue, value + 1);
     }
 
     @Override
     public void previous() {
-        if (value > 0) {
-            value = Math.max(0, value - increment);
-        }
+        value = Math.max(minValue, value - 1);
     }
 
     @Override
     public String display() {
-        return value + "%";
-    }
-
-    public float asFloat() {
-        return value / 100f;
+        return value.toString();
     }
 }

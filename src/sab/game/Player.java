@@ -2,6 +2,7 @@ package sab.game;
 
 import java.util.List;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.seagull_engine.GameObject;
@@ -24,6 +25,7 @@ import sab.game.stage.StageObject;
 import sab.net.Keys;
 import sab.replay.ReplayAI;
 import sab.util.SabRandom;
+import sab.util.Utils;
 
 public class Player extends GameObject implements Hittable {
     public final Battle battle;
@@ -36,6 +38,9 @@ public class Player extends GameObject implements Hittable {
     public InputState keys;
     public Fighter fighter;
     public int damage;
+    private boolean useHealth;
+    private int health;
+    private int startingHealth;
     public boolean touchingStage;
     public boolean usedRecovery;
     public int costume;
@@ -143,6 +148,13 @@ public class Player extends GameObject implements Hittable {
         drawRectOffset = new Vector2();
         gameStats = new GameStats("Human " + fighter.name, id);
         fighter.start(this);
+    }
+
+    public Player(Fighter fighter, int costume, int id, int lives, Battle battle, int startHealth) {
+        this(fighter, costume, id, lives, battle);
+        useHealth = true;
+        health = startHealth;
+        startingHealth = startHealth;
     }
 
     public void setAI(AI ai) {
@@ -363,8 +375,15 @@ public class Player extends GameObject implements Hittable {
 
     public void kill(int livesCost) {
         fighter.onKill(this);
-        for (int i = 0; i < 16; i++) {
-            battle.addParticle(new Particle(hitbox.getCenter(new Vector2()), hitbox.getCenter(new Vector2()).scl(-0.025f * SabRandom.random(0.125f, 1f)).rotateDeg(SabRandom.random(-2.5f, 2.5f)), 128, 128, "twinkle.png"));
+        if (battle.getStage().getSafeBlastZone().contains(getCenter())) {
+            for (int i = 0; i < 16; i++) {
+                float particleSize = 64 * SabRandom.random(0.5f, 2f);
+                battle.addParticle(new Particle(hitbox.getCenter(new Vector2()), Utils.randomParticleVelocity(8), particleSize, particleSize, "twinkle.png"));
+            }
+        } else {
+            for (int i = 0; i < 16; i++) {
+                battle.addParticle(new Particle(hitbox.getCenter(new Vector2()), hitbox.getCenter(new Vector2()).scl(-0.025f * SabRandom.random(0.125f, 1f)).rotateDeg(SabRandom.random(-2.5f, 2.5f)), 128, 128, "twinkle.png"));
+            }
         }
         battle.shakeCamera(6);
         rotation = 0;
@@ -384,7 +403,11 @@ public class Player extends GameObject implements Hittable {
         battle.getPlayer(1 - id).gameStats.gotKill();
         SabSounds.playSound("death.mp3");
         lives -= livesCost;
-        damage = 0;
+        if (useHealth) {
+            health = startingHealth;
+        } else {
+            damage = 0;
+        }
         if (heldItem != null) heldItem.toss(this);
 
         for (Attack attack : battle.getAttacks()) {
@@ -430,6 +453,10 @@ public class Player extends GameObject implements Hittable {
     @Override
     public void preUpdate() {
         checkController();
+
+        if (useHealth && health <= 0) {
+            kill(1);
+        }
 
         update();
         postUpdate();
@@ -889,8 +916,14 @@ public class Player extends GameObject implements Hittable {
 
     @Override
     public boolean onHit(DamageSource source) {
-        int damageBefore = damage;
-        damage += source.damage;
+        int statusBefore;
+        if (useHealth) {
+            statusBefore = health;
+            health -= source.damage;
+        } else {
+            statusBefore = damage;
+            damage += source.damage;
+        }
 
         battle.shakeCamera(3);
         battle.freezeFrame((int) Math.round((source.damage - 10) / 30f), 2, 1, false);
@@ -939,7 +972,13 @@ public class Player extends GameObject implements Hittable {
 
         battle.getStage().onPlayerHit(this, source, shouldDie);
 
-        gameStats.tookDamage(damage - damageBefore);
+        if (useHealth) {
+            gameStats.tookDamage(statusBefore - health);
+        } else {
+            gameStats.tookDamage(damage - statusBefore);
+            if (damage > 1000) damage = 1000;
+        }
+
         return true;
     }
 
@@ -978,9 +1017,9 @@ public class Player extends GameObject implements Hittable {
                     g.usefulDraw(g.imageProvider.getImage("p" + (id + 1) + "_spawn_platform.png"), drawRect.getCenter(new Vector2()).x - 40, hitbox.y - 32, 80, 32, 0, 1, rotation, false, false);
                 }
             }
-            if (Settings.drawPlayerArrows.value) {
+            if (Settings.localSettings.drawPlayerArrows.value) {
                 Vector2 arrowPosition = getCenter().add(-8, drawRect.height / 2 + 4);
-                g.usefulDraw(g.imageProvider.getImage("player_arrows.png"), arrowPosition.x, arrowPosition.y, 16, 8, id == -1 ? 3 : id,3, 0, false, false);
+                g.usefulDraw(g.imageProvider.getImage("player_arrows.png"), arrowPosition.x, arrowPosition.y, 16, 8, id == -1 ? 2 : id,3, 0, false, false);
             }
         }
     }
@@ -1012,5 +1051,35 @@ public class Player extends GameObject implements Hittable {
 
     public String getRenderName() {
         return fighter.id + "_render" + (costume == 0 ? "" : ("_alt_" + costume)) + ".png";
+    }
+
+    public void renderUI(Seagraphics g) {
+        if (id == 0) {
+            g.scalableDraw(g.imageProvider.getImage("in_battle_hud_p1.png"), -256, -256 - 64, 128, 128);
+
+            for (int i = 0; i < lives; i++) {
+                g.scalableDraw(g.imageProvider.getImage("life_p1.png"), -256 + 48 + 24 * i, -256 - 12, 20, 20);
+            }
+
+            if (useHealth) {
+                g.drawText(health + "hp", Game.getDefaultFont(), -256 + 116, -256 + 48, Game.getDefaultFontScale(), Color.WHITE, 1);
+            } else {
+                g.drawText(damage + "%", Game.getDefaultFont(), -256 + 116, -256 + 48, Game.getDefaultFontScale(), Color.WHITE, 1);
+            }
+        } else if (id == 1) {
+            g.scalableDraw(g.imageProvider.getImage("in_battle_hud_p2.png"), 256 - 128, -256 - 64, 128, 128);
+
+            for (int i = 0; i < lives; i++) {
+                g.scalableDraw(g.imageProvider.getImage("life_p2.png"), 256 - 128 + 48 + 24 * i, -256 - 12, 20, 20);
+            }
+
+            if (useHealth) {
+                g.drawText(health + "hp", Game.getDefaultFont(), 256 - 128 + 116, -256 + 48, Game.getDefaultFontScale(), Color.WHITE, 1);
+            } else {
+                g.drawText(damage + "%", Game.getDefaultFont(), 256 - 128 + 116, -256 + 48, Game.getDefaultFontScale(), Color.WHITE, 1);
+            }
+        }
+
+        fighter.renderUI(this, g);
     }
 }

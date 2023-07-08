@@ -71,7 +71,7 @@ public class JoinGameScreen extends ScreenAdapter {
             hostPort = servers.getValue(mostRecent.getRawValue()).getRawValue();
         } else {
             hostIp = "localhost";
-            hostPort = Integer.toString(Settings.hostingPort);
+            hostPort = Integer.toString(Settings.localSettings.hostingPort);
         }
     }
 

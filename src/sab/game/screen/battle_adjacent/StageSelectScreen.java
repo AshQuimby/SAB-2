@@ -15,6 +15,7 @@ import sab.game.fighter.Fighter;
 import sab.game.screen.BattleScreen;
 import sab.game.screen.NetScreen;
 import sab.game.screen.error.ErrorScreen;
+import sab.game.settings.Settings;
 import sab.game.stage.Stage;
 import sab.game.stage.StageType;
 import sab.modloader.ModLoader;
@@ -175,9 +176,9 @@ public class StageSelectScreen extends NetScreen {
         if (keyCode == Input.Keys.ENTER && (host || local)) {
             if (host) {
                 server.send(0, new ScreenTransitionPacket());
-                return new BattleScreen(server, player1, player2, new int[] {player1Costume, player2Costume}, stages.get(stageIndex), 3);
+                return new BattleScreen(server, player1, player2, new int[] {player1Costume, player2Costume}, stages.get(stageIndex), Settings.localSettings.lifeCount.value);
             }
-            return new BattleScreen(player1, player2, new int[] {player1Costume, player2Costume}, stages.get(stageIndex), player1Type, player2Type, 3);
+            return new BattleScreen(player1, player2, new int[] {player1Costume, player2Costume}, stages.get(stageIndex), player1Type, player2Type, Settings.localSettings.lifeCount.value);
         }
         if (keyCode == Input.Keys.ESCAPE) return Game.game.globalCharacterSelectScreen;
         SabSounds.playSound(SabSounds.BLIP);

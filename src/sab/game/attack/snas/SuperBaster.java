@@ -58,7 +58,7 @@ public class SuperBaster extends MeleeAttackType {
             super.update(attack);
             target = attack.getNearestOpponent(-1);
             Vector2 toTarget = target.getCenter().sub(attack.getCenter());
-            if (attack.life < -30) {
+            if (attack.life > -60) {
                 attack.rotation = toTarget.angleDeg();
             }
             attack.knockback = new Vector2(16, 0).setAngleDeg(attack.rotation);
@@ -75,7 +75,7 @@ public class SuperBaster extends MeleeAttackType {
 
     @Override
     public boolean canHit(Attack attack, GameObject hit) {
-        return Utils.raycast(attack.getCenter(), attack.rotation, 400, target.hitbox);
+        return Utils.raycast(attack.getCenter(), attack.rotation, 500, target.hitbox);
     }
 
     @Override
@@ -87,11 +87,11 @@ public class SuperBaster extends MeleeAttackType {
         g.shapeRenderer.setColor(Color.WHITE);
         if (fired) {
             Rectangle laserRect = new Rectangle();
-            laserRect.setSize(400, attack.life / 0.9375f);
-            laserRect.setCenter(attack.getCenter().add(MathUtils.cosDeg(attack.rotation) * 200, MathUtils.sinDeg(attack.rotation) * 200));
+            laserRect.setSize(500, attack.life / 0.9375f);
+            laserRect.setCenter(attack.getCenter().add(MathUtils.cosDeg(attack.rotation) * 250, MathUtils.sinDeg(attack.rotation) * 250));
             g.usefulTintDraw(g.imageProvider.getImage("pixel.png"), laserRect.x, laserRect.y, (int) laserRect.width, (int) laserRect.height, 0, 1, attack.rotation, false, false, new Color(1, 1, 1, 0.5f));
-            laserRect.setSize(400, attack.life / 1.875f);
-            laserRect.setCenter(attack.getCenter().add(MathUtils.cosDeg(attack.rotation) * 200, MathUtils.sinDeg(attack.rotation) * 200));
+            laserRect.setSize(500, attack.life / 1.875f);
+            laserRect.setCenter(attack.getCenter().add(MathUtils.cosDeg(attack.rotation) * 250, MathUtils.sinDeg(attack.rotation) * 250));
             g.usefulTintDraw(g.imageProvider.getImage("pixel.png"), laserRect.x, laserRect.y, (int) laserRect.width, (int) laserRect.height, 0, 1, attack.rotation, false, false, new Color(1, 1, 1, 0.75f));
         }
         super.render(attack, g);

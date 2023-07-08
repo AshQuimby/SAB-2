@@ -8,58 +8,72 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Settings {
+    public static final Settings localSettings = new Settings();
+    
     // Gameplay
-    public static final BoolSetting stageHazards = new BoolSetting("stage_hazards", "Stage Hazards", true);
-    public static final BoolSetting assBalls = new BoolSetting("ass_balls", "Spawn Ass Balls", true);
-    public static final BoolSetting anticipation = new BoolSetting("anticipation", "Victory Anticipation", true);
-    public static final BoolSetting debugMode = new BoolSetting("debug_mode", "Debug Mode", false);
-
+    public final BoolSetting stageHazards = new BoolSetting("stage_hazards", "Stage Hazards", true);
+    public final BoolSetting assBalls = new BoolSetting("ass_balls", "Spawn Ass Balls", true);
+    public final BoolSetting anticipation = new BoolSetting("anticipation", "Victory Anticipation", true);
+    public final BoolSetting debugMode = new BoolSetting("debug_mode", "Debug Mode", false);
+    public final IntSetting lifeCount = new IntSetting("life_count", "Number of Lives", 3, 1, 5);
+    public final ListSetting gameMode = new ListSetting("game_mode", "Game Mode", 0, new String[] {
+        "damage", "health"
+    }, new String[] {
+        "Damage", "Health"
+    });
     // Video
-    public static final BoolSetting fullscreen = new BoolSetting("fullscreen", "Fullscreen", true);
-    public static final BoolSetting staticCamera = new BoolSetting("static_camera", "Static Camera", false);
-    public static final BoolSetting screenShake = new BoolSetting("screen_shake", "Screen Shake", true);
-    public static final BoolSetting drawPlayerArrows = new BoolSetting("draw_player_arrows", "Player Arrows", false);
-    public static final ListSetting font = new ListSetting("font", "Font", 0, new String[] {
+    public final BoolSetting fullscreen = new BoolSetting("fullscreen", "Fullscreen", true);
+    public final BoolSetting staticCamera = new BoolSetting("static_camera", "Camera", false);
+    public final BoolSetting followAssBall = new BoolSetting("follow_ass_ball", "Camera Follows Ass Ball", false);
+    public final BoolSetting screenShake = new BoolSetting("screen_shake", "Screen Shake", true);
+    public final BoolSetting drawPlayerArrows = new BoolSetting("draw_player_arrows", "Player Arrows", true);
+    public final ListSetting font = new ListSetting("font", "Font", 0, new String[] {
             "SAB_font", "comic_snas", "minecraft", "shitfont23", "arial"
     }, new String[] {
             "SAB", "Comic Snas", "Blockbreak", "shitfont23", "Arial"
     });
-    public static final BoolSetting crtEffect = new BoolSetting("crt_effect", "CRT Monitor Effect [!]", false);
+    public final BoolSetting crtEffect = new BoolSetting("crt_effect", "CRT Monitor Effect [!]", false);
 
     // Audio
-    public static final PercentageSetting masterVolume = new PercentageSetting("master_volume", "Master Volume", 50);
-    public static final PercentageSetting musicVolume = new PercentageSetting("music_volume", "Music Volume", 100);
-    public static final PercentageSetting sfxVolume = new PercentageSetting("sfx_volume", "SFX Volume", 100);
+    public final BoolSetting muteGame = new BoolSetting("mute_game", "Mute", false);
+    public final PercentageSetting masterVolume = new PercentageSetting("master_volume", "Master Volume", 50);
+    public final PercentageSetting musicVolume = new PercentageSetting("music_volume", "Music Volume", 100);
+    public final PercentageSetting sfxVolume = new PercentageSetting("sfx_volume", "SFX Volume", 100);
+    public final PercentageSetting jukeboxVolume = new PercentageSetting("jukebox_volume", "Jukebox Volume", 100);
+    public final BoolSetting bypassJukebox = new BoolSetting("bypass_jukebox", "Jukebox Ignores Mute/Master", false);
 
     // Multiplayer
-    public static int hostingPort;
+    public int hostingPort;
 
-    public static final Setting<?>[] settings = new Setting[] {
-            stageHazards, assBalls, anticipation, debugMode,
-            fullscreen, staticCamera, screenShake, drawPlayerArrows, font, crtEffect,
-            masterVolume, musicVolume, sfxVolume
+    public final Setting<?>[] settings = new Setting[] {
+            // Gameplay
+            stageHazards, assBalls, anticipation, debugMode, lifeCount, gameMode,
+            // Video
+            fullscreen, staticCamera, followAssBall, screenShake, drawPlayerArrows, font, crtEffect,
+            // Audio
+            muteGame, masterVolume, musicVolume, sfxVolume, jukeboxVolume, bypassJukebox
     };
 
-    public static final Setting<?>[] gameplaySettings = new Setting[] {
-            stageHazards, assBalls, anticipation, screenShake
+    public final Setting<?>[] gameplaySettings = new Setting[] {
+            stageHazards, assBalls, anticipation, screenShake, lifeCount, gameMode
     };
 
-    public static final Setting<?>[] videoSettings = new Setting[] {
-            fullscreen, staticCamera, screenShake, drawPlayerArrows, font, crtEffect
+    public final Setting<?>[] videoSettings = new Setting[] {
+            fullscreen, staticCamera, followAssBall, screenShake, drawPlayerArrows, font, crtEffect
     };
 
-    public static final Setting<?>[] audioSettings = new Setting[] {
-            masterVolume, musicVolume, sfxVolume
+    public final Setting<?>[] audioSettings = new Setting[] {
+            muteGame, masterVolume, musicVolume, sfxVolume, jukeboxVolume, bypassJukebox
     };
 
-    public static void resetAll() {
+    public void resetAll() {
         for (Setting<?> setting : settings) {
             setting.reset();
         }
         hostingPort = 19128;
     }
 
-    public static void save() {
+    public void save() {
         try {
             SabWriter.write(new File("../settings.sab"), toSabData());
         } catch (IOException e) {
@@ -67,7 +81,7 @@ public class Settings {
         }
     }
 
-    public static void load() {
+    public void load() {
         try {
             SabData data = SabReader.read(new File("../settings.sab"));
 
@@ -86,7 +100,7 @@ public class Settings {
         }
     }
 
-    private static SabData toSabData() {
+    private SabData toSabData() {
         SabData data = new SabData();
         for (Setting<?> setting : settings) {
             data.insertValue(setting.id, new SabValue(setting.asRawValue()));
@@ -95,7 +109,7 @@ public class Settings {
         return data;
     }
 
-    private static List<Setting<?>> setFrom(SabData data) {
+    private List<Setting<?>> setFrom(SabData data) {
         List<Setting<?>> unloaded = new ArrayList<>();
 
         for (Setting<?> setting : settings) {

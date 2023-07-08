@@ -1,7 +1,10 @@
 package sab.game;
 
 import com.seagull_engine.SeagullSounds;
+import sab.game.settings.Setting;
 import sab.game.settings.Settings;
+
+import java.util.Set;
 
 
 public class SabSounds {
@@ -10,12 +13,30 @@ public class SabSounds {
     public static final String BLIP = "blip.mp3";
     public static final String SELECT = "select.mp3";
 
+    private static boolean playingJukebox = false;
+
     public static void playSound(String name) {
-        soundEngine.playSound(name, Settings.sfxVolume.asFloat() * Settings.masterVolume.asFloat());
+        if (!Settings.localSettings.muteGame.value) soundEngine.playSound(name, Settings.localSettings.sfxVolume.asFloat() * Settings.localSettings.masterVolume.asFloat());
     }
 
     public static void playMusic(String name, boolean loops) {
-        soundEngine.playMusic(name, loops, 1, Settings.musicVolume.asFloat() * Settings.masterVolume.asFloat(), 0);
+        if (!Settings.localSettings.muteGame.value) soundEngine.playMusic(name, loops, 1, Settings.localSettings.musicVolume.asFloat() * Settings.localSettings.masterVolume.asFloat(), 0);
+        playingJukebox = false;
+    }
+
+    public static void playJukeboxMusic(String name, boolean loops) {
+        if (Settings.localSettings.bypassJukebox.value) soundEngine.playMusic(name, loops, 1, Settings.localSettings.jukeboxVolume.asFloat(), 0);
+        else if (!Settings.localSettings.muteGame.value) soundEngine.playMusic(name, loops, 1, Settings.localSettings.jukeboxVolume.asFloat() * Settings.localSettings.masterVolume.asFloat(), 0);
+        playingJukebox = true;
+    }
+
+    public static void resetCurrentMusicVolume() {
+        if (playingJukebox) {
+            if (Settings.localSettings.bypassJukebox.value) soundEngine.setCurrentMusicVolume(Settings.localSettings.jukeboxVolume.asFloat());
+            else soundEngine.setCurrentMusicVolume(Settings.localSettings.jukeboxVolume.asFloat() * Settings.localSettings.masterVolume.asFloat());
+        } else {
+            soundEngine.setCurrentMusicVolume(Settings.localSettings.musicVolume.asFloat() * Settings.localSettings.masterVolume.asFloat());
+        }
     }
 
     public static void stopMusic() {

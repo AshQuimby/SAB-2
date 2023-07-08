@@ -15,9 +15,9 @@ public class SettingsMenuScreen extends SelectorScreen {
 
     @Override
     protected Screen onBack() {
-        SabSounds.soundEngine.setCurrentMusicVolume(Settings.musicVolume.asFloat() * Settings.masterVolume.asFloat());
-        Settings.save();
-        if (Settings.fullscreen.value) {
+        SabSounds.resetCurrentMusicVolume();
+        Settings.localSettings.save();
+        if (Settings.localSettings.fullscreen.value) {
             Game.game.goFullscreened();
         } else {
             Game.game.goWindowed();
@@ -29,9 +29,9 @@ public class SettingsMenuScreen extends SelectorScreen {
     protected Screen onSelect(int selection) {
         super.onSelect(selection);
         return switch (selection) {
-            case 0 -> new SettingsEditorScreen(Settings.gameplaySettings);
-            case 1 -> new SettingsEditorScreen(Settings.videoSettings);
-            case 2 -> new SettingsEditorScreen(Settings.audioSettings);
+            case 0 -> new SettingsEditorScreen(Settings.localSettings.gameplaySettings);
+            case 1 -> new SettingsEditorScreen(Settings.localSettings.videoSettings);
+            case 2 -> new SettingsEditorScreen(Settings.localSettings.audioSettings);
             default -> onBack();
         };
     }

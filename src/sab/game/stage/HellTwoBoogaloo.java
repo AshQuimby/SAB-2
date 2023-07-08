@@ -56,7 +56,7 @@ public class HellTwoBoogaloo extends StageType {
         platform.createLedges(16, 24, 16, stage);
         stage.addStageObject(platform);
 
-        if (Settings.stageHazards.value) {
+        if (Settings.localSettings.stageHazards.value) {
 
             StageObject marvinBox = new PassablePlatform(-512, 960, 128, 128, "marvin_box.png", new StageObjectBehaviour() {
                 @Override

@@ -24,7 +24,7 @@ public class HostGameScreen extends ScreenAdapter {
 
     public HostGameScreen() {
         try {
-            server = new Server(new SabPacketManager(), Settings.hostingPort);
+            server = new Server(new SabPacketManager(), Settings.localSettings.hostingPort);
             serverStarted = true;
         } catch (IOException ignored) {
             return;
