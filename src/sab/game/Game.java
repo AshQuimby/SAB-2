@@ -99,7 +99,9 @@ public class Game extends Messenger {
 
         Controllers.addListener(controllerManager);
         Settings.load();
-        if (Settings.crtEffect.value) window.getGraphics().addPostEffect("crt");
+        if (Settings.crtEffect.value) {
+            window.getGraphics().addPostEffect("crt");
+        }
 
         Mod baseGame = new Mod("Super Ass Brothers: Remasstered", null, "0.6.7", "Adds all the base game stages and fighters", "marvin_render.png");
         try {

@@ -4,6 +4,6 @@
 @super_near assets/backgrounds/title_screen/icy_slab/super_near.png
 @ambient_far_reverse assets/backgrounds/title_screen/icy_slab/ambient_far_reverse.png
 @back assets/backgrounds/title_screen/icy_slab/back.png
-@ambient_near assets/backgrounds/title_screen/icy_slab/ambient_near.png
 @ambient_middle_reverse assets/backgrounds/title_screen/icy_slab/ambient_middle_reverse.png
+@ambient_near assets/backgrounds/title_screen/icy_slab/ambient_near.png
 @ambient_middle assets/backgrounds/title_screen/icy_slab/ambient_middle.png

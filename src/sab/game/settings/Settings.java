@@ -22,7 +22,7 @@ public class Settings {
     public static final ListSetting font = new ListSetting("font", "Font", 0, new String[] {
             "SAB_font", "comic_snas", "minecraft", "shitfont23", "arial"
     }, new String[] {
-            "SAB", "Comic Snas", "Blockbreak", "tfont 23", "Arial"
+            "SAB", "Comic Snas", "Blockbreak", "shitfont23", "Arial"
     });
     public static final BoolSetting crtEffect = new BoolSetting("crt_effect", "CRT Monitor Effect [!]", false);
 

@@ -28,25 +28,24 @@ public class SettingsEditorScreen extends ScreenAdapter {
         if (keyCode == Input.Keys.ESCAPE) {
             Settings.save();
             return new SettingsMenuScreen();
-        }
-        if (keyCode == Input.Keys.UP) {
+        } else if (keyCode == Input.Keys.ENTER) {
+            if (index == settings.length) {
+                return new SettingsMenuScreen();
+            }
+        } else if (keyCode == Input.Keys.UP) {
             ticksSinceKeyPress = 0;
             SabSounds.playSound(SabSounds.BLIP);
-            index = Utils.loop(index, -1, settings.length, 0);
-        }
-        if (keyCode == Input.Keys.DOWN) {
+            index = Utils.loop(index, -1, settings.length + 1, 0);
+        } else if (keyCode == Input.Keys.DOWN) {
             ticksSinceKeyPress = 0;
             SabSounds.playSound(SabSounds.BLIP);
-            index = Utils.loop(index, 1, settings.length, 0);
-        }
-
-        if (keyCode == Input.Keys.LEFT) {
+            index = Utils.loop(index, 1, settings.length + 1, 0);
+        } else if (keyCode == Input.Keys.LEFT) {
             input.press(0);
             ticksSinceKeyPress = 0;
             SabSounds.playSound(SabSounds.BLIP);
             settings[index].previous();
-        }
-        if (keyCode == Input.Keys.RIGHT) {
+        } else if (keyCode == Input.Keys.RIGHT) {
             input.press(1);
             ticksSinceKeyPress = 0;
             SabSounds.playSound(SabSounds.BLIP);
@@ -60,8 +59,7 @@ public class SettingsEditorScreen extends ScreenAdapter {
     public Screen keyReleased(int keyCode) {
         if (keyCode == Input.Keys.LEFT) {
             input.release(0);
-        }
-        if (keyCode == Input.Keys.RIGHT) {
+        } else if (keyCode == Input.Keys.RIGHT) {
             input.release(1);
         }
 
@@ -70,7 +68,8 @@ public class SettingsEditorScreen extends ScreenAdapter {
 
     @Override
     public Screen update() {
-        if (!settings[index].isDiscrete()) {
+        if (index == settings.length) {
+        } else if (!settings[index].isDiscrete()) {
             if (input.isPressed(0) && ticksSinceKeyPress > 30 && ticksSinceKeyPress % 3 == 0) {
                 SabSounds.playSound(SabSounds.BLIP);
                 settings[index].previous();
@@ -89,10 +88,14 @@ public class SettingsEditorScreen extends ScreenAdapter {
     public void render(Seagraphics g) {
         g.scalableDraw(g.imageProvider.getImage("settings_screen_background.png"), -Game.game.window.resolutionX / 2, -Game.game.window.resolutionY / 2, Game.game.window.resolutionX, Game.game.window.resolutionY);
 
+        int finalY = 0;
         for (int i = 0; i < settings.length; i++) {
             Setting<?> setting = settings[i];
-            Utils.drawButton(g, -256, i * -58 + 116, setting.name + " - " + setting.display(), Game.getDefaultFontScale() * 1.5f, i == index, -1);
+            finalY = i * -58 + 116;
+            Utils.drawButton(g, -256, finalY, setting.name + " - " + setting.display(), Game.getDefaultFontScale() * 1.5f, i == index, -1);
         }
+        finalY -= 58;
+        Utils.drawButton(g, -256, finalY, "Back", Game.getDefaultFontScale() * 1.5f, index == settings.length, -1);
 
         g.drawText("[!] = Restart Required", g.imageProvider.getFont(Settings.font.asRawValue()), 0, -320, Game.getDefaultFontScale(), Color.WHITE, 0);
     }

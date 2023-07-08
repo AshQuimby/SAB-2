@@ -52,7 +52,7 @@ public class ListSetting extends Setting<Integer> {
     @Override
     public void previous() {
         value--;
-        if (value <= 0) {
+        if (value < 0) {
             value = options.length - 1;
         }
     }

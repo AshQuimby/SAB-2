@@ -10,7 +10,7 @@ import sab.util.Utils;
 
 public class SettingsMenuScreen extends SelectorScreen {
     public SettingsMenuScreen() {
-        super(new String[] {"Gameplay", "Video", "Audio", "Back"});
+        super(new String[] {"Gameplay", "Video", "Audio", "Save Settings"});
     }
 
     @Override
