@@ -13,14 +13,15 @@ public class ModdedLocalGame {
     public static void main(String[] args) throws IOException {
         File modsFolder = new File("../mods");
         if (modsFolder.exists()) {
-            List<File> modFolders = new ArrayList<>();
-            ModLoader.getPotentialMods(modsFolder, new ArrayList<>());
+            List<File> modFolders;
+            modFolders = ModLoader.getPotentialMods(modsFolder, new ArrayList<>());
             StringBuilder stringBuilder = new StringBuilder("sab_2.jar");
             for (File file : modFolders) {
                 stringBuilder.append(";");
                 stringBuilder.append(file.getPath());
-                stringBuilder.append("/*");
             }
+
+            System.out.println(stringBuilder);
 
             if (System.getProperty("os.name").startsWith("Mac")) {
                 ProcessBuilder builder = new ProcessBuilder("java", "-XstartOnFirstThread", "-cp", stringBuilder.toString(), "sab.game.LocalGame");

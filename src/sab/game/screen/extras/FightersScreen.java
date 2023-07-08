@@ -10,6 +10,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.sab_format.SabData;
 import com.sab_format.SabParsingException;
 import com.sab_format.SabReader;
+import com.sab_format.SabValue;
 import com.seagull_engine.Seagraphics;
 
 import sab.game.Game;
@@ -47,8 +48,14 @@ public class FightersScreen extends ScreenAdapter {
         g.scalableDraw(g.imageProvider.getImage("character_description_background_layer_2.png"), -Game.game.window.resolutionX / 2, -Game.game.window.resolutionY / 2, Game.game.window.resolutionX, Game.game.window.resolutionY);
 
         g.drawText(fighters.get(characterIndex).name, Game.getDefaultFont(), 0, Game.game.window.resolutionY / 2 - 64, 3 * Game.getDefaultFontScale(), Color.WHITE, 0);
+        String timesPlayed = "";
 
-        String timesPlayed = this.timesPlayed == null ? "Couldn't load data :(" : this.timesPlayed.getValue(fighters.get(characterIndex).id).getRawValue();
+        if (this.timesPlayed != null) {
+            SabValue value = this.timesPlayed.getValue(fighters.get(characterIndex).id);
+            timesPlayed = value == null ? "0" : value.getRawValue();
+        } else {
+            timesPlayed = "0";
+        }
         if (timesPlayed == null) {
             timesPlayed = "Why haven't you played me yet :(";
         } else {

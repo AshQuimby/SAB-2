@@ -146,6 +146,7 @@ public class StageSelectScreen extends NetScreen {
     public void render(Seagraphics g) {
         g.scalableDraw(g.imageProvider.getImage(stages.get(stageIndex).background), -1280 / 2, -720 / 2, 1280 , 720);
         Game.game.window.camera.update();
+        g.useDynamicCamera();
         stages.get(stageIndex).renderBackground(g);
         stages.get(stageIndex).renderDetails(g);
         stages.get(stageIndex).renderPlatforms(g);

@@ -200,12 +200,16 @@ public class AI {
         pressKey(Keys.DOWN);
         pressKey(Keys.ATTACK);
     }
+
+    public boolean canTargetPlayer(Player target) {
+        return target != player;
+    }
     
     public final Player getNearestOpponent() {
         float bestDistance = -1;
         Player bestTarget = null;
         for (Player target : player.battle.getPlayers()) {
-            if (target != player) {
+            if (canTargetPlayer(target)) {
                 float distance = player.hitbox.getCenter(new Vector2()).dst(target.hitbox.getCenter(new Vector2()));
                 if (distance <= bestDistance || bestDistance < 0) {
                     bestTarget = target;

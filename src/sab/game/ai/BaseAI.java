@@ -189,7 +189,7 @@ public class BaseAI extends AI {
 
         Platform platformBelow = getPlatformBelow();
         Ledge nearestLedge = getNearestLedge();
-        boolean shouldRecover = platformBelow == null && (player.getRemainingJumps() == 0 || nearestLedge.grabBox.getCenter(new Vector2()).dst(center) > 480f || (nearestLedge != null && nearestLedge.grabBox.getCenter(new Vector2()).y < center.y && nearestLedge.grabBox.getCenter(new Vector2()).dst(player.getCenter()) > 256f));
+        boolean shouldRecover = platformBelow == null && (player.getRemainingJumps() == 0 || nearestLedge.grabBox.getCenter(new Vector2()).dst(center) > 480f || (nearestLedge != null && nearestLedge.grabBox.getCenter(new Vector2()).y > center.y + 128 && nearestLedge.grabBox.getCenter(new Vector2()).dst(player.getCenter()) > 256f));
         if (shouldRecover) {
             recover(targetPlatform, getNearestLedge());
             return;

@@ -24,6 +24,8 @@ import sab.game.fighter.FighterType;
 import sab.game.screen.extras.JukeboxScreen;
 import sab.game.stage.StageType;
 
+import javax.management.ReflectionException;
+
 public final class ModLoader {
 
     public static List<File> fileCache = new ArrayList<>();
@@ -59,13 +61,15 @@ public final class ModLoader {
         List<File> files = new ArrayList<>();
         List<File[]> folders = new ArrayList<>();
         folders.add(modsFolder.listFiles());
-        for (int i = 0; i < folders.size(); i++) {
+        int n = folders.size();
+        for (int i = 0; i < n; i++) {
             File[] folder = folders.get(i);
             for (File file : folder) {
                 if (file.isDirectory()) {
                     folders.add(file.listFiles());
+                    n = folders.size();
                     directories.add(file);
-                } else if (file.getName().endsWith(".jar")) {
+                } else if (file.getName().endsWith(".jar") && !file.getName().endsWith("sab-mod-tools.jar")) {
                     files.add(file);
                 }
             }
@@ -103,6 +107,7 @@ public final class ModLoader {
         Mod mod = new Mod(modSettings.get("display_name"), modSettings.get("namespace"),
                 modSettings.get("version"), modSettings.get("description"), modSettings.get("icon"));
         System.out.println(modSettings.get("load_message"));
+        boolean autoLoadFighters = modSettings.get("auto_load_fighters") == null ? true : Boolean.parseBoolean(modSettings.get("auto_load_fighters"));
         if (!modSettings.containsKey("icon")) {
             Game.game.addModError("Mod " + modSettings.get("display_name") + " failed to load: mod.sab file lacks @icon property, set it to an image path, ex: example_mod:poopy_man_render.png");
             return null;
@@ -123,24 +128,26 @@ public final class ModLoader {
 
             // Transfer sound/image assets in order to be loaded by the game
             String fileName = entry.getName().split("/")[entry.getName().split("/").length - 1];
-            String path = new File("../mods/resources/").getCanonicalPath() + "/" + fileName;
+            String path = new File("../mods/resources/").getCanonicalPath() + "/" + mod.namespace + fileName;
 
             Path target = Paths.get(path);
             Files.copy(entryReader, target);
 
+            String name = entry.getName().split("/")[entry.getName().split("/").length - 1];
+
             if (entry.getName().endsWith(".png")) {
-                game.window.imageProvider.loadAbsoluteImage(path, mod.namespace + ":" + (entry.getName().split("/"))[entry.getName().split("/").length - 1]);
+                game.window.imageProvider.loadAbsoluteImage(path, mod.namespace + ":" + name);
             } else if (entry.getName().endsWith(".mp3")) {
                 if (entry.getRealName().contains("music")) {
-                    game.window.soundEngine.loadMusicAbsolute(path, mod.namespace + ":" + (entry.getName().split("/"))[entry.getName().split("/").length - 1]);
+                    game.window.soundEngine.loadMusicAbsolute(path, mod.namespace + ":" + name);
                 } else {
-                    game.window.soundEngine.loadSoundAbsolute(path, mod.namespace + ":" + (entry.getName().split("/"))[entry.getName().split("/").length - 1]);
+                    game.window.soundEngine.loadSoundAbsolute(path, mod.namespace + ":" + name);
                 }
             } else if (entry.getName().endsWith(".class") && entry.getName().startsWith(mod.namespace)) {
                 try {
                     Class<?> clazz = classLoader
                             .loadClass(entry.getName().replace("/", ".").substring(0, entry.getName().length() - 6));
-                    if (FighterType.class.isAssignableFrom(clazz)) {
+                    if (autoLoadFighters && FighterType.class.isAssignableFrom(clazz)) {
                         // This is "unsafe" but we know that it will always be safe as long as mods are up-to-date
                         mod.addFighter((Class<? extends FighterType>) clazz);
                     }
@@ -150,15 +157,18 @@ public final class ModLoader {
                     }
                     if (AttackType.class.isAssignableFrom(clazz)) {
                         // Again, "unsafe" but we know that it will always be safe as long as mods are up-to-date
-                        String id = clazz.getSimpleName().toLowerCase();
+                        String id = clazz.getSimpleName();
                         mod.addAttack(mod.namespace + ":" + id, (Class<? extends AttackType>) clazz);
                     }
                     if (ModType.class.isAssignableFrom(clazz)) {
                         // "Unsafe"
                         mod.modType = (ModType) clazz.getConstructors()[0].newInstance();
+                        if (!autoLoadFighters) mod.addFighters(mod.modType.getFighters());
                         System.out.println(mod.modType.getLoadMessage());
                     }
-                } catch (Exception e) {
+                } catch (InstantiationException | IllegalAccessException | InvocationTargetException |
+                         ClassNotFoundException e) {
+                    System.out.println("Issue loading mod: " + mod.displayName);
                     throw new RuntimeException(e);
                 }
             }

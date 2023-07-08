@@ -453,10 +453,12 @@ public class Battle {
         addNewGameObjects();
 
         if (hasAssBalls) {
-            assBallSpawnTime--;
-            if (assBallSpawnTime <= 0) {
-                spawnAssBall();
-                assBallSpawnTime = SabRandom.random(3000, 6000);
+            if (getAssBalls().isEmpty()) {
+                assBallSpawnTime--;
+                if (assBallSpawnTime <= 0) {
+                    spawnAssBall();
+                    assBallSpawnTime = SabRandom.random(3000, 6000);
+                }
             }
         }
 

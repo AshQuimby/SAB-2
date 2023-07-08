@@ -604,6 +604,9 @@ public class Player extends GameObject implements Hittable {
                 charge = 0;
                 minCharge = 0;
                 charging = false;
+                if (repeatAttack) {
+                    tryAttacks();
+                }
                 fighter.onEndAction(previousAction, this);
             }
             gravityAndFriction();
@@ -643,24 +646,7 @@ public class Player extends GameObject implements Hittable {
         // Player actions
         if (occupied <= 0) {
             // Attacks
-            if (keys.isJustPressed(Keys.ATTACK) || (repeatAttack && keys.isPressed(Keys.ATTACK))) {
-                if (keys.isPressed(Keys.DOWN)) {
-                    fighter.downAttack(this);
-                } else if (keys.isPressed(Keys.UP)) {
-                    fighter.upAttack(this);
-                } else if (keys.isPressed(Keys.LEFT) || keys.isPressed(Keys.RIGHT)) {
-                    if (hasItem()) fighter.useItem(this);
-                    else fighter.sideAttack(this);
-                } else {
-                    if (hasItem()) fighter.useItem(this);
-                    else if (assCharged && !repeatAttack) {
-                        if (fighter.finalAss(this)) assCharged = false;
-                    }
-                    else fighter.neutralAttack(this);
-                }
-            } else {
-                repeatAttack = false;
-            }
+            tryAttacks();
 
             // Parrying
             if (keys.isJustPressed(Keys.PARRY)) {
@@ -691,6 +677,27 @@ public class Player extends GameObject implements Hittable {
         if (usedRecovery) frame = fighter.freefallAnimation.stepLooping();
 
         gravityAndFriction();
+    }
+
+    public void tryAttacks() {
+        if (keys.isJustPressed(Keys.ATTACK) || (repeatAttack && keys.isPressed(Keys.ATTACK))) {
+            if (keys.isPressed(Keys.DOWN)) {
+                fighter.downAttack(this);
+            } else if (keys.isPressed(Keys.UP)) {
+                fighter.upAttack(this);
+            } else if (keys.isPressed(Keys.LEFT) || keys.isPressed(Keys.RIGHT)) {
+                if (hasItem()) fighter.useItem(this);
+                else fighter.sideAttack(this);
+            } else {
+                if (hasItem()) fighter.useItem(this);
+                else if (assCharged && !repeatAttack) {
+                    if (fighter.finalAss(this)) assCharged = false;
+                }
+                else fighter.neutralAttack(this);
+            }
+        } else {
+            repeatAttack = false;
+        }
     }
 
     public int getRemainingJumps() {
