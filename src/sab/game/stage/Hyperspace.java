@@ -1,7 +1,9 @@
 package sab.game.stage;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.seagull_engine.graphics.ParallaxBackground;
 import sab.game.Battle;
 import sab.game.Game;
 
@@ -11,6 +13,7 @@ public class Hyperspace extends StageType {
         stage.name = "Hyperspace";
         stage.background = "hyperspace_background.png";
         stage.music = "wavezone.mp3";
+        stage.parallaxBackground = new ParallaxBackground(Gdx.files.internal("assets/backgrounds/stage/hyperspace"));
 
         stage.safeBlastZone = new Rectangle(-1360 / 2, -800 / 2, 1360, 800);
         stage.unsafeBlastZone = new Rectangle(-1440 / 2, -860 / 2, 1440, 860);

@@ -363,8 +363,8 @@ public class BowlBoy extends FighterType {
         for (int i = 0; i < Math.min(5, getCardCount() + 1); i++) {
 
             int drawAmount = (int) (superMeter % 10 / 10f * 40);
-            if (i >= getCardCount()) Game.game.window.batch.draw(g.imageProvider.getImage("bowl_boy_card.png"), (player.getId() == 0 ? -256 - 32 - 32 : 256 + 32) + 36 * i * (player.getId() == 0 ? 1 : -1), -186, 32, drawAmount / 4 * 4, 0, 0, 7, drawAmount / 4, false, false);
-            else g.scalableDraw(g.imageProvider.getImage("bowl_boy_card_full.png"), (player.getId() == 0 ? -256 - 32 - 32 : 256 + 32) + 36 * i * (player.getId() == 0 ? 1 : -1), -186, 32, 40);
+            if (i >= getCardCount()) Game.game.window.batch.draw(g.imageProvider.getImage("bowl_boy_card.png"), (player.getId() == 0 ? -256 - 32 - 32 : 256 + 32) + 36 * i * (player.getId() == 0 ? 1 : -1), -186, 28, drawAmount / 4 * 4, 0, 0, 7, drawAmount / 4, false, false);
+            else g.scalableDraw(g.imageProvider.getImage("bowl_boy_card_full.png"), (player.getId() == 0 ? -256 - 32 - 32 : 256 + 32) + 36 * i * (player.getId() == 0 ? 1 : -1), -186, 28, 40);
         }
     }
 }

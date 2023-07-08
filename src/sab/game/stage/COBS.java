@@ -15,6 +15,7 @@ public class COBS extends StageType {
         stage.background = "cobs_background.png";
         stage.music = "seagull_ultima.mp3";
         stage.parallaxBackground = new ParallaxBackground(Gdx.files.internal("assets/backgrounds/stage/cobs"));
+        stage.parallaxBackground.ambientSpeedMultiplier = 0.25f;
         sab.game.stage.Platform platform = new sab.game.stage.Platform(-280 / 2 - 280 - 100, -128, 280, 72, "ruined_platform_1.png", stage, new StageObjectBehaviour() {
             @Override
             public void update(sab.game.stage.StageObject stageObject, Battle battle) {

@@ -1,7 +1,9 @@
 package sab.game.stage;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.seagull_engine.GameObject;
+import com.seagull_engine.graphics.ParallaxBackground;
 import sab.game.Player;
 import sab.game.attack.Attack;
 import sab.game.attack.AttackType;
@@ -16,6 +18,7 @@ public class LittleHLand extends StageType {
         stage.name = "Little h Land";
         stage.background = "little_h_land_background.png";
         stage.music = "fresh_beginnings.mp3";
+        stage.parallaxBackground = new ParallaxBackground(Gdx.files.internal("assets/backgrounds/stage/little_h_land"));
 
         player = new Player(new Fighter(new Marvin()), 0, 0, 100000, stage.getBattle());
 
