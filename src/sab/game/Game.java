@@ -95,11 +95,11 @@ public class Game extends Messenger {
         window.imageProvider.loadFont("fonts/shitfont23.ttf", 225);
 
         window.getGraphics().addShader("enchanted_baguette", new SpriteShader("shaders/default.vsh", "shaders/enchanted_baguette.fsh"));
-        window.getGraphics().addShader("crt", new SpriteShader("shaders/default.vsh", "shaders/crt.fsh"));
 
         Controllers.addListener(controllerManager);
         Settings.localSettings.load();
         if (Settings.localSettings.crtEffect.value) {
+            window.getGraphics().addShader("crt", new SpriteShader("shaders/default.vsh", "shaders/crt.fsh"));
             window.getGraphics().addPostEffect("crt");
         }
 

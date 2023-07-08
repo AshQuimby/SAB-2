@@ -32,6 +32,7 @@ public class SettingsEditorScreen extends ScreenAdapter {
         } else if (keyCode == Input.Keys.ENTER) {
             if (index == settings.length) {
                 SabSounds.playSound(SabSounds.SELECT);
+                Settings.localSettings.save();
                 return new SettingsMenuScreen();
             }
         } else if (keyCode == Input.Keys.UP) {
