@@ -8,7 +8,7 @@ import com.seagull_engine.Seagraphics;
 import sab.error.SabError;
 import sab.game.Game;
 import sab.game.SabSounds;
-import sab.game.Settings;
+import sab.game.settings.Settings;
 import sab.game.screen.battle_adjacent.CharacterSelectScreen;
 import sab.game.screen.error.ErrorScreen;
 import sab.net.client.Client;
@@ -22,7 +22,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.HashMap;
 
 public class JoinGameScreen extends ScreenAdapter {
     private static final int TIMEOUT_THRESHOLD = 3000;
@@ -72,7 +71,7 @@ public class JoinGameScreen extends ScreenAdapter {
             hostPort = servers.getValue(mostRecent.getRawValue()).getRawValue();
         } else {
             hostIp = "localhost";
-            hostPort = Integer.toString(Settings.getHostingPort());
+            hostPort = Integer.toString(Settings.hostingPort);
         }
     }
 

@@ -6,7 +6,7 @@ import com.badlogic.gdx.math.Vector2;
 import sab.game.Battle;
 import sab.game.Game;
 import sab.game.Player;
-import sab.game.Settings;
+import sab.game.settings.Settings;
 import sab.game.attack.Attack;
 import sab.game.attack.marvin.Fireball;
 import sab.game.attack.marvin.Frostball;
@@ -56,7 +56,7 @@ public class HellTwoBoogaloo extends StageType {
         platform.createLedges(16, 24, 16, stage);
         stage.addStageObject(platform);
 
-        if (Settings.getStageHazards()) {
+        if (Settings.stageHazards.value) {
 
             StageObject marvinBox = new PassablePlatform(-512, 960, 128, 128, "marvin_box.png", new StageObjectBehaviour() {
                 @Override

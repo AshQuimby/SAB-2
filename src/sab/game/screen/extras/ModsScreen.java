@@ -50,7 +50,11 @@ public class ModsScreen extends ScreenAdapter {
         g.scalableDraw(g.imageProvider.getImage("character_description_background_layer_2.png"), -Game.game.window.resolutionX / 2, -Game.game.window.resolutionY / 2, Game.game.window.resolutionX, Game.game.window.resolutionY);
 
         g.drawText(mod.displayName, Game.getDefaultFont(), 0, Game.game.window.resolutionY / 2 - 64, 2 * Game.getDefaultFontScale(), Color.WHITE, 0);
-        g.drawText(mod.namespace + ", version " + mod.version, Game.getDefaultFont(), 0, Game.game.window.resolutionY / 2 - 128, 1 * Game.getDefaultFontScale(), Color.WHITE, 0);
+        if (mod.namespace == null) {
+            g.drawText(String.format("v%s", mod.version), Game.getDefaultFont(), 0, Game.game.window.resolutionY / 2 - 128, 1 * Game.getDefaultFontScale(), Color.WHITE, 0);
+        } else {
+            g.drawText(String.format("%s v%s", mod.namespace, mod.version), Game.getDefaultFont(), 0, Game.game.window.resolutionY / 2 - 128, 1 * Game.getDefaultFontScale(), Color.WHITE, 0);
+        }
 
         String description = "     " + mod.description;
 

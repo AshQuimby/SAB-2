@@ -7,7 +7,7 @@ import com.seagull_engine.Seagraphics;
 import sab.game.Game;
 import sab.game.Player;
 import sab.game.SabSounds;
-import sab.game.Settings;
+import sab.game.settings.Settings;
 import sab.screen.Screen;
 import sab.screen.ScreenAdapter;
 
@@ -23,7 +23,7 @@ public class VictoryScreen extends ScreenAdapter {
         this.background = background;
         SabSounds.playMusic("leadup.mp3", false);
         setupTimer = -360;
-        if (!Settings.getAnticipation() || Settings.getMusicVolume() == 0 || Settings.getMasterVolume() == 0) setupTimer = -60;
+        if (!Settings.anticipation.value || Settings.musicVolume.value == 0 || Settings.masterVolume.value == 0) setupTimer = -60;
         Game.game.window.camera.viewportWidth = Game.game.window.resolutionX;
         Game.game.window.camera.viewportHeight = Game.game.window.resolutionY;
         Game.game.window.camera.position.x = 0;

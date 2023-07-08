@@ -2,7 +2,6 @@ package sab.game;
 
 import java.util.List;
 
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.seagull_engine.GameObject;
@@ -17,6 +16,7 @@ import sab.game.attack.AttackType;
 import sab.game.fighter.Fighter;
 import sab.game.item.Item;
 import sab.game.particle.Particle;
+import sab.game.settings.Settings;
 import sab.game.stage.Ledge;
 import sab.game.stage.PassablePlatform;
 import sab.game.stage.Slope;
@@ -978,7 +978,7 @@ public class Player extends GameObject implements Hittable {
                     g.usefulDraw(g.imageProvider.getImage("p" + (id + 1) + "_spawn_platform.png"), drawRect.getCenter(new Vector2()).x - 40, hitbox.y - 32, 80, 32, 0, 1, rotation, false, false);
                 }
             }
-            if (Settings.getDrawPlayerArrows()) {
+            if (Settings.drawPlayerArrows.value) {
                 Vector2 arrowPosition = getCenter().add(-8, drawRect.height / 2 + 4);
                 g.usefulDraw(g.imageProvider.getImage("player_arrows.png"), arrowPosition.x, arrowPosition.y, 16, 8, id == -1 ? 3 : id,3, 0, false, false);
             }

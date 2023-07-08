@@ -13,7 +13,7 @@ import sab.game.Game;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.seagull_engine.Seagraphics;
-import sab.game.Settings;
+import sab.game.settings.Settings;
 
 public class Utils {
     public static int loop(int old, int increment, int max, int min) {
@@ -172,7 +172,7 @@ public class Utils {
     }
 
     public static void drawButton(Seagraphics g, float x, float y, String text, float textSize, boolean highlighted, int anchor) {
-        Rectangle textBounds = g.getTextBounds(text, g.imageProvider.getFont(Settings.getDefaultFont()), x, y, textSize, anchor);
+        Rectangle textBounds = g.getTextBounds(text, g.imageProvider.getFont(Settings.font.asRawValue()), x, y, textSize, anchor);
         textBounds.height -= 1;
         float a = textSize / Game.getDefaultFontScale() * 16;
         textBounds.width -= a;
@@ -190,6 +190,6 @@ public class Utils {
         Game.game.window.batch.draw(image, textBounds.x, textBounds.y + textBounds.height, textBounds.width, a, .4f, .6f, .6f, 1f);
 
         Game.game.window.batch.draw(image, textBounds.x, textBounds.y, textBounds.width, textBounds.height, .4f, .4f, .6f, .6f);
-        g.drawText(text, g.imageProvider.getFont(Settings.getDefaultFont()), textBounds.x + textBounds.width / 2, textBounds.y + textBounds.height * 3.5f + 2, textSize, highlighted ? Color.WHITE : Color.LIGHT_GRAY, 0);
+        g.drawText(text, g.imageProvider.getFont(Settings.font.asRawValue()), textBounds.x + textBounds.width / 2, textBounds.y + textBounds.height * 3.5f + 2, textSize, highlighted ? Color.WHITE : Color.LIGHT_GRAY, 0);
     }
 }

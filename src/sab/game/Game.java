@@ -12,12 +12,12 @@ import com.seagull_engine.Seagraphics;
 
 import com.seagull_engine.graphics.ParallaxBackground;
 import com.seagull_engine.graphics.SpriteShader;
-import sab.game.attack.AttackType;
 import sab.game.fighter.*;
 import sab.game.screen.battle_adjacent.CharacterSelectScreen;
 import sab.game.screen.extras.JukeboxScreen;
 import sab.game.screen.ModErrorScreen;
 import sab.game.screen.TitleScreen;
+import sab.game.settings.Settings;
 import sab.game.stage.*;
 import sab.modloader.Mod;
 import sab.modloader.ModLoader;
@@ -64,14 +64,14 @@ public class Game extends Messenger {
     }
 
     public static BitmapFont getDefaultFont() {
-        String fontId = Settings.getDefaultFont();
+        String fontId = Settings.font.asRawValue();
         BitmapFont font = game.window.imageProvider.getFont(fontId);
         if (font == null) return game.window.imageProvider.getFont("SAB_font");
         return font;
     }
 
     public static float getDefaultFontScale() {
-        String fontId = Settings.getDefaultFont();
+        String fontId = Settings.font.asRawValue();
         if (fontId.equals("arial")) {
             return 0.28f;
         } else if (fontId.equals("comic_snas")) {
@@ -98,10 +98,10 @@ public class Game extends Messenger {
         window.getGraphics().addShader("crt", new SpriteShader("shaders/default.vsh", "shaders/crt.fsh"));
 
         Controllers.addListener(controllerManager);
-        Settings.loadSettings();
-        if (Settings.getCrtEffect()) window.getGraphics().addPostEffect("crt");
+        Settings.load();
+        if (Settings.crtEffect.value) window.getGraphics().addPostEffect("crt");
 
-        Mod baseGame = new Mod("Super Ass Brothers: Remasstered", "N/A", "0.6.7", "Adds all the base game stages and fighters", "marvin_render.png");
+        Mod baseGame = new Mod("Super Ass Brothers: Remasstered", null, "0.6.7", "Adds all the base game stages and fighters", "marvin_render.png");
         try {
             baseGame.addFighters((Class<? extends FighterType>[]) new Class<?>[]{Marvin.class, Chain.class, Walouis.class, Gus.class, EmperorEvil.class, Snas.class, Stephane.class, UnnamedDuck.class, Matthew.class, EmptySoldier.class, John.class, BowlBoy.class, BigSeagull.class});
 //            baseGame.addFighters((Class<? extends FighterType>[]) new Class<?>[]{Marvin.class, Chain.class   });
@@ -125,7 +125,7 @@ public class Game extends Messenger {
             screen = new ModErrorScreen(modErrors);
         }
 
-        if (Settings.getFullscreen()) {
+        if (Settings.fullscreen.value) {
             goFullscreened();
         }
     }
