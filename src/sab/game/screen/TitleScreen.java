@@ -16,23 +16,27 @@ public class TitleScreen extends SelectorScreen {
     public TitleScreen(boolean playMusic) {
         super(new String[] {"Play", "Host", "Join", "Campaign", "Settings", "Extras", "Quit"});
         if (playMusic) {
-            String titleMusic = "";
-            switch (SabRandom.random(0, 3)) {
-                case 0 :
-                    titleMusic = "lobby_music";
-                    break;
-                case 1 :
-                    titleMusic = "lobby_music_old";
-                    break;
-                case 2 :
-                    titleMusic = "jazzlouis";
-                    break;
-            }
-            if (Utils.aprilFools()) {
-                titleMusic = "loongoon";
-            }
-            SabSounds.playMusic(titleMusic + ".mp3", true);
+            playMusic();
         }
+    }
+
+    public static void playMusic() {
+        String titleMusic = "";
+        switch (SabRandom.random(0, 3)) {
+            case 0 :
+                titleMusic = "lobby_music";
+                break;
+            case 1 :
+                titleMusic = "lobby_music_old";
+                break;
+            case 2 :
+                titleMusic = "jazzlouis";
+                break;
+        }
+        if (Utils.aprilFools()) {
+            titleMusic = "loongoon";
+        }
+        SabSounds.playMusic(titleMusic + ".mp3", true);
     }
 
     @Override

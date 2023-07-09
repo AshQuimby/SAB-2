@@ -7,6 +7,7 @@ import com.seagull_engine.Seagraphics;
 import sab.game.Game;
 import sab.game.Player;
 import sab.game.SabSounds;
+import sab.game.screen.TitleScreen;
 import sab.game.settings.Settings;
 import sab.screen.Screen;
 import sab.screen.ScreenAdapter;
@@ -66,7 +67,7 @@ public class VictoryScreen extends ScreenAdapter {
         if (keyCode == Input.Keys.ESCAPE || keyCode == Input.Keys.ENTER) {
             if (setupTimer > 0) {
                 SabSounds.playSound(SabSounds.BLIP);
-                SabSounds.playMusic("lobby_music.mp3", true);
+                TitleScreen.playMusic();
                 Game.selectNewTitleScreen();
                 Game.game.globalCharacterSelectScreen.start();
                 return Game.game.globalCharacterSelectScreen;

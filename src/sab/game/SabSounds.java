@@ -20,18 +20,26 @@ public class SabSounds {
     }
 
     public static void playMusic(String name, boolean loops) {
-        if (!Settings.localSettings.muteGame.value) soundEngine.playMusic(name, loops, 1, Settings.localSettings.musicVolume.asFloat() * Settings.localSettings.masterVolume.asFloat(), 0);
+        float volume;
+        if (Settings.localSettings.muteGame.value) volume = 0f;
+        else volume = Settings.localSettings.musicVolume.asFloat() * Settings.localSettings.masterVolume.asFloat();
+        soundEngine.playMusic(name, loops, 1, volume, 0);
         playingJukebox = false;
     }
 
     public static void playJukeboxMusic(String name, boolean loops) {
-        if (Settings.localSettings.bypassJukebox.value) soundEngine.playMusic(name, loops, 1, Settings.localSettings.jukeboxVolume.asFloat(), 0);
-        else if (!Settings.localSettings.muteGame.value) soundEngine.playMusic(name, loops, 1, Settings.localSettings.jukeboxVolume.asFloat() * Settings.localSettings.masterVolume.asFloat(), 0);
+        float volume;
+        if (Settings.localSettings.muteGame.value) volume = 0f;
+        else if (Settings.localSettings.bypassJukebox.value) volume = Settings.localSettings.jukeboxVolume.asFloat();
+        else volume = Settings.localSettings.jukeboxVolume.asFloat() * Settings.localSettings.masterVolume.asFloat();
+        soundEngine.playMusic(name, loops, 1, volume, 0);
         playingJukebox = true;
     }
 
     public static void resetCurrentMusicVolume() {
-        if (playingJukebox) {
+        if (Settings.localSettings.muteGame.value) {
+            soundEngine.setCurrentMusicVolume(0f);
+        } else if (playingJukebox) {
             if (Settings.localSettings.bypassJukebox.value) soundEngine.setCurrentMusicVolume(Settings.localSettings.jukeboxVolume.asFloat());
             else soundEngine.setCurrentMusicVolume(Settings.localSettings.jukeboxVolume.asFloat() * Settings.localSettings.masterVolume.asFloat());
         } else {

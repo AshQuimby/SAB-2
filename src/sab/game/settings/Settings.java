@@ -1,6 +1,7 @@
 package sab.game.settings;
 
 import com.sab_format.*;
+import sab.game.SabSounds;
 
 import java.io.File;
 import java.io.IOException;
@@ -35,11 +36,55 @@ public class Settings {
     public final BoolSetting crtEffect = new BoolSetting("crt_effect", "CRT Monitor Effect [!]", false);
 
     // Audio
-    public final BoolSetting muteGame = new BoolSetting("mute_game", "Mute", false);
-    public final PercentageSetting masterVolume = new PercentageSetting("master_volume", "Master Volume", 50);
-    public final PercentageSetting musicVolume = new PercentageSetting("music_volume", "Music Volume", 100);
+    public final BoolSetting muteGame = new BoolSetting("mute_game", "Mute", false) {
+        @Override
+        public void next() {
+            super.next();
+            SabSounds.resetCurrentMusicVolume();
+        }
+        @Override
+        public void previous() {
+            super.previous();
+            SabSounds.resetCurrentMusicVolume();
+        }
+    };
+    public final PercentageSetting masterVolume = new PercentageSetting("master_volume", "Master Volume", 50) {
+        @Override
+        public void next() {
+            super.next();
+            SabSounds.resetCurrentMusicVolume();
+        }
+        @Override
+        public void previous() {
+            super.previous();
+            SabSounds.resetCurrentMusicVolume();
+        }
+    };
+    public final PercentageSetting musicVolume = new PercentageSetting("music_volume", "Music Volume", 100) {
+        @Override
+        public void next() {
+            super.next();
+            SabSounds.resetCurrentMusicVolume();
+        }
+        @Override
+        public void previous() {
+            super.previous();
+            SabSounds.resetCurrentMusicVolume();
+        }
+    };
     public final PercentageSetting sfxVolume = new PercentageSetting("sfx_volume", "SFX Volume", 100);
-    public final PercentageSetting jukeboxVolume = new PercentageSetting("jukebox_volume", "Jukebox Volume", 100);
+    public final PercentageSetting jukeboxVolume = new PercentageSetting("jukebox_volume", "Jukebox Volume", 100) {
+        @Override
+        public void next() {
+            super.next();
+            SabSounds.resetCurrentMusicVolume();
+        }
+        @Override
+        public void previous() {
+            super.previous();
+            SabSounds.resetCurrentMusicVolume();
+        }
+    };
     public final BoolSetting bypassJukebox = new BoolSetting("bypass_jukebox", "Jukebox Ignores Mute/Master", false);
 
     // Multiplayer

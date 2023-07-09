@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="sab_auto_updater:jar">
+    <output-path>$PROJECT_DIR$/../releases/SAB 2 Beta</output-path>
+    <root id="archive" name="sab_auto_updater.jar">
+      <element id="module-output" name="sab_auto_updater" />
+    </root>
+  </artifact>
+</component>

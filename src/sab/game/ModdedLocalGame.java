@@ -1,7 +1,5 @@
 package sab.game;
 
-import com.badlogic.gdx.math.Vector2;
-import com.seagull_engine.SeagullEngine;
 import sab.modloader.ModLoader;
 
 import java.io.File;
