@@ -63,10 +63,4 @@ public class Tongue extends MeleeAttackType {
         attack.knockback = new Vector2(-3 * attack.owner.direction, 4);
         SabSounds.playSound("tongue_spit.mp3");
     }
-
-    @Override
-    public void render(Attack attack, Seagraphics g) {
-        super.render(attack, g);
-        g.shapeRenderer.rect(tipper.x, tipper.y, tipper.width, tipper.height);
-    }
 }
