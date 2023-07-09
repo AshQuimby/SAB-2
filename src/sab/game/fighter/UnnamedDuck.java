@@ -61,6 +61,10 @@ public class UnnamedDuck extends FighterType {
         return new BaseAI(player, difficulty, 0) {
             @Override
             public void attack(Vector2 center, Player target, Vector2 targetPosition) {
+                if (player.hasItem() && (player.getItem() instanceof Jerrycan || player.getItem() instanceof Match)) {
+                    useSideAttack();
+                    return;
+                }
 
                 if (isDirectlyHorizontal(target.hitbox) && isFacing(targetPosition.x)) {
                     float horizontalDistance = Math.abs(center.x - targetPosition.x);

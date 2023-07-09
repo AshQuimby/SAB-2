@@ -876,6 +876,10 @@ public class Player extends GameObject implements Hittable {
         return heldItem != null;
     }
 
+    public Item getItem() {
+        return heldItem;
+    }
+
     public boolean takingKnockback() {
         return knockbackDuration > 0;
     }
