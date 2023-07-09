@@ -4,6 +4,7 @@ import java.util.*;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.seagull_engine.GameObject;
@@ -710,22 +711,22 @@ public class Battle {
         return battleTick;
     }
 
-    private void drawHitbox(GameObject gameObject, Seagraphics g) {
+    private void drawHitbox(GameObject gameObject, ShapeRenderer s) {
         Rectangle hitbox = gameObject.hitbox;
 
-        g.shapeRenderer.setColor(1, 1, 0, 1);
+        s.setColor(1, 1, 0, 1);
         if (gameObject.getClass().isAssignableFrom(Player.class)) {
-            g.shapeRenderer.setColor(0, 0, 1, 1);
+            s.setColor(0, 0, 1, 1);
         } else if (gameObject.getClass().isAssignableFrom(Platform.class)) {
-            g.shapeRenderer.setColor(0, 1, 0, 1);
+            s.setColor(0, 1, 0, 1);
         } else if (gameObject.getClass().isAssignableFrom(Attack.class)) {
-            g.shapeRenderer.setColor(1, 0, 1, 1);
-            g.shapeRenderer.line(gameObject.hitbox.getCenter(new Vector2()),
+            s.setColor(1, 0, 1, 1);
+            s.line(gameObject.hitbox.getCenter(new Vector2()),
                     gameObject.hitbox.getCenter(new Vector2()).cpy().add(((Attack) gameObject).knockback));
-                    g.shapeRenderer.setColor(1, 0, 0, 1);
+                    s.setColor(1, 0, 0, 1);
         }
 
-        g.shapeRenderer.rect(hitbox.x, hitbox.y, hitbox.width, hitbox.height);
+        s.rect(hitbox.x, hitbox.y, hitbox.width, hitbox.height);
     }
 
     public void render(Seagraphics g) {
@@ -743,19 +744,16 @@ public class Battle {
 
         for (GameObject misc : miscGameObjects) {
             misc.render(g);
-            if (drawHitboxes) drawHitbox(misc, g);
         }
 
         stage.renderDetails(g);
 
         for (Attack attack : attacks) {
             attack.render(g);
-            if (drawHitboxes) drawHitbox(attack, g);
         }
 
         for (Player player : players) {
             player.render(g);
-            if (drawHitboxes) drawHitbox(player, g);
         }
 
         stage.renderPlatforms(g);
@@ -770,37 +768,6 @@ public class Battle {
 
         for (Attack attack : attacks) {
             attack.lateRender(g);
-        }
-
-        if (drawHitboxes) {
-            for (Ledge ledge : stage.getLedges()) {
-                g.shapeRenderer.setColor(new Color(0, 1, 1, 1));
-                g.shapeRenderer.rect(ledge.grabBox.x, ledge.grabBox.y, ledge.grabBox.width, ledge.grabBox.height);
-            }
-
-            for (Slope slope : stage.getSlopes()) {
-                g.shapeRenderer.setColor(1, 1, 0, 1);
-                g.shapeRenderer.rect(slope.bounds.x, slope.bounds.y, slope.bounds.width, slope.bounds.height);
-                g.shapeRenderer.setColor(0, 1, 0, 1);
-                g.shapeRenderer.line(slope.start, slope.end);
-                g.shapeRenderer.setColor(1, 0, 0, 1);
-                Vector2 midPoint = slope.start.cpy().add(slope.end).scl(.5f);
-                g.shapeRenderer.line(midPoint.x, midPoint.y, midPoint.x + slope.outerDirection * 10, midPoint.y);
-            }
-        }
-
-        if (drawPathfindingGraph) {
-            for (Node node : stage.graph.getNodes()) {
-                switch (node.type) {
-                    case GROUND -> g.shapeRenderer.setColor(0, 1, 0, 1);
-                    case LEDGE -> g.shapeRenderer.setColor(0, 1, 1, 1);
-                    case AIR -> g.shapeRenderer.setColor(1, 1, 1, 1);
-                }
-                g.shapeRenderer.circle(node.position.x, node.position.y, 8);
-                for (Edge<Node> edge : stage.graph.getEdges(node)) {
-                    g.shapeRenderer.line(edge.a.position, edge.b.position);
-                }
-            }
         }
 
         g.useStaticCamera();
@@ -833,6 +800,44 @@ public class Battle {
 
         if (currentDialogue != null) {
             currentDialogue.render(g);
+        }
+    }
+
+    public void debugRender(ShapeRenderer s) {
+        Game.game.window.getGraphics().useDynamicCamera();
+        if (drawHitboxes) {
+            for (GameObject gameObject : gameObjects) {
+                drawHitbox(gameObject, s);
+            }
+
+            for (Ledge ledge : stage.getLedges()) {
+                s.setColor(new Color(0, 1, 1, 1));
+                s.rect(ledge.grabBox.x, ledge.grabBox.y, ledge.grabBox.width, ledge.grabBox.height);
+            }
+
+            for (Slope slope : stage.getSlopes()) {
+                s.setColor(1, 1, 0, 1);
+                s.rect(slope.bounds.x, slope.bounds.y, slope.bounds.width, slope.bounds.height);
+                s.setColor(0, 1, 0, 1);
+                s.line(slope.start, slope.end);
+                s.setColor(1, 0, 0, 1);
+                Vector2 midPoint = slope.start.cpy().add(slope.end).scl(.5f);
+                s.line(midPoint.x, midPoint.y, midPoint.x + slope.outerDirection * 10, midPoint.y);
+            }
+        }
+
+        if (drawPathfindingGraph) {
+            for (Node node : stage.graph.getNodes()) {
+                switch (node.type) {
+                    case GROUND -> s.setColor(0, 1, 0, 1);
+                    case LEDGE -> s.setColor(0, 1, 1, 1);
+                    case AIR -> s.setColor(1, 1, 1, 1);
+                }
+                s.circle(node.position.x, node.position.y, 8);
+                for (Edge<Node> edge : stage.graph.getEdges(node)) {
+                    s.line(edge.a.position, edge.b.position);
+                }
+            }
         }
     }
 }

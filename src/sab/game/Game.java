@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.PixmapIO;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.seagull_engine.Messenger;
 import com.seagull_engine.Seagraphics;
 
@@ -317,6 +318,11 @@ public class Game extends Messenger {
     @Override
     public void render(Seagraphics g) {
         screen.render(g);
+    }
+
+    @Override
+    public void debugRender(ShapeRenderer s) {
+        screen.debugRender(s);
     }
 
     // Called when the window is closed

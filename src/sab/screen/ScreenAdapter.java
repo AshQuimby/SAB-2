@@ -1,6 +1,7 @@
 package sab.screen;
 
 import com.badlogic.gdx.controllers.Controller;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.seagull_engine.Seagraphics;
 
 public class ScreenAdapter implements Screen {
@@ -26,6 +27,11 @@ public class ScreenAdapter implements Screen {
 
     @Override
     public void render(Seagraphics g) {
+
+    }
+
+    @Override
+    public void debugRender(ShapeRenderer s) {
 
     }
 

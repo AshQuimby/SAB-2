@@ -1,6 +1,7 @@
 package sab.game.screen;
 
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.sab_format.SabData;
 import com.sab_format.SabParsingException;
 import com.sab_format.SabReader;
@@ -351,5 +352,10 @@ public class BattleScreen extends NetScreen {
     @Override
     public void render(Seagraphics g) {
         battle.render(g);
+    }
+
+    @Override
+    public void debugRender(ShapeRenderer s) {
+        battle.debugRender(s);
     }
 }
