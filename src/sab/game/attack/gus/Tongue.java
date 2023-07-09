@@ -4,11 +4,13 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.seagull_engine.GameObject;
 
+import com.seagull_engine.Seagraphics;
 import sab.game.SabSounds;
 import sab.game.attack.Attack;
 import sab.game.attack.AttackType;
+import sab.game.attack.MeleeAttackType;
 
-public class Tongue extends AttackType {
+public class Tongue extends MeleeAttackType {
     private Rectangle tipper;
     
     @Override
@@ -27,13 +29,14 @@ public class Tongue extends AttackType {
         tipper = new Rectangle();
         tipper.width = 4;
         tipper.height = 4;
+        usePlayerDirection = true;
+        offset = new Vector2(attack.owner.hitbox.width, 12);
     }
 
     @Override
     public void update(Attack attack) {
-        attack.hitbox.setCenter(attack.owner.hitbox.getCenter(new Vector2()).add((attack.hitbox.width + attack.owner.hitbox.width) / 2 * attack.owner.direction, 12));
+        super.update(attack);
         tipper.setCenter(attack.hitbox.getCenter(new Vector2()).add(attack.direction * (attack.hitbox.width / 2 - tipper.width / 2), 2));
-        attack.direction = attack.owner.direction;
 
         if (attack.life <= 5) {
             attack.frame = 1;
@@ -56,7 +59,14 @@ public class Tongue extends AttackType {
     @Override
     public void onSpawn(Attack attack, int[] data) {
         attack.hitbox.setCenter(attack.owner.hitbox.getCenter(new Vector2()).add(32 * attack.owner.direction, 4));
+        tipper.setCenter(attack.hitbox.getCenter(new Vector2()).add(attack.direction * (attack.hitbox.width / 2 - tipper.width / 2), 2));
         attack.knockback = new Vector2(-3 * attack.owner.direction, 4);
         SabSounds.playSound("tongue_spit.mp3");
+    }
+
+    @Override
+    public void render(Attack attack, Seagraphics g) {
+        super.render(attack, g);
+        g.shapeRenderer.rect(tipper.x, tipper.y, tipper.width, tipper.height);
     }
 }

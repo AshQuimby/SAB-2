@@ -23,20 +23,16 @@ public class SettingsEditorScreen extends ScreenAdapter {
         input = new InputState(2);
     }
 
-    private Screen onBack() {
-        Settings.localSettings.save();
-        return new SettingsMenuScreen();
-    }
-
     @Override
     public Screen keyPressed(int keyCode) {
         if (keyCode == Input.Keys.ESCAPE) {
             SabSounds.playSound(SabSounds.BLIP);
-            return onBack();
+            Settings.localSettings.save();
+            return new SettingsMenuScreen();
         } else if (keyCode == Input.Keys.ENTER) {
             if (index == settings.length) {
                 SabSounds.playSound(SabSounds.SELECT);
-                return onBack();
+                return new SettingsMenuScreen();
             }
         } else if (keyCode == Input.Keys.UP) {
             ticksSinceKeyPress = 0;
