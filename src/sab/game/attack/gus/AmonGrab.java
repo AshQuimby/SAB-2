@@ -87,7 +87,7 @@ public class AmonGrab extends MeleeAttackType {
 
         } else if (hit != attack.owner && grabbedPlayer == null && hit instanceof Player) {
             grabbedPlayer = (Player) hit;
-            attack.life = 20;
+            attack.life = 20; 
         }
     }
 

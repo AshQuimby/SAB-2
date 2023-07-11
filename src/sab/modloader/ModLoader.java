@@ -19,6 +19,7 @@ import com.sab_format.SabData;
 import com.sab_format.SabParsingException;
 import com.sab_format.SabReader;
 import sab.game.Game;
+import sab.game.SabSounds;
 import sab.game.attack.AttackType;
 import sab.game.fighter.FighterType;
 import sab.game.screen.extras.JukeboxScreen;
@@ -28,6 +29,7 @@ import javax.management.ReflectionException;
 
 public final class ModLoader {
 
+    public static List<String> fileKeyCache = new ArrayList<>();
     public static List<File> fileCache = new ArrayList<>();
 
     // Loads a mod's "mod.sab" file from a mod file
@@ -135,13 +137,15 @@ public final class ModLoader {
 
             String name = entry.getName().split("/")[entry.getName().split("/").length - 1];
 
+            String key = mod.namespace + ":" + name;
+
             if (entry.getName().endsWith(".png")) {
-                game.window.imageProvider.loadAbsoluteImage(path, mod.namespace + ":" + name);
+                game.window.imageProvider.loadAbsoluteImage(path, key);
             } else if (entry.getName().endsWith(".mp3")) {
                 if (entry.getRealName().contains("music")) {
-                    game.window.soundEngine.loadMusicAbsolute(path, mod.namespace + ":" + name);
+                    game.window.soundEngine.loadMusicAbsolute(path, key);
                 } else {
-                    game.window.soundEngine.loadSoundAbsolute(path, mod.namespace + ":" + name);
+                    game.window.soundEngine.loadSoundAbsolute(path, key);
                 }
             } else if (entry.getName().endsWith(".class") && entry.getName().startsWith(mod.namespace)) {
                 try {
@@ -155,10 +159,9 @@ public final class ModLoader {
                         // This is also "unsafe" but we know that it will always be safe as long as mods are up-to-date
                         mod.addStage((Class<? extends StageType>) clazz);
                     }
-                    if (AttackType.class.isAssignableFrom(clazz)) {
+                    if (ModBattle.class.isAssignableFrom(clazz)) {
                         // Again, "unsafe" but we know that it will always be safe as long as mods are up-to-date
-                        String id = clazz.getSimpleName();
-                        mod.addAttack(mod.namespace + ":" + id, (Class<? extends AttackType>) clazz);
+                        mod.addModBattle((Class<? extends ModBattle>) clazz);
                     }
                     if (ModType.class.isAssignableFrom(clazz)) {
                         // "Unsafe"
@@ -176,7 +179,11 @@ public final class ModLoader {
             try {
                 Files.delete(target);
             } catch (FileSystemException e) {
-                fileCache.add(new File(path));
+                if (entry.getRealName().contains("music")) {
+                    System.out.println(key + ", " + path);
+                    fileKeyCache.add(key);
+                    fileCache.add(new File(path));
+                }
             }
         }
 
@@ -188,7 +195,12 @@ public final class ModLoader {
     }
 
     public static void dispose() {
-        for (File file : fileCache) {
+        for (int i = 0; i < fileCache.size(); i++) {
+            File file = fileCache.get(i);
+            try {
+                SabSounds.soundEngine.getMusic(fileKeyCache.get(i)).dispose();
+            } catch (NullPointerException e) {
+            }
             file.delete();
         }
     }

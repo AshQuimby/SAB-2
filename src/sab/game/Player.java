@@ -386,6 +386,7 @@ public class Player extends GameObject implements Hittable {
             }
         }
         battle.shakeCamera(6);
+        battle.onPlayerKilled(this);
         rotation = 0;
         velocity.scl(0);
         knockback.scl(0);
@@ -884,7 +885,7 @@ public class Player extends GameObject implements Hittable {
     public boolean canBeHit(DamageSource source) {
         if (source.parryable && parryTime > 0) {
             source.onParry();
-            battle.onSuccessfulParry();
+            battle.onSuccessfulParry(source, this);
             if (source.owner != null) {
                 source.owner.stun(20);
             }
@@ -916,6 +917,9 @@ public class Player extends GameObject implements Hittable {
 
     @Override
     public boolean onHit(DamageSource source) {
+        if (!battle.preOnPlayerHit(source, this)) {
+            return false;
+        }
         int statusBefore;
         if (useHealth) {
             statusBefore = health;
@@ -970,6 +974,7 @@ public class Player extends GameObject implements Hittable {
             velocity = new Vector2();
         }
 
+        battle.onPlayerHit(source, this);
         battle.getStage().onPlayerHit(this, source, shouldDie);
 
         if (useHealth) {
@@ -985,6 +990,10 @@ public class Player extends GameObject implements Hittable {
     // Called when one of this player's attacks hits a gameObject
     public void hitObject(Attack attack, GameObject hit) {
         fighter.hitObject(this, attack, hit);
+    }
+
+    public PlayerAction getCurrentAction() {
+        return currentAction;
     }
 
     @Override
