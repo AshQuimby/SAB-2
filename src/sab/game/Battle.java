@@ -868,6 +868,12 @@ public class Battle {
         }
 
         g.useStaticCamera();
+
+        modBattles.forEach((modBattle) -> {
+            g.useStaticCamera();
+            modBattle.renderBeforeUI(g);
+        });
+
         stage.renderOverlay(g);
 
         for (Player player : players) {
