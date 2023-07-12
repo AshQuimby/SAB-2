@@ -18,7 +18,7 @@ public class Mod {
     public final String icon;
     public final List<Class<? extends FighterType>> fighters;
     public final List<Class<? extends StageType>> stages;
-    public final HashMap<String, Class<? extends AttackType>> attacks;
+    public final List<Class<? extends ModBattle>> modBattles;
     public ModType modType;
     public Mod(String displayName, String namespace, String version, String description, String icon) {
         this.displayName = displayName;
@@ -26,9 +26,9 @@ public class Mod {
         this.version = version;
         this.description = description;
         this.icon = icon;
-        fighters = new ArrayList<Class<? extends FighterType>>();
-        stages = new ArrayList<Class<? extends StageType>>();
-        attacks = new HashMap<String, Class<? extends AttackType>>();
+        fighters = new ArrayList<>();
+        stages = new ArrayList<>();
+        modBattles = new ArrayList<>();
     }
 
     public void addFighter(Class<? extends FighterType> fighter) {
@@ -38,9 +38,8 @@ public class Mod {
     public void addStage(Class<? extends StageType> stage) {
         stages.add(stage);
     }
-
-    public void addAttack(String id, Class<? extends AttackType> attack) {
-        attacks.put(id, attack);
+    public void addModBattle(Class<? extends ModBattle> modBattle) {
+        modBattles.add(modBattle);
     }
 
     public void addFighters(Class<? extends FighterType>[] fighters) {

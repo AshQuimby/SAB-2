@@ -96,4 +96,20 @@ public class PlayerAction {
     }
 
     public Animation getAnimation() { return animation; }
+
+    public int getDelay() {
+        return delay;
+    }
+
+    public int getEndLag() {
+        return endLag;
+    }
+
+    public Attack getAttack() {
+        return attack;
+    }
+
+    public boolean isUsedAttack() {
+        return usedAttack;
+    }
 }

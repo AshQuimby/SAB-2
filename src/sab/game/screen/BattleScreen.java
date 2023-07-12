@@ -65,6 +65,7 @@ public class BattleScreen extends NetScreen {
         boolean stageHazards = data.getValue("stageHazards").asBool();
 
         battle = new Battle(seed, player1, player2, costumes, new Stage(new LastLocation()), player1Type, player2Type, lives, assBalls, stageHazards);
+        battle.start();
         playingReplay = new Replay();
         playingReplay.fromSabData(data);
         playingReplay.tickReplay(battle, 0);
@@ -74,6 +75,7 @@ public class BattleScreen extends NetScreen {
         super();
         long seed = System.currentTimeMillis();
         battle = new Battle(seed, player1, player2, costumes, stage, player1Type, player2Type, lives, Settings.localSettings.assBalls.value, Settings.localSettings.stageHazards.value);
+        battle.start();
         SabSounds.playMusic(battle.getStage().music, true);
         currentReplay = new Replay(seed, battle.getPlayer(0), battle.getPlayer(1), player1Type, player2Type, stage, lives, Settings.localSettings.assBalls.value, Settings.localSettings.stageHazards.value);
     }
@@ -82,6 +84,7 @@ public class BattleScreen extends NetScreen {
         super(server);
         long seed = System.currentTimeMillis();
         battle = new Battle(seed, player1, player2, costumes, stage, 0, 0, lives, Settings.localSettings.assBalls.value, Settings.localSettings.stageHazards.value);
+        battle.start();
         SabSounds.playMusic(battle.getStage().music, true);
         currentReplay = new Replay(seed, battle.getPlayer(0), battle.getPlayer(1), 0, 0, stage, lives, Settings.localSettings.assBalls.value, Settings.localSettings.stageHazards.value);
     }

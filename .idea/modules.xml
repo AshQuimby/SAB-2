@@ -3,7 +3,6 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/sab_2.iml" filepath="$PROJECT_DIR$/sab_2.iml" />
-      <module fileurl="file://$PROJECT_DIR$/../sab_auto_updater/sab_auto_updater.iml" filepath="$PROJECT_DIR$/../sab_auto_updater/sab_auto_updater.iml" />
     </modules>
   </component>
 </project>

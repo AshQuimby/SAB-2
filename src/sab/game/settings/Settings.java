@@ -100,7 +100,7 @@ public class Settings {
     };
 
     public final Setting<?>[] gameplaySettings = new Setting[] {
-            stageHazards, assBalls, anticipation, screenShake, lifeCount, gameMode
+            stageHazards, assBalls, anticipation, debugMode, lifeCount, gameMode
     };
 
     public final Setting<?>[] videoSettings = new Setting[] {

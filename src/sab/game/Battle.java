@@ -1,5 +1,6 @@
 package sab.game;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 
 import com.badlogic.gdx.Gdx;
@@ -24,6 +25,7 @@ import sab.game.particle.Particle;
 import sab.game.settings.Settings;
 import sab.game.stage.*;
 import sab.modloader.Mod;
+import sab.modloader.ModBattle;
 import sab.net.Keys;
 import sab.net.VoidFunction;
 import sab.replay.ReplayAI;
@@ -81,6 +83,7 @@ public class Battle {
 
     // Callbacks
     private VoidFunction<Particle> spawnParticleCallback;
+    private List<ModBattle> modBattles;
 
     public Battle(long seed, Fighter fighter1, Fighter fighter2, int[] costumes, Stage stage, int player1Type, int player2Type, int lives, boolean hasAssBalls, boolean hasStageHazards) {
         SabRandom.createNewBattleRandom(seed);
@@ -100,6 +103,17 @@ public class Battle {
         this.stage = stage;
         stage.setBattle(this);
         stage.init();
+
+        modBattles = new ArrayList<>();
+        for (Mod mod : Game.game.mods.values()) {
+            for (Class<? extends ModBattle> modBattle : mod.modBattles) {
+                try {
+                    modBattles.add((ModBattle) modBattle.getConstructors()[0].newInstance(this));
+                } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
 
         this.hasAssBalls = hasAssBalls;
         this.hasStageHazards = hasStageHazards;
@@ -154,6 +168,12 @@ public class Battle {
     // Relic of the past
     public Battle() {
         this(System.currentTimeMillis(), new Fighter(new Marvin()), new Fighter(new Chain()), new int[] {0, 0}, new Stage(new LastLocation()), 0, 0, 3, true, true);
+    }
+
+    public void start() {
+        modBattles.forEach((modBattle) -> {
+            modBattle.onStart();
+        });
     }
 
     public void setDialogue(Dialogue dialogue) {
@@ -352,21 +372,37 @@ public class Battle {
             }
 
             if (newGameObject instanceof Player) {
-                players.add((Player) newGameObject);
+                Player player = (Player) newGameObject;
+                players.add(player);
+                modBattles.forEach((modBattle) -> {
+                    modBattle.onPlayerSpawn(player);
+                });
                 misc = false;
             }
 
             if (newGameObject instanceof Attack) {
-                attacks.add((Attack) newGameObject);
+                Attack attack = (Attack) newGameObject;
+                attacks.add(attack);
                 misc = false;
+                modBattles.forEach((modBattle) -> {
+                    modBattle.onAttackSpawned(attack);
+                });
             }
 
             if (newGameObject instanceof StageObject) {
-                stage.addStageObject((StageObject) newGameObject);
+                StageObject stageObject = (StageObject) newGameObject;
+                stage.addStageObject(stageObject);
+                modBattles.forEach((modBattle) -> {
+                    modBattle.onStageObjectSpawned(stageObject);
+                });
             }
 
             if (newGameObject instanceof AssBall) {
-                assBalls.add((AssBall) newGameObject);
+                AssBall assBall = (AssBall) newGameObject;
+                assBalls.add(assBall);
+                modBattles.forEach((modBattle) -> {
+                    modBattle.onAssBallSpawn(assBall);
+                });
             }
 
 
@@ -392,6 +428,9 @@ public class Battle {
 
         for (Mod mod : Game.game.mods.values()) {
             if (!mod.modType.updateBattle(this, freezeTime)) freezeTime = true;
+            modBattles.forEach((modBattle) -> {
+                modBattle.update(freezeTime);
+            });
         }
 
         if (gameOver()) {
@@ -597,9 +636,33 @@ public class Battle {
         SabRandom.disposeBattleRandom();
     }
 
-    public void onSuccessfulParry() {
+    public boolean preOnPlayerHit(DamageSource source, Player player) {
+        boolean shouldTakeDamage = true;
+        for (ModBattle modBattle : modBattles) {
+            if (!modBattle.preOnPlayerHit(source, player))
+                shouldTakeDamage = false;
+        }
+        return shouldTakeDamage;
+    }
+
+    public void onPlayerHit(DamageSource source, Player player) {
+        modBattles.forEach((modBattle) -> {
+            modBattle.onPlayerHit(source, player);
+        });
+    }
+
+    public void onPlayerKilled(Player player) {
+        modBattles.forEach((modBattle) -> {
+            modBattle.onPlayerKilled(player);
+        });
+    }
+
+    public void onSuccessfulParry(DamageSource source, Player player) {
         SabSounds.playSound("parry.mp3");
         parryFlash = 15;
+        modBattles.forEach((modBattle) -> {
+            modBattle.onParry(source, player);
+        });
     }
 
     public void spawnAssBall() {
@@ -652,6 +715,9 @@ public class Battle {
         this.winner = winner;
         this.loser = loser;
         endGameTimer = 1;
+        modBattles.forEach((modBattle) -> {
+            modBattle.onGameEnd();
+        });
         slowdown(8, 600);
     }
 
@@ -660,6 +726,9 @@ public class Battle {
         screenShatter = 90;
         shakeCamera(8);
         SabSounds.playSound("shatter.mp3");
+        modBattles.forEach((modBattle) -> {
+            modBattle.onScreenShatter();
+        });
     }
 
     public void triggerPauseMenu() {
@@ -742,21 +811,49 @@ public class Battle {
 
         stage.renderBackground(g);
 
+        modBattles.forEach((modBattle) -> {
+            g.useStaticCamera();
+            modBattle.renderBackground(g);
+        });
+
+        g.useDynamicCamera();
+
         for (GameObject misc : miscGameObjects) {
             misc.render(g);
         }
 
         stage.renderDetails(g);
 
+        modBattles.forEach((modBattle) -> {
+            g.useDynamicCamera();
+            modBattle.renderBeforeAttacks(g);
+        });
+
         for (Attack attack : attacks) {
             attack.render(g);
         }
+
+        modBattles.forEach((modBattle) -> {
+            g.useDynamicCamera();
+            modBattle.renderBeforePlayers(g);
+        });
 
         for (Player player : players) {
             player.render(g);
         }
 
+        modBattles.forEach((modBattle) -> {
+            g.useDynamicCamera();
+            modBattle.renderBeforePlatforms(g);
+        });
+
+
         stage.renderPlatforms(g);
+
+        modBattles.forEach((modBattle) -> {
+            g.useDynamicCamera();
+            modBattle.renderBeforeParticles(g);
+        });
 
         for (Particle particle : particles) {
             particle.render(g);
@@ -779,6 +876,11 @@ public class Battle {
             }
         }
 
+        modBattles.forEach((modBattle) -> {
+            g.useStaticCamera();
+            modBattle.renderAfterUI(g);
+        });
+
         if (parryFlash > 0) {
             g.usefulTintDraw(g.imageProvider.getImage("pixel.png"), -1280 / 2, -720 / 2, 1280, 720, 0, 1, 0, false, false, new Color(1, 1, 1,
                     parryFlash / 30f));
@@ -793,6 +895,11 @@ public class Battle {
             g.usefulTintDraw(g.imageProvider.getImage("pixel.png"), -1280 / 2, -720 / 2, 1280, 720, 0, 1, 0, false, false, new Color(0, 0, 0, 1 - ((121f - endGameTimer) / 120)));
             g.drawText("GAME END", Game.getDefaultFont(), 0, 0, (2.5f - ((121f - endGameTimer) / 120) / 2) * Game.getDefaultFontScale(), Color.WHITE, 0);
         }
+
+        modBattles.forEach((modBattle) -> {
+            g.useStaticCamera();
+            modBattle.renderAfterAll(g);
+        });
 
         if (paused && !pauseOverlayHidden) {
             g.usefulDraw(g.imageProvider.getImage("pause_overlay.png"), -Game.game.window.resolutionX / 2, -Game.game.window.resolutionY / 2, Game.game.window.resolutionX, Game.game.window.resolutionY, pauseMenuIndex, 3, 0, false, false);
