@@ -797,6 +797,8 @@ public class Player extends GameObject implements Hittable {
         if (ticks > stunned) stunned = ticks;
     }
 
+    public void resetStun() {
+    }
     public void freeze(int ticks) {
         if (ticks > frozen) frozen = ticks;
         freezeFrame = frame;

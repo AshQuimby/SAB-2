@@ -18,6 +18,7 @@ import java.util.zip.ZipFile;
 import com.sab_format.SabData;
 import com.sab_format.SabParsingException;
 import com.sab_format.SabReader;
+import com.seagull_engine.graphics.ParallaxBackground;
 import sab.game.Game;
 import sab.game.SabSounds;
 import sab.game.attack.AttackType;
@@ -28,7 +29,7 @@ import sab.game.stage.StageType;
 import javax.management.ReflectionException;
 
 public final class ModLoader {
-
+    private static final Map<String, ParallaxBackground> parallaxBackgrounds = new HashMap<>();
     public static List<String> fileKeyCache = new ArrayList<>();
     public static List<File> fileCache = new ArrayList<>();
 
@@ -57,6 +58,10 @@ public final class ModLoader {
             jar.close();
             throw new IOException("Error parsing mod.sab: " + e.getLocalizedMessage());
         }
+    }
+
+    public static ParallaxBackground getParallaxBackground(String identifier) {
+        return parallaxBackgrounds.get(identifier);
     }
 
     public static List<File> getPotentialMods(File modsFolder, List<File> directories) {
@@ -136,11 +141,22 @@ public final class ModLoader {
             Files.copy(entryReader, target);
 
             String name = entry.getName().split("/")[entry.getName().split("/").length - 1];
-
             String key = mod.namespace + ":" + name;
-
             if (entry.getName().endsWith(".png")) {
-                game.window.imageProvider.loadAbsoluteImage(path, key);
+                String realName = entry.getRealName();
+                if (realName.contains("backgrounds") && !realName.contains("images")) {
+                    String shortName = entry.getName().substring(entry.getName().lastIndexOf('/') + 1);
+                    int first = realName.indexOf("backgrounds/") + 12;
+                    int last = realName.lastIndexOf(shortName) - 1;
+                    String backgroundKey = mod.namespace + ":" + realName.substring(first, last);
+                    if (parallaxBackgrounds.containsKey(backgroundKey)) {
+                    } else {
+                        parallaxBackgrounds.put(backgroundKey, new ParallaxBackground());
+                    }
+                    parallaxBackgrounds.get(backgroundKey).addLayer(new File(path));
+                } else {
+                    game.window.imageProvider.loadAbsoluteImage(path, key);
+                }
             } else if (entry.getName().endsWith(".mp3")) {
                 if (entry.getRealName().contains("music")) {
                     game.window.soundEngine.loadMusicAbsolute(path, key);
@@ -180,7 +196,6 @@ public final class ModLoader {
                 Files.delete(target);
             } catch (FileSystemException e) {
                 if (entry.getRealName().contains("music")) {
-                    System.out.println(key + ", " + path);
                     fileKeyCache.add(key);
                     fileCache.add(new File(path));
                 }
