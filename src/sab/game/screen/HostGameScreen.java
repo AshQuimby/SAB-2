@@ -36,6 +36,7 @@ public class HostGameScreen extends ScreenAdapter {
                         remoteClient = server.accept();
                         hasRemoteConnection = true;
                     } catch (IOException e) {
+                        e.printStackTrace();
                         errorAcceptingConnection = true;
                     }
                 }

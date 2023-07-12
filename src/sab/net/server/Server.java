@@ -4,12 +4,10 @@ import sab.net.packet.Packet;
 import sab.net.packet.PacketManager;
 
 import java.io.IOException;
+import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Server {
     private final ServerSocket serverSocket;
@@ -23,7 +21,10 @@ public class Server {
     private int nextId;
 
     public Server(PacketManager packetManager, int port) throws IOException {
-        serverSocket = new ServerSocket(port);
+        serverSocket = new ServerSocket();
+        serverSocket.setPerformancePreferences(0, 2, 1);
+        serverSocket.bind(new InetSocketAddress(port));
+
         this.packetManager = packetManager;
         connections = new ArrayList<>();
 
@@ -150,7 +151,6 @@ public class Server {
         receiver.setName("Connection Handler");
         receiver.setDaemon(true);
         receiver.start();
-
         return nextId++;
     }
 
