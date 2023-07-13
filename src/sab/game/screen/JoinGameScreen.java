@@ -11,6 +11,7 @@ import sab.game.SabSounds;
 import sab.game.settings.Settings;
 import sab.game.screen.battle_adjacent.CharacterSelectScreen;
 import sab.game.screen.error.ErrorScreen;
+import sab.net.JoinGameException;
 import sab.net.client.Client;
 import sab.net.packet.*;
 import sab.screen.Screen;
@@ -96,6 +97,8 @@ public class JoinGameScreen extends ScreenAdapter {
                         client = new Client(hostIp, Integer.parseInt(hostPort), new SabPacketManager());
                     } catch (IOException ignored) {
                         error = new SabError("Connection Failed", "Failed to connect");
+                    } catch (JoinGameException e) {
+                        error = e.error;
                     }
                 }
         );

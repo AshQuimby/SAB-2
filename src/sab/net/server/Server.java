@@ -1,5 +1,8 @@
 package sab.net.server;
+import sab.game.Game;
+import sab.modloader.Mod;
 import sab.net.Connection;
+import sab.net.Protocol;
 import sab.net.packet.Packet;
 import sab.net.packet.PacketManager;
 
@@ -118,6 +121,13 @@ public class Server {
     public int accept() throws IOException {
         Socket socket = serverSocket.accept();
         Connection connection = new Connection(socket);
+        connection.writeInt(Protocol.PROTOCOL_VERSION);
+        connection.writeInt(Game.game.mods.size() - 1);
+        for (Mod mod : Game.game.mods.values()) {
+            if (mod.namespace == null) continue;
+            connection.writeUTF(mod.namespace);
+            connection.writeUTF(mod.version);
+        }
         connection.writeInt(nextId);
 
         connections.add(connection);
