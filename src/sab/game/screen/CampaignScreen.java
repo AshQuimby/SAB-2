@@ -56,7 +56,7 @@ public class CampaignScreen extends ScreenAdapter {
         }
         if (keyCode == Input.Keys.ENTER) {
             SabSounds.playSound(SabSounds.SELECT);
-            BattleScreen battleScreen = new BattleScreen(new Fighter(new Marvin()), levels[selection].opponent, new int[] {0, 0}, levels[selection].stage, 0, levels[selection].difficulty, 3);
+            BattleScreen battleScreen = new BattleScreen(0, new BattleConfig()); // FIXME: Make campaign levels actually work
             battleScreen.battle.setDialogue(Dialogues.getDialogue("chain_greeting.dlg"));
             return battleScreen;
         }

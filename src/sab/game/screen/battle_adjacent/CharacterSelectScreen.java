@@ -23,6 +23,8 @@ import sab.game.fighter.Random;
 import sab.game.screen.NetScreen;
 import sab.game.screen.TitleScreen;
 import sab.game.screen.error.ErrorScreen;
+import sab.game.settings.Settings;
+import sab.game.stage.BattleConfig;
 import sab.modloader.ModLoader;
 import sab.net.client.Client;
 import sab.net.packet.CharacterSelectPacket;
@@ -101,6 +103,23 @@ public class CharacterSelectScreen extends NetScreen {
         updateCharacterList = true;
     }
 
+    private BattleConfig createBattleConfig() {
+        BattleConfig config = new BattleConfig();
+        config.setPlayer1(player1.index, player1.costume, player1.type);
+        config.setPlayer2(player2.index, player2.costume, player2.type);
+
+        config.gameMode = switch (Settings.localSettings.gameMode.value) {
+            case 0 -> BattleConfig.GameMode.DAMAGE;
+            case 1 -> BattleConfig.GameMode.HEALTH;
+            default -> throw new IllegalStateException(String.format("Invalid Game Mode: %s", Settings.localSettings.gameMode.value));
+        };
+        config.lives = Settings.localSettings.lifeCount.value;
+        config.spawnAssBalls = Settings.localSettings.assBalls.value;
+        config.stageHazards = Settings.localSettings.stageHazards.value;
+
+        return config;
+    }
+
     @Override
     public Screen update() {
         if (updateCharacterList) {
@@ -119,14 +138,7 @@ public class CharacterSelectScreen extends NetScreen {
         }
 
         if (starting) {
-            return new StageSelectScreen(
-                    client,
-                    player1.availableFighters.get(player1.index).copy(),
-                    player2.availableFighters.get(player2.index).copy(),
-                    player1.costume,
-                    player2.costume,
-                    player1.type,
-                    player2.type);
+            return new StageSelectScreen(client, createBattleConfig());
         }
 
         return this;
@@ -214,24 +226,16 @@ public class CharacterSelectScreen extends NetScreen {
                     updateTimesPlayed();
                     updateCharacterList = true;
                     SabSounds.playSound(SabSounds.BLIP);
+
+                    BattleConfig config = new BattleConfig();
+                    config.setPlayer1(player1.index, player1.costume, player1.type);
+                    config.setPlayer2(player2.index, player2.costume, player2.type);
+
                     if (host) {
                         server.send(0, new ScreenTransitionPacket());
-                        return new StageSelectScreen(
-                                server,
-                                p1Fighter,
-                                p2Fighter,
-                                player1.costume,
-                                player2.costume,
-                                player1.type,
-                                player2.type);
+                        return new StageSelectScreen(server, createBattleConfig());
                     }
-                    return new StageSelectScreen(
-                            p1Fighter,
-                            p2Fighter,
-                            player1.costume,
-                            player2.costume,
-                            player1.type,
-                            player2.type);
+                    return new StageSelectScreen(createBattleConfig());
                 }
             }
             case Input.Keys.F -> {

@@ -18,6 +18,7 @@ public class ErrorScreen extends ScreenAdapter {
 
     @Override
     public void render(Seagraphics g) {
+        g.useStaticCamera();
         g.scalableDraw(g.imageProvider.getImage("cobs_background.png"), -1280 / 2, -720 / 2, 1280, 720);
         g.drawText(error.type(), Game.getDefaultFont(), 0, 64, Game.getDefaultFontScale() * 2, Color.WHITE, 0);
         g.drawText(error.message(), Game.getDefaultFont(), 0, 0, Game.getDefaultFontScale() * 1.5f, Color.WHITE, 0);

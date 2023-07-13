@@ -16,81 +16,64 @@ import sab.game.screen.BattleScreen;
 import sab.game.screen.NetScreen;
 import sab.game.screen.error.ErrorScreen;
 import sab.game.settings.Settings;
+import sab.game.stage.BattleConfig;
 import sab.game.stage.Stage;
 import sab.game.stage.StageType;
 import sab.modloader.ModLoader;
 import sab.net.client.Client;
-import sab.net.packet.KickPacket;
-import sab.net.packet.Packet;
-import sab.net.packet.ScreenTransitionPacket;
-import sab.net.packet.StageSelectPacket;
+import sab.net.packet.*;
 import sab.net.server.Server;
 import sab.screen.Screen;
 
 public class StageSelectScreen extends NetScreen {
     private final List<Stage> stages;
     private int stageIndex;
-    private final int player1Costume, player2Costume;
-    private final Fighter player1, player2;
-    private final int player1Type, player2Type;
     private boolean disconnected;
     private boolean starting;
 
-    public StageSelectScreen(Fighter player1, Fighter player2, int player1Costume, int player2Costume, int player1Type, int player2Type) {
+    private long seed;
+    private BattleConfig config;
+
+    public StageSelectScreen(BattleConfig config) {
         super();
         stages = new ArrayList<>();
         stageIndex = 0;
 
-        this.player1 = player1;
-        this.player2 = player2;
-        this.player1Costume = player1Costume;
-        this.player2Costume = player2Costume;
-        this.player1Type = player1Type;
-        this.player2Type = player2Type;
+        this.config = config;
 
         for (Class<? extends StageType> stage : Game.game.stages) {
             Stage drawnStage = new Stage(ModLoader.getStageType(stage));
-            drawnStage.setBattle(new Battle());
+            drawnStage.setBattle(new Battle(0, new BattleConfig())); // This Battle is a dummy
             drawnStage.init();
             stages.add(drawnStage);
         }
     }
 
-    public StageSelectScreen(Server server, Fighter player1, Fighter player2, int player1Costume, int player2Costume, int player1Type, int player2Type) {
+    public StageSelectScreen(Server server, BattleConfig config) {
         super(server);
         stages = new ArrayList<>();
         stageIndex = 0;
 
-        this.player1 = player1;
-        this.player2 = player2;
-        this.player1Costume = player1Costume;
-        this.player2Costume = player2Costume;
-        this.player1Type = player1Type;
-        this.player2Type = player2Type;
+        this.config = config;
 
         for (Class<? extends StageType> stage : Game.game.stages) {
             Stage drawnStage = new Stage(ModLoader.getStageType(stage));
-            drawnStage.setBattle(new Battle());
+            drawnStage.setBattle(new Battle(0, new BattleConfig())); // This Battle is a dummy
             drawnStage.init();
             stages.add(drawnStage);
         }
     }
 
-    public StageSelectScreen(Client client, Fighter player1, Fighter player2, int player1Costume, int player2Costume, int player1Type, int player2Type) {
+    public StageSelectScreen(Client client, BattleConfig config) {
         super(client);
         stages = new ArrayList<>();
         stageIndex = 0;
 
-        this.player1 = player1;
-        this.player2 = player2;
-        this.player1Costume = player1Costume;
-        this.player2Costume = player2Costume;
-        this.player1Type = player1Type;
-        this.player2Type = player2Type;
+        this.config = config;
 
         for (Class<? extends StageType> stage : Game.game.stages) {
             Stage drawnStage = new Stage(ModLoader.getStageType(stage));
-            drawnStage.setBattle(new Battle());
+            drawnStage.setBattle(new Battle(0, new BattleConfig())); // This Battle is a dummy
             drawnStage.init();
             stages.add(drawnStage);
         }
@@ -100,7 +83,10 @@ public class StageSelectScreen extends NetScreen {
     protected void receive(Packet p) {
         if (p instanceof StageSelectPacket ssp) {
             stageIndex = ssp.stage;
-        } else if (p instanceof ScreenTransitionPacket) {
+        } else if (p instanceof BattleConfigPacket bcp) {
+            seed = bcp.seed;
+            config = bcp.config;
+            stageIndex = config.stageIndex;
             starting = true;
         }
     }
@@ -137,7 +123,8 @@ public class StageSelectScreen extends NetScreen {
         }
 
         if (starting) {
-            return new BattleScreen(client, player1, player2, new int[] {player1Costume, player2Costume}, stages.get(stageIndex), 3);
+            config.stageIndex = stageIndex;
+            return new BattleScreen(client, seed, config);
         }
 
         return this;
@@ -174,11 +161,13 @@ public class StageSelectScreen extends NetScreen {
             }
         }
         if (keyCode == Input.Keys.ENTER && (host || local)) {
+            config.stageIndex = stageIndex;
+            seed = System.currentTimeMillis();
             if (host) {
-                server.send(0, new ScreenTransitionPacket());
-                return new BattleScreen(server, player1, player2, new int[] {player1Costume, player2Costume}, stages.get(stageIndex), Settings.localSettings.lifeCount.value);
+                server.send(0, new BattleConfigPacket(seed, config));
+                return new BattleScreen(server, seed, config);
             }
-            return new BattleScreen(player1, player2, new int[] {player1Costume, player2Costume}, stages.get(stageIndex), player1Type, player2Type, Settings.localSettings.lifeCount.value);
+            return new BattleScreen(seed, config);
         }
         if (keyCode == Input.Keys.ESCAPE) return Game.game.globalCharacterSelectScreen;
         SabSounds.playSound(SabSounds.BLIP);

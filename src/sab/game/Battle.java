@@ -26,13 +26,15 @@ import sab.game.settings.Settings;
 import sab.game.stage.*;
 import sab.modloader.Mod;
 import sab.modloader.ModBattle;
+import sab.modloader.ModLoader;
 import sab.net.Keys;
 import sab.net.VoidFunction;
 import sab.replay.ReplayAI;
 import sab.util.SabRandom;
 
 public class Battle {
-    private long seed;
+    private final long seed;
+
     private List<Player> players;
     private Player player1;
     private Player player2;
@@ -85,7 +87,19 @@ public class Battle {
     private VoidFunction<Particle> spawnParticleCallback;
     private List<ModBattle> modBattles;
 
-    public Battle(long seed, Fighter fighter1, Fighter fighter2, int[] costumes, Stage stage, int player1Type, int player2Type, int lives, boolean hasAssBalls, boolean hasStageHazards) {
+    public Battle(long seed,
+                  Fighter player1Fighter,
+                  int player1Costume,
+                  int player1Type,
+                  Fighter player2Fighter,
+                  int player2Costume,
+                  int player2Type,
+                  Stage stage,
+                  BattleConfig.GameMode gameMode,
+                  int lives,
+                  boolean spawnAssBalls,
+                  boolean stageHazards) {
+        this.seed = seed;
         SabRandom.createNewBattleRandom(seed);
 
         gameObjects = new ArrayList<>();
@@ -115,26 +129,24 @@ public class Battle {
             }
         }
 
-        this.hasAssBalls = hasAssBalls;
-        this.hasStageHazards = hasStageHazards;
+        this.hasAssBalls = spawnAssBalls;
+        this.hasStageHazards = stageHazards;
 
         players = new ArrayList<>();
 
-        if (Settings.localSettings.gameMode.asRawValue().equals("health")) {
-            player1 = new Player(fighter1, costumes[0], 0, lives, this, 150);
-            player2 = new Player(fighter2, costumes[1], 1, lives, this, 150);
-        } else {
-            player1 = new Player(fighter1, costumes[0], 0, lives, this);
-            player2 = new Player(fighter2, costumes[1], 1, lives, this);
+        switch (gameMode) {
+            case DAMAGE -> {
+                player1 = new Player(player1Fighter.copy(), player1Costume, 0, lives, this);
+                player2 = new Player(player2Fighter.copy(), player2Costume, 1, lives, this);
+            }
+            case HEALTH -> {
+                player1 = new Player(player1Fighter.copy(), player1Costume, 0, lives, this, 150);
+                player2 = new Player(player2Fighter.copy(), player2Costume, 1, lives, this, 150);
+            }
         }
 
-        player1.setAI(player1Type == 0 ? null : player1.fighter.getAI(player1, player1Type));
-
-        if (player1Type == -1) player1.setAI(new ReplayAI());
-
-        player2.setAI(player2Type == 0 ? null : player2.fighter.getAI(player2, player2Type));
-
-        if (player2Type == -1) player2.setAI(new ReplayAI());
+        player1.setAI(player1Type == 0 ? null : player1Type == -1 ? new ReplayAI() : player1.fighter.getAI(player1, player1Type));
+        player2.setAI(player2Type == 0 ? null : player2Type == -1 ? new ReplayAI() : player2.fighter.getAI(player2, player2Type));
 
         player2.direction = -1;
         paused = false;
@@ -165,15 +177,23 @@ public class Battle {
         addNewGameObjects();
     }
 
-    // Relic of the past
-    public Battle() {
-        this(System.currentTimeMillis(), new Fighter(new Marvin()), new Fighter(new Chain()), new int[] {0, 0}, new Stage(new LastLocation()), 0, 0, 3, true, true);
+    public Battle(long seed, BattleConfig config) {
+        this(seed,
+            new Fighter(ModLoader.getFighterType(Game.game.fighters.get(config.player1Index))),
+            config.player1Costume,
+            config.player1Type,
+            new Fighter(ModLoader.getFighterType(Game.game.fighters.get(config.player2Index))),
+            config.player2Costume,
+            config.player2Type,
+            new Stage(ModLoader.getStageType(Game.game.stages.get(config.stageIndex))),
+            config.gameMode,
+            config.lives,
+            config.spawnAssBalls,
+            config.stageHazards);
     }
 
     public void start() {
-        modBattles.forEach((modBattle) -> {
-            modBattle.onStart();
-        });
+        modBattles.forEach(ModBattle::onStart);
     }
 
     public void setDialogue(Dialogue dialogue) {

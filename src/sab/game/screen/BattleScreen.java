@@ -10,12 +10,15 @@ import com.seagull_engine.Seagraphics;
 import sab.error.SabError;
 import sab.game.*;
 import sab.game.fighter.Fighter;
+import sab.game.fighter.FighterType;
 import sab.game.screen.battle_adjacent.CharacterSelectScreen;
 import sab.game.screen.battle_adjacent.VictoryScreen;
 import sab.game.screen.error.ErrorScreen;
 import sab.game.settings.Settings;
+import sab.game.stage.BattleConfig;
 import sab.game.stage.LastLocation;
 import sab.game.stage.Stage;
+import sab.modloader.ModLoader;
 import sab.net.Keys;
 import sab.net.client.Client;
 import sab.net.packet.KeyEventPacket;
@@ -63,38 +66,46 @@ public class BattleScreen extends NetScreen {
 
         boolean assBalls = data.getValue("assBalls").asBool();
         boolean stageHazards = data.getValue("stageHazards").asBool();
-
-        battle = new Battle(seed, player1, player2, costumes, new Stage(new LastLocation()), player1Type, player2Type, lives, assBalls, stageHazards);
+        battle = new Battle(seed,
+                player1,
+                costumes[0],
+                player1Type,
+                player2,
+                costumes[1],
+                player2Type,
+                new Stage(new LastLocation()),
+                BattleConfig.GameMode.DAMAGE,
+                lives,
+                assBalls,
+                stageHazards);
         battle.start();
         playingReplay = new Replay();
         playingReplay.fromSabData(data);
         playingReplay.tickReplay(battle, 0);
     }
 
-    public BattleScreen(Fighter player1, Fighter player2, int[] costumes, Stage stage, int player1Type, int player2Type, int lives) {
+    public BattleScreen(long seed, BattleConfig config) {
         super();
-        long seed = System.currentTimeMillis();
-        battle = new Battle(seed, player1, player2, costumes, stage, player1Type, player2Type, lives, Settings.localSettings.assBalls.value, Settings.localSettings.stageHazards.value);
+        battle = new Battle(seed, config);
         battle.start();
         SabSounds.playMusic(battle.getStage().music, true);
-        currentReplay = new Replay(seed, battle.getPlayer(0), battle.getPlayer(1), player1Type, player2Type, stage, lives, Settings.localSettings.assBalls.value, Settings.localSettings.stageHazards.value);
+        currentReplay = new Replay(seed, battle.getPlayer(0), battle.getPlayer(1), config.player1Type, config.player2Type, battle.getStage(), config.lives, config.spawnAssBalls, config.stageHazards);
     }
 
-    public BattleScreen(Server server, Fighter player1, Fighter player2, int[] costumes, Stage stage, int lives) {
+    public BattleScreen(Server server, long seed, BattleConfig config) {
         super(server);
-        long seed = System.currentTimeMillis();
-        battle = new Battle(seed, player1, player2, costumes, stage, 0, 0, lives, Settings.localSettings.assBalls.value, Settings.localSettings.stageHazards.value);
+        battle = new Battle(seed, config);
         battle.start();
         SabSounds.playMusic(battle.getStage().music, true);
-        currentReplay = new Replay(seed, battle.getPlayer(0), battle.getPlayer(1), 0, 0, stage, lives, Settings.localSettings.assBalls.value, Settings.localSettings.stageHazards.value);
+        currentReplay = new Replay(seed, battle.getPlayer(0), battle.getPlayer(1), 0, 0, battle.getStage(), config.lives, config.spawnAssBalls, config.stageHazards);
     }
 
-    public BattleScreen(Client client, Fighter player1, Fighter player2, int[] costumes, Stage stage, int lives) {
+    public BattleScreen(Client client, long seed, BattleConfig config) {
         super(client);
-        long seed = System.currentTimeMillis();
-        battle = new Battle(seed, player1, player2, costumes, stage, 0, 0, lives, Settings.localSettings.assBalls.value, Settings.localSettings.stageHazards.value);
+        battle = new Battle(seed, config);
+        battle.start();
         SabSounds.playMusic(battle.getStage().music, true);
-        currentReplay = new Replay(seed, battle.getPlayer(0), battle.getPlayer(1), 0, 0, stage, lives, Settings.localSettings.assBalls.value, Settings.localSettings.stageHazards.value);
+        currentReplay = new Replay(seed, battle.getPlayer(0), battle.getPlayer(1), 0, 0, battle.getStage(), config.lives, config.spawnAssBalls, config.stageHazards);
     }
 
     @Override
