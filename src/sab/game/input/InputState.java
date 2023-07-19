@@ -1,4 +1,4 @@
-package sab.game;
+package sab.game.input;
 
 public class InputState {
     private final int inputs;

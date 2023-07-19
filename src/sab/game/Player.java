@@ -15,6 +15,7 @@ import sab.game.animation.Animation;
 import sab.game.attack.Attack;
 import sab.game.attack.AttackType;
 import sab.game.fighter.Fighter;
+import sab.game.input.InputState;
 import sab.game.item.Item;
 import sab.game.particle.Particle;
 import sab.game.settings.Settings;

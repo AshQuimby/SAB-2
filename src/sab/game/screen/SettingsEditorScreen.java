@@ -4,7 +4,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.seagull_engine.Seagraphics;
 import sab.game.Game;
-import sab.game.InputState;
+import sab.game.input.InputState;
 import sab.game.SabSounds;
 import sab.game.settings.Setting;
 import sab.game.settings.Settings;
