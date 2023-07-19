@@ -21,9 +21,7 @@ import sab.game.stage.Stage;
 import sab.modloader.ModLoader;
 import sab.net.Keys;
 import sab.net.client.Client;
-import sab.net.packet.KeyEventPacket;
-import sab.net.packet.Packet;
-import sab.net.packet.UpdatePacket;
+import sab.net.packet.*;
 import sab.net.server.Server;
 import sab.replay.Replay;
 import sab.screen.*;
@@ -111,9 +109,38 @@ public class BattleScreen extends NetScreen {
         if (p instanceof KeyEventPacket kep) {
             if (kep.state) battle.getPlayer(0).keys.press(kep.key);
             else battle.getPlayer(0).keys.release(kep.key);
-        } else if (p instanceof UpdatePacket) {
+        } else if (p instanceof UpdatePacket up) {
+            for (int i = 0; i < 6; i++) {
+                if (up.player1Pressed[i]) {
+                    battle.getPlayer(0).keys.press(i);
+                }
+                if (up.player1Released[i]) {
+                    battle.getPlayer(0).keys.release(i);
+                }
+                if (up.player2Pressed[i]) {
+                    battle.getPlayer(1).keys.press(i);
+                }
+                if (up.player2Released[i]) {
+                    battle.getPlayer(1).keys.release(i);
+                }
+            }
             battle.update();
             battle.postUpdate();
+        } else if (p instanceof PausePacket pp) {
+            if (pp.paused) battle.pause();
+            else battle.unpause();
+        } else if (p instanceof DebugCommandPacket dcp) {
+            if (dcp.command == DebugCommandPacket.SPAWN) {
+                battle.spawnAssBall();
+            } else if (dcp.command == DebugCommandPacket.GRANT) {
+                for (Player player : battle.getPlayers()) {
+                    player.grantFinalAss();
+                }
+            }
+        } else if (p instanceof EndGamePacket) {
+            battle.pause();
+            battle.pauseMenuIndex = 2;
+            battle.onPressEnter();
         }
     }
 
@@ -154,26 +181,35 @@ public class BattleScreen extends NetScreen {
         }
 
         if (Settings.localSettings.debugMode.value) {
-            if (keyCode == Input.Keys.V) {
+            if (keyCode == Input.Keys.V && (local || host)) {
                 // SPAWN MASSIVE BALLS
                 battle.spawnAssBall();
+                if (host) {
+                    server.send(0, new DebugCommandPacket(DebugCommandPacket.SPAWN));
+                }
             } else if (keyCode == Input.Keys.H) {
                 battle.drawHitboxes = !battle.drawHitboxes;
             } else if (keyCode == Input.Keys.P) {
                 battle.drawPathfindingGraph = !battle.drawPathfindingGraph;
-            } else if (keyCode == Input.Keys.SPACE && battle.isPaused()) {
+            } else if (keyCode == Input.Keys.SPACE && battle.isPaused() && (local || host)) {
+                server.send(0, new PausePacket(false));
                 battle.unpause();
+                server.send(0, new UpdatePacket(battle.getPlayer(0), battle.getPlayer(1)));
                 battle.update();
                 battle.postUpdate();
                 battle.pause();
-            } else if (keyCode == Input.Keys.B) {
+                server.send(0, new PausePacket(true));
+            } else if (keyCode == Input.Keys.B && (host || local)) {
                 for (Player player : battle.getPlayers()) {
                     player.grantFinalAss();
+                }
+                if (host) {
+                    server.send(0, new DebugCommandPacket(DebugCommandPacket.GRANT));
                 }
             }
         }
 
-        if (!battle.gameOver()) {
+        if (!battle.gameOver() && (local || host)) {
             if (battle.isPaused()) {
                 if (keyCode == Input.Keys.W || keyCode == Input.Keys.UP) {
                     battle.pauseMenuIndex = Utils.loop(battle.pauseMenuIndex, -1, 3, 0);
@@ -216,8 +252,15 @@ public class BattleScreen extends NetScreen {
 
             if (keyCode == Input.Keys.ESCAPE || keyCode == Input.Keys.SHIFT_RIGHT) {
                 battle.togglePause();
+                server.send(0, new PausePacket(battle.isPaused()));
             } else if (keyCode == Input.Keys.ENTER) {
                 battle.onPressEnter();
+                if (host) {
+                    server.send(0, new PausePacket(battle.isPaused()));
+                    if (battle.gameOver()) {
+                        server.send(0, new EndGamePacket());
+                    }
+                }
             } else if (currentReplay != null) {
                 numInputs++;
                 currentReplay.keyStateChanged(keyCode, true);
@@ -227,14 +270,17 @@ public class BattleScreen extends NetScreen {
         if (host) {
             for (byte i = 0; i < 6; i++) {
                 if (battle.getPlayer(0).keys.isJustPressed(i)) {
-                    server.send(0, new KeyEventPacket(i, true));
+                    //server.send(0, new KeyEventPacket(i, true));
                 }
             }
         } else if (!local) {
-            for (byte i = 0; i < 6; i++) {
-                if (battle.getPlayer(1).keys.isJustPressed(i)) {
-                    client.send(new KeyEventPacket(i, true));
-                }
+            switch (keyCode) {
+                case Input.Keys.UP -> client.send(new KeyEventPacket(Keys.UP, true));
+                case Input.Keys.DOWN -> client.send(new KeyEventPacket(Keys.DOWN, true));
+                case Input.Keys.LEFT -> client.send(new KeyEventPacket(Keys.LEFT, true));
+                case Input.Keys.RIGHT -> client.send(new KeyEventPacket(Keys.RIGHT, true));
+                case Input.Keys.M -> client.send(new KeyEventPacket(Keys.ATTACK, true));
+                case Input.Keys.N -> client.send(new KeyEventPacket(Keys.PARRY, true));
             }
         }
 
@@ -261,7 +307,7 @@ public class BattleScreen extends NetScreen {
             else if (keyCode == Input.Keys.T) keyCode = Input.Keys.N;
         }
 
-        if (!battle.gameOver()) {
+        if (!battle.gameOver() && (local || host)) {
             if (keyCode == Input.Keys.W) {
                 battle.getPlayer(0).keys.release(Keys.UP);
             } else if (keyCode == Input.Keys.A) {
@@ -303,14 +349,17 @@ public class BattleScreen extends NetScreen {
         if (host) {
             for (byte i = 0; i < 6; i++) {
                 if (battle.getPlayer(0).keys.isJustReleased(i)) {
-                    server.send(0, new KeyEventPacket(i, false));
+                    //server.send(0, new KeyEventPacket(i, false));
                 }
             }
         } else if (!local) {
-            for (byte i = 0; i < 6; i++) {
-                if (battle.getPlayer(1).keys.isJustReleased(i)) {
-                    client.send(new KeyEventPacket(i, false));
-                }
+            switch (keyCode) {
+                case Input.Keys.UP -> client.send(new KeyEventPacket(Keys.UP, false));
+                case Input.Keys.DOWN -> client.send(new KeyEventPacket(Keys.DOWN, false));
+                case Input.Keys.LEFT -> client.send(new KeyEventPacket(Keys.LEFT, false));
+                case Input.Keys.RIGHT -> client.send(new KeyEventPacket(Keys.RIGHT, false));
+                case Input.Keys.M -> client.send(new KeyEventPacket(Keys.ATTACK, false));
+                case Input.Keys.N -> client.send(new KeyEventPacket(Keys.PARRY, false));
             }
         }
 
@@ -349,7 +398,7 @@ public class BattleScreen extends NetScreen {
         }
         if (host || local) {
             if (host) {
-                server.send(0, new UpdatePacket());
+                server.send(0, new UpdatePacket(battle.getPlayer(0), battle.getPlayer(1)));
             }
             if (battle.update()) {
                 if (currentReplay != null) currentReplay.update(battle.getBattleTick());
