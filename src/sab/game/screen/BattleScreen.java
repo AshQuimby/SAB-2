@@ -23,7 +23,7 @@ import sab.net.Keys;
 import sab.net.client.Client;
 import sab.net.packet.KeyEventPacket;
 import sab.net.packet.Packet;
-import sab.net.packet.PlayerStatePacket;
+import sab.net.packet.UpdatePacket;
 import sab.net.server.Server;
 import sab.replay.Replay;
 import sab.screen.*;
@@ -32,13 +32,11 @@ import sab.util.Utils;
 import java.io.File;
 
 public class BattleScreen extends NetScreen {
-    private static final int NETWORK_TICK_MILLISECONDS = 50;
     public Battle battle;
     private Replay currentReplay;
     private Replay playingReplay;
     private boolean disconnected;
     private boolean ended;
-    private long lastBroadcastTimestamp;
 
     private int numInputs;
 
@@ -113,8 +111,9 @@ public class BattleScreen extends NetScreen {
         if (p instanceof KeyEventPacket kep) {
             if (kep.state) battle.getPlayer(0).keys.press(kep.key);
             else battle.getPlayer(0).keys.release(kep.key);
-        } else if (p instanceof PlayerStatePacket psp && battle != null) {
-            psp.syncPlayer(battle.getPlayer(psp.playerId));
+        } else if (p instanceof UpdatePacket) {
+            battle.update();
+            battle.postUpdate();
         }
     }
 
@@ -348,17 +347,15 @@ public class BattleScreen extends NetScreen {
             System.out.println("Replay inputs detected: " + Replay.inputsDetected);
             return new VictoryScreen(battle.winner, battle.loser, battle.getStage().background);
         }
-        if (battle.update()) {
-            if (currentReplay != null) currentReplay.update(battle.getBattleTick());
-            else playingReplay.tickReplay(battle, battle.getBattleTick() + 1);
-        }
-        battle.postUpdate();
-        if (host && System.currentTimeMillis() - lastBroadcastTimestamp > NETWORK_TICK_MILLISECONDS) {
-            lastBroadcastTimestamp = System.currentTimeMillis();
-            for (int i = 0; i < battle.getPlayers().size(); i++) {
-                Player player = battle.getPlayer(i);
-                server.send(0, new PlayerStatePacket(player));
+        if (host || local) {
+            if (host) {
+                server.send(0, new UpdatePacket());
             }
+            if (battle.update()) {
+                if (currentReplay != null) currentReplay.update(battle.getBattleTick());
+                else playingReplay.tickReplay(battle, battle.getBattleTick() + 1);
+            }
+            battle.postUpdate();
         }
         return this;
     }
