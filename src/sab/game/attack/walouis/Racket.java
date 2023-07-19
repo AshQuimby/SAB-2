@@ -4,6 +4,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.seagull_engine.GameObject;
 
+import com.seagull_engine.Seagraphics;
 import sab.game.action.PlayerAction;
 import sab.game.animation.Animation;
 import sab.game.attack.Attack;
@@ -35,8 +36,7 @@ public class Racket extends AttackType {
     @Override
     public void update(Attack attack) {
         attack.hitbox.setSize(208, 116);
-        attack.hitbox.setCenter(attack.owner.hitbox.getCenter(new Vector2()).add(0, 24));
-        attack.drawRect.setCenter(attack.hitbox.getCenter(new Vector2()));
+        attack.hitbox.setCenter(attack.owner.getCenter().add(0, 24));
 
         if (attack.owner.charging()) {
             attack.life = 24;
@@ -48,6 +48,10 @@ public class Racket extends AttackType {
             attack.knockback = new Vector2(1 * attack.owner.direction, 0.5f).scl(attack.owner.getCharge() / 8f + 12f);
             attack.owner.startAnimation(24, new Animation(new int[]{9, 5, 4, 0}, 4, false), 8, false);
             swung = true;
+        }
+
+        if (attack.owner.isStuck()) {
+            attack.alive = false;
         }
 
         attack.direction = attack.owner.direction;
@@ -63,11 +67,13 @@ public class Racket extends AttackType {
         if (attack.frame == 2) {
             attack.hitbox.set(attack.hitbox.x - 64 * attack.direction, attack.hitbox.y + 56, 120, 60);
             if (attack.direction == 1) attack.hitbox.x += 92;
+            attack.resize(160, 80);
         }
 
         if (attack.frame == 3) {
             attack.hitbox.set(attack.hitbox.x - 16 * attack.direction, attack.hitbox.y + 20, 52, 68);
             if (attack.direction == 1) attack.hitbox.x += 152;
+            attack.resize(64, 96);
         }
 
         if (attack.frame == 2 || attack.frame == 3) {
@@ -86,6 +92,12 @@ public class Racket extends AttackType {
         } else {
             attack.canHit = false;
         }
+    }
+
+    @Override
+    public void render(Attack attack, Seagraphics g) {
+        attack.drawRect.setCenter(attack.owner.getCenter().add(0, 16));
+        super.render(attack, g);
     }
 
     @Override

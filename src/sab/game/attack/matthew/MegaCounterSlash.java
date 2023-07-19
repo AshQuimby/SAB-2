@@ -38,9 +38,9 @@ public class MegaCounterSlash extends MeleeAttackType {
 
     @Override
     public void onSpawn(Attack attack, int[] data) {
-        attack.damage = (int) (data[0] * 1.2f);
+        attack.damage = (int) (data[0] * 1.5f);
         super.onSpawn(attack, data);
-        attack.knockback = new Vector2(8 * attack.owner.direction, 5).scl(data[0] / 20f + 1);
+        attack.knockback = new Vector2(8 * attack.owner.direction, 5).scl(data[0] / 15f + 1);
         SabSounds.playSound("swish.mp3");
     }
 }

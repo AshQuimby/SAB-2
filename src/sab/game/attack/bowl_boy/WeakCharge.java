@@ -21,7 +21,7 @@ public class WeakCharge extends BowlBoyShot {
         attack.frameCount = 4;
         attack.collideWithStage = true;
         attack.staticKnockback = true;
-        superMeterValue = 1.5f;
+        superMeterValue = 2f;
     }
 
     @Override

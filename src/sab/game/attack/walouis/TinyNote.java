@@ -23,7 +23,7 @@ public class TinyNote extends AttackType {
         attack.hitbox.height = 20;
         attack.drawRect.width = 20;
         attack.drawRect.height = 20;
-        attack.frame = new Random().nextInt(3);
+        attack.frame = SabRandom.random(3);
         attack.damage = 4;
         attack.directional = true;
         attack.collideWithStage = true;

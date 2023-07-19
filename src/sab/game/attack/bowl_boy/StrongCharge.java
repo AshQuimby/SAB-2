@@ -20,7 +20,7 @@ public class StrongCharge extends BowlBoyShot {
         attack.hitCooldown = 20;
         attack.frameCount = 8;
         attack.collideWithStage = true;
-        superMeterValue = 5;
+        superMeterValue = 8;
     }
 
     @Override

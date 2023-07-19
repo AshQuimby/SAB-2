@@ -21,7 +21,7 @@ public class HellTwoBoogaloo extends StageType {
     public static int i = 0;
     @Override
     public void init(Stage stage) {
-        stage.name = "HELL 2 BABY (It's back in business)";
+        stage.name = "HELL 2 BABY (It's back in business)\n[Photosensitivity & Sound warning]";
         stage.music = "genetically_engineered_bad.mp3";
         stage.background = "no_ducks.png";
         stage.maxZoomOut = 3f;

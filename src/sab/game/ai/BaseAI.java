@@ -19,7 +19,6 @@ public class BaseAI extends AI {
     private boolean dontChase;
     private int moveToCenterTime;
     private Platform platformToCenterOn;
-
     private final Navigator navigator;
 
     public BaseAI(Player player, int difficulty, float preferredHorizontalDistance) {

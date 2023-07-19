@@ -18,7 +18,9 @@ public class Saxophone extends AttackType {
         attack.canHit = false;
         attack.hitbox = new Rectangle(0, 0, 1, 1);
         attack.drawRect = new Rectangle(0, 0, 32, 56);
-        attack.life = 740 + 150;
+        attack.life = 740 + 90;
+        attack.reflectable = false;
+        attack.parryable = false;
     }
 
     @Override
@@ -33,7 +35,7 @@ public class Saxophone extends AttackType {
     @Override
     public void update(Attack attack) {
         if (attack.life >= 740) {
-            Vector2 step = target.cpy().sub(startPos).scl(1 / 151f);
+            Vector2 step = target.cpy().sub(startPos).scl(1 / 91f);
             attack.hitbox.x += step.x;
             attack.hitbox.y += step.y;
         }

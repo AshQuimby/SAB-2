@@ -19,7 +19,7 @@ public class Peashot extends BowlBoyShot {
         attack.hitCooldown = 20;
         attack.collideWithStage = true;
         attack.staticKnockback = true;
-        superMeterValue = 1;
+        superMeterValue = 1.5f;
     }
 
     @Override

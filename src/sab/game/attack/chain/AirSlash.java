@@ -23,7 +23,7 @@ public class AirSlash extends MeleeAttackType {
         attack.hitbox.height = 48;
         attack.drawRect.width = 120;
         attack.drawRect.height = 64;
-        attack.damage = 4;
+        attack.damage = 3;
         attack.direction = attack.owner.direction;
         attack.hitCooldown = 4;
         attack.reflectable = false;

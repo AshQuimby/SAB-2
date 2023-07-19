@@ -15,7 +15,7 @@ public class EightWay extends BowlBoyShot {
         attack.hitbox.height = 36;
         attack.drawRect.width = 40;
         attack.drawRect.height = 48;
-        attack.damage = 8;
+        attack.damage = 12;
         attack.frameCount = 0;
         attack.directional = true;
         attack.hitCooldown = 30;

@@ -11,7 +11,7 @@ public class BlockSmash extends AttackType {
     public void setDefaults(Attack attack) {
         attack.imageName = "none.png";
         attack.damage = 12;
-        attack.knockback = new Vector2(0, 8);
+        attack.knockback = new Vector2(0, 13);
         attack.hitCooldown = 30;
         attack.life = 4;
     }

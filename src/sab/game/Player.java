@@ -579,9 +579,11 @@ public class Player extends GameObject implements Hittable {
         if (ledgeCooldown > 0) {
             ledgeCooldown--;
             ledge = null;
+            ledgeGrabbing = false;
         }
 
-        if (ledge != null) {
+        if (ledgeGrabbing) {
+            resetAction();
             direction = ledge.direction;
             hitbox.setPosition(ledge.getGrabPosition(hitbox));
             velocity.scl(0);

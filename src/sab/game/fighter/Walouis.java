@@ -167,8 +167,8 @@ public class Walouis extends FighterType {
     @Override
     public boolean finalAss(Fighter fighter, Player player) {
         if (!player.usedRecovery) {
-            // 740 is sax time, 150 is the saxophone animation
-            playingSaxFor = 740 + 150;
+            // 740 is sax time, 90 is the saxophone animation
+            playingSaxFor = 740 + 90;
             player.battle.addAttack(new Attack(new Saxophone(), player), null);
             SabSounds.pauseMusic();
             SabSounds.playSound("spotlight.mp3");

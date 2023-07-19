@@ -29,7 +29,7 @@ public class AssBall extends GameObject implements Hittable {
         velocity = new Vector2();
         frameCount = 18;
         flyTo = new Vector2(0, 0);
-        health = 50;
+        health = 80;
         killed = false;
     }
 
@@ -39,7 +39,7 @@ public class AssBall extends GameObject implements Hittable {
         rotation += rotationSpeed;
         rotationSpeed *= 0.9f;
         color = new Color(1f, 1f, 1f, 0.8f).fromHsv(age % 360, 1f, 1f);
-        velocity = velocity.add(flyTo.cpy().sub(getCenter()).nor().scl(0.125f)).scl(63 / 64f);
+        velocity = velocity.add(flyTo.cpy().sub(getCenter()).nor().scl(0.125f)).scl(127f / 128f);
         frame = age / 8 % 18;
         age++;
     }
@@ -63,7 +63,7 @@ public class AssBall extends GameObject implements Hittable {
     public boolean onHit(DamageSource source) {
         if (!killed) {
             velocity = source.knockback.cpy();
-            health -= source.damage;
+            health -= Math.max(source.damage, 15);
             if (source.owner != null) lastPlayerToHit = source.owner;
             if (health <= 0) {
                 kill();

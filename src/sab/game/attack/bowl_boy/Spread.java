@@ -19,7 +19,7 @@ public class Spread extends BowlBoyShot {
         attack.hitCooldown = 20;
         attack.collideWithStage = true;
         attack.staticKnockback = true;
-        superMeterValue = 0.5f;
+        superMeterValue = 1f;
     }
 
     @Override
