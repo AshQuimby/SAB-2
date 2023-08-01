@@ -452,6 +452,13 @@ public class Player extends GameObject implements Hittable {
 //        }
     }
 
+    public boolean ownsAttackType(Class c) {
+        for (Attack attack : battle.getAttacks()) {
+            if (attack.type.getClass().isAssignableFrom(c)) return true;
+        }
+        return false;
+    }
+
     @Override
     public void preUpdate() {
         checkController();
@@ -544,7 +551,7 @@ public class Player extends GameObject implements Hittable {
         ledgeGrabbing = ledge != null;
 
         if (knockbackDuration > 0) {
-            if (currentAction != null && currentAction.isImportant()) {
+                if (currentAction != null && currentAction.isImportant() && currentAction.hasUsedAttack()) {
                 knockbackDuration = 0;
                 knockback = new Vector2();
             } else {

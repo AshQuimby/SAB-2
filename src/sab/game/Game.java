@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.controllers.*;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Cursor;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.PixmapIO;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -88,6 +89,7 @@ public class Game extends Messenger {
     // Initial load tasks (like from Among Us)
     @Override
     public void load() {
+        Gdx.graphics.setSystemCursor(Cursor.SystemCursor.None);
         selectNewTitleScreen();
         window.imageProvider.loadFont("fonts/SAB_font.ttf", 100);
         window.imageProvider.loadFont("fonts/arial.ttf", 100);

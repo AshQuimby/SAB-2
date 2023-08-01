@@ -5,6 +5,7 @@ import sab.game.Player;
 import sab.game.SabSounds;
 import sab.game.ai.AI;
 import sab.game.ai.BaseAI;
+import sab.game.ai.FutureCollision;
 import sab.game.animation.Animation;
 import sab.game.attack.Attack;
 import sab.game.attack.big_seagull.Glide;
@@ -56,7 +57,9 @@ public class BigSeagull extends FighterType {
 
     @Override
     public AI getAI(Player player, int difficulty) {
-        return new BaseAI(player, difficulty, 32) {
+        return new BaseAI(player, difficulty, 64) {
+            private static final int MELEE_DISTANCE = 170;
+
             @Override
             public void parry(Attack attack) {
                 if (attack.reflectable) useNeutralAttack();
@@ -65,6 +68,7 @@ public class BigSeagull extends FighterType {
 
             @Override
             public void attack(Vector2 center, Player target, Vector2 targetPosition) {
+                mashCooldown = 0;
                 Platform platform = getPlatformBelow();
                 boolean belowTarget = target.hitbox.y > player.hitbox.y + player.hitbox.height;
                 boolean targetAboveVoid = getPlatformBelow(target) == null;
@@ -74,34 +78,45 @@ public class BigSeagull extends FighterType {
                             pressKey(Keys.RIGHT);
                             return;
                         }
-                        if (belowTarget) {
-                            pressKey(Keys.UP);
-                            return;
-                        }
-                        useNeutralAttack();
-                        return;
                     } else if (distanceToRightSide(platform.hitbox) < 16 && targetPosition.x > center.x && targetAboveVoid) {
                         if (player.velocity.x > 0) {
                             pressKey(Keys.LEFT);
                             return;
                         }
-                        if (belowTarget) {
-                            pressKey(Keys.UP);
+                    }
+                    if (player.ownsAttackType(Glide.class)) {
+                        useNeutralAttack();
+                    }
+                }
+
+                Attack threat = getNearestEnemyAttack();
+                if (threat != null) {
+                    FutureCollision collision = getFutureCollision(threat, difficulty * 5);
+                    if (collision == null) return;
+
+                    if (difficulty > 2) {
+                        if (threat.reflectable) {
+                            useNeutralAttack();
                             return;
                         }
-                        useNeutralAttack();
-                        return;
                     }
                 }
 
                 if (isDirectlyHorizontal(target.hitbox) && SabRandom.random() * 20 < difficulty && isFacing(targetPosition.x)) {
-                    if (target.damage > 30 && SabRandom.random() * 100 + target.damage > 170) {
-                        useNeutralAttack();
-                    } else {
-                        if (SabRandom.random() < .2) {
-                            useDownAttack();
+                    float horizontalDistance = Math.abs(center.x - targetPosition.x);
+                    if (horizontalDistance < MELEE_DISTANCE) {
+                        if (target.damage > 30 && SabRandom.random() * 100 + target.damage > 170) {
+                            useNeutralAttack();
                         } else {
-                            useSideAttack(player.direction);
+                            if (target.touchingStage && SabRandom.random() < 0.2f) {
+                                if (target.damage < 120) {
+                                    useNeutralAttack();
+                                } else {
+                                    useDownAttack();
+                                }
+                            } else {
+                                useSideAttack(player.direction);
+                            }
                         }
                     }
                 }

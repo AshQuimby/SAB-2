@@ -14,7 +14,7 @@ public class ModdedLocalGame {
             List<File> modFolders;
             modFolders = ModLoader.getPotentialMods(modsFolder, new ArrayList<>());
             StringBuilder stringBuilder = new StringBuilder("sab_2.jar");
-            if (modsFolder != null) {
+            if (modFolders != null) {
                 for (File file : modFolders) {
                     stringBuilder.append(";");
                     stringBuilder.append(file.getPath());
@@ -37,13 +37,14 @@ public class ModdedLocalGame {
 
         } else {
             if (System.getProperty("os.name").startsWith("Mac")) {
-                ProcessBuilder builder = new ProcessBuilder("java", "-XstartOnFirstThread", "-cp", "", "sab.game.LocalGame");
+                ProcessBuilder builder = new ProcessBuilder("java", "-XstartOnFirstThread", "-cp", "sab_2.jar", "sab.game.LocalGame");
                 builder.directory(new File("").getCanonicalFile());
                 builder.inheritIO();
                 builder.start();
             } else {
-                ProcessBuilder builder = new ProcessBuilder("java", "-cp", "", "sab.game.LocalGame");
+                ProcessBuilder builder = new ProcessBuilder("java", "-cp", "sab_2.jar", "sab.game.LocalGame");
                 builder.directory(new File("").getCanonicalFile());
+                System.out.println(new File("").getCanonicalFile());
                 builder.inheritIO();
                 builder.start();
             }

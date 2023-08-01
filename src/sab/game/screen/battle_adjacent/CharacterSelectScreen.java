@@ -217,11 +217,13 @@ public class CharacterSelectScreen extends NetScreen {
                     if (p1Fighter.type instanceof Random) {
                         p1Fighter = player1.availableFighters.get(SabRandom.random(player1.availableFighters.size() - 2));
                         player1.costume = p1Fighter.getRandomCostume();
+                        player1.index = player1.availableFighters.indexOf(p1Fighter);
                     }
                     Fighter p2Fighter = player2.availableFighters.get(player2.index).copy();
                     if (p2Fighter.type instanceof Random) {
                         p2Fighter = player2.availableFighters.get(SabRandom.random(player2.availableFighters.size() - 2));
                         player2.costume = p2Fighter.getRandomCostume();
+                        player2.index = player2.availableFighters.indexOf(p2Fighter);
                     }
                     updateTimesPlayed();
                     updateCharacterList = true;

@@ -109,7 +109,7 @@ public class PlayerAction {
         return attack;
     }
 
-    public boolean isUsedAttack() {
+    public boolean hasUsedAttack() {
         return usedAttack;
     }
 }

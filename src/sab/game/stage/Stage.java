@@ -58,8 +58,8 @@ public class Stage {
         graph = new Graph<>();
         maxZoomOut = 1;
 
-        safeBlastZone = new Rectangle(-Game.game.window.resolutionX / 2 - 64, -Game.game.window.resolutionY / 2 - 64, Game.game.window.resolutionX + 128, Game.game.window.resolutionY + 128);
-        unsafeBlastZone = new Rectangle(-Game.game.window.resolutionX / 2 - 128, -Game.game.window.resolutionY / 2 - 128, Game.game.window.resolutionX + 256, Game.game.window.resolutionY + 256);
+        safeBlastZone = new Rectangle(-Game.game.window.resolutionX / 2 - 64, -Game.game.window.resolutionY / 2 - 64, Game.game.window.resolutionX + 128, Game.game.window.resolutionY + 256);
+        unsafeBlastZone = new Rectangle(-Game.game.window.resolutionX / 2 - 256, -Game.game.window.resolutionY / 2 - 128, Game.game.window.resolutionX + 512, Game.game.window.resolutionY + 384);
         player1SpawnX = -128;
         player2SpawnX = 128;
         player1SpawnY = safeBlastZone.y + safeBlastZone.height;

@@ -1,5 +1,6 @@
 package sab.game.ai;
 
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
@@ -70,11 +71,14 @@ public class BaseAI extends AI {
             }
 
             Attack threat = getNearestEnemyAttack();
-            if (threat != null) {
-                FutureCollision collision = getFutureCollision(threat, difficulty * 5);
+            if (threat != null && (threat.parryable && player.touchingStage || difficulty < 3)) {
+                FutureCollision collision = getFutureCollision(threat, difficulty * 8);
                 if (collision == null) return;
 
-                pressKey(Keys.PARRY);
+                if (difficulty > 1) {
+                    if (difficulty > 3 || SabRandom.random() < 0.5f)
+                        pressKey(Keys.PARRY);
+                }
             }
 
             return;
@@ -87,15 +91,15 @@ public class BaseAI extends AI {
                 pressKey(Keys.LEFT);
             }
         }
-        if (player.velocity.y <= -difficulty / 10f) {
+        if (player.velocity.y <= -difficulty / 5f) {
             if (player.getRemainingJumps() == 0) {
                 pressKey(Keys.UP);
                 pressKey(Keys.ATTACK);
                 mashCooldown = 20 - difficulty * 3;
             } else {
-                    releaseKey(Keys.ATTACK);
-                    lockKey(Keys.ATTACK);
-                    pressKey(Keys.UP);
+                releaseKey(Keys.ATTACK);
+                lockKey(Keys.ATTACK);
+                pressKey(Keys.UP);
             }
         }
     }
@@ -195,13 +199,6 @@ public class BaseAI extends AI {
         }
 
         if (movingToCenter) {
-            if (player.velocity.y <= 0) {
-                pressKey(Keys.UP);
-                if (player.getRemainingJumps() == 0 && Math.abs(center.x - (platformToCenterOn.hitbox.x + platformToCenterOn.hitbox.width / 2)) < preferredHorizontalDistance) {
-                    pressKey(Keys.ATTACK);
-                }
-            }
-
             if (center.x < platformToCenterOn.hitbox.x + platformToCenterOn.hitbox.width / 2) {
                 pressKey(Keys.RIGHT);
             }

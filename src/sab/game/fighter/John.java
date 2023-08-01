@@ -153,7 +153,7 @@ public class John extends FighterType {
     public void sideAttack(Fighter fighter, Player player) {
         if (!player.usedRecovery) {
             punchAnimation.reset();
-            player.startAttack(new JohnPunch(), punchAnimation, 16, 12, true);
+            player.startAttack(new JohnPunch(), punchAnimation, 16, 16, true);
         }
     }
 
