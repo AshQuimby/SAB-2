@@ -24,7 +24,8 @@ public class VictoryScreen extends ScreenAdapter {
         this.background = background;
         SabSounds.playMusic("leadup.mp3", false);
         setupTimer = -360;
-        if (!Settings.localSettings.anticipation.value || Settings.localSettings.musicVolume.value == 0 || Settings.localSettings.masterVolume.value == 0) setupTimer = -60;
+        if (!Settings.localSettings.anticipation.value || Settings.localSettings.musicVolume.value == 0 || Settings.localSettings.masterVolume.value == 0)
+            setupTimer = -60;
         Game.game.window.camera.viewportWidth = Game.game.window.resolutionX;
         Game.game.window.camera.viewportHeight = Game.game.window.resolutionY;
         Game.game.window.camera.position.x = 0;
@@ -49,16 +50,46 @@ public class VictoryScreen extends ScreenAdapter {
 
         if (winner.fighter.name.equals("Tie")) {
             g.drawText("TIE GAME!", Game.getDefaultFont(), 0, Game.game.window.resolutionY / 2 - 64, 3 * Game.getDefaultFontScale(), Color.WHITE, 0);
-        }else {
+        } else {
             g.drawText(winner.fighter.name.toUpperCase() + " WINS!", Game.getDefaultFont(), 0, Game.game.window.resolutionY / 2 - 64, 3 * Game.getDefaultFontScale(), Color.WHITE, 0);
         }
 
         g.drawText(winner.gameStats.toString(), Game.getDefaultFont(), -Game.game.window.resolutionX / 2 + 32, Game.game.window.resolutionY / 2 - 220, Game.getDefaultFontScale(), Color.WHITE, -1);
+        int loserStyle = loser.gameStats.getStyle();
+        int winnerStyle = winner.gameStats.getStyle();
+        if (loserStyle < 0) {
+            winnerStyle -= loserStyle;
+            loserStyle -= loserStyle;
+        }
+        if (winnerStyle < 0) {
+            loserStyle -= winnerStyle;
+            winnerStyle -= winnerStyle;
+        }
+        float styleRatio = (float) winnerStyle / loserStyle;
+        int winnerRank = winner.gameStats.wasFlawless() ? 0 : 5;
+        if (winnerRank != 0) for (int i = 0; i < 5; i++) {
+            if (styleRatio > 2f / (i + 1)) {
+                winnerRank = i + 1;
+                break;
+            }
+        }
+        if (winner.gameStats.getStyle() < 0) winnerRank = 6;
+        g.usefulDraw(g.imageProvider.getImage("ranks.png"), -Game.game.window.resolutionX / 2 + 32 + 88, Game.game.window.resolutionY / 2 - 220 - 160 - 56, 32, 32, winnerRank, 7, 0, false, false);
 
         g.drawText(loser.gameStats.toString(), Game.getDefaultFont(), -Game.game.window.resolutionX / 2 + 256 + 64, Game.game.window.resolutionY / 2 - 220 - 128, Game.getDefaultFontScale(), Color.WHITE, -1);
-    
+        styleRatio = (float) loserStyle / winnerStyle;
+        int loserRank = winner.gameStats.wasFlawless() ? 0 : 5;
+        if (loserRank != 0) for (int i = 0; i < 5; i++) {
+            if (styleRatio > 2f / (i + 1)) {
+                loserRank = i + 1;
+                break;
+            }
+        }
+        if (loser.gameStats.getStyle() < 0) loserRank = 6;
+        g.usefulDraw(g.imageProvider.getImage("ranks.png"), -Game.game.window.resolutionX / 2 + 256 + 64 + 88, Game.game.window.resolutionY / 2 - 220 - 128 - 160 - 56, 32, 32, loserRank, 7, 0, false, false);
+
         g.usefulTintDraw(g.imageProvider.getImage("pixel.png"), -Game.game.window.resolutionX / 2, -Game.game.window.resolutionY / 2, Game.game.window.resolutionX, Game.game.window.resolutionY, 0, 1, 0, false, false, setupTimer < 0 ? new Color(0, 0, 0, 1) : new Color(1, 1, 1, Math.max(Math.min(1f, ((255 - setupTimer * 15f) / 255f)), 0)));
-        
+
         winner.fighter.type.renderVictoryScreen(winner.fighter, winner, loser, this, g);
     }
 
@@ -75,7 +106,7 @@ public class VictoryScreen extends ScreenAdapter {
                 setupTimer = -1;
             }
         }
-        
+
         return this;
     }
 }

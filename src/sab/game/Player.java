@@ -902,6 +902,7 @@ public class Player extends GameObject implements Hittable {
         if (source.parryable && parryTime > 0) {
             source.onParry();
             battle.onSuccessfulParry(source, this);
+            gameStats.landedParry();
             if (source.owner != null) {
                 source.owner.stun(20);
             }
