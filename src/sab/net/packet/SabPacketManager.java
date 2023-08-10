@@ -14,5 +14,7 @@ public class SabPacketManager extends PacketManager {
         register(DebugCommandPacket.class);
         register(PausePacket.class);
         register(EndGamePacket.class);
+        register(InputPacket.class);
+        register(ReadyPacket.class);
     }
 }
