@@ -4,6 +4,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.MathUtils;
 import com.seagull_engine.Seagraphics;
+import sab.dialogue.Dialogue;
 import sab.dialogue.Dialogues;
 import sab.game.Game;
 import sab.game.SabSounds;
@@ -17,14 +18,20 @@ public class CampaignScreen extends ScreenAdapter {
     private static final int CARD_HEIGHT = 161 * 4;
 
     private static class Level {
-        private Stage stage;
-        private Fighter opponent;
-        private int difficulty;
+        private final Stage stage;
+        private final Fighter opponent;
+        private final int difficulty;
+        private final Dialogue dialogue;
 
         public Level(StageType stageType, FighterType fighterType, int difficulty) {
+            this(stageType, fighterType, difficulty, null);
+        }
+
+        public Level(StageType stageType, FighterType fighterType, int difficulty, Dialogue dialogue) {
             stage = new Stage(stageType);
             opponent = new Fighter(fighterType);
             this.difficulty = difficulty;
+            this.dialogue = dialogue;
         }
     }
 
@@ -32,7 +39,7 @@ public class CampaignScreen extends ScreenAdapter {
     private float animationTimer;
 
     private final Level[] levels = new Level[] {
-            new Level(new Warzone(), new Chain(), 1),
+            new Level(new Warzone(), new Chain(), 1, Dialogues.getDialogue("chain_greeting.dlg")),
             new Level(new LastLocation(), new Walouis(), 1),
             new Level(new Warzone(), new EmperorEvil(), 2),
             new Level(new LastLocation(), new Gus(), 2),
@@ -56,8 +63,20 @@ public class CampaignScreen extends ScreenAdapter {
         }
         if (keyCode == Input.Keys.ENTER) {
             SabSounds.playSound(SabSounds.SELECT);
-            BattleScreen battleScreen = new BattleScreen(0, new BattleConfig()); // FIXME: Make campaign levels actually work
-            battleScreen.battle.setDialogue(Dialogues.getDialogue("chain_greeting.dlg"));
+
+            Level level = levels[selection];
+            BattleConfig config = new BattleConfig();
+            config.stageIndex = Game.game.stages.indexOf(level.stage.type.getClass());
+            config.stageHazards = true;
+            config.lives = 3;
+            config.setPlayer1(Game.game.fighters.indexOf(Marvin.class), 0, 0); // TODO: Allow the player to select which character to play as
+            config.setPlayer2(Game.game.fighters.indexOf(level.opponent.type.getClass()), 0, level.difficulty);
+
+            BattleScreen battleScreen = new BattleScreen(System.nanoTime(), config);
+            if (level.dialogue != null) {
+                battleScreen.battle.setDialogue(level.dialogue);
+            }
+
             return battleScreen;
         }
         return this;
