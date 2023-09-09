@@ -28,6 +28,8 @@ import sab.util.Utils;
 import java.io.File;
 
 public class BattleScreen extends NetScreen {
+    private final static boolean LOG_NETWORK_EVENTS = false;
+
     public Battle battle;
     private Replay currentReplay;
     private Replay playingReplay;
@@ -118,31 +120,33 @@ public class BattleScreen extends NetScreen {
             return;
         }
 
-        if (p instanceof UpdatePacket up) {
-            for (int i = 0; i < 6; i++) {
-                if (up.player1Pressed[i]) {
-                    battle.getPlayer(0).keys.press(i);
-                }
-                if (up.player1Released[i]) {
-                    battle.getPlayer(0).keys.release(i);
-                }
-                if (up.player2Pressed[i]) {
-                    System.out.printf("Client pressed %s on tick %s\n", i, battle.getBattleTick());
-                    battle.getPlayer(1).keys.press(i);
-                }
-                if (up.player2Released[i]) {
-                    System.out.printf("Client released %s on tick %s\n", i, battle.getBattleTick());
-                    battle.getPlayer(1).keys.release(i);
-                }
-            }
+        if (p instanceof UpdatePacket) {
             battle.update();
             battle.postUpdate();
+        } else if (p instanceof KeyEventPacket kep) {
+            if (kep.acknowledgement) {
+                if (kep.state) {
+                    if (LOG_NETWORK_EVENTS) System.out.printf("Host acknowledged key %s pressed on tick %s\n", kep.key, battle.getBattleTick());
+                    battle.getPlayer(1).keys.press(kep.key);
+                } else {
+                    if (LOG_NETWORK_EVENTS) System.out.printf("Host acknowledged key %s released on tick %s\n", kep.key, battle.getBattleTick());
+                    battle.getPlayer(1).keys.release(kep.key);
+                }
+            } else {
+                if (kep.state) {
+                    if (LOG_NETWORK_EVENTS) System.out.printf("Host pressed %s on tick %s\n", kep.key, battle.getBattleTick());
+                    battle.getPlayer(0).keys.press(kep.key);
+                } else {
+                    if (LOG_NETWORK_EVENTS) System.out.printf("Host released %s on tick %s\n", kep.key, battle.getBattleTick());
+                    battle.getPlayer(0).keys.release(kep.key);
+                }
+            }
         } else if (p instanceof PausePacket pp) {
-            System.out.printf("%s on tick %s\n", pp.paused ? "Pause" : "Unpause", battle.getBattleTick());
+            if (LOG_NETWORK_EVENTS) System.out.printf("%s on tick %s\n", pp.paused ? "Pause" : "Unpause", battle.getBattleTick());
             if (pp.paused) battle.pause();
             else battle.unpause();
         } else if (p instanceof DebugCommandPacket dcp) {
-            System.out.printf("Debug command %s on tick %s\n", dcp.command, battle.getBattleTick());
+            if (LOG_NETWORK_EVENTS) System.out.printf("Debug command %s on tick %s\n", dcp.command, battle.getBattleTick());
             if (dcp.command == DebugCommandPacket.SPAWN) {
                 battle.spawnAssBall();
             } else if (dcp.command == DebugCommandPacket.GRANT) {
@@ -151,7 +155,7 @@ public class BattleScreen extends NetScreen {
                 }
             }
         } else if (p instanceof EndGamePacket) {
-            System.out.printf("Game ended on tick %s\n", battle.getBattleTick());
+            if (LOG_NETWORK_EVENTS) System.out.printf("Game ended on tick %s\n", battle.getBattleTick());
             battle.pause();
             battle.pauseMenuIndex = 2;
             battle.onPressEnter();
@@ -162,17 +166,19 @@ public class BattleScreen extends NetScreen {
     protected void receive(int connection, Packet p) {
         if (p instanceof ReadyPacket) {
             initialized = true;
-            System.out.println("Ready");
+            if (LOG_NETWORK_EVENTS) System.out.println("Ready");
         }
         if (!initialized) return;
 
         if (p instanceof KeyEventPacket kep) {
             if (kep.state) {
-                System.out.printf("Client pressed %s on tick %s\n", kep.key, battle.getBattleTick());
+                if (LOG_NETWORK_EVENTS) System.out.printf("Client pressed %s on tick %s\n", kep.key, battle.getBattleTick());
                 battle.getPlayer(1).keys.press(kep.key);
+                server.send(0, new KeyEventPacket(kep.key, kep.state, true));
             } else {
-                System.out.printf("Client released %s on tick %s\n", kep.key, battle.getBattleTick());
+                if (LOG_NETWORK_EVENTS) System.out.printf("Client released %s on tick %s\n", kep.key, battle.getBattleTick());
                 battle.getPlayer(1).keys.release(kep.key);
+                server.send(0, new KeyEventPacket(kep.key, kep.state, true));
             }
         }
     }
@@ -210,7 +216,7 @@ public class BattleScreen extends NetScreen {
                 // SPAWN MASSIVE BALLS
                 battle.spawnAssBall();
                 if (host) {
-                    System.out.printf("Debug command %s on tick %s\n", DebugCommandPacket.SPAWN, battle.getBattleTick());
+                    if (LOG_NETWORK_EVENTS) System.out.printf("Debug command %s on tick %s\n", DebugCommandPacket.SPAWN, battle.getBattleTick());
                     server.send(0, new DebugCommandPacket(DebugCommandPacket.SPAWN));
                 }
             } else if (keyCode == Input.Keys.H) {
@@ -220,7 +226,7 @@ public class BattleScreen extends NetScreen {
             } else if (keyCode == Input.Keys.SPACE && battle.isPaused() && (local || host)) {
                 if (host) server.send(0, new PausePacket(false));
                 battle.unpause();
-                if (host) server.send(0, new UpdatePacket(battle.getPlayer(0), battle.getPlayer(1)));
+                if (host) server.send(0, new UpdatePacket());
                 battle.update();
                 battle.postUpdate();
                 battle.pause();
@@ -230,7 +236,7 @@ public class BattleScreen extends NetScreen {
                     player.grantFinalAss();
                 }
                 if (host) {
-                    System.out.printf("Debug command %s on tick %s\n", DebugCommandPacket.GRANT, battle.getBattleTick());
+                    if (LOG_NETWORK_EVENTS) System.out.printf("Debug command %s on tick %s\n", DebugCommandPacket.GRANT, battle.getBattleTick());
                     server.send(0, new DebugCommandPacket(DebugCommandPacket.GRANT));
                 }
             }
@@ -280,7 +286,7 @@ public class BattleScreen extends NetScreen {
             if (keyCode == Input.Keys.ESCAPE || keyCode == Input.Keys.SHIFT_RIGHT) {
                 battle.togglePause();
                 if (host) {
-                    System.out.printf("%s on tick %s\n", battle.isPaused() ? "Pause" : "Unpause", battle.getBattleTick());
+                    if (LOG_NETWORK_EVENTS) System.out.printf("%s on tick %s\n", battle.isPaused() ? "Pause" : "Unpause", battle.getBattleTick());
                     server.send(0, new PausePacket(battle.isPaused()));
                 }
             } else if (keyCode == Input.Keys.ENTER) {
@@ -288,7 +294,7 @@ public class BattleScreen extends NetScreen {
                 if (host) {
                     server.send(0, new PausePacket(battle.isPaused()));
                     if (battle.gameOver()) {
-                        System.out.printf("Game ended on tick %s\n", battle.getBattleTick());
+                        if (LOG_NETWORK_EVENTS) System.out.printf("Game ended on tick %s\n", battle.getBattleTick());
                         server.send(0, new EndGamePacket());
                     }
                 }
@@ -299,10 +305,13 @@ public class BattleScreen extends NetScreen {
         }
 
         if (host) {
-            for (byte i = 0; i < 6; i++) {
-                if (battle.getPlayer(0).keys.isJustPressed(i)) {
-                    //server.send(0, new KeyEventPacket(i, true));
-                }
+            switch (keyCode) {
+                case Input.Keys.W -> server.send(0, new KeyEventPacket(Keys.UP, true));
+                case Input.Keys.S -> server.send(0, new KeyEventPacket(Keys.DOWN, true));
+                case Input.Keys.A -> server.send(0, new KeyEventPacket(Keys.LEFT, true));
+                case Input.Keys.D -> server.send(0, new KeyEventPacket(Keys.RIGHT, true));
+                case Input.Keys.F -> server.send(0, new KeyEventPacket(Keys.ATTACK, true));
+                case Input.Keys.T -> server.send(0, new KeyEventPacket(Keys.PARRY, true));
             }
         } else if (!local) {
             switch (keyCode) {
@@ -378,10 +387,13 @@ public class BattleScreen extends NetScreen {
         }
 
         if (host) {
-            for (byte i = 0; i < 6; i++) {
-                if (battle.getPlayer(0).keys.isJustReleased(i)) {
-                    //server.send(0, new KeyEventPacket(i, false));
-                }
+            switch (keyCode) {
+                case Input.Keys.W -> server.send(0, new KeyEventPacket(Keys.UP, false));
+                case Input.Keys.S -> server.send(0, new KeyEventPacket(Keys.DOWN, false));
+                case Input.Keys.A -> server.send(0, new KeyEventPacket(Keys.LEFT, false));
+                case Input.Keys.D -> server.send(0, new KeyEventPacket(Keys.RIGHT, false));
+                case Input.Keys.F -> server.send(0, new KeyEventPacket(Keys.ATTACK, false));
+                case Input.Keys.T -> server.send(0, new KeyEventPacket(Keys.PARRY, false));
             }
         } else if (!local) {
             switch (keyCode) {
@@ -431,16 +443,7 @@ public class BattleScreen extends NetScreen {
         }
         if (host || local) {
             if (host) {
-                // Artificial lag for testing
-//                if (Math.random() < .01) {
-//                    try {
-//                        Thread.sleep((long) (Math.random() * 100));
-//                    } catch (InterruptedException e) {
-//                        e.printStackTrace();
-//                    }
-//                }
-
-                server.send(0, new UpdatePacket(battle.getPlayer(0), battle.getPlayer(1)));
+                server.send(0, new UpdatePacket());
             }
             if (battle.update()) {
                 if (currentReplay != null) currentReplay.update(battle.getBattleTick());
