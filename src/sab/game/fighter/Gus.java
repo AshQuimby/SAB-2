@@ -243,8 +243,7 @@ public class Gus extends FighterType {
                 }
             }
 
-            @Override
-            public void attack(Vector2 center, Player target, Vector2 targetPosition) {
+            private void gusAttack(Vector2 center, Player target, Vector2 targetPosition) {
                 preferredHorizontalDistance = Math.max(80, 100 - target.damage / 120 * 20);
 
                 boolean vented = false;
@@ -286,6 +285,53 @@ public class Gus extends FighterType {
                         }
                     }
                 }
+            }
+
+            private void amongUsManAttack(Vector2 center, Player target, Vector2 targetPosition) {
+                if (SabRandom.random() > .1) {
+                    return;
+                }
+
+                if (isDirectlyHorizontal(target.hitbox) && isFacing(target.hitbox.x + target.hitbox.width / 2)) {
+                    float horizontalDistance = Math.abs(target.hitbox.x + target.hitbox.width / 2 - center.x);
+                    if (horizontalDistance < 80) {
+                        Platform platform = getPlatformBelow();
+                        if (platform != null) {
+                            float distanceLeft = distanceToLeftSide(platform.hitbox);
+                            float distanceRight = distanceToRightSide(platform.hitbox);
+
+                            if (distanceLeft < distanceRight) {
+                                if (player.direction == -1) {
+                                    useDownAttack();
+                                } else {
+                                    useNeutralAttack();
+                                }
+                            } else {
+                                if (player.direction == 1) {
+                                    useDownAttack();
+                                } else {
+                                    useNeutralAttack();
+                                }
+                            }
+                        }
+                    } else {
+                        useSideAttack();
+                    }
+                }
+            }
+
+            @Override
+            public void attack(Vector2 center, Player target, Vector2 targetPosition) {
+                if (amongUsManMode) {
+                    amongUsManAttack(center, target, targetPosition);
+                } else {
+                    gusAttack(center, target, targetPosition);
+                }
+            }
+
+            @Override
+            protected boolean shouldUseFinalAss(Player target) {
+                return true;
             }
         };
     }
