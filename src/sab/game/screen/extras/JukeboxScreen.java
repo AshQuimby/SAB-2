@@ -30,8 +30,8 @@ public class JukeboxScreen extends ScreenAdapter {
     private static int johnFrame;
     private static float johnFrameTimer;
     private static float currentDanceRate;
-    private static boolean johnFlip;
     private static boolean johnSleeping;
+    private static boolean johnFlip;
 
     static {
         songIndex = 0;

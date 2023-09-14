@@ -40,7 +40,6 @@ import java.util.zip.Deflater;
 
 public class Game extends Messenger {
     public static final Game game = new Game();
-
     public static ControllerManager controllerManager;
     public static Map<Integer, Boolean> controllerKeysPressed;
     public final List<Class<? extends FighterType>> fighters;
@@ -50,7 +49,6 @@ public class Game extends Messenger {
     private List<String> modErrors;
     private Screen screen;
     private boolean fullscreen;
-
     public final Map<String, Mod> mods;
 
     public Game() {
